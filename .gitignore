@@ -20,7 +20,5 @@
 # Go workspace file
 go.work
 dev/nsglogs
-dev/nsgLogs
 .env
 dev/la-tables.json
-.vscode
