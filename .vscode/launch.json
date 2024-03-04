@@ -12,9 +12,9 @@
       "mode": "debug",
       "program": "dev/main.go",
       "env": {
-        "DEVOPS_ORG": "APCDevOps",
-        "DEVOPS_PAT": "mdk56dnjigdca2wui7g4zcbv4x5gtk3qvndrqrxkistu3nlfpw2q",
-        "DEVOPS_PROJECT": "APC-IaC"
+        "DEVOPS_ORG": "",
+        "DEVOPS_PAT": "",
+        "DEVOPS_PROJECT": ""
       }
     }
 
