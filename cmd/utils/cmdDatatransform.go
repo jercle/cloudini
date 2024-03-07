@@ -35,7 +35,7 @@ Current functionality includes:
 func init() {
 	utilsCmd.AddCommand(datatransformCmd)
 
-	datatransformCmd.PersistentFlags().StringVarP(&jsonString, "jsonString", "j", "", "Json string to transform")
+	datatransformCmd.PersistentFlags().StringVar(&jsonString, "jsonString", "", "Json string to transform")
 	datatransformCmd.PersistentFlags().StringVarP(&fileName, "fileName", "f", "", "Json string to transform")
 	datatransformCmd.PersistentFlags().StringVarP(&webApi, "webApi", "a", "", "Json http API to get data and parse")
 	datatransformCmd.PersistentFlags().StringVarP(&outFile, "outFile", "o", "", "File to save output")

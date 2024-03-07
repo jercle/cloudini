@@ -1,208 +1,332 @@
 package main
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"os"
-	"slices"
+	"reflect"
+	"strconv"
 	"strings"
 	"sync"
-	"time"
 
-	"github.com/fatih/color"
 	"github.com/jercle/azg/lib"
-	"github.com/rodaine/table"
 )
 
-type nsgFlowLogRecord struct {
-	Category      string `json:"category"`
-	MacAddress    string `json:"macAddress"`
-	OperationName string `json:"operationName"`
-	Properties    struct {
-		Version int `json:"Version"`
-		Flows   []struct {
-			Flows []struct {
-				FlowTuples []string `json:"flowTuples"`
-				Mac        string   `json:"mac"`
-			} `json:"flows"`
-			Rule string `json:"rule"`
-		} `json:"flows"`
-	} `json:"properties"`
-	ResourceID string    `json:"resourceId"`
-	SystemID   string    `json:"systemId"`
-	Time       time.Time `json:"time"`
+type rowData struct {
+	DepartmentName   string  `csv:"-"`
+	AccountName      string  `csv:"-"`
+	AccountOwnerId   string  `csv:"-"`
+	SubscriptionGuid string  `csv:"SubscriptionGuid"`
+	SubscriptionName string  `csv:"SubscriptionName"`
+	ResourceGroup    string  `csv:"ResourceGroup"`
+	ResourceLocation string  `csv:"-"`
+	AvailabilityZone string  `csv:"-"`
+	UsageDateTime    string  `csv:"UsageDateTime"`
+	ProductName      string  `csv:"ProductName"`
+	MeterCategory    string  `csv:"-"`
+	MeterSubcategory string  `csv:"-"`
+	MeterId          string  `csv:"-"`
+	MeterName        string  `csv:"MeterName"`
+	MeterRegion      string  `csv:"-"`
+	UnitOfMeasure    string  `csv:"UnitOfMeasure"`
+	UsageQuantity    float64 `csv:"UsageQuantity"`
+	ResourceRate     float64 `csv:"ResourceRate"`
+	PreTaxCost       float64 `csv:"PreTaxCost"`
+	CostCenter       string  `csv:"-"`
+	ConsumedService  string  `csv:"ConsumedService"`
+	ResourceType     string  `csv:"ResourceType"`
+	InstanceId       string  `csv:"InstanceId"`
+	Tags             string  `csv:"-"`
+	OfferId          string  `csv:"-"`
+	AdditionalInfo   string  `csv:"-"`
+	ServiceInfo1     string  `csv:"-"`
+	ServiceInfo2     string  `csv:"-"`
+	Currency         string  `csv:"Currency"`
+	Datafile         string
 }
 
-type nsgFlowLog struct {
-	Records []nsgFlowLogRecord
+type costExportData []rowData
 
-	// Records []nsgFlowLogRecords `json: "records"`
+type FieldMismatch struct {
+	expected, found int
 }
 
-type combinedFlowLogs struct {
-	nsgFlowLogs []nsgFlowLogRecord
-	FileCount   int
+func (e *FieldMismatch) Error() string {
+	return "CSV line fields mismatch. Expected " + strconv.Itoa(e.expected) + " found " + strconv.Itoa(e.found)
 }
 
-type ipList struct {
-	SourceIps []string
-	DestIps   []string
+type UnsupportedType struct {
+	Type string
 }
 
-func (m *ipList) printCount() {
-	fmt.Println("Source IPs:      ", len(m.SourceIps))
-	fmt.Println("Destination IPs: ", len(m.DestIps))
-}
-
-func getUniqueIpAddresses(dataset []nsgFlowLogRecord) ipList {
-	var ipList ipList
-
-	for _, record := range dataset {
-		for _, outerFlow := range record.Properties.Flows {
-			for _, innerFlow := range outerFlow.Flows {
-				for _, tuple := range innerFlow.FlowTuples {
-					split := strings.Split(tuple, ",")
-					ipList.SourceIps = append(ipList.SourceIps, split[1])
-					ipList.DestIps = append(ipList.DestIps, split[2])
-				}
-			}
-		}
-	}
-	ipList.SourceIps = lib.UniqueNonEmptyElementsOf(ipList.SourceIps)
-	ipList.DestIps = lib.UniqueNonEmptyElementsOf(ipList.DestIps)
-	return ipList
-}
-
-func getFlowLogData(path string) nsgFlowLog {
-	var flowLogData nsgFlowLog
-
-	jsonFile, err := os.Open(path)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer jsonFile.Close()
-
-	byteValue, _ := io.ReadAll(jsonFile)
-	json.Unmarshal(byteValue, &flowLogData)
-
-	return flowLogData
-}
-
-func combineLogFileRecords(dataPath string) combinedFlowLogs {
+func combineCostExportData(dataPath string) costExportData {
 	var (
 		wg             sync.WaitGroup
-		allFlowLogData combinedFlowLogs
+		costExportData costExportData
 		mutex          sync.Mutex
+		filePaths      = lib.GetFullFilePaths(dataPath)
 	)
-
-	filePaths := lib.GetFullFilePaths(dataPath)
-	allFlowLogData.FileCount = len(filePaths)
-
 	for _, file := range filePaths {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			data := getFlowLogData(file).Records
+			// fmt.Println(file)
+			data, err := getCostExportFileData(file)
+			if err != nil {
+				panic(err)
+			}
 			mutex.Lock()
-			allFlowLogData.nsgFlowLogs = append(allFlowLogData.nsgFlowLogs, data...)
+			costExportData = append(costExportData, data...)
 			mutex.Unlock()
 		}()
 	}
 	wg.Wait()
-
-	return allFlowLogData
+	return costExportData
 }
 
-func (m *ipList) printTable() {
-	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
-	columnFmt := color.New(color.FgYellow).SprintfFunc()
-
-	tbl := table.New("IP Address", "Source/Dest")
-	tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
-
-	for _, ipAddress := range *&m.DestIps {
-		tbl.AddRow(ipAddress, "Destination")
-	}
-	for _, ipAddress := range *&m.SourceIps {
-		tbl.AddRow(ipAddress, "Source")
-	}
-	tbl.Print()
+type transformedCostItem struct {
+	ResourceGroup    string
+	PreTaxCost       float64
+	SubscriptionName string
+	Tenant           string
+	Datafile         string
 }
 
-func (r *combinedFlowLogs) filterIp(filter string, filterDirection string) {
-	var filteredLogs combinedFlowLogs
-	filteredLogs.FileCount = r.FileCount
-	filterSlice := strings.Split(filter, ",")
-
-	for _, record := range r.nsgFlowLogs {
-	recordLoop:
-		for _, outerFlow := range record.Properties.Flows {
-			for _, innerFlow := range outerFlow.Flows {
-				for _, tuple := range innerFlow.FlowTuples {
-					split := strings.Split(tuple, ",")
-					if strings.ToLower(filterDirection) == "source" {
-						if slices.Contains(filterSlice, split[1]) {
-							filteredLogs.nsgFlowLogs = append(filteredLogs.nsgFlowLogs, record)
-							break recordLoop
-						}
-					}
-					if strings.ToLower(filterDirection) == "dest" {
-						if slices.Contains(filterSlice, split[2]) {
-							filteredLogs.nsgFlowLogs = append(filteredLogs.nsgFlowLogs, record)
-							break recordLoop
-						}
-					}
-				}
-			}
-		}
-	}
-	*r = filteredLogs
+type transformedTenantData struct {
+	PreTaxCost float64
+	ResGroups  []transformedCostItem
 }
 
-func (m *ipList) filterSourceIp(filter string) {
-	var filteredTables ipList
-	filterSlice := strings.Split(filter, ",")
-
-	for _, ipAddress := range *&m.SourceIps {
-		// if strings.Contains(ipAddress, filter) {
-		if slices.Contains(filterSlice, ipAddress) {
-			filteredTables.SourceIps = append(filteredTables.SourceIps, ipAddress)
-		}
-	}
-
-	*m = filteredTables
-}
-
-func (r *nsgFlowLogRecord) printJSON() {
-	jsonData, err := json.MarshalIndent(r, "", "  ")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(jsonData))
+type transformedCostItemsByTenant struct {
+	Blue      transformedTenantData
+	BlueDTQ   transformedTenantData
+	Red       transformedTenantData
+	RedDTQ    transformedTenantData
+	Yellow    transformedTenantData
+	PUD       transformedTenantData
+	PUDDTQ    transformedTenantData
+	Purple    transformedTenantData
+	PurpleDTQ transformedTenantData
 }
 
 func main() {
+	var dataPath = "./cost-exports"
 
-	// var filePaths = getFullFilePaths("./fakedata/nsgLogs")
-	var dataPath = "./nsgLogs"
+	combinedCostData := combineCostExportData(dataPath)
 
-	combinedData := combineLogFileRecords(dataPath)
-	// combinedData.filterIp("44.66.171.246", "source")
-	// combinedData.filterIp("192.168.0.1,192.168.0.2,200.197.39.223", "dest")
-	uniqueIps := getUniqueIpAddresses(combinedData.nsgFlowLogs)
+	// fmt.Println(len(combinedCostData))
 
-	// fmt.Println()
-	fmt.Println("Files processed: ", combinedData.FileCount)
-	// uniqueIps.filterSourceIp("192.168.0.1,192.168.0.2,130.111.165.184")
-	// fmt.Println(len(combinedData.nsgFlowLogs))
-	uniqueIps.printCount()
-	// uniqueIps.printTable()
+	transformedData := transformCostData(combinedCostData)
 
-	// for _, r := range combinedData.nsgFlowLogs {
-	// 	fmt.Println(record)
-	// 	r.printJSON()
-	// 	os.Exit(0)
+	// costData, err := getCostExportFileData("cost-exports/monthly-cost-exports_BLUEDTQ.csv")
+	// if err != nil {
+	// 	panic(err)
 	// }
+
+	// fmt.Println(combinedCostData)
+	jsonData, _ := json.MarshalIndent(transformedData, "", "  ")
+	fmt.Println(string(jsonData))
+	// _ = jsonData
+	// fmt.Println(len(costData))
+}
+
+func transformCostData(data costExportData) transformedCostItemsByTenant {
+	// fmt.Println(len(*data))
+
+	var (
+		// transformedTenantData transformedTenantData
+		allData          transformedCostItemsByTenant
+		allSubscriptions []string
+	)
+	allSubscriptions = lib.UniqueNonEmptyElementsOf(allSubscriptions)
+	// type transformedCostItem struct {
+	// 	ResourceGroup    string
+	// 	PreTaxCost       float64
+	// 	SubscriptionName string
+	// 	Tenant           string
+	// }
+	for _, costData := range data {
+		// fmt.Println(costData.Datafile)
+		// fmt.Println(costData.PreTaxCost)
+		var tenantName string
+
+		// let lcSubName = SubscriptionName.toLowerCase()
+		sn := strings.ToLower(costData.SubscriptionName)
+
+		switch {
+		case sn == "pud":
+			tenantName = "PUD"
+		case sn == "puddtq":
+			tenantName = "PUDDTQ"
+		case strings.Contains(sn, "agd"):
+			tenantName = "YELLOW"
+		case strings.Contains(sn, "devdtq") && costData.Datafile != "BLUE" && costData.Datafile != "BLUEDTQ":
+			tenantName = "PURPLEDTQ"
+		case strings.Contains(sn, "dev") && costData.Datafile != "YELLOW":
+			tenantName = "PURPLE"
+		case strings.Contains(sn, "apcdtq"):
+			tenantName = "REDDTQ"
+		case strings.Contains(sn, "apc") && costData.Datafile == "REDDTQ":
+			tenantName = "REDDTQ"
+		case strings.Contains(sn, "apc") && costData.Datafile != "REDDTQ":
+			tenantName = "RED"
+		case strings.Contains(sn, "hapdtq"):
+			tenantName = "BLUEDTQ"
+		default:
+			tenantName = strings.ToUpper(costData.Datafile)
+		}
+
+		tci := transformedCostItem{
+			ResourceGroup:    costData.ResourceGroup,
+			PreTaxCost:       costData.PreTaxCost,
+			SubscriptionName: costData.SubscriptionName,
+			Tenant:           tenantName,
+			Datafile:         costData.Datafile,
+		}
+
+		// allData[costData.Datafile].ResGroups = append(allData[costData.Datafile].ResGroups, tci)
+		// transformedTenantData.PreTaxCost += costData.PreTaxCost
+		// allData.addPreTaxCost(tci)
+		allData.appendTenantData(tci)
+		// allData
+		// transformedTenantData.ResGroups = append(transformedTenantData.ResGroups, tci)
+		// fmt.Println(tci)
+		// os.Exit(0)
+	}
+
+	return allData
+}
+
+func (tenants *transformedCostItemsByTenant) addPreTaxCost(tci transformedCostItem) {
+
+	switch tci.Datafile {
+	case "Blue":
+		tenants.Blue.PreTaxCost += tci.PreTaxCost
+	case "BlueDTQ":
+		tenants.BlueDTQ.PreTaxCost += tci.PreTaxCost
+	case "Red":
+		tenants.Red.PreTaxCost += tci.PreTaxCost
+	case "RedDTQ":
+		tenants.RedDTQ.PreTaxCost += tci.PreTaxCost
+	case "Yellow":
+		tenants.Yellow.PreTaxCost += tci.PreTaxCost
+	case "PUD":
+		tenants.PUD.PreTaxCost += tci.PreTaxCost
+	case "PUDDTQ":
+		tenants.PUDDTQ.PreTaxCost += tci.PreTaxCost
+	case "Purple":
+		tenants.Purple.PreTaxCost += tci.PreTaxCost
+	case "PurpleDTQ":
+		tenants.PurpleDTQ.PreTaxCost += tci.PreTaxCost
+	}
+}
+
+func (tenants *transformedCostItemsByTenant) appendTenantData(tci transformedCostItem) {
+	switch tci.Tenant {
+	case "BLUE":
+		tenants.Blue.ResGroups = append(tenants.Blue.ResGroups, tci)
+		tenants.Blue.PreTaxCost += tci.PreTaxCost
+	case "BLUEDTQ":
+		tenants.BlueDTQ.ResGroups = append(tenants.BlueDTQ.ResGroups, tci)
+		tenants.BlueDTQ.PreTaxCost += tci.PreTaxCost
+	case "RED":
+		tenants.Red.ResGroups = append(tenants.Red.ResGroups, tci)
+		tenants.Red.PreTaxCost += tci.PreTaxCost
+	case "REDDTQ":
+		tenants.RedDTQ.ResGroups = append(tenants.RedDTQ.ResGroups, tci)
+		tenants.RedDTQ.PreTaxCost += tci.PreTaxCost
+	case "YELLOW":
+		tenants.Yellow.ResGroups = append(tenants.Yellow.ResGroups, tci)
+		tenants.Yellow.PreTaxCost += tci.PreTaxCost
+	case "PUD":
+		tenants.PUD.ResGroups = append(tenants.PUD.ResGroups, tci)
+		tenants.PUD.PreTaxCost += tci.PreTaxCost
+	case "PUDDTQ":
+		tenants.PUDDTQ.ResGroups = append(tenants.PUDDTQ.ResGroups, tci)
+		tenants.PUDDTQ.PreTaxCost += tci.PreTaxCost
+	case "PURPLE":
+		tenants.Purple.ResGroups = append(tenants.Purple.ResGroups, tci)
+		tenants.Purple.PreTaxCost += tci.PreTaxCost
+	case "PURPLEDTQ":
+		tenants.PurpleDTQ.ResGroups = append(tenants.PurpleDTQ.ResGroups, tci)
+		tenants.PurpleDTQ.PreTaxCost += tci.PreTaxCost
+	}
+}
+
+func getCostExportFileData(fileName string) (costExportData, error) {
+	file, err := os.Open(fileName)
+	if err != nil {
+		return nil, err
+	}
+	reader := csv.NewReader(file)
+	reader.LazyQuotes = true
+	reader.TrimLeadingSpace = true
+	_, err = reader.Read()
+
+	var rowData rowData
+	var costExport costExportData
+	for {
+		err := UnmarshalCostExportCSV(reader, &rowData, fileName)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		if rowData.ResourceGroup != "ResourceGroup" {
+			costExport = append(costExport, rowData)
+		}
+	}
+	return costExport, nil
+}
+
+func UnmarshalCostExportCSV(reader *csv.Reader, v *rowData, fileName string) error {
+
+	record, err := reader.Read()
+	if err != nil {
+		return err
+	}
+
+	tenant := strings.Split(fileName, "_")[1]
+	tenant = strings.Split(tenant, ".")[0]
+
+	s := reflect.ValueOf(v).Elem()
+	if s.NumField() != len(record)+1 {
+		return &FieldMismatch{s.NumField(), len(record)}
+	}
+
+	for i := range s.NumField() {
+		f := s.Field(i)
+		switch f.Type().String() {
+		case "float64":
+			fval, err := strconv.ParseFloat(record[i], 64)
+			if err != nil {
+				return err
+			}
+			f.SetFloat(fval)
+		case "string":
+			if i == len(record) {
+				f.SetString(tenant)
+			} else {
+				f.SetString(record[i])
+			}
+		case "int":
+			ival, err := strconv.ParseInt(record[i], 10, 0)
+			if err != nil {
+				return err
+			}
+			f.SetInt(ival)
+		default:
+			fmt.Println(f)
+			return &UnsupportedType{f.Type().String()}
+		}
+	}
+
+	return nil
+}
+
+func (e *UnsupportedType) Error() string {
+	return "Unsupported type: " + e.Type
 }

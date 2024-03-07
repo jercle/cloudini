@@ -30,8 +30,8 @@ to quickly create a Cobra application.`,
 		opts.JsonString = jsonData
 		opts.JsonFile = ""
 		opts.WebApi = ""
-		opts.Stdin = false
-		opts.GetFromClipboard = false
+		opts.Stdin = stdin
+		opts.GetFromClipboard = getFromClipboard
 
 		code, err := dt.Generate(opts)
 		if err != nil {

@@ -22,3 +22,4 @@ go.work
 dev/nsglogs
 .env
 dev/la-tables.json
+dev/cost-exports
