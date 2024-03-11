@@ -61,31 +61,6 @@ type UnsupportedType struct {
 	Type string
 }
 
-func combineCostExportData(dataPath string) costExportData {
-	var (
-		wg             sync.WaitGroup
-		costExportData costExportData
-		mutex          sync.Mutex
-		filePaths      = lib.GetFullFilePaths(dataPath)
-	)
-	for _, file := range filePaths {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			// fmt.Println(file)
-			data, err := getCostExportFileData(file)
-			if err != nil {
-				panic(err)
-			}
-			mutex.Lock()
-			costExportData = append(costExportData, data...)
-			mutex.Unlock()
-		}()
-	}
-	wg.Wait()
-	return costExportData
-}
-
 type transformedCostItem struct {
 	ResourceGroup    string
 	PreTaxCost       float64
@@ -112,13 +87,16 @@ type transformedCostItemsByTenant struct {
 }
 
 func main() {
-	var dataPath = "./cost-exports"
+	var dataPath = "./testdata/cost-exports"
 
 	combinedCostData := combineCostExportData(dataPath)
 
+	ccdJson, _ := json.MarshalIndent(combinedCostData, "", "  ")
+	fmt.Println(string(ccdJson))
+
 	// fmt.Println(len(combinedCostData))
 
-	transformedData := transformCostData(combinedCostData)
+	// transformedData := transformCostData(combinedCostData)
 
 	// costData, err := getCostExportFileData("cost-exports/monthly-cost-exports_BLUEDTQ.csv")
 	// if err != nil {
@@ -126,10 +104,46 @@ func main() {
 	// }
 
 	// fmt.Println(combinedCostData)
-	jsonData, _ := json.MarshalIndent(transformedData, "", "  ")
-	fmt.Println(string(jsonData))
+	// jsonData, _ := json.MarshalIndent(transformedData, "", "  ")
+	// fmt.Println(string(jsonData))
 	// _ = jsonData
 	// fmt.Println(len(costData))
+}
+
+func combineCostExportData(dataPath string) costExportData {
+	var (
+		wg             sync.WaitGroup
+		costExportData costExportData
+		mutex          sync.Mutex
+		filePaths      = lib.GetFullFilePaths(dataPath)
+		// productNames       []string
+		// meterCategories    []string
+		// meterSubcategories []string
+		// meterIds           []string
+		// meterNames         []string
+		// meterRegions       []string
+		// unitsOfMeasure     []string
+		// consumedServices   []string
+		// resourceTypes      []string
+		// offerIds           []string
+	)
+	for _, file := range filePaths {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			// fmt.Println(file)
+			data, err := getCostExportFileData(file)
+			if err != nil {
+				panic(err)
+			}
+			mutex.Lock()
+			// productNames = append(productNames)
+			costExportData = append(costExportData, data...)
+			mutex.Unlock()
+		}()
+	}
+	wg.Wait()
+	return costExportData
 }
 
 func transformCostData(data costExportData) transformedCostItemsByTenant {
@@ -160,7 +174,7 @@ func transformCostData(data costExportData) transformedCostItemsByTenant {
 			tenantName = "PUD"
 		case sn == "puddtq":
 			tenantName = "PUDDTQ"
-		case strings.Contains(sn, "agd"):
+		case strings.ToLower(costData.Datafile) == "yellow":
 			tenantName = "YELLOW"
 		case strings.Contains(sn, "devdtq") && costData.Datafile != "BLUE" && costData.Datafile != "BLUEDTQ":
 			tenantName = "PURPLEDTQ"

@@ -1,3 +1,5 @@
+// main-nsgFlowLogs.go - modifying with channel pipelines
+
 package main
 
 import (
