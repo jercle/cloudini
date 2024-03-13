@@ -216,7 +216,9 @@ func main() {
 	// lib.CheckFatalError(err)
 
 	// lib.MarshalAndPrintJson(tenantTokens)
-	azure.GetCachedTokens()
+	// azure.GetCachedTokens()
+
+	lib.GetCldConfig(lib.CldConfigOptions{})
 
 }
 
