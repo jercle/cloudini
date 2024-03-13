@@ -23,3 +23,8 @@ dev/nsglogs
 .env
 dev/la-tables.json
 dev/cost-exports
+dev/res.json
+dev/config.json
+dev/billing.json
+dev/cldConf.json
+dev/tCache
