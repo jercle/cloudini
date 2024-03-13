@@ -42,6 +42,8 @@ to quickly create a Cobra application.`,
 		opts.Stdin = stdin
 		opts.GetFromClipboard = getFromClipboard
 
+		// fmt.Println(fileName)
+
 		code, err := dt.Generate(opts)
 		if err != nil {
 			log.Fatal(err)
