@@ -129,54 +129,54 @@ type allVmReqResponseBody struct {
 // type singleVm
 
 // Lists all Virtual Machines in a given subscription
-// func getAllSubscriptionVMs(token azure.MultiAuthToken, subscriptionId string) []virtualMachine {
-// 	// https://learn.microsoft.com/en-us/rest/api/compute/virtual-machines/list-all?view=rest-compute-2023-10-02&tabs=HTTP
-// 	// GET https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.Compute/virtualMachines?api-version=2023-09-01
-// 	// cred, err := azidentity.NewDefaultAzureCredential(nil)
-// 	// subscriptionId := "bae338c7-6098-4d52-b173-e2147e107dfa"
-// 	// var allVirtualMachines virtualMachines
-// 	// ctx := context.Background()
-// 	// tokenRequestOptions := policy.TokenRequestOptions{
-// 	// 	Scopes: []string{
-// 	// 		"https://management.core.windows.net/.default",
-// 	// 	},
-// 	// }
+func getAllSubscriptionVMs(token azure.MultiAuthToken, subscriptionId string) []virtualMachine {
+	// https://learn.microsoft.com/en-us/rest/api/compute/virtual-machines/list-all?view=rest-compute-2023-10-02&tabs=HTTP
+	// GET https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.Compute/virtualMachines?api-version=2023-09-01
+	// cred, err := azidentity.NewDefaultAzureCredential(nil)
+	// subscriptionId := "bae338c7-6098-4d52-b173-e2147e107dfa"
+	// var allVirtualMachines virtualMachines
+	// ctx := context.Background()
+	// tokenRequestOptions := policy.TokenRequestOptions{
+	// 	Scopes: []string{
+	// 		"https://management.core.windows.net/.default",
+	// 	},
+	// }
 
-// 	// token, err := cred.GetToken(ctx, tokenRequestOptions)
-// 	// if err != nil {
-// 	// 	log.Fatal(err)
-// 	// }
-// 	urlString := "https://management.azure.com/subscriptions/" +
-// 		subscriptionId +
-// 		"/providers/Microsoft.Compute/virtualMachines?api-version=2023-09-01"
-// 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	req.Header.Add("Content-Type", "application/json")
-// 	req.Header.Add("Authorization", "Bearer "+token.TokenData.Token)
+	// token, err := cred.GetToken(ctx, tokenRequestOptions)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	urlString := "https://management.azure.com/subscriptions/" +
+		subscriptionId +
+		"/providers/Microsoft.Compute/virtualMachines?api-version=2023-09-01"
+	req, err := http.NewRequest(http.MethodGet, urlString, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+token.TokenData.Token)
 
-// 	res, err := http.DefaultClient.Do(req)
-// 	if err != nil {
-// 		log.Fatal("Error fetching LA Workspace Tables")
-// 	}
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Fatal("Error fetching LA Workspace Tables")
+	}
 
-// 	responseBody, err := io.ReadAll(res.Body)
-// 	if res.StatusCode == 400 {
-// 		log.Fatal("Error fetching LA Workspace Tables: ", string(responseBody))
-// 	}
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	defer res.Body.Close()
+	responseBody, err := io.ReadAll(res.Body)
+	if res.StatusCode == 400 {
+		log.Fatal("Error fetching LA Workspace Tables: ", string(responseBody))
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer res.Body.Close()
 
-// 	// fmt.Println(string(responseBody))
+	// fmt.Println(string(responseBody))
 
-// 	var responseBodyUnmarshal vmReqResponseBody
-// 	json.Unmarshal(responseBody, &responseBodyUnmarshal)
-// 	allVirtualMachines := responseBodyUnmarshal.Value
-// 	return allVirtualMachines
-// }
+	var responseBodyUnmarshal allVmReqResponseBody
+	json.Unmarshal(responseBody, &responseBodyUnmarshal)
+	allVirtualMachines := responseBodyUnmarshal.Value
+	return allVirtualMachines
+}
 
 // Lists Azure subscriptions availabe to a given auth token
 func listSubscriptions(token azure.MultiAuthToken) ([]azure.FetchedSubscription, error) {
@@ -230,8 +230,6 @@ func main() {
 	// jsonData, err := json.MarshalIndent(tokens, "", "  ")
 	// fmt.Println(string(jsonData))
 
-	// token := "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlhSdmtvOFA3QTNVYVdTblU3Yk05blQwTWpoQSIsImtpZCI6IlhSdmtvOFA3QTNVYVdTblU3Yk05blQwTWpoQSJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldCIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0L2Y2NjMwN2I3LWE5OWEtNDNjOC05Y2Y2LTM0YzgwNmY1NDczOS8iLCJpYXQiOjE3MTAzODM4OTMsIm5iZiI6MTcxMDM4Mzg5MywiZXhwIjoxNzEwMzg3NzkzLCJhaW8iOiJBU1FBMi84V0FBQUEwcisrTm1KTk9nL0t6RnF4b0FESmVTdXVBV3owSHJENjF3b3oza0loZS9vPSIsImFwcGlkIjoiNDIwYmNlNDItNzQxMS00NGZlLWFhZGItYjQxOGY0ZTI0YThiIiwiYXBwaWRhY3IiOiIxIiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvZjY2MzA3YjctYTk5YS00M2M4LTljZjYtMzRjODA2ZjU0NzM5LyIsImlkdHlwIjoiYXBwIiwib2lkIjoiNWViYTBlYmQtNzNiMS00Y2M0LTkyNGUtMjM5N2M5ODI0NjM1IiwicmgiOiIwLkFVRUF0d2RqOXBxcHlFT2M5alRJQnZWSE9VWklmM2tBdXRkUHVrUGF3ZmoyTUJOQkFBQS4iLCJzdWIiOiI1ZWJhMGViZC03M2IxLTRjYzQtOTI0ZS0yMzk3Yzk4MjQ2MzUiLCJ0aWQiOiJmNjYzMDdiNy1hOTlhLTQzYzgtOWNmNi0zNGM4MDZmNTQ3MzkiLCJ1dGkiOiI3X2c3SEVGWFhFcThKa19qblJKRkFBIiwidmVyIjoiMS4wIiwieG1zX2NhZSI6IjEiLCJ4bXNfY2MiOlsiQ1AxIl0sInhtc19yZCI6IjAuNDJMbFlCSmlkQVFBIiwieG1zX3NzbSI6IjEiLCJ4bXNfdGNkdCI6MTUzNzkyMjMxMn0.jN85qBg4-pRh365LC3qRJcGeDAhVMeydZ_ysHZU3HQ_VxTzqRrXvBaQHOT9BR6EaaoNVA0OZv1vcXIqu_ZY5-4I_NbLmtLm3Py6AzhZsQapDgf_o8UKIDRQZw6EDA_bCr5CVnWyz7-EZDicj1dsLhDi9TX3NdMi4vtLf_jLpuv7mucoHi-GVEhs7nbIwFBxSZd7b3V1a5G35MzLEg4OWddqLMLGKdLQwCie03QgQTCTaxzZ5kHasDcufF33-r3lCq2Q3qTwGd-Lomg23BCuZlZ7WvCcVpHmuN_qhIqTOaKAhpWhIU-yoHltYY8LEwpabLuLV7XIa6ebSa4DVrxUksQ"
-
 	// ResourceId := ""
 	// // ResourceId := ""
 	// GetVmDetails(AzureOptions{ResourceId: ResourceId}, token)
@@ -241,10 +239,17 @@ func main() {
 	// 	TenantName: "YELLOW",
 	// }
 
-	var tokenOptions azure.AzureRequestOptions
-	tokenOptions.TenantName = "YELLOW"
+	// var tokenOptions azure.AzureRequestOptions
+	// tokenOptions.TenantName = "YELLOW"
 
-	azure.GetSingleTenantToken(tokenOptions)
+	// azure.GetSingleTenantToken(tokenOptions)
+	// azure.GetAllTenantSPTokens(azure.AzureRequestOptions{})
+	// token := azure.GetAzCliToken()
+	token := azure.GetToken()
+
+	fmt.Println(token)
+
+	// listSubscriptions()
 }
 
 func GetVmDetails(options azure.AzureRequestOptions, token string) {
