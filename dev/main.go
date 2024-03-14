@@ -214,42 +214,13 @@ func listSubscriptions(token azure.MultiAuthToken) ([]azure.FetchedSubscription,
 }
 
 func main() {
-	// tenantTokens, err := azure.GetAllTenantTokens(azure.GetAllTenantTokenOptions{})
-	// _ = tenantTokens
+
+	config := lib.GetCldConfig(lib.CldConfigOptions{})
+	// sub, err := azure.GetActiveSub()
 	// lib.CheckFatalError(err)
 
-	// lib.MarshalAndPrintJson(tenantTokens)
-	// azure.GetCachedTokens()
+	config.AddAzureTenant("e9f4bce2-7308-461a-91ce-3f663d079f47", "FakeTest")
 
-	// lib.GetCldConfig(lib.CldConfigOptions{})
-
-	// token := azure.GetToken()
-
-	// tokens, err := azure.GetAllTenantTokens(azure.GetAllTenantTokenOptions{})
-	// lib.CheckFatalError(err)
-	// jsonData, err := json.MarshalIndent(tokens, "", "  ")
-	// fmt.Println(string(jsonData))
-
-	// ResourceId := ""
-	// // ResourceId := ""
-	// GetVmDetails(AzureOptions{ResourceId: ResourceId}, token)
-	// azure.GetAllTenantTokens()
-
-	// tokenOptions := *azure.AzureRequestOptions{
-	// 	TenantName: "YELLOW",
-	// }
-
-	// var tokenOptions azure.AzureRequestOptions
-	// tokenOptions.TenantName = "YELLOW"
-
-	// azure.GetSingleTenantToken(tokenOptions)
-	// azure.GetAllTenantSPTokens(azure.AzureRequestOptions{})
-	// token := azure.GetAzCliToken()
-	token := azure.GetToken()
-
-	fmt.Println(token)
-
-	// listSubscriptions()
 }
 
 func GetVmDetails(options azure.AzureRequestOptions, token string) {
@@ -266,11 +237,6 @@ func GetVmDetails(options azure.AzureRequestOptions, token string) {
 			options.ResourceName +
 			"?api-version=2023-09-01"
 	}
-
-	// jsonOpts, err := json.MarshalIndent(options, "", "  ")
-	// lib.CheckFatalError(err)
-	// fmt.Println(string(jsonOpts))
-	// os.Exit(0)
 
 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
 	if err != nil {
@@ -294,7 +260,6 @@ func GetVmDetails(options azure.AzureRequestOptions, token string) {
 	defer res.Body.Close()
 
 	fmt.Println(string(responseBody))
-
 	// var responseBodyUnmarshal vmReqResponseBody
 	// json.Unmarshal(responseBody, &responseBodyUnmarshal)
 	// vmDetails := responseBodyUnmarshal.Value
