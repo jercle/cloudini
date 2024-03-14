@@ -1,4 +1,4 @@
-package cmd
+package lib
 
 type CldConfig struct {
 	Azure struct {
@@ -6,6 +6,11 @@ type CldConfig struct {
 			Tenants []CldConfigTenantAuth `json:"tenants"`
 		} `json:"multiTenantAuth"`
 	} `json:"azure"`
+}
+
+type CldConfigOptions struct {
+	GetWriteToken  bool
+	ConfigFilePath string
 }
 
 type CldConfigTenantAuth struct {

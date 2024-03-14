@@ -15,12 +15,12 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/charmbracelet/log"
-	"github.com/jercle/azg/cmd"
 	"github.com/jercle/azg/lib"
 )
 
 var usrHomeDir, err = os.UserHomeDir()
-var tCacheFile = usrHomeDir + "/.config/cld/tCache"
+var configPath = usrHomeDir + "/.config/cld"
+var tCacheFile = configPath + "/tCache"
 
 type MultiAuthToken struct {
 	TenantId   string
@@ -149,18 +149,28 @@ func (subs *SubsReqResBody) UpdateTenantName(tenantName string) {
 }
 
 func GetCachedTokens() AllTenantTokens {
-	var (
-		tokens AllTenantTokens
-	)
+	var tokens AllTenantTokens
+	if _, err := os.Stat(configPath); err != nil {
+		os.MkdirAll(configPath, os.ModePerm)
+	}
+	if _, err = os.Stat(tCacheFile); err != nil {
+		os.Create(tCacheFile)
+	}
 	fileData, err := os.ReadFile(tCacheFile)
 	lib.CheckFatalError(err)
 	byteData, err := b64.StdEncoding.DecodeString(string(fileData))
 	lib.CheckFatalError(err)
 	json.Unmarshal(byteData, &tokens)
+	if len(tokens) == 0 {
+		fmt.Println("Fetching new tokens")
+		tokens, err = GetAllTenantTokens(GetAllTenantTokenOptions{})
+		lib.CheckFatalError(err)
+	}
+	fmt.Println(tokens)
 	return tokens
 }
 
-func GetServicePrincipalToken(tenant string, spDetails cmd.CldConfigClientAuthDetails) (*TokenData, error) {
+func GetServicePrincipalToken(tenant string, spDetails lib.CldConfigClientAuthDetails) (*TokenData, error) {
 	ctx := context.Background()
 
 	tokenRequestOptions := policy.TokenRequestOptions{
@@ -311,28 +321,11 @@ func GetToken() TokenData {
 // First parameter passed into this function overwrites the config file path
 func GetAllTenantTokens(options AzureRequestOptions) (AllTenantTokens, error) {
 	var (
-		configPath   string
-		config       cmd.CldConfig
+		config       = lib.GetCldConfig(lib.CldConfigOptions{})
 		tenantTokens []MultiAuthToken
 		wg           sync.WaitGroup
 		mut          sync.Mutex
-		homeDir, _   = os.UserHomeDir()
 	)
-
-	if options.ConfigFilePath != "" {
-		configPath = options.ConfigFilePath
-	} else {
-		configPath = homeDir + "/.config/cld/config.json"
-	}
-
-	jsonConfig, err := os.Open(configPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer jsonConfig.Close()
-
-	byteValue, _ := io.ReadAll(jsonConfig)
-	json.Unmarshal(byteValue, &config)
 
 	for _, tenant := range config.Azure.TenantAuth.Tenants {
 		wg.Add(1)
