@@ -13,9 +13,7 @@ func GetFullFilePaths(path string) []string {
 
 	err := filepath.Walk(path,
 		func(path string, info os.FileInfo, err error) error {
-			if err != nil {
-				return err
-			}
+			CheckFatalError(err)
 			if !info.IsDir() {
 				fullFilePaths = append(fullFilePaths, path)
 			}
@@ -26,4 +24,12 @@ func GetFullFilePaths(path string) []string {
 	}
 
 	return fullFilePaths
+}
+
+func CheckDirExists(path string) bool {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return false
+	} else {
+		return true
+	}
 }

@@ -65,7 +65,14 @@ type azureAuthRequirements struct {
 	AZURE_RESOURCE_NAME   bool
 }
 
-type GetAllTenantTokenOptions struct {
+type AzureRequestOptions struct {
+	SubscriptionId    string
+	ResourceId        string
+	ResourceGroupName string
+	ResourceName      string
+	TenantId          string
+	TenantName        string
+
 	GetWriteToken  bool
 	ConfigFilePath string
 }
@@ -111,6 +118,24 @@ func (tokens *AllTenantTokens) SaveToFile() {
 
 func (tokens *AllTenantTokens) CheckExpiry() {
 	fmt.Println(tokens)
+}
+
+func (tokens AllTenantTokens) SelectTenant(tenantName string) (*MultiAuthToken, error) {
+	// var tenantToken MultiAuthToken
+	var tenantToken *MultiAuthToken
+
+	for _, token := range tokens {
+		if token.TenantName == tenantName {
+			*tenantToken = token
+			break
+		}
+	}
+
+	if tenantToken != nil {
+		return tenantToken, nil
+	} else {
+		return nil, fmt.Errorf("Token not found for supplied tenant name")
+	}
 }
 
 func (subs *SubsReqResBody) UpdateTenantName(tenantName string) {
@@ -284,7 +309,7 @@ func GetToken() TokenData {
 // Default path is ~/.config/cld/config.json
 //
 // First parameter passed into this function overwrites the config file path
-func GetAllTenantTokens(options GetAllTenantTokenOptions) (AllTenantTokens, error) {
+func GetAllTenantTokens(options AzureRequestOptions) (AllTenantTokens, error) {
 	var (
 		configPath   string
 		config       cmd.CldConfig
@@ -336,4 +361,47 @@ func GetAllTenantTokens(options GetAllTenantTokenOptions) (AllTenantTokens, erro
 	}
 	wg.Wait()
 	return tenantTokens, nil
+}
+
+func GetSingleTenantToken(options AzureRequestOptions) (MultiAuthToken, error) {
+	var (
+		configPath string
+		config     cmd.CldConfig
+		// multiAuthToken MultiAuthToken
+		homeDir, _ = os.UserHomeDir()
+	)
+
+	if options.ConfigFilePath != "" {
+		configPath = options.ConfigFilePath
+	} else {
+		configPath = homeDir + "/.config/cld/config.json"
+	}
+
+	jsonConfig, err := os.Open(configPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer jsonConfig.Close()
+
+	byteValue, _ := io.ReadAll(jsonConfig)
+	json.Unmarshal(byteValue, &config)
+
+	for _, tenant := range config.Azure.TenantAuth.Tenants {
+		fmt.Println(tenant)
+	}
+	// os.Exit(0)
+	// tokens := GetAllTenantTokens()
+
+	var tokenData MultiAuthToken
+	// fmt.Println("Getting token for " + tenant.TenantName)
+	if options.GetWriteToken {
+		// tokenData, err = GetServicePrincipalToken(options.TenantId)
+	} else if !options.GetWriteToken {
+		// tokenData, err = GetServicePrincipalToken(tenant.TenantId, tenant.Reader)
+	}
+	lib.CheckFatalError(err)
+
+	// fmt.Println("Obtained token for " + tenant.TenantName)
+
+	return tokenData, nil
 }

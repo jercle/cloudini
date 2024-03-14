@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"runtime"
+	"strconv"
 )
 
 // Simple wrapper to
@@ -13,8 +15,10 @@ import (
 //	}
 func CheckFatalError(err error) {
 	if err != nil {
-		log.Fatalln(err)
+		_, file, no, _ := runtime.Caller(1)
+		log.Fatalln(file+":"+strconv.Itoa(no)+":0", err)
 	}
+
 }
 
 // Simple wraper around
