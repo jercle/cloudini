@@ -219,7 +219,7 @@ func main() {
 	// sub, err := azure.GetActiveSub()
 	// lib.CheckFatalError(err)
 
-	config.AddAzureTenant("e9f4bce2-7308-461a-91ce-3f663d079f47", "FakeTest")
+	// config.AddAzureTenant("e9f4bce2-7308-461a-91ce-3f663d079f47", "FakeTest")
 
 }
 

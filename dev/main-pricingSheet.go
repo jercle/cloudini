@@ -44,7 +44,6 @@ type PriceSheetItem struct {
 
 func main() {
 	// ChunkPriceSheet()
-
 	CombinePriceSheet()
 }
 
@@ -120,7 +119,7 @@ func ChunkPriceSheet() {
 	)
 	start := time.Now()
 
-	f, err := os.Open("fullFakePricingSheet.json")
+	f, err := os.Open("./outputs/fullFakePricingSheet.json")
 	lib.CheckFatalError(err)
 	defer f.Close()
 
@@ -131,6 +130,7 @@ func ChunkPriceSheet() {
 	r := bufio.NewReader(f)
 	d := json.NewDecoder(r)
 	i := 0
+	fileCount := 0
 
 	d.Token()
 	for d.More() {
@@ -139,18 +139,26 @@ func ChunkPriceSheet() {
 		priceItemsChunk = append(priceItemsChunk, *item)
 
 		i++
+
 		if math.Mod(float64(i), 1000) == 0 {
 			// fmt.Println(i, " chunk of 100")
 			chunkBytes, err := json.Marshal(priceItemsChunk)
 			lib.CheckFatalError(err)
 			err = os.WriteFile(pricingSheetPath+"/fakePricingSheet-"+strconv.Itoa(i)+".json", chunkBytes, os.ModePerm)
 			priceItemsChunk = nil
+			fileCount++
 		}
 	}
 	d.Token()
 
+	chunkBytes, err := json.Marshal(priceItemsChunk)
+	lib.CheckFatalError(err)
+	fileCount++
+
+	err = os.WriteFile(pricingSheetPath+"/fakePricingSheet-"+strconv.Itoa(i)+".json", chunkBytes, os.ModePerm)
+
 	elapsed := time.Since(start)
-	fmt.Printf("Total of [%v] object created.\n", i)
+	fmt.Printf("Total of [%v] objects created in [%v] files.\n", i, fileCount)
 	fmt.Printf("To parse the file took [%v]\n", elapsed)
 }
 
@@ -170,7 +178,7 @@ func CombinePriceSheet() {
 
 	for _, fn := range filenames {
 		wg.Add(1)
-		fmt.Println(fn)
+		// fmt.Println(fn)
 		go func() {
 			chunkData, err := ReadChunkedPricingSheetFile(fn)
 			lib.CheckFatalError(err)
@@ -183,9 +191,17 @@ func CombinePriceSheet() {
 	}
 	wg.Wait()
 
+	byteValue, err := json.MarshalIndent(fullPriceSheet, "", "  ")
+	lib.CheckFatalError(err)
+
+	if !lib.CheckDirExists("./outputs") {
+		os.MkdirAll("./outputs", os.ModePerm)
+	}
+
+	os.WriteFile("./outputs/combinedPriceSheetIndent.json", byteValue, os.ModePerm)
+
 	elapsed := time.Since(start)
-	fmt.Printf("Total of [%v] objects parsed.\n", len(fullPriceSheet))
-	fmt.Printf("Total of [%v] files parsed.\n", filesParsed)
+	fmt.Printf("Total of [%v] objects parsed from [%v] files.\n", len(fullPriceSheet), filesParsed)
 	fmt.Printf("To parse the file took [%v]\n", elapsed)
 }
 
