@@ -2,7 +2,6 @@ package lib
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 )
@@ -22,7 +21,7 @@ func GetCldConfig(options CldConfigOptions) CldConfig {
 	if options.ConfigFilePath != "" {
 		configPath = options.ConfigFilePath
 	} else {
-		configPath = usrHomeDir + configPath + "/config.json"
+		configPath = configFile
 	}
 
 	if _, err := os.Stat(configPath); err != nil {
@@ -47,7 +46,7 @@ func GetCldConfig(options CldConfigOptions) CldConfig {
 		CheckFatalError(err)
 	}
 
-	fmt.Println(config)
+	// fmt.Println(config)
 
 	return config
 }

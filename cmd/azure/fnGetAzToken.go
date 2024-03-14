@@ -163,7 +163,7 @@ func GetCachedTokens() AllTenantTokens {
 	json.Unmarshal(byteData, &tokens)
 	if len(tokens) == 0 {
 		fmt.Println("Fetching new tokens")
-		tokens, err = GetAllTenantTokens(GetAllTenantTokenOptions{})
+		tokens, err = GetAllTenantTokens(AzureRequestOptions{})
 		lib.CheckFatalError(err)
 	}
 	fmt.Println(tokens)
@@ -359,7 +359,7 @@ func GetAllTenantTokens(options AzureRequestOptions) (AllTenantTokens, error) {
 func GetSingleTenantToken(options AzureRequestOptions) (MultiAuthToken, error) {
 	var (
 		configPath string
-		config     cmd.CldConfig
+		config     lib.CldConfig
 		// multiAuthToken MultiAuthToken
 		homeDir, _ = os.UserHomeDir()
 	)
@@ -371,9 +371,7 @@ func GetSingleTenantToken(options AzureRequestOptions) (MultiAuthToken, error) {
 	}
 
 	jsonConfig, err := os.Open(configPath)
-	if err != nil {
-		log.Fatal(err)
-	}
+	lib.CheckFatalError(err)
 	defer jsonConfig.Close()
 
 	byteValue, _ := io.ReadAll(jsonConfig)
@@ -382,19 +380,15 @@ func GetSingleTenantToken(options AzureRequestOptions) (MultiAuthToken, error) {
 	for _, tenant := range config.Azure.TenantAuth.Tenants {
 		fmt.Println(tenant)
 	}
-	// os.Exit(0)
-	// tokens := GetAllTenantTokens()
 
 	var tokenData MultiAuthToken
 	// fmt.Println("Getting token for " + tenant.TenantName)
 	if options.GetWriteToken {
-		// tokenData, err = GetServicePrincipalToken(options.TenantId)
+		// tokenData, err = GetServicePrincipalToken(options.TenantId, options.ten)
 	} else if !options.GetWriteToken {
 		// tokenData, err = GetServicePrincipalToken(tenant.TenantId, tenant.Reader)
 	}
 	lib.CheckFatalError(err)
-
-	// fmt.Println("Obtained token for " + tenant.TenantName)
 
 	return tokenData, nil
 }

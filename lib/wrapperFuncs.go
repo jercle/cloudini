@@ -18,7 +18,11 @@ func CheckFatalError(err error) {
 		_, file, no, _ := runtime.Caller(1)
 		log.Fatalln(file+":"+strconv.Itoa(no)+":0", err)
 	}
+}
 
+func PrintSrcLoc(str string) {
+	_, file, no, _ := runtime.Caller(1)
+	fmt.Println(file+":"+strconv.Itoa(no)+":0", str)
 }
 
 // Simple wraper around
