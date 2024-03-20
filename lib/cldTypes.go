@@ -2,14 +2,11 @@ package lib
 
 type CldConfig struct {
 	Azure struct {
-		TenantAuth struct {
-			Tenants []CldConfigTenantAuth `json:"tenants"`
-		} `json:"multiTenantAuth"`
+		Tenants []CldConfigTenantAuth `json:"tenants"`
 	} `json:"azure"`
 }
 
 type CldConfigOptions struct {
-	GetWriteToken  bool
 	ConfigFilePath string
 }
 

@@ -64,23 +64,23 @@ type Subscription struct {
 	TenantID  string `json:"tenantId"`
 }
 
-func GetActiveSub() (string, error) {
+func GetActiveSub() (*Subscription, error) {
 	subs, _ := getSubs()
 
 	for _, sub := range subs.Subscriptions {
 		if sub.IsDefault {
-			return sub.ID, nil
+			return &sub, nil
 		}
 	}
 
-	return "", fmt.Errorf("no default subscription")
+	return nil, fmt.Errorf("no default subscription")
 }
 
 func getSubs() (AzureProfile, []byte) {
 	userHomeDir, _ := os.UserHomeDir()
 	content, readError := os.ReadFile(userHomeDir + "/.azure/azureProfile.json")
 	// content, readError := os.ReadFile("/home/jercle/git/azg/testData/azCliProfile.json")
-
+	// fmt.Println(string(content))
 	if readError != nil {
 		log.Fatal("Error when opening Azure Profile. Have you logged into az-cli?", readError)
 	}

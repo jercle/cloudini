@@ -18,8 +18,8 @@ import (
 	"github.com/jercle/azg/lib"
 )
 
-var usrHomeDir, err = os.UserHomeDir()
-var configPath = usrHomeDir + "/.config/cld"
+// var usrHomeDir, err = os.UserHomeDir()
+var configPath = lib.InitConfig(lib.CldConfigOptions{})
 var tCacheFile = configPath + "/tCache"
 
 type MultiAuthToken struct {
@@ -65,18 +65,6 @@ type azureAuthRequirements struct {
 	AZURE_RESOURCE_NAME   bool
 }
 
-type AzureRequestOptions struct {
-	SubscriptionId    string
-	ResourceId        string
-	ResourceGroupName string
-	ResourceName      string
-	TenantId          string
-	TenantName        string
-
-	GetWriteToken  bool
-	ConfigFilePath string
-}
-
 type FetchedSubscription struct {
 	AuthorizationSource  string   `json:"authorizationSource"`
 	DisplayName          string   `json:"displayName"`
@@ -105,7 +93,6 @@ type AllTenantTokens []MultiAuthToken
 
 func (tokens *AllTenantTokens) SaveToFile() {
 
-	lib.CheckFatalError(err)
 	byteData, err := json.Marshal(tokens)
 	lib.CheckFatalError(err)
 	if _, err := os.Stat(tCacheFile); err != nil {
@@ -153,7 +140,7 @@ func GetCachedTokens() AllTenantTokens {
 	if _, err := os.Stat(configPath); err != nil {
 		os.MkdirAll(configPath, os.ModePerm)
 	}
-	if _, err = os.Stat(tCacheFile); err != nil {
+	if _, err := os.Stat(tCacheFile); err != nil {
 		os.Create(tCacheFile)
 	}
 	fileData, err := os.ReadFile(tCacheFile)
@@ -163,7 +150,7 @@ func GetCachedTokens() AllTenantTokens {
 	json.Unmarshal(byteData, &tokens)
 	if len(tokens) == 0 {
 		fmt.Println("Fetching new tokens")
-		tokens, err = GetAllTenantTokens(AzureRequestOptions{})
+		tokens, err = GetAllTenantSPTokens(AzureRequestOptions{})
 		lib.CheckFatalError(err)
 	}
 	fmt.Println(tokens)
@@ -248,9 +235,8 @@ func GetLogAnalyticsToken() (*TokenRequestResponse, error) {
 	tokenReqStr := "grant_type=client_credentials&client_id=" + authDetails.AZURE_CLIENT_ID + "&resource=https://api.loganalytics.io&client_secret=" + authDetails.AZURE_CLIENT_SECRET
 
 	req, err := http.NewRequest(http.MethodPost, urlString, bytes.NewBufferString(tokenReqStr))
-	if err != nil {
-		return nil, err
-	}
+	lib.CheckFatalError(err)
+
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	res, err := http.DefaultClient.Do(req)
@@ -290,11 +276,15 @@ func GetAzureEnvVariables(requiredEnvVars azureAuthRequirements) *azureAuthDetai
 	return &envs
 }
 
-func GetToken() TokenData {
+func GetToken(tenantName string) MultiAuthToken {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+	lib.CheckFatalError(err)
+
+	sub, err := GetActiveSub()
+	lib.CheckFatalError(err)
+	// fmt.Println(sub.TenantID)
+	// os.Exit(0)
+
 	ctx := context.Background()
 	tokenRequestOptions := policy.TokenRequestOptions{
 		Scopes: []string{
@@ -303,15 +293,18 @@ func GetToken() TokenData {
 	}
 
 	tokenResponse, err := cred.GetToken(ctx, tokenRequestOptions)
-	if err != nil {
-		log.Fatal(err)
+	lib.CheckFatalError(err)
+
+	multiAuthToken := MultiAuthToken{
+		TenantId:   sub.TenantID,
+		TenantName: tenantName,
+		TokenData: TokenData{
+			Token:     tokenResponse.Token,
+			ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
+		},
 	}
 
-	token := TokenData{
-		Token:     tokenResponse.Token,
-		ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
-	}
-	return token
+	return multiAuthToken
 }
 
 // Gets a token for each tenant configured in the cld config file
@@ -319,26 +312,26 @@ func GetToken() TokenData {
 // Default path is ~/.config/cld/config.json
 //
 // First parameter passed into this function overwrites the config file path
-func GetAllTenantTokens(options AzureRequestOptions) (AllTenantTokens, error) {
+func GetAllTenantSPTokens(options AzureRequestOptions) (AllTenantTokens, error) {
 	var (
 		config       = lib.GetCldConfig(lib.CldConfigOptions{})
 		tenantTokens []MultiAuthToken
 		wg           sync.WaitGroup
 		mut          sync.Mutex
+		err          error
 	)
 
-	for _, tenant := range config.Azure.TenantAuth.Tenants {
+	for _, tenant := range config.Azure.Tenants {
 		wg.Add(1)
 		go func() {
 			var tokenData *TokenData
 			// fmt.Println("Getting token for " + tenant.TenantName)
 			if options.GetWriteToken {
 				tokenData, err = GetServicePrincipalToken(tenant.TenantID, tenant.Writer)
+				lib.CheckFatalError(err)
 			} else if !options.GetWriteToken {
 				tokenData, err = GetServicePrincipalToken(tenant.TenantID, tenant.Reader)
-			}
-			if err != nil {
-				log.Fatal(err)
+				lib.CheckFatalError(err)
 			}
 			tenantToken := MultiAuthToken{
 				TenantId:   tenant.TenantID,
@@ -356,7 +349,7 @@ func GetAllTenantTokens(options AzureRequestOptions) (AllTenantTokens, error) {
 	return tenantTokens, nil
 }
 
-func GetSingleTenantToken(options AzureRequestOptions) (MultiAuthToken, error) {
+func GetSingleTenantSPToken(options AzureRequestOptions) (MultiAuthToken, error) {
 	var (
 		configPath string
 		config     lib.CldConfig
@@ -370,19 +363,27 @@ func GetSingleTenantToken(options AzureRequestOptions) (MultiAuthToken, error) {
 		configPath = homeDir + "/.config/cld/config.json"
 	}
 
+	if !lib.CheckDirExists(configPath) {
+		os.MkdirAll(configPath, os.ModePerm)
+	}
+
 	jsonConfig, err := os.Open(configPath)
 	lib.CheckFatalError(err)
+
 	defer jsonConfig.Close()
 
 	byteValue, _ := io.ReadAll(jsonConfig)
 	json.Unmarshal(byteValue, &config)
 
-	for _, tenant := range config.Azure.TenantAuth.Tenants {
+	for _, tenant := range config.Azure.Tenants {
 		fmt.Println(tenant)
 	}
+	// os.Exit(0)
+	// tokens := GetAllTenantTokens()
+	// lib.CldConfigClientAuthDetails
 
 	var tokenData MultiAuthToken
-	// fmt.Println("Getting token for " + tenant.TenantName)
+	// fmt.Println("Getting token for " + options.TenantName)
 	if options.GetWriteToken {
 		// tokenData, err = GetServicePrincipalToken(options.TenantId, options.ten)
 	} else if !options.GetWriteToken {
