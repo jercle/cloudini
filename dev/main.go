@@ -1,35 +1,14 @@
-// Azure DevOps authentication
-
 package main
 
 import (
-	"context"
 	"fmt"
 
-	"github.com/jercle/azg/lib"
-
-	"github.com/AzureAD/microsoft-authentication-library-for-go/apps/public"
+	"github.com/jercle/azg/cmd/web"
 )
 
 func main() {
-	ctx := context.Background()
-	clientId := "4ca69554-1c1c-4eb5-84d6-a7e61551929a"
-	tenantId := "e9f4bce2-7308-461a-91ce-3f663d079f47"
+	urlString := "https://appserviceapcipam.azurewebsites.net/api/users/me"
+	token := "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlhSdmtvOFA3QTNVYVdTblU3Yk05blQwTWpoQSJ9.eyJhdWQiOiJmNmU5YzllMi0yOTM3LTQ3MWUtOTE5My1kMjZjMDI5Y2E0YzQiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNjQ4YTVlZDctYzVhYy00NWI3LWI0MDYtNzkxZjBkNDMzNGE2L3YyLjAiLCJpYXQiOjE3MTEzMTU0NzYsIm5iZiI6MTcxMTMxNTQ3NiwiZXhwIjoxNzExMzIxMTI5LCJhaW8iOiJBV1FBbS84V0FBQUE3dGw4ZVU1eTQ2UW5ydjMwUDhDSllLY1RvOWRmZGNyRndLL3N0Kzc3RjB1NzJBbHdjTmwycWI0NmhRNU1CdjZ5aGpyZWJrelBVVDRxaXJldlEzRFB1Y2VBejRxY0tFbm1ma2pTMlJrMldxV1NpVTBJRlVuMDZTY1V0SUdSZGlrWSIsImF6cCI6ImQ1MjI1NjdiLTZmNDItNGZhZi1hMmUzLTBlMzhkMmY2MDdmYyIsImF6cGFjciI6IjAiLCJuYW1lIjoiYWRtLjExNDQwZSIsIm9pZCI6ImMxZjBlM2I3LTQ5NWUtNDY2MS05MDI1LWFmNDE0NTNjM2M4NSIsInByZWZlcnJlZF91c2VybmFtZSI6ImFkbS4xMTQ0MGVAYXNpby5nb3YuYXUiLCJyaCI6IjAuQVVJQTExNktaS3pGdDBXMEJua2ZEVU0wcHVMSjZmWTNLUjVIa1pQU2JBS2NwTVJDQUxRLiIsInNjcCI6ImFjY2Vzc19hc191c2VyIiwic3ViIjoiNVRlME55N1h5T3Y1Zl9TbS1hSE5Wb0stNm1jRXcxQ2drUTB3Umxnd2M5ayIsInRpZCI6IjY0OGE1ZWQ3LWM1YWMtNDViNy1iNDA2LTc5MWYwZDQzMzRhNiIsInV0aSI6IkQ1WHh4bll1QWtXZW90NEFQQ2RZQUEiLCJ2ZXIiOiIyLjAifQ.hC7w7yE7hSzE46fi408_2L44Vwrs6q_mTJ5NaRlstgwI7Yz4pvYReY5wez4RBv5hnjZPG4W2B2OFd9ZkRo5lLIWopSh2TUu9JYFSmtnCZ9Uc6uSH87tvGXQXchf0r1EEoWaXkjWkw_hZv_BFthn5xE4R3BosWwA7liXcKlZKiwJ9soSG1FlYW1PP-cYvzV6AF5_yt5r8JnsogG9x7r_LPXLy-aSelsS7JNO9CagMe6WyeK5JpBjOwA-U_EhGnQOjbTvPsgKSy8hAdjxqP8zK1LIHvMuHOTJhddeLBGxXuEd2t9w4vfEteCcHKlEaA6OuJKAmpViaFIWIJaX0JcBzYg"
 
-	client, err := public.New(clientId, public.WithAuthority("https://login.microsoftonline.com/"+tenantId))
-	lib.CheckFatalError(err)
-
-	// fmt.Println(client)
-	// accounts, err := client.Accounts(ctx)
-	// fmt.Println(accounts)
-
-	scopes := []string{
-		"User.ReadAll",
-	}
-
-	// auth, err := client.AcquireTokenInteractive(ctx, scopes)
-	auth, err := client.AcquireTokenByDeviceCode(ctx, scopes)
-	lib.CheckFatalError(err)
-
-	fmt.Println(auth)
+	fmt.Println(string(web.SimpleGetRequestWithToken(urlString, token)))
 }
