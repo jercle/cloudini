@@ -5,6 +5,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -112,8 +113,8 @@ func main() {
 		allPipelines []Pipeline
 		allRuns      []PipelineRun
 		// adoProject   = "Infra"
-		adoPAT = os.Getenv("CLD_ADO_PAT")
-		orgUrl = "https://dev.azure.com/" + os.Getenv("CLD_ADO_ORG")
+		adoPAT = os.Getenv("AZURE_DEVOPS_EXT_PAT")
+		orgUrl = "https://dev.azure.com/" + os.Getenv("AZURE_DEVOPS_ORGANIZATION")
 		ctx    = context.Background()
 	)
 	connection := azuredevops.NewPatConnection(orgUrl, adoPAT)
@@ -124,12 +125,12 @@ func main() {
 	_ = connection
 
 	// allRuns = getAllRuns(ctx, connection)
-	// allPipelines = getAllPipelinesWithRuns(ctx, connection)
+	allPipelines = getAllPipelinesWithRuns(ctx, connection)
 
-	// jsonData, err := json.MarshalIndent(allPipelines, "", "  ")
-	// lib.CheckFatalError(err)
+	jsonData, err := json.MarshalIndent(allPipelines, "", "  ")
+	lib.CheckFatalError(err)
 
-	// fmt.Println(string(jsonData))
+	fmt.Println(string(jsonData))
 }
 
 func (pipeline *Pipeline) GetRuns(ctx context.Context, connection *azuredevops.Connection) []PipelineRun {

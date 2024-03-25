@@ -8,6 +8,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	devOpsOrg           string
+	personalAccessToken string
+	projectName         string
+)
+
 var adoCmd = &cobra.Command{
 	Use:   "ado",
 	Short: "A brief description of your command",
@@ -24,6 +30,15 @@ to quickly create a Cobra application.`,
 
 func init() {
 	cmd.RootCmd.AddCommand(adoCmd)
+
+	adoCmd.PersistentFlags().StringVarP(&devOpsOrg, "org", "o", "", "Azure DevOps Organization")
+	// AZURE_DEVOPS_ORGANIZATION
+	adoCmd.PersistentFlags().StringVarP(&personalAccessToken, "pat", "p", "", "Azure DevOps Personal Access Token")
+	// AZURE_DEVOPS_EXT_PAT
+	adoCmd.PersistentFlags().StringVar(&projectName, "project", "", "Azure DevOps Project")
+
+	adoCmd.MarkPersistentFlagRequired("org")
+	adoCmd.MarkPersistentFlagRequired("pat")
 
 	// Here you will define your flags and configuration settings.
 
