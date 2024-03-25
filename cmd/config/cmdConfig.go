@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/jercle/azg/cmd"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +15,7 @@ var SetConfigItem string
 // configCmd represents the config command
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "A brief description of your command",
+	Short: "Commands related to Cloudini configuration",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
@@ -30,7 +31,7 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	RootCmd.AddCommand(configCmd)
+	cmd.RootCmd.AddCommand(configCmd)
 	configCmd.Flags().StringVarP(&SetConfigItem, "setItem", "s", "", "Set config item")
 
 	// Here you will define your flags and configuration settings.
