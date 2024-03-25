@@ -6,20 +6,22 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.10.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.5.1
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/costmanagement/armcostmanagement v1.1.1
+	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resourcegraph/armresourcegraph v0.9.0
+	github.com/AzureAD/microsoft-authentication-library-for-go v1.2.2
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/alecthomas/assert/v2 v2.6.0
 	github.com/brianvoe/gofakeit/v7 v7.0.2
 	github.com/charmbracelet/bubbles v0.18.0
 	github.com/charmbracelet/bubbletea v0.25.0
 	github.com/charmbracelet/lipgloss v0.10.0
-	github.com/charmbracelet/log v0.3.1
+	github.com/charmbracelet/log v0.4.0
 	github.com/fatih/camelcase v1.0.0
 	github.com/fatih/color v1.16.0
 	github.com/fatih/structtag v1.2.0
 	github.com/gernest/wow v0.1.0
 	github.com/go-faker/faker/v4 v4.3.0
-	github.com/gocarina/gocsv v0.0.0-20231116093920-b87c2d0e983a
 	github.com/mattn/go-sqlite3 v1.14.22
+	github.com/microsoft/azure-devops-go-api/azuredevops/v7 v7.1.0
 	github.com/muesli/go-app-paths v0.2.2
 	github.com/rodaine/table v1.1.1
 	github.com/spf13/cobra v1.8.0
@@ -34,7 +36,6 @@ require (
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.5.2 // indirect
-	github.com/AzureAD/microsoft-authentication-library-for-go v1.2.1 // indirect
 	github.com/alecthomas/repr v0.4.0 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
