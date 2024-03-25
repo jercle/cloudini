@@ -1,7 +1,3 @@
-// Azure DevOps authentication
-
-package main
-
 import (
 	"context"
 	"encoding/json"
@@ -104,32 +100,6 @@ type PipelineRun struct {
 		Folder  string `json:"folder"`
 		WebUrl  string `json:"webUrl"`
 	}
-}
-
-// With PAT
-func main() {
-	var (
-		allPipelines []Pipeline
-		allRuns      []PipelineRun
-		// adoProject   = "Infra"
-		adoPAT = os.Getenv("CLD_ADO_PAT")
-		orgUrl = "https://dev.azure.com/" + os.Getenv("CLD_ADO_ORG")
-		ctx    = context.Background()
-	)
-	connection := azuredevops.NewPatConnection(orgUrl, adoPAT)
-
-	_ = allPipelines
-	_ = allRuns
-	_ = ctx
-	_ = connection
-
-	// allRuns = getAllRuns(ctx, connection)
-	// allPipelines = getAllPipelinesWithRuns(ctx, connection)
-
-	// jsonData, err := json.MarshalIndent(allPipelines, "", "  ")
-	// lib.CheckFatalError(err)
-
-	// fmt.Println(string(jsonData))
 }
 
 func (pipeline *Pipeline) GetRuns(ctx context.Context, connection *azuredevops.Connection) []PipelineRun {
