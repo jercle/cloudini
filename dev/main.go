@@ -382,7 +382,7 @@ func main() {
 				allIpAddresses.PublicAddresses = append(allIpAddresses.PrivateAddresses, ipAddressItem)
 			} else {
 				// Is a public IP
-				pubAddressUrl := "https://management.azure.com" + "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/publicIPAddresses/bst-apcdtqshared-automon-pip" + "?api-version=2023-02-01"
+				pubAddressUrl := "https://management.azure.com" + conf.Properties.PublicIpAddress.ID + "?api-version=2023-02-01"
 				result := printHttpGetResult(pubAddressUrl)
 
 				var publicIp PublicIpAddress
