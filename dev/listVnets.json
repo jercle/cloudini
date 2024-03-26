@@ -1,0 +1,1503 @@
+{
+  "value": [
+    {
+      "name": "vnet-apcdtqshared-automon",
+      "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon",
+      "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "australiaeast",
+      "tags": {
+        "cost_group": "management",
+        "env": "red-dtq",
+        "managed_by": "terraform"
+      },
+      "properties": {
+        "provisioningState": "Succeeded",
+        "resourceGuid": "88ac1461-699e-45b7-83d9-07a00fcfe4ef",
+        "addressSpace": {
+          "addressPrefixes": [
+            "172.26.0.0/19"
+          ]
+        },
+        "dhcpOptions": {
+          "dnsServers": []
+        },
+        "subnets": [
+          {
+            "name": "snet-apcdtqshared-automon-builders",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/subnets/snet-apcdtqshared-automon-builders",
+            "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.26.0.64/26",
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/routeTables/rt-apcdtqshared-automon-builders"
+              },
+              "ipConfigurations": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/networkInterfaces/PVT-AUTOMON-BUILDERS-STORAGE-NIC/ipConfigurations/PRIVATEENDPOINTIPCONFIG.05BF63B2-DE57-4B09-A14F-55D95F5D2860"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/networkInterfaces/PVT-STAPCDTQDESKTOPAIB-AUTOMON-NIC/ipConfigurations/PRIVATEENDPOINTIPCONFIG.F8A37684-005D-4AC8-9095-08AD75411B23"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/networkInterfaces/PVT-STDEVDTQDESKTOPAIB-AUTOMON-NIC/ipConfigurations/PRIVATEENDPOINTIPCONFIG.902F944C-B99D-4BCE-A335-C0ADC6AF7AD7"
+                }
+              ],
+              "privateEndpoints": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/privateEndpoints/PVT-AUTOMON-BUILDERS-STORAGE"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/privateEndpoints/PVT-STAPCDTQDESKTOPAIB-AUTOMON"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/privateEndpoints/PVT-STDEVDTQDESKTOPAIB-AUTOMON"
+                }
+              ],
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.KeyVault",
+                  "locations": [
+                    "*"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.EventHub",
+                  "locations": [
+                    "*"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                }
+              ],
+              "delegations": [],
+              "purpose": "PrivateEndpoints",
+              "privateEndpointNetworkPolicies": "Disabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "AzureBastionSubnet",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/subnets/AzureBastionSubnet",
+            "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.26.15.0/26",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-automon-bastion"
+              },
+              "ipConfigurations": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/bastionHosts/BST-APCDTQSHARED-AUTOMON/bastionHostIpConfigurations/BST_PUB_IP"
+                }
+              ],
+              "serviceEndpoints": [],
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "snet-apcdtqshared-automon",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/subnets/snet-apcdtqshared-automon",
+            "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.26.0.0/26",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/networkSecurityGroups/nsg-automon"
+              },
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/routeTables/rt-apcdtqshared-automon"
+              },
+              "ipConfigurations": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/networkInterfaces/PACKERBUILDER-NIC/ipConfigurations/INTERNAL"
+                }
+              ],
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.ContainerRegistry",
+                  "locations": [
+                    "*"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.KeyVault",
+                  "locations": [
+                    "*"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.ServiceBus",
+                  "locations": [
+                    "*"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.EventHub",
+                  "locations": [
+                    "*"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                }
+              ],
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          }
+        ],
+        "virtualNetworkPeerings": [
+          {
+            "name": "peer-vnet-automon-apcdtqshared-aueast",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/virtualNetworkPeerings/peer-vnet-automon-apcdtqshared-aueast",
+            "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "resourceGuid": "42cb034c-e907-0660-1830-803ba9553ea6",
+              "peeringState": "Connected",
+              "peeringSyncLevel": "FullyInSync",
+              "remoteVirtualNetwork": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast"
+              },
+              "allowVirtualNetworkAccess": true,
+              "allowForwardedTraffic": true,
+              "allowGatewayTransit": true,
+              "useRemoteGateways": false,
+              "doNotVerifyRemoteGateways": false,
+              "peerCompleteVnets": true,
+              "remoteAddressSpace": {
+                "addressPrefixes": [
+                  "172.25.14.0/23"
+                ]
+              },
+              "remoteVirtualNetworkAddressSpace": {
+                "addressPrefixes": [
+                  "172.25.14.0/23"
+                ]
+              },
+              "routeServiceVips": {}
+            },
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+          },
+          {
+            "name": "RemoteVnetToHubPeering_75d244df-339d-40c5-8b68-f4125b5eac31",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/virtualNetworkPeerings/RemoteVnetToHubPeering_75d244df-339d-40c5-8b68-f4125b5eac31",
+            "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "resourceGuid": "fd7e50be-5a03-0572-08b1-f3b2549148de",
+              "peeringState": "Connected",
+              "peeringSyncLevel": "FullyInSync",
+              "remoteVirtualNetwork": {
+                "id": "/subscriptions/e20a43d8-eb35-4dd2-b223-8849a06b780b/resourceGroups/RG_sechub-apcdtqconn-aueast_8a4cd79e-351d-46b5-88ca-2d258e863429/providers/Microsoft.Network/virtualNetworks/HV_sechub-apcdtqconn-au_a4107b7f-90d0-4886-9da0-0b33052634f4"
+              },
+              "allowVirtualNetworkAccess": true,
+              "allowForwardedTraffic": false,
+              "allowGatewayTransit": false,
+              "useRemoteGateways": true,
+              "doNotVerifyRemoteGateways": true,
+              "peerCompleteVnets": true,
+              "remoteGateways": [
+                {
+                  "id": "/subscriptions/e20a43d8-eb35-4dd2-b223-8849a06b780b/resourceGroups/RG_sechub-apcdtqconn-aueast_8a4cd79e-351d-46b5-88ca-2d258e863429/providers/Microsoft.Network/virtualNetworkGateways/CG_637daa76-4fd8-40f1-8db0-83c8fdd73216"
+                }
+              ],
+              "remoteAddressSpace": {
+                "addressPrefixes": [
+                  "172.25.0.0/23"
+                ]
+              },
+              "remoteVirtualNetworkAddressSpace": {
+                "addressPrefixes": [
+                  "172.25.0.0/23"
+                ]
+              },
+              "routeServiceVips": {
+                "af36ba88-8c99-43f4-a5e3-8fa90652cc96": "20.248.216.217"
+              }
+            },
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+          },
+          {
+            "name": "peer-hapdtqpshared-automon",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/virtualNetworkPeerings/peer-hapdtqpshared-automon",
+            "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "resourceGuid": "0b8b5284-a021-0e24-0039-51ccacb53d2b",
+              "peeringState": "Connected",
+              "peeringSyncLevel": "FullyInSync",
+              "remoteVirtualNetwork": {
+                "id": "/subscriptions/c77b7e3c-4ec7-459a-9d30-93d5ac47a0ff/resourceGroups/rg-hapdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-hapdtqshared-automon"
+              },
+              "allowVirtualNetworkAccess": true,
+              "allowForwardedTraffic": true,
+              "allowGatewayTransit": false,
+              "useRemoteGateways": false,
+              "doNotVerifyRemoteGateways": false,
+              "peerCompleteVnets": true,
+              "remoteAddressSpace": {
+                "addressPrefixes": [
+                  "172.27.0.0/19"
+                ]
+              },
+              "remoteVirtualNetworkAddressSpace": {
+                "addressPrefixes": [
+                  "172.27.0.0/19"
+                ]
+              },
+              "routeServiceVips": {}
+            },
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+          }
+        ],
+        "enableDdosProtection": false
+      }
+    },
+    {
+      "name": "rg-apcdtqshared-nifi-vnet",
+      "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-nifi/providers/Microsoft.Network/virtualNetworks/rg-apcdtqshared-nifi-vnet",
+      "etag": "W/\"1bb41b83-1b8b-4267-bb89-ee7d375b32bc\"",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "australiaeast",
+      "tags": {
+        "Created By": "7955C"
+      },
+      "properties": {
+        "provisioningState": "Succeeded",
+        "resourceGuid": "97b4d9c6-74cf-4917-abab-089e19bf503c",
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "dhcpOptions": {
+          "dnsServers": []
+        },
+        "subnets": [
+          {
+            "name": "default",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-nifi/providers/Microsoft.Network/virtualNetworks/rg-apcdtqshared-nifi-vnet/subnets/default",
+            "etag": "W/\"1bb41b83-1b8b-4267-bb89-ee7d375b32bc\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "10.0.0.0/24",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-nifi/providers/Microsoft.Network/networkSecurityGroups/rg-apcdtqshared-nifi-vnet-default-nsg"
+              },
+              "ipConfigurations": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-nifi/providers/Microsoft.Network/networkInterfaces/gateway-ansible-0170/ipConfigurations/ipconfig1"
+                }
+              ],
+              "serviceEndpoints": [],
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          }
+        ],
+        "virtualNetworkPeerings": [],
+        "enableDdosProtection": false
+      }
+    },
+    {
+      "name": "vnet-apcdtqshared-aueast",
+      "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast",
+      "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "australiaeast",
+      "tags": {
+        "Business Onwer": "Cloud",
+        "Created By": "devops",
+        "Technical Onwer": "Cloud"
+      },
+      "properties": {
+        "provisioningState": "Succeeded",
+        "resourceGuid": "ca67172d-8099-43d7-9be9-879ba69ada49",
+        "addressSpace": {
+          "addressPrefixes": [
+            "172.25.14.0/23"
+          ]
+        },
+        "dhcpOptions": {
+          "dnsServers": [
+            "172.25.18.30",
+            "172.25.18.4",
+            "172.25.18.5"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "snet-apcdtqshared-adcfront-aueast",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-adcfront-aueast",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.25.14.32/27",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-adcfront-aueast"
+              },
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/routeTables/rt-apcdtqshared-aueast"
+              },
+              "ipConfigurations": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW001-NIC-CLIENT/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW001-NIC-CLIENT/ipConfigurations/IPCONFIG2"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW001-NIC-CLIENT/ipConfigurations/IPCONFIG3"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW001-NIC-CLIENT/ipConfigurations/IPCONFIG4"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW001-NIC-CLIENT/ipConfigurations/IPCONFIG5"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW001-NIC-CLIENT/ipConfigurations/IPCONFIG6"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW002-NIC-CLIENT/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW002-NIC-CLIENT/ipConfigurations/IPCONFIG2"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW002-NIC-CLIENT/ipConfigurations/IPCONFIG3"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW002-NIC-CLIENT/ipConfigurations/IPCONFIG4"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW002-NIC-CLIENT/ipConfigurations/IPCONFIG5"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW002-NIC-CLIENT/ipConfigurations/IPCONFIG6"
+                }
+              ],
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.AzureCosmosDB",
+                  "locations": [
+                    "*"
+                  ]
+                }
+              ],
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "snet-apcdtqshared-syslog-aueast",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-syslog-aueast",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.25.14.128/28",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-syslog-aueast"
+              },
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/routeTables/rt-apcdtqshared-aueast"
+              },
+              "ipConfigurations": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-RG-APCDTQSHARED-SYSLOG/providers/Microsoft.Network/networkInterfaces/VM-DSHR-VM-DSHR-SYSLOG-NIC-INT-01/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-SYSLOG/providers/Microsoft.Network/networkInterfaces/VM-DSHR-SLOG001-NIC-INT-01/ipConfigurations/IPCONFIG1"
+                }
+              ],
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.AzureCosmosDB",
+                  "locations": [
+                    "*"
+                  ]
+                }
+              ],
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "snet-apcdtqshared-functionapp",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-functionapp",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.25.14.144/29",
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/routeTables/rt-apcdtqshared-aueast"
+              },
+              "serviceAssociationLinks": [
+                {
+                  "name": "AppServiceLink",
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-functionapp/serviceAssociationLinks/AppServiceLink",
+                  "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+                  "type": "Microsoft.Network/virtualNetworks/subnets/serviceAssociationLinks",
+                  "properties": {
+                    "provisioningState": "Succeeded",
+                    "linkedResourceType": "Microsoft.Web/serverfarms",
+                    "link": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automation/providers/Microsoft.Web/serverfarms/asp-apcdtqshared-aueast",
+                    "enabledForArmDeployments": false,
+                    "allowDelete": false,
+                    "subnetId": "00000000-0000-0000-0000-000000000000",
+                    "locations": []
+                  }
+                }
+              ],
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.AzureCosmosDB",
+                  "locations": [
+                    "*"
+                  ]
+                }
+              ],
+              "delegations": [
+                {
+                  "name": "delegation",
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-functionapp/delegations/delegation",
+                  "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+                  "properties": {
+                    "provisioningState": "Succeeded",
+                    "serviceName": "Microsoft.Web/serverfarms",
+                    "actions": [
+                      "Microsoft.Network/virtualNetworks/subnets/action"
+                    ]
+                  },
+                  "type": "Microsoft.Network/virtualNetworks/subnets/delegations"
+                }
+              ],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "snet-apcdtqshared-loki-aueast",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-loki-aueast",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.25.14.224/29",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-loki-aueast"
+              },
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/routeTables/rt-apcdtqshared-aueast"
+              },
+              "ipConfigurations": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-LB/providers/Microsoft.Network/loadBalancers/LBI-APCDTQSHARED-LOKI/frontendIPConfigurations/APCDTQSHAREDLOKILBFRONTEND"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-LOKI/providers/Microsoft.Network/networkInterfaces/VM-DSHR-LOKI001-NIC-INT-01/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-LOKI/providers/Microsoft.Network/networkInterfaces/VM-DSHR-LOKI002-NIC-INT-02/ipConfigurations/IPCONFIG1"
+                }
+              ],
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.AzureCosmosDB",
+                  "locations": [
+                    "*"
+                  ]
+                }
+              ],
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Disabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "snet-apcdtqshared-adcback-aueast",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-adcback-aueast",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.25.14.64/27",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-adcback-aueast"
+              },
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/routeTables/rt-apcdtqshared-aueast"
+              },
+              "ipConfigurations": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW001-NIC-MANAGEMENT/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW001-NIC-MANAGEMENT/ipConfigurations/IPCONFIG2"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW001-NIC-SERVER/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW002-NIC-MANAGEMENT/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW002-NIC-MANAGEMENT/ipConfigurations/IPCONFIG2"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW002-NIC-MANAGEMENT/ipConfigurations/IPCONFIG3"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW002-NIC-MANAGEMENT/ipConfigurations/IPCONFIG4"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW002-NIC-MANAGEMENT/ipConfigurations/IPCONFIG5"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/APCDTQ-CTXGW002-NIC-SERVER/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-ADC/providers/Microsoft.Network/networkInterfaces/VM-DSHR-CXAM001964/ipConfigurations/IPCONFIG1"
+                }
+              ],
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.AzureCosmosDB",
+                  "locations": [
+                    "*"
+                  ]
+                }
+              ],
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "snet-apcdtqshared-automation-aueast",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-automation-aueast",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.25.14.176/28",
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/routeTables/rt-apcdtqshared-aueast"
+              },
+              "serviceEndpoints": [],
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Disabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "snet-apcdtqshared-mail-aueast",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-mail-aueast",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.25.14.192/27",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-mail-aueast"
+              },
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/routeTables/rt-apcdtqshared-aueast"
+              },
+              "ipConfigurations": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-LB/providers/Microsoft.Network/loadBalancers/LBI-APCDTQSHARED-FORTIMAIL/frontendIPConfigurations/APCDTQSHAREDFORTILBFRONTEND"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-MAIL/providers/Microsoft.Network/networkInterfaces/VM-DSHR-FML001-NIC-INT-01/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-MAIL/providers/Microsoft.Network/networkInterfaces/VM-DSHR-FML002-NIC-INT-01/ipConfigurations/IPCONFIG1"
+                }
+              ],
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.AzureCosmosDB",
+                  "locations": [
+                    "*"
+                  ]
+                }
+              ],
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Disabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "snet-apcdtqshared-infra-aueast",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-infra-aueast",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.25.14.0/27",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-infra-aueast"
+              },
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/routeTables/rt-apcdtqshared-aueast"
+              },
+              "ipConfigurations": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMATION/providers/Microsoft.Network/networkInterfaces/ACD-APCDTQSHARED-AUEAST.NIC.7667ED8E-2953-45E9-8F46-7C1770E5F36C/ipConfigurations/SQL-ACD-APCDTQSHARED-AUEAST-AUSTRALIAEAST.PRIVATEENDPOINT"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMATION/providers/Microsoft.Network/networkInterfaces/ACD-APCDTQSHARED-AUEAST.NIC.7667ED8E-2953-45E9-8F46-7C1770E5F36C/ipConfigurations/SQL-ACD-APCDTQSHARED-AUEAST.PRIVATEENDPOINT"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMATION/providers/Microsoft.Network/networkInterfaces/FUNC-APCDTQSHARED-AUEAST.NIC.433B0EC7-179E-4ABF-8324-65A4B3572D14/ipConfigurations/SITES-SITES.PRIVATEENDPOINT"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMATION/providers/Microsoft.Network/networkInterfaces/LA-APCDTQSHARED-AUEAST.NIC.F989251B-6362-4735-B387-994DE6036700/ipConfigurations/SITES-SITES.PRIVATEENDPOINT"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMATION/providers/Microsoft.Network/networkInterfaces/STAPCDTQSHAREDFUNAPPAUTO-BLOB.NIC.51C8B939-E166-4BD7-A69E-D18FA1D84557/ipConfigurations/PRIVATEENDPOINTIPCONFIG.44D1AC83-94E3-49C2-BFD9-003D9E8D9953"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMATION/providers/Microsoft.Network/networkInterfaces/STAPCDTQSHAREDFUNAPPAUTO.NIC.269D544D-2867-43B9-B3CD-7C531F7AEF7B/ipConfigurations/BLOB-BLOB.PRIVATEENDPOINT"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/networkInterfaces/PE-KV-AUTOMON-5NYHCBK4X2KS6.NIC.AFBF82BF-1B1E-4E4B-B4F9-5F81F2922766/ipConfigurations/PRIVATEENDPOINTIPCONFIG.88B9465B-9726-4A40-9D5F-619A9F7C0965"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AZDO-AGENT/providers/Microsoft.Network/networkInterfaces/APCDTQS-AZDO486/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AZDO/providers/Microsoft.Network/networkInterfaces/APCDTQS-AZDO001-NIC-INT-01/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AZDO/providers/Microsoft.Network/networkInterfaces/VM-DSHR-AZDO001-NIC-INT-01/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AZDO/providers/Microsoft.Network/networkInterfaces/VM-DSHR-AZDO002-NIC-INT-01/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AZDO/providers/Microsoft.Network/networkInterfaces/VM-DSHR-AZDO002-NIC-INT-02/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-CONFIG/providers/Microsoft.Network/networkInterfaces/AA-APCDTQSHARED-DSCANDHYBRIDWORKER.NIC.5CA2AE73-85A6-4C1C-AB1D-08E614607D2F/ipConfigurations/PRIVATEENDPOINTIPCONFIG.05917D56-C818-42B5-BEE3-D92216360DFE"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-CONFIG/providers/Microsoft.Network/networkInterfaces/AA-APCDTQSHARED-DSCANDHYBRIDWORKER.NIC.5CA2AE73-85A6-4C1C-AB1D-08E614607D2F/ipConfigurations/PRIVATEENDPOINTIPCONFIG.30C3B369-E34A-40B3-A664-367030FA096C"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-CONFIG/providers/Microsoft.Network/networkInterfaces/AA-APCDTQSHARED-WEBHOOK.NIC.ED69D69F-8DE9-4F86-9B90-8AE79F802CFB/ipConfigurations/PRIVATEENDPOINTIPCONFIG.A8534F20-4657-4E6A-A0EB-0C5E28233B1E"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-CONFIG/providers/Microsoft.Network/networkInterfaces/PE-KV-APCDTQSHARED-VM-OFM5LRL5MI6AG.NIC.053E416F-6A27-42AE-8766-9AFF9E727ED8/ipConfigurations/PRIVATEENDPOINTIPCONFIG.1002DD5D-F6B4-4A4B-93C6-6348A995E095"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-CONFIG/providers/Microsoft.Network/networkInterfaces/STAPCDTQSHARED-BLOB.NIC.9BC9C788-01ED-437C-A4B8-BB060A44B39F/ipConfigurations/PRIVATEENDPOINTIPCONFIG.BFFFBC97-121D-4923-95FB-C85AAD420EFA"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-SERVICESTOOLS/providers/Microsoft.Network/networkInterfaces/ACRAPCDTQSHAREDAUEAST.NIC.E0308A8C-80F3-467F-A0C9-5A5BBE3153BB/ipConfigurations/REGISTRY-REGISTRY.PRIVATEENDPOINT"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-SERVICESTOOLS/providers/Microsoft.Network/networkInterfaces/ACRAPCDTQSHAREDAUEAST.NIC.E0308A8C-80F3-467F-A0C9-5A5BBE3153BB/ipConfigurations/REGISTRY-REGISTRY_DATA_AUSTRALIAEAST.PRIVATEENDPOINT"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-TEST/providers/Microsoft.Network/networkInterfaces/AA-APCDTQSHAREDTEST-DSCANDHYBRIDWORKER.NIC.638714A4-11B1-426F-B05A-F34B89BF97BE/ipConfigurations/PRIVATEENDPOINTIPCONFIG.3E835DBB-C8CE-46BE-A89B-A883D5883362"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-TEST/providers/Microsoft.Network/networkInterfaces/AA-APCDTQSHAREDTEST-DSCANDHYBRIDWORKER.NIC.638714A4-11B1-426F-B05A-F34B89BF97BE/ipConfigurations/PRIVATEENDPOINTIPCONFIG.E0098006-3A28-4AE0-8DF9-29548878A8EE"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-TEST/providers/Microsoft.Network/networkInterfaces/AA-APCDTQSHAREDTEST-WEBHOOK.NIC.59D79E67-B7B3-47D5-B43C-79A536BA422C/ipConfigurations/PRIVATEENDPOINTIPCONFIG.86875223-1CD9-49A7-993D-93C1D8AE789E"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-TEST/providers/Microsoft.Network/networkInterfaces/STAPCDTQSHAREDTEST-BLOB.NIC.03A89806-42C6-4F70-988B-11A081A66D4F/ipConfigurations/PRIVATEENDPOINTIPCONFIG.EC23EBC5-A262-416F-A963-480FB7936AB9"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED/providers/Microsoft.Network/networkInterfaces/PE-KV-APCDTQSHARED-RDQA6DODKTZJI.NIC.15151ED5-3E54-4B57-9455-C7B679701874/ipConfigurations/PRIVATEENDPOINTIPCONFIG.E4E4E12A-7161-4776-8577-9AF3D263F433"
+                }
+              ],
+              "privateEndpoints": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMATION/providers/Microsoft.Network/privateEndpoints/ACD-APCDTQSHARED-AUEAST"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMATION/providers/Microsoft.Network/privateEndpoints/FUNC-APCDTQSHARED-AUEAST"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMATION/providers/Microsoft.Network/privateEndpoints/LA-APCDTQSHARED-AUEAST"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMATION/providers/Microsoft.Network/privateEndpoints/STAPCDTQSHAREDFUNAPPAUTO"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMATION/providers/Microsoft.Network/privateEndpoints/STAPCDTQSHAREDFUNAPPAUTO-BLOB"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/privateEndpoints/PE-KV-AUTOMON-5NYHCBK4X2KS6"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-CONFIG/providers/Microsoft.Network/privateEndpoints/AA-APCDTQSHARED-DSCANDHYBRIDWORKER"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-CONFIG/providers/Microsoft.Network/privateEndpoints/AA-APCDTQSHARED-WEBHOOK"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-CONFIG/providers/Microsoft.Network/privateEndpoints/PE-KV-APCDTQSHARED-VM-OFM5LRL5MI6AG"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-CONFIG/providers/Microsoft.Network/privateEndpoints/STAPCDTQSHARED-BLOB"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-SERVICESTOOLS/providers/Microsoft.Network/privateEndpoints/ACRAPCDTQSHAREDAUEAST"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-TEST/providers/Microsoft.Network/privateEndpoints/AA-APCDTQSHAREDTEST-DSCANDHYBRIDWORKER"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-TEST/providers/Microsoft.Network/privateEndpoints/AA-APCDTQSHAREDTEST-WEBHOOK"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-TEST/providers/Microsoft.Network/privateEndpoints/STAPCDTQSHAREDTEST-BLOB"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED/providers/Microsoft.Network/privateEndpoints/PE-KV-APCDTQSHARED-RDQA6DODKTZJI"
+                }
+              ],
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.AzureCosmosDB",
+                  "locations": [
+                    "*"
+                  ]
+                }
+              ],
+              "delegations": [],
+              "purpose": "PrivateEndpoints",
+              "privateEndpointNetworkPolicies": "Disabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "snet-apcdtqshared-postgres-aueast",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-postgres-aueast",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.25.14.240/28",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-postgres-aueast"
+              },
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/routeTables/rt-apcdtqshared-aueast"
+              },
+              "serviceAssociationLinks": [
+                {
+                  "name": "f69a3036-9704-e44d-7d6a-1cf1f439ecee-service-association-link",
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-postgres-aueast/serviceAssociationLinks/f69a3036-9704-e44d-7d6a-1cf1f439ecee-service-association-link",
+                  "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+                  "type": "Microsoft.Network/virtualNetworks/subnets/serviceAssociationLinks",
+                  "properties": {
+                    "provisioningState": "Succeeded",
+                    "linkedResourceType": "Microsoft.DBforPostgreSQL/flexibleServers",
+                    "enabledForArmDeployments": false,
+                    "allowDelete": false,
+                    "subnetId": "00000000-0000-0000-0000-000000000000",
+                    "locations": []
+                  }
+                }
+              ],
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.AzureCosmosDB",
+                  "locations": [
+                    "*"
+                  ]
+                }
+              ],
+              "delegations": [
+                {
+                  "name": "delegation",
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-postgres-aueast/delegations/delegation",
+                  "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+                  "properties": {
+                    "provisioningState": "Succeeded",
+                    "serviceName": "Microsoft.DBforPostgreSQL/flexibleServers",
+                    "actions": [
+                      "Microsoft.Network/virtualNetworks/subnets/join/action"
+                    ]
+                  },
+                  "type": "Microsoft.Network/virtualNetworks/subnets/delegations"
+                }
+              ],
+              "privateEndpointNetworkPolicies": "Disabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "snet-apcdtqshared-sm-aueast",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-sm-aueast",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.25.15.0/24",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-sm-aueast"
+              },
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/routeTables/rt-apcdtqshared-aueast"
+              },
+              "ipConfigurations": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/providers/Microsoft.Network/loadBalancers/KUBERNETES-INTERNAL/frontendIPConfigurations/A50262A38AB74471BB0592570923CC0E"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/providers/Microsoft.Network/loadBalancers/KUBERNETES-INTERNAL/frontendIPConfigurations/A5AF9B71240314C4D80CCDE3955CA182"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/providers/Microsoft.Network/loadBalancers/KUBERNETES-INTERNAL/frontendIPConfigurations/AC8209D2B4AA74F7AA9E141E4468F75F"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/providers/Microsoft.Network/loadBalancers/KUBERNETES-INTERNAL/frontendIPConfigurations/ACF7B067AC5CC4E7EBF37AF04678DDEA"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/providers/Microsoft.Network/networkInterfaces/KUBE-APISERVER.NIC.0805157D-46A1-464D-896F-61F8099CCD1B/ipConfigurations/PRIVATEENDPOINTIPCONFIG"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/providers/Microsoft.Network/networkInterfaces/VELEROAD238A09EED4-BLOB.NIC.D9786690-7C54-40D7-895A-29EC2799E1D5/ipConfigurations/PRIVATEENDPOINTIPCONFIG.CD3A3CCF-0B85-4068-A440-EEAFC5F30B60"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG10"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG11"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG12"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG13"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG14"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG15"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG16"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG17"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG18"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG19"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG2"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG20"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG21"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG22"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG23"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG24"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG25"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG26"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG27"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG28"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG29"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG3"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG30"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG31"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG32"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG33"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG34"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG35"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG36"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG37"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG38"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG39"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG4"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG40"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG41"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG42"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG43"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG44"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG45"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG46"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG47"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG48"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG49"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG5"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG6"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG7"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG8"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/0/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG9"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG1"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG10"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG11"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG12"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG13"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG14"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG15"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG16"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG17"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG18"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG19"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG2"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG20"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG21"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG22"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG23"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG24"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG25"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG26"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG27"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG28"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG29"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG3"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG30"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG31"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG32"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG33"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG34"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG35"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG36"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG37"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG38"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG39"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG4"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG40"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG41"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG42"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG43"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG44"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG45"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG46"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG47"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG48"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG49"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG5"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG6"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG7"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG8"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/PROVIDERS/MICROSOFT.COMPUTE/VIRTUALMACHINESCALESETS/AKS-SYSE4ASZ1-39110867-VMSS/VIRTUALMACHINES/1/NETWORKINTERFACES/AKS-SYSE4ASZ1-39110867-VMSS/ipConfigurations/IPCONFIG9"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-SERVICESTOOLS/providers/Microsoft.Network/networkInterfaces/POSTGRES-PRIVATE-ENDPOINT-APCDTQSHARED.NIC.0CFCFDFC-2C96-4C08-AFF8-7BF66E6DFEF5/ipConfigurations/PRIVATEENDPOINTIPCONFIG.621CEEFA-4DB6-4E43-9603-B4F238E12BE3"
+                }
+              ],
+              "privateEndpoints": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/providers/Microsoft.Network/privateEndpoints/KUBE-APISERVER"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/MC_RG-APCDTQSHARED-SERVICESTOOLS_AKS-APCDTQSHARED-AUEAST-SM_AUSTRALIAEAST/providers/Microsoft.Network/privateEndpoints/VELEROAD238A09EED4-BLOB"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-SERVICESTOOLS/providers/Microsoft.Network/privateEndpoints/POSTGRES-PRIVATE-ENDPOINT-APCDTQSHARED"
+                }
+              ],
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.AzureCosmosDB",
+                  "locations": [
+                    "*"
+                  ]
+                }
+              ],
+              "delegations": [],
+              "purpose": "PrivateEndpoints",
+              "privateEndpointNetworkPolicies": "Disabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "snet-apcdtqshared-adclb-aueast",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-adclb-aueast",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.25.14.96/27",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-adclb-aueast"
+              },
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/routeTables/rt-apcdtqshared-aueast"
+              },
+              "ipConfigurations": [
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-LB/providers/Microsoft.Network/loadBalancers/LBI-APCDTQSHARED-APC/frontendIPConfigurations/APCDTQSHAREDAPCLBFRONTEND"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-LB/providers/Microsoft.Network/loadBalancers/LBI-APCDTQSHARED-DEV/frontendIPConfigurations/APCDTQSHAREDDEVLBFRONTEND"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-LB/providers/Microsoft.Network/loadBalancers/LBI-APCDTQSHARED-HA/frontendIPConfigurations/APCDTQSHAREDHALBFRONTEND"
+                },
+                {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-LB/providers/Microsoft.Network/loadBalancers/LBI-APCDTQSHARED-PUD/frontendIPConfigurations/APCDTQSHAREDPUDLBFRONTEND"
+                }
+              ],
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.AzureCosmosDB",
+                  "locations": [
+                    "*"
+                  ]
+                }
+              ],
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          },
+          {
+            "name": "snet-apcdtqshared-nifi-aueast",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/subnets/snet-apcdtqshared-nifi-aueast",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.25.14.152/29",
+              "networkSecurityGroup": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-nifi-aueast"
+              },
+              "routeTable": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/routeTables/rt-apcdtqshared-aueast"
+              },
+              "serviceEndpoints": [
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.Storage",
+                  "locations": [
+                    "australiaeast",
+                    "australiasoutheast"
+                  ]
+                },
+                {
+                  "provisioningState": "Succeeded",
+                  "service": "Microsoft.AzureCosmosDB",
+                  "locations": [
+                    "*"
+                  ]
+                }
+              ],
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Disabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "type": "Microsoft.Network/virtualNetworks/subnets"
+          }
+        ],
+        "virtualNetworkPeerings": [
+          {
+            "name": "RemoteVnetToHubPeering_75d244df-339d-40c5-8b68-f4125b5eac31",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/virtualNetworkPeerings/RemoteVnetToHubPeering_75d244df-339d-40c5-8b68-f4125b5eac31",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "resourceGuid": "bfb553f2-b304-0312-1081-7389fdc47678",
+              "peeringState": "Connected",
+              "peeringSyncLevel": "FullyInSync",
+              "remoteVirtualNetwork": {
+                "id": "/subscriptions/e20a43d8-eb35-4dd2-b223-8849a06b780b/resourceGroups/RG_sechub-apcdtqconn-aueast_8a4cd79e-351d-46b5-88ca-2d258e863429/providers/Microsoft.Network/virtualNetworks/HV_sechub-apcdtqconn-au_a4107b7f-90d0-4886-9da0-0b33052634f4"
+              },
+              "allowVirtualNetworkAccess": true,
+              "allowForwardedTraffic": false,
+              "allowGatewayTransit": false,
+              "useRemoteGateways": true,
+              "doNotVerifyRemoteGateways": true,
+              "peerCompleteVnets": true,
+              "remoteGateways": [
+                {
+                  "id": "/subscriptions/e20a43d8-eb35-4dd2-b223-8849a06b780b/resourceGroups/RG_sechub-apcdtqconn-aueast_8a4cd79e-351d-46b5-88ca-2d258e863429/providers/Microsoft.Network/virtualNetworkGateways/CG_637daa76-4fd8-40f1-8db0-83c8fdd73216"
+                }
+              ],
+              "remoteAddressSpace": {
+                "addressPrefixes": [
+                  "172.25.0.0/23"
+                ]
+              },
+              "remoteVirtualNetworkAddressSpace": {
+                "addressPrefixes": [
+                  "172.25.0.0/23"
+                ]
+              },
+              "routeServiceVips": {
+                "af36ba88-8c99-43f4-a5e3-8fa90652cc96": "20.248.216.217"
+              }
+            },
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+          },
+          {
+            "name": "peer-vnet-apcdtqdesktopanf-aueast-shared",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/virtualNetworkPeerings/peer-vnet-apcdtqdesktopanf-aueast-shared",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "resourceGuid": "2a55b4a6-8a1c-0bae-2304-d8c2e2db0792",
+              "peeringState": "Connected",
+              "peeringSyncLevel": "FullyInSync",
+              "remoteVirtualNetwork": {
+                "id": "/subscriptions/fdeee0c2-5569-40ea-9ad9-81dd325f6e1e/resourceGroups/rg-apcdtqdesktopanf-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqdesktopanf-aueast"
+              },
+              "allowVirtualNetworkAccess": true,
+              "allowForwardedTraffic": true,
+              "allowGatewayTransit": false,
+              "useRemoteGateways": false,
+              "doNotVerifyRemoteGateways": false,
+              "peerCompleteVnets": true,
+              "remoteAddressSpace": {
+                "addressPrefixes": [
+                  "172.25.12.0/25"
+                ]
+              },
+              "remoteVirtualNetworkAddressSpace": {
+                "addressPrefixes": [
+                  "172.25.12.0/25"
+                ]
+              },
+              "routeServiceVips": {}
+            },
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+          },
+          {
+            "name": "peer-vnet-apcdtqshared-aueast-automon",
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast/virtualNetworkPeerings/peer-vnet-apcdtqshared-aueast-automon",
+            "etag": "W/\"8051f610-a4d0-498c-8514-79d1eede618d\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "resourceGuid": "42cb034c-e907-0660-1830-803ba9553ea6",
+              "peeringState": "Connected",
+              "peeringSyncLevel": "FullyInSync",
+              "remoteVirtualNetwork": {
+                "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon"
+              },
+              "allowVirtualNetworkAccess": true,
+              "allowForwardedTraffic": true,
+              "allowGatewayTransit": true,
+              "useRemoteGateways": false,
+              "doNotVerifyRemoteGateways": false,
+              "peerCompleteVnets": true,
+              "remoteAddressSpace": {
+                "addressPrefixes": [
+                  "172.26.0.0/19"
+                ]
+              },
+              "remoteVirtualNetworkAddressSpace": {
+                "addressPrefixes": [
+                  "172.26.0.0/19"
+                ]
+              },
+              "routeServiceVips": {}
+            },
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+          }
+        ],
+        "enableDdosProtection": false
+      }
+    }
+  ]
+}
