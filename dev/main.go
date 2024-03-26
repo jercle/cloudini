@@ -1,84 +1,453 @@
-// Get Azure ACRs
-
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/jercle/azg/cmd/azure"
 	"github.com/jercle/azg/lib"
 )
 
-func main() {
-	listSubscriptionContainerRegistries()
+type VnetResponse struct {
+	Etag       string `json:"etag"`
+	ID         string `json:"id"`
+	Location   string `json:"location"`
+	Name       string `json:"name"`
+	Properties struct {
+		AddressSpace struct {
+			AddressPrefixes []string `json:"addressPrefixes"`
+		} `json:"addressSpace"`
+		DhcpOptions struct {
+			DnsServers []any `json:"dnsServers"`
+		} `json:"dhcpOptions"`
+		EnableDdosProtection bool   `json:"enableDdosProtection"`
+		ProvisioningState    string `json:"provisioningState"`
+		ResourceGuid         string `json:"resourceGuid"`
+		Subnets              []struct {
+			Etag       string `json:"etag"`
+			ID         string `json:"id"`
+			Name       string `json:"name"`
+			Properties struct {
+				AddressPrefix    string `json:"addressPrefix"`
+				Delegations      []any  `json:"delegations"`
+				IpConfigurations []struct {
+					ID string `json:"id"`
+				} `json:"ipConfigurations"`
+				NetworkSecurityGroup *struct {
+					ID string `json:"id"`
+				} `json:"networkSecurityGroup,omitempty"`
+				PrivateEndpointNetworkPolicies string `json:"privateEndpointNetworkPolicies"`
+				PrivateEndpoints               []struct {
+					ID string `json:"id"`
+				} `json:"privateEndpoints,omitempty"`
+				PrivateLinkServiceNetworkPolicies string `json:"privateLinkServiceNetworkPolicies"`
+				ProvisioningState                 string `json:"provisioningState"`
+				Purpose                           string `json:"purpose,omitempty"`
+				RouteTable                        *struct {
+					ID string `json:"id"`
+				} `json:"routeTable,omitempty"`
+				ServiceEndpoints []struct {
+					Locations         []string `json:"locations"`
+					ProvisioningState string   `json:"provisioningState"`
+					Service           string   `json:"service"`
+				} `json:"serviceEndpoints"`
+			} `json:"properties"`
+			Type string `json:"type"`
+		} `json:"subnets"`
+		VirtualNetworkPeerings []struct {
+			Etag       string `json:"etag"`
+			ID         string `json:"id"`
+			Name       string `json:"name"`
+			Properties struct {
+				AllowForwardedTraffic     bool   `json:"allowForwardedTraffic"`
+				AllowGatewayTransit       bool   `json:"allowGatewayTransit"`
+				AllowVirtualNetworkAccess bool   `json:"allowVirtualNetworkAccess"`
+				DoNotVerifyRemoteGateways bool   `json:"doNotVerifyRemoteGateways"`
+				PeerCompleteVnets         bool   `json:"peerCompleteVnets"`
+				PeeringState              string `json:"peeringState"`
+				PeeringSyncLevel          string `json:"peeringSyncLevel"`
+				ProvisioningState         string `json:"provisioningState"`
+				RemoteAddressSpace        struct {
+					AddressPrefixes []string `json:"addressPrefixes"`
+				} `json:"remoteAddressSpace"`
+				RemoteGateways []struct {
+					ID string `json:"id"`
+				} `json:"remoteGateways,omitempty"`
+				RemoteVirtualNetwork struct {
+					ID string `json:"id"`
+				} `json:"remoteVirtualNetwork"`
+				RemoteVirtualNetworkAddressSpace struct {
+					AddressPrefixes []string `json:"addressPrefixes"`
+				} `json:"remoteVirtualNetworkAddressSpace"`
+				ResourceGuid     string `json:"resourceGuid"`
+				RouteServiceVips struct {
+					Af36ba888c9943f4A5e38fa90652cc96 string `json:"af36ba88-8c99-43f4-a5e3-8fa90652cc96,omitempty"`
+				} `json:"routeServiceVips"`
+				UseRemoteGateways bool `json:"useRemoteGateways"`
+			} `json:"properties"`
+			Type string `json:"type"`
+		} `json:"virtualNetworkPeerings"`
+	} `json:"properties"`
+	Tags struct {
+		CostGroup string `json:"cost_group"`
+		Env       string `json:"env"`
+		ManagedBy string `json:"managed_by"`
+	} `json:"tags"`
+	Type string `json:"type"`
 }
 
-func listSubscriptionContainerRegistries() {
-	// Get all Azure Container Registries for subscription
-	// fmt.Println("ACRs")
-	tenantId := os.Getenv("AZURE_TENANT_ID")
-	subscriptionId := os.Getenv("AZURE_SUBSCRIPTION_ID")
-	clientId := os.Getenv("AZURE_CLIENT_ID")
-	clientSecret := os.Getenv("AZURE_CLIENT_SECRET")
-	token, err := azure.GetServicePrincipalToken(tenantId, lib.CldConfigClientAuthDetails{ClientID: clientId, ClientSecret: clientSecret})
-	lib.CheckFatalError(err)
+type SubnetResponse struct {
+	Etag       string `json:"etag"`
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Properties struct {
+		AddressPrefix    string `json:"addressPrefix"`
+		Delegations      []any  `json:"delegations"`
+		IpConfigurations []struct {
+			ID string `json:"id"`
+		} `json:"ipConfigurations"`
+		PrivateEndpointNetworkPolicies string `json:"privateEndpointNetworkPolicies"`
+		PrivateEndpoints               []struct {
+			ID string `json:"id"`
+		} `json:"privateEndpoints"`
+		PrivateLinkServiceNetworkPolicies string `json:"privateLinkServiceNetworkPolicies"`
+		ProvisioningState                 string `json:"provisioningState"`
+		Purpose                           string `json:"purpose"`
+		RouteTable                        struct {
+			ID string `json:"id"`
+		} `json:"routeTable"`
+		ServiceEndpoints []struct {
+			Locations         []string `json:"locations"`
+			ProvisioningState string   `json:"provisioningState"`
+			Service           string   `json:"service"`
+		} `json:"serviceEndpoints"`
+	} `json:"properties"`
+	Type string `json:"type"`
+}
 
-	// cred, err := azidentity.NewClientSecretCredential(tenantId, clientId, clientSecret, nil)
-	// lib.CheckFatalError(err)
+type SubnetIPConfigResponse struct {
+	Etag       string `json:"etag"`
+	ID         string `json:"id"`
+	Location   string `json:"location"`
+	Name       string `json:"name"`
+	Properties struct {
+		AddressSpace struct {
+			AddressPrefixes []string `json:"addressPrefixes"`
+		} `json:"addressSpace"`
+		DhcpOptions struct {
+			DnsServers []any `json:"dnsServers"`
+		} `json:"dhcpOptions"`
+		EnableDdosProtection bool   `json:"enableDdosProtection"`
+		ProvisioningState    string `json:"provisioningState"`
+		ResourceGuid         string `json:"resourceGuid"`
+		Subnets              []struct {
+			Etag       string `json:"etag"`
+			ID         string `json:"id"`
+			Name       string `json:"name"`
+			Properties struct {
+				AddressPrefix    string `json:"addressPrefix"`
+				Delegations      []any  `json:"delegations"`
+				IpConfigurations []struct {
+					Etag       string `json:"etag"`
+					ID         string `json:"id"`
+					Name       string `json:"name"`
+					Resource   IPAddressItem
+					Properties struct {
+						Primary                         bool   `json:"primary,omitempty"`
+						PrivateIpAddress                string `json:"privateIPAddress,omitempty"`
+						PrivateIpAddressVersion         string `json:"privateIPAddressVersion,omitempty"`
+						PrivateIpAllocationMethod       string `json:"privateIPAllocationMethod"`
+						PrivateLinkConnectionProperties *struct {
+							Fqdns              []string `json:"fqdns"`
+							GroupID            string   `json:"groupId"`
+							RequiredMemberName string   `json:"requiredMemberName"`
+						} `json:"privateLinkConnectionProperties,omitempty"`
+						ProvisioningState string `json:"provisioningState"`
+						PublicIpAddress   *struct {
+							ID string `json:"id"`
+						} `json:"publicIPAddress,omitempty"`
+						Subnet struct {
+							ID string `json:"id"`
+						} `json:"subnet"`
+					} `json:"properties"`
+					Type string `json:"type"`
+				} `json:"ipConfigurations"`
+				NetworkSecurityGroup *struct {
+					ID string `json:"id"`
+				} `json:"networkSecurityGroup,omitempty"`
+				PrivateEndpointNetworkPolicies string `json:"privateEndpointNetworkPolicies"`
+				PrivateEndpoints               []struct {
+					ID string `json:"id"`
+				} `json:"privateEndpoints,omitempty"`
+				PrivateLinkServiceNetworkPolicies string `json:"privateLinkServiceNetworkPolicies"`
+				ProvisioningState                 string `json:"provisioningState"`
+				Purpose                           string `json:"purpose,omitempty"`
+				RouteTable                        *struct {
+					ID string `json:"id"`
+				} `json:"routeTable,omitempty"`
+				ServiceEndpoints []struct {
+					Locations         []string `json:"locations"`
+					ProvisioningState string   `json:"provisioningState"`
+					Service           string   `json:"service"`
+				} `json:"serviceEndpoints"`
+			} `json:"properties"`
+			Type string `json:"type"`
+		} `json:"subnets"`
+		VirtualNetworkPeerings []struct {
+			Etag       string `json:"etag"`
+			ID         string `json:"id"`
+			Name       string `json:"name"`
+			Properties struct {
+				AllowForwardedTraffic     bool   `json:"allowForwardedTraffic"`
+				AllowGatewayTransit       bool   `json:"allowGatewayTransit"`
+				AllowVirtualNetworkAccess bool   `json:"allowVirtualNetworkAccess"`
+				DoNotVerifyRemoteGateways bool   `json:"doNotVerifyRemoteGateways"`
+				PeerCompleteVnets         bool   `json:"peerCompleteVnets"`
+				PeeringState              string `json:"peeringState"`
+				PeeringSyncLevel          string `json:"peeringSyncLevel"`
+				ProvisioningState         string `json:"provisioningState"`
+				RemoteAddressSpace        struct {
+					AddressPrefixes []string `json:"addressPrefixes"`
+				} `json:"remoteAddressSpace"`
+				RemoteGateways []struct {
+					ID string `json:"id"`
+				} `json:"remoteGateways,omitempty"`
+				RemoteVirtualNetwork struct {
+					ID string `json:"id"`
+				} `json:"remoteVirtualNetwork"`
+				RemoteVirtualNetworkAddressSpace struct {
+					AddressPrefixes []string `json:"addressPrefixes"`
+				} `json:"remoteVirtualNetworkAddressSpace"`
+				ResourceGuid     string `json:"resourceGuid"`
+				RouteServiceVips struct {
+					Af36ba888c9943f4A5e38fa90652cc96 string `json:"af36ba88-8c99-43f4-a5e3-8fa90652cc96,omitempty"`
+				} `json:"routeServiceVips"`
+				UseRemoteGateways bool `json:"useRemoteGateways"`
+			} `json:"properties"`
+			Type string `json:"type"`
+		} `json:"virtualNetworkPeerings"`
+	} `json:"properties"`
+	Tags struct {
+		CostGroup string `json:"cost_group"`
+		Env       string `json:"env"`
+		ManagedBy string `json:"managed_by"`
+	} `json:"tags"`
+	Type string `json:"type"`
+}
 
-	// clientFactory, err := armcontainerregistry.NewClientFactory(subscriptionId, cred, nil)
+type PublicIpAddress struct {
+	Etag       string `json:"etag"`
+	ID         string `json:"id"`
+	Location   string `json:"location"`
+	Name       string `json:"name"`
+	Properties struct {
+		DdosSettings struct {
+			ProtectionMode string `json:"protectionMode"`
+		} `json:"ddosSettings"`
+		IdleTimeoutInMinutes int    `json:"idleTimeoutInMinutes"`
+		IpAddress            string `json:"ipAddress"`
+		IpConfiguration      struct {
+			ID string `json:"id"`
+		} `json:"ipConfiguration"`
+		IpTags                   []any  `json:"ipTags"`
+		ProvisioningState        string `json:"provisioningState"`
+		PublicIpAddressVersion   string `json:"publicIPAddressVersion"`
+		PublicIpAllocationMethod string `json:"publicIPAllocationMethod"`
+		ResourceGuid             string `json:"resourceGuid"`
+	} `json:"properties"`
+	Sku struct {
+		Name string `json:"name"`
+		Tier string `json:"tier"`
+	} `json:"sku"`
+	Tags map[string]string `json:"tags"`
+	Type string            `json:"type"`
+}
+
+type IPAddressItem struct {
+	ResourceName string `json:"name"`
+	ResourceID   string `json:"id"`
+	ResourceType string `json:"type"`
+	IpAddress    string
+	Vnet         string
+	Subnet       string
+	Tags         map[string]string
+}
+
+type IPAddressList struct {
+	PrivateAddresses []IPAddressItem
+	PublicAddresses  []IPAddressItem
+}
+
+func main() {
+	var (
+		// tenantId           = os.Getenv("AZURE_TENANT_ID")
+		// subscriptionId = "fdeee0c2-5569-40ea-9ad9-81dd325f6e1e"
+		subscriptionId = os.Getenv("AZURE_SUBSCRIPTION_ID")
+		// spDetails          lib.CldConfigClientAuthDetails
+		resourceGroupName  = "rg-apcdtqshared-automon"
+		virtualNetworkName = "vnet-apcdtqshared-automon"
+		// subnetName         = "snet-apcdtqshared-automon-builders"
+		subnetName = "snet-apcdtqshared-automon"
+	)
+
+	_ = subscriptionId
+	_ = resourceGroupName
+	_ = virtualNetworkName
+	_ = subnetName
+
+	// Get vNet
+	// urlString := "https://management.azure.com/subscriptions/" +
+	// 	subscriptionId +
+	// 	"/resourceGroups/" +
+	// 	resourceGroupName +
+	// 	"/providers/Microsoft.Network/virtualNetworks/" +
+	// 	virtualNetworkName +
+	// 	"?api-version=2023-09-01"
+
+	// Get vNet Usages
+	// urlString := "https://management.azure.com/subscriptions/" +
+	// 	subscriptionId +
+	// 	"/resourceGroups/" +
+	// 	resourceGroupName +
+	// 	"/providers/Microsoft.Network/virtualNetworks/" +
+	// 	virtualNetworkName +
+	// 	"/usages?api-version=2023-09-01"
+
+	// Get Subnet
+	// urlString := "https://management.azure.com/subscriptions/" +
+	// 	subscriptionId +
+	// 	"/resourceGroups/" +
+	// 	resourceGroupName +
+	// 	"/providers/Microsoft.Network/virtualNetworks/" +
+	// 	virtualNetworkName +
+	// 	"/subnets/" +
+	// 	subnetName +
+	// 	"?api-version=2023-09-01"
 
 	urlString := "https://management.azure.com/subscriptions/" +
 		subscriptionId +
-		"/providers/Microsoft.ContainerRegistry/registries?api-version=2023-01-01-preview"
+		"/resourceGroups/" +
+		resourceGroupName +
+		"/providers/Microsoft.Network/virtualNetworks/" +
+		virtualNetworkName +
+		"?api-version=2023-02-01&$expand=subnets/ipConfigurations"
 
-	// client := clientFactory.NewRegistriesClient()
+	resp := printHttpGetResult(urlString)
 
-	// pager := client.NewListPager(nil)
+	// fmt.Println(string(resp))
+	var vnet SubnetIPConfigResponse
+	err := json.Unmarshal(resp, &vnet)
+	lib.CheckFatalError(err)
 
-	// pager.
+	// 	jsonString, err := json.MarshalIndent(subnet, "", "  ")
+	// 	lib.CheckFatalError(err)
 
-	// fmt.Println(token)
+	// fmt.Println(string(jsonString))
 
-	// ctx := context.Background()
-	// tokenRequestOptions := policy.TokenRequestOptions{
-	// 	Scopes: []string{
-	// 		"https://management.core.windows.net/.default",
-	// 	},
-	// }
+	subnets := vnet.Properties.Subnets
 
-	// token, err := cred.GetToken(ctx, tokenRequestOptions)
-	// _ = token
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	var allIpAddresses IPAddressList
+	// var allSubnetIpConfigs []SubnetIPConfigResponse
 
-	req, err := http.NewRequest(http.MethodGet, urlString, nil)
-	if err != nil {
-		log.Fatal(err)
+	for _, sn := range subnets {
+		ipConfigs := sn.Properties.IpConfigurations
+
+		// fmt.Println(sn)
+		// os.Exit(0)
+
+		for _, conf := range ipConfigs {
+			confId := strings.Split(conf.ID, "ipConfigurations")[0]
+			confUrl := "https://management.azure.com" + confId + "?api-version=2023-02-01"
+			var resourceResp IPAddressItem
+			result := printHttpGetResult(confUrl)
+			json.Unmarshal(result, &resourceResp)
+			// resourceResp.PrivateIpAddress = conf.Properties.PrivateIpAddress
+
+			ipAddressItem := IPAddressItem{
+				ResourceName: resourceResp.ResourceName,
+				ResourceID:   resourceResp.ResourceID,
+				ResourceType: resourceResp.ResourceType,
+				Subnet:       sn.Name,
+				Vnet:         vnet.Name,
+				Tags:         resourceResp.Tags,
+			}
+
+			if conf.Properties.PrivateIpAddress != "" {
+				// Is a private IP
+				ipAddressItem.IpAddress = conf.Properties.PrivateIpAddress
+				allIpAddresses.PublicAddresses = append(allIpAddresses.PrivateAddresses, ipAddressItem)
+			} else {
+				// Is a public IP
+				pubAddressUrl := "https://management.azure.com" + "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/publicIPAddresses/bst-apcdtqshared-automon-pip" + "?api-version=2023-02-01"
+				result := printHttpGetResult(pubAddressUrl)
+
+				var publicIp PublicIpAddress
+				json.Unmarshal(result, &publicIp)
+				ipAddressItem.IpAddress = publicIp.Properties.IpAddress
+				ipAddressItem.ResourceName = publicIp.Name
+				ipAddressItem.ResourceID = publicIp.ID
+				ipAddressItem.ResourceType = publicIp.Type
+				ipAddressItem.Tags = publicIp.Tags
+
+				jsonStr, err := json.MarshalIndent(ipAddressItem, "", "  ")
+				lib.CheckFatalError(err)
+				fmt.Println(string(jsonStr))
+				os.Exit(0)
+				allIpAddresses.PublicAddresses = append(allIpAddresses.PublicAddresses, ipAddressItem)
+			}
+
+			// fmt.Println(string(resourceResp.Name))
+			// // os.Exit(0)
+			// conf.Resource.Name = resourceResp.Name
+			// conf.Resource.ID = resourceResp.ID
+			// conf.Resource.Type = resourceResp.Type
+			// conf.Resource.PrivateIpAddress = conf.Properties.PrivateIpAddress
+			// conf.Resource.ID = result
+			// allSubnetIpConfigs = append(allSubnetIpConfigs, resourceResp)
+
+			// jsonStr, err := json.MarshalIndent(conf.Resource, "", "  ")
+			// lib.CheckFatalError(err)
+			// fmt.Println(string(jsonStr))
+			// os.Exit(0)
+		}
 	}
 
-	// POST https://management.azure.com/providers/Microsoft.Billing/billingAccounts/4f53d9ee-159b-562a-dbdf-0569086af295%3A59377d87-4d23-4a91-8051-d6819401ef72_2019-05-31/billingProfiles/ZBRW-RA37-BG7-PGB/providers/Microsoft.CostManagement/pricesheets/default/download?api-version=2023-11-01
-	// Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlhSdmtvOFA3QTNVYVdTblU3Yk05blQwTWpoQSIsImtpZCI6IlhSdmtvOFA3QTNVYVdTblU3Yk05blQwTWpoQSJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldCIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzY0OGE1ZWQ3LWM1YWMtNDViNy1iNDA2LTc5MWYwZDQzMzRhNi8iLCJpYXQiOjE3MTAyMDU0MzUsIm5iZiI6MTcxMDIwNTQzNSwiZXhwIjoxNzEwMjEwMTA0LCJhY3IiOiIxIiwiYWlvIjoiQVZRQXEvOFdBQUFBdkJQbTU4eVVOMzBvUjRwUWdpN3pEMlZyam9VT0xYVEJuS0tVTDA4SllyY25tejg1L0tYb3IvOEZtVTVuaXM3d3YrNzQrbXROaEpaUERaUjI5TFhrK2xVWWhFRmhlMzN4SVE3bjFBT0Q3Q2c9IiwiYW1yIjpbInB3ZCIsIm1mYSJdLCJhcHBpZCI6IjE4ZmJjYTE2LTIyMjQtNDVmNi04NWIwLWY3YmYyYjM5YjNmMyIsImFwcGlkYWNyIjoiMCIsImZhbWlseV9uYW1lIjoiYWRtLjExNDQwZSIsImdpdmVuX25hbWUiOiJFIiwiZ3JvdXBzIjpbImNhMTgxYzg5LTEwYjUtNDA4MC1iZTg0LTYzNGRiNmJlOGZmNCIsIjQyMjk4N2E4LTMwNGEtNGY5ZC04ODM1LWZkNzU0YzQ5OWQ5YyIsImFhYWY0MzBiLTRlNTgtNDlhMC1iNjI5LTRiYzIxY2EzYjY1MCIsImQ3Y2ViMjBiLTc4YWUtNDQ0OC04MGFkLWMxMjc2ZGVlZWJlNyIsIjhmZTk0ODBmLWY3ZTItNDhhZi1iZDcxLWQ2Y2UyYmVkOTllNiIsIjFlYTgxMzEwLTRiZTEtNGMwYy1hN2MwLTY5NDZmOWIzNjU0ZSIsImY2MmQ3ZTEyLTAzZWMtNDUxYi05MjU3LWU5OWExNWRkMWZjMiIsImM0NTI2OTE2LTIyYjItNDE4OS05NTM1LTUxMjZiN2VjMGQ2YiIsIjI3MGVhYzM2LTZiYjYtNGQ5Yi1iNDBiLTJjMTY1NWFmM2YwMCIsIjRjYmIyZTM4LTg3ZWUtNDU4NS04N2NhLTIxNzYwZTNkMzYxZCIsIjgwMzcxMjQzLTQxMDktNDU2ZC05N2QzLTA0ZTliZGY1MWY5OCIsIjU2OWMyYTQ2LWM5YmItNDc3ZC1hODhkLWFmMTgyOWI3NmIxNyIsImJkYjRhYzQ5LWQwY2QtNDdjNy1iMWQxLWJkZmExN2VlZjdjYyIsIjdiZmY5MjU3LThhMWYtNDA5Ny05NzkwLTBmYzRkYTY5MGJhYyIsIjUzZGIwZTU5LTU3OWMtNDFmYy1hNmYzLTU1YTA4ZjBmMmJlNSIsImQ4ODU5NzViLWU3NTEtNDYzYy04YzAxLWFiYWZkMmI4OTAwYyIsIjdkMDMwNDYzLWUwZGUtNDg5Ny1hZjUyLWVmODQ4MWFhNjI3YiIsIjQ3NTJlZTc0LTA4MjEtNGEwZC1hZWNiLTczZjFmOWE1MmEwYiIsIjY3YjVmYTc0LTlhMmItNGU2ZS04NjZlLWIyNDZhN2QxNjRhMCIsIjUxMjQyNjg0LTU0MjYtNGZhZi05NzFhLTE1ZjVjYThiZWRmZSIsImVmY2Y0MTg3LTE4YzctNGE3OC1hMjM3LTVhYWJkOGIzNDYwZiIsIjBlZTVhYzhiLWYwNDktNDYxZi05ZjMwLTBiM2U0YmIyNWIyMCIsImVlMDA1ODkzLWE3ODMtNGNjMC1iNTgxLWYxZTJlNWEyNzM0MyIsImMzNzBkNjliLTA2MTItNGI3My1hOWRlLTNlMTg0NGQ1MjM5NyIsImE0N2VmNTljLWY3YzQtNDhkMi05NmIyLWZmOGJkNGI5NmJkZiIsIjRjMTMxYTllLWRkZTYtNGMwMC1hYmE0LTEwYWE0ZTU3ZGRmZCIsImVhMWE4MDllLTc3ZDgtNGJlYS05NGVlLTI5YjYwYzk3MjhmNiIsIjE4NjkwMDlmLWZjZDctNGU5Ny05YmM1LTliNTUxMjU0MTExMSIsImRlYmYxZGEwLWFkOTUtNDFlYi1iYTQ3LTQ0ODBiM2Y0ODBkYSIsImUwMGYxNmFkLTUwMjYtNDY1OC05Y2E5LTBmOTI0NGNlNmI1MCIsImY0ZjdkZGIyLTBhYTItNDBkNi05Mzg0LTc4MmRjYWE0ZjFlMiIsIjBiZjQ2MmI4LTI0NDgtNGIwMS1iZTRjLTIzOTI1M2UxNDEyMSIsIjA3ZDlmY2NjLWMzMTYtNGY3Mi04NTU3LTE5NzExYTkxZTYzZCIsIjg3ZDdhM2Q2LTFkZmItNDBiNC04NTM3LTZhMDc2MjZjMzc5MSIsIjlhNDVkYmRkLTE3ZWItNDgyMS1iNmMxLWMwOTI1YzM1MmM3YSIsIjI1NzdkMGVlLTU4ZTktNGNlNi04NzkxLWMwMWZiMWJlMWQ0YSIsIjJhOTY5NGZiLTExN2MtNDNmNC05YzQxLTQ5ZDgzZGMwYTgyYiIsImFkMmUwMWZlLTg5MGQtNDNhZC1hMWY3LTQxZWVhMmQ3NTVlYyIsImZmNjRiMGZlLWRlY2QtNDJhYy04OWIxLTc1NTA5ODc1NTEyNSJdLCJpZHR5cCI6InVzZXIiLCJpcGFkZHIiOiIxNDQuMTQwLjE1MC41IiwibmFtZSI6ImFkbS4xMTQ0MGUiLCJvaWQiOiJjMWYwZTNiNy00OTVlLTQ2NjEtOTAyNS1hZjQxNDUzYzNjODUiLCJvbnByZW1fc2lkIjoiUy0xLTUtMjEtMTA5Mzk4NjEwMC0xNzU3NDc3MjUyLTI4NDc3NTk5NzUtODYwNyIsInB1aWQiOiIxMDAzMjAwMzNCOTYxNjNBIiwicmgiOiIwLkFVSUExMTZLWkt6RnQwVzBCbmtmRFVNMHBrWklmM2tBdXRkUHVrUGF3ZmoyTUJOQ0FMUS4iLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJ0N1Vvb2VNZVM4ZS16Ynl3ZlgxZTZ1UGVGT3I0Vl83VUtnQ3pqVkZTamdNIiwidGlkIjoiNjQ4YTVlZDctYzVhYy00NWI3LWI0MDYtNzkxZjBkNDMzNGE2IiwidW5pcXVlX25hbWUiOiJhZG0uMTE0NDBlQGFzaW8uZ292LmF1IiwidXBuIjoiYWRtLjExNDQwZUBhc2lvLmdvdi5hdSIsInV0aSI6Il9jLWdQTGVZQkVDbjNaYTJJbXNGQUEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbImIwZjU0NjYxLTJkNzQtNGM1MC1hZmEzLTFlYzgwM2YxMmVmZSIsIjYyZTkwMzk0LTY5ZjUtNDIzNy05MTkwLTAxMjE3NzE0NWUxMCIsImI3OWZiZjRkLTNlZjktNDY4OS04MTQzLTc2YjE5NGU4NTUwOSJdLCJ4bXNfY2FlIjoiMSIsInhtc190Y2R0IjoxNjA2ODYxNDUwfQ.UDjV7WWeRELnw6EDOtbiUStSDexz3DjAuJNFEx_gQpl9daUFwNuE8J4sf40FHHTlh_OvCEMP6llDmFFElP0i9hDZZdvXrDRTnialdfMYk6KRTzeflES8wVguSk3Tf_J80Njt8ymkmJUPf-7212rdfGPVywG7qGiYl-VSIUu3wB1lLpAjF9HQ0Y1yyjJTUVrgOcYiX4UsJRMJFca76m437KRao2qb2DsdJuQ_oCk1MhAXNcI20wzpwitEAQz6aOlmGFLQLn0xd8dcD4sh4XVsJeZgBxrGemij9otuZ-8TvQ8ytqGWK52fOYe52WNlhnqCVys0jhcSzNfLvJ5tkmBk_Q
-	// Content-type: application/json
+	jsonStr, err := json.MarshalIndent(allIpAddresses, "", "  ")
+	lib.CheckFatalError(err)
+	_ = jsonStr
+	fmt.Println(string(jsonStr))
+}
 
-	// https://management.azure.com/subscriptions/9564369d-5e7c-42c8-bea5-328ea671bbc6/providers/Microsoft.Web/billingMeters?api-version=2022-03-01
-	// POST https://management.azure.com/providers/Microsoft.Billing/billingAccounts/D 6462/billingProfiles/D 6462/providers/Microsoft.CostManagement/pricesheets/default/download?api-version=2023-11-01
+func printHttpGetResult(urlString string) []byte {
+	var (
+		tenantId = os.Getenv("AZURE_TENANT_ID")
+		// subscriptionId     = os.Getenv("AZURE_SUBSCRIPTION_ID")
+		spDetails lib.CldConfigClientAuthDetails
+		// resourceGroupName  = "rg-apcdtqshared-automon"
+		// virtualNetworkName = "vnet-apcdtqshared-automon"
+	)
+	spDetails.ClientID = os.Getenv("AZURE_CLIENT_ID")
+	spDetails.ClientSecret = os.Getenv("AZURE_CLIENT_SECRET")
+
+	token, err := azure.GetServicePrincipalToken(tenantId, spDetails)
+	lib.CheckFatalError(err)
+
+	req, err := http.NewRequest(http.MethodGet, urlString, nil)
+	lib.CheckFatalError(err)
+
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+token.Token)
 
 	res, err := http.DefaultClient.Do(req)
 	lib.CheckFatalError(err)
 
-	// fmt.Println(res)
-
 	responseBody, err := io.ReadAll(res.Body)
 	lib.CheckFatalError(err)
 
-	fmt.Println(string(responseBody))
-
+	// fmt.Println(string(responseBody))
+	return responseBody
 }

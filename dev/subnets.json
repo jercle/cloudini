@@ -1,0 +1,391 @@
+{
+  "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon",
+  "location": "australiaeast",
+  "name": "vnet-apcdtqshared-automon",
+  "properties": {
+    "addressSpace": {
+      "addressPrefixes": [
+        "172.26.0.0/19"
+      ]
+    },
+    "dhcpOptions": {
+      "dnsServers": []
+    },
+    "enableDdosProtection": false,
+    "provisioningState": "Succeeded",
+    "resourceGuid": "88ac1461-699e-45b7-83d9-07a00fcfe4ef",
+    "subnets": [
+      {
+        "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+        "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/subnets/snet-apcdtqshared-automon-builders",
+        "name": "snet-apcdtqshared-automon-builders",
+        "properties": {
+          "addressPrefix": "172.26.0.64/26",
+          "delegations": [],
+          "ipConfigurations": [
+            {
+              "etag": "W/\"ce4c17ef-e47f-41ba-a553-ec554a33c9db\"",
+              "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/networkInterfaces/pvt-automon-builders-storage-nic/ipConfigurations/privateEndpointIpConfig.05bf63b2-de57-4b09-a14f-55d95f5d2860",
+              "name": "privateEndpointIpConfig.05bf63b2-de57-4b09-a14f-55d95f5d2860",
+              "Resource": {
+                "name": "",
+                "id": "",
+                "type": "",
+                "PrivateIpAddress": ""
+              },
+              "properties": {
+                "primary": true,
+                "privateIPAddress": "172.26.0.68",
+                "privateIPAddressVersion": "IPv4",
+                "privateIPAllocationMethod": "Dynamic",
+                "privateLinkConnectionProperties": {
+                  "fqdns": [],
+                  "groupId": "blob",
+                  "requiredMemberName": "blob"
+                },
+                "provisioningState": "Succeeded",
+                "subnet": {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/subnets/snet-apcdtqshared-automon-builders"
+                }
+              },
+              "type": "Microsoft.Network/networkInterfaces/ipConfigurations"
+            },
+            {
+              "etag": "W/\"4e619c93-ce32-4522-b535-32f7191ab4bf\"",
+              "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/networkInterfaces/pvt-stapcdtqdesktopaib-automon-nic/ipConfigurations/privateEndpointIpConfig.f8a37684-005d-4ac8-9095-08ad75411b23",
+              "name": "privateEndpointIpConfig.f8a37684-005d-4ac8-9095-08ad75411b23",
+              "Resource": {
+                "name": "",
+                "id": "",
+                "type": "",
+                "PrivateIpAddress": ""
+              },
+              "properties": {
+                "primary": true,
+                "privateIPAddress": "172.26.0.70",
+                "privateIPAddressVersion": "IPv4",
+                "privateIPAllocationMethod": "Dynamic",
+                "privateLinkConnectionProperties": {
+                  "fqdns": [
+                    "stapcdtqdesktopaib.blob.core.windows.net"
+                  ],
+                  "groupId": "blob",
+                  "requiredMemberName": "blob"
+                },
+                "provisioningState": "Succeeded",
+                "subnet": {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/subnets/snet-apcdtqshared-automon-builders"
+                }
+              },
+              "type": "Microsoft.Network/networkInterfaces/ipConfigurations"
+            },
+            {
+              "etag": "W/\"becbf0c3-e2fb-449d-a76e-82541049afa6\"",
+              "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/networkInterfaces/pvt-stdevdtqdesktopaib-automon-nic/ipConfigurations/privateEndpointIpConfig.902f944c-b99d-4bce-a335-c0adc6af7ad7",
+              "name": "privateEndpointIpConfig.902f944c-b99d-4bce-a335-c0adc6af7ad7",
+              "Resource": {
+                "name": "",
+                "id": "",
+                "type": "",
+                "PrivateIpAddress": ""
+              },
+              "properties": {
+                "primary": true,
+                "privateIPAddress": "172.26.0.69",
+                "privateIPAddressVersion": "IPv4",
+                "privateIPAllocationMethod": "Dynamic",
+                "privateLinkConnectionProperties": {
+                  "fqdns": [],
+                  "groupId": "blob",
+                  "requiredMemberName": "blob"
+                },
+                "provisioningState": "Succeeded",
+                "subnet": {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/subnets/snet-apcdtqshared-automon-builders"
+                }
+              },
+              "type": "Microsoft.Network/networkInterfaces/ipConfigurations"
+            }
+          ],
+          "privateEndpointNetworkPolicies": "Disabled",
+          "privateEndpoints": [
+            {
+              "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/privateEndpoints/PVT-AUTOMON-BUILDERS-STORAGE"
+            },
+            {
+              "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/privateEndpoints/PVT-STAPCDTQDESKTOPAIB-AUTOMON"
+            },
+            {
+              "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/RG-APCDTQSHARED-AUTOMON/providers/Microsoft.Network/privateEndpoints/PVT-STDEVDTQDESKTOPAIB-AUTOMON"
+            }
+          ],
+          "privateLinkServiceNetworkPolicies": "Enabled",
+          "provisioningState": "Succeeded",
+          "purpose": "PrivateEndpoints",
+          "routeTable": {
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/routeTables/rt-apcdtqshared-automon-builders"
+          },
+          "serviceEndpoints": [
+            {
+              "locations": [
+                "*"
+              ],
+              "provisioningState": "Succeeded",
+              "service": "Microsoft.KeyVault"
+            },
+            {
+              "locations": [
+                "*"
+              ],
+              "provisioningState": "Succeeded",
+              "service": "Microsoft.EventHub"
+            },
+            {
+              "locations": [
+                "australiaeast",
+                "australiasoutheast"
+              ],
+              "provisioningState": "Succeeded",
+              "service": "Microsoft.Storage"
+            }
+          ]
+        },
+        "type": "Microsoft.Network/virtualNetworks/subnets"
+      },
+      {
+        "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+        "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/subnets/AzureBastionSubnet",
+        "name": "AzureBastionSubnet",
+        "properties": {
+          "addressPrefix": "172.26.15.0/26",
+          "delegations": [],
+          "ipConfigurations": [
+            {
+              "etag": "W/\"73a37616-e78e-4816-a325-c2a7cf814afb\"",
+              "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/bastionHosts/bst-apcdtqshared-automon/bastionHostIpConfigurations/bst_pub_ip",
+              "name": "bst_pub_ip",
+              "Resource": {
+                "name": "",
+                "id": "",
+                "type": "",
+                "PrivateIpAddress": ""
+              },
+              "properties": {
+                "privateIPAllocationMethod": "Dynamic",
+                "provisioningState": "Succeeded",
+                "publicIPAddress": {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/publicIPAddresses/bst-apcdtqshared-automon-pip"
+                },
+                "subnet": {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/subnets/AzureBastionSubnet"
+                }
+              },
+              "type": "Microsoft.Network/bastionHosts/bastionHostIpConfigurations"
+            }
+          ],
+          "networkSecurityGroup": {
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-automon-bastion"
+          },
+          "privateEndpointNetworkPolicies": "Enabled",
+          "privateLinkServiceNetworkPolicies": "Enabled",
+          "provisioningState": "Succeeded",
+          "serviceEndpoints": []
+        },
+        "type": "Microsoft.Network/virtualNetworks/subnets"
+      },
+      {
+        "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+        "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/subnets/snet-apcdtqshared-automon",
+        "name": "snet-apcdtqshared-automon",
+        "properties": {
+          "addressPrefix": "172.26.0.0/26",
+          "delegations": [],
+          "ipConfigurations": [
+            {
+              "etag": "W/\"1d2c13aa-1b23-43a3-bc68-4f916ad092ab\"",
+              "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/networkInterfaces/packerbuilder-nic/ipConfigurations/internal",
+              "name": "internal",
+              "Resource": {
+                "name": "",
+                "id": "",
+                "type": "",
+                "PrivateIpAddress": ""
+              },
+              "properties": {
+                "primary": true,
+                "privateIPAddress": "172.26.0.4",
+                "privateIPAddressVersion": "IPv4",
+                "privateIPAllocationMethod": "Dynamic",
+                "provisioningState": "Succeeded",
+                "subnet": {
+                  "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/subnets/snet-apcdtqshared-automon"
+                }
+              },
+              "type": "Microsoft.Network/networkInterfaces/ipConfigurations"
+            }
+          ],
+          "networkSecurityGroup": {
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/networkSecurityGroups/nsg-automon"
+          },
+          "privateEndpointNetworkPolicies": "Enabled",
+          "privateLinkServiceNetworkPolicies": "Enabled",
+          "provisioningState": "Succeeded",
+          "routeTable": {
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/routeTables/rt-apcdtqshared-automon"
+          },
+          "serviceEndpoints": [
+            {
+              "locations": [
+                "*"
+              ],
+              "provisioningState": "Succeeded",
+              "service": "Microsoft.ContainerRegistry"
+            },
+            {
+              "locations": [
+                "*"
+              ],
+              "provisioningState": "Succeeded",
+              "service": "Microsoft.KeyVault"
+            },
+            {
+              "locations": [
+                "*"
+              ],
+              "provisioningState": "Succeeded",
+              "service": "Microsoft.ServiceBus"
+            },
+            {
+              "locations": [
+                "*"
+              ],
+              "provisioningState": "Succeeded",
+              "service": "Microsoft.EventHub"
+            },
+            {
+              "locations": [
+                "australiaeast",
+                "australiasoutheast"
+              ],
+              "provisioningState": "Succeeded",
+              "service": "Microsoft.Storage"
+            }
+          ]
+        },
+        "type": "Microsoft.Network/virtualNetworks/subnets"
+      }
+    ],
+    "virtualNetworkPeerings": [
+      {
+        "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+        "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/virtualNetworkPeerings/peer-vnet-automon-apcdtqshared-aueast",
+        "name": "peer-vnet-automon-apcdtqshared-aueast",
+        "properties": {
+          "allowForwardedTraffic": true,
+          "allowGatewayTransit": true,
+          "allowVirtualNetworkAccess": true,
+          "doNotVerifyRemoteGateways": false,
+          "peerCompleteVnets": true,
+          "peeringState": "Connected",
+          "peeringSyncLevel": "FullyInSync",
+          "provisioningState": "Succeeded",
+          "remoteAddressSpace": {
+            "addressPrefixes": [
+              "172.25.14.0/23"
+            ]
+          },
+          "remoteVirtualNetwork": {
+            "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-aueast"
+          },
+          "remoteVirtualNetworkAddressSpace": {
+            "addressPrefixes": [
+              "172.25.14.0/23"
+            ]
+          },
+          "resourceGuid": "42cb034c-e907-0660-1830-803ba9553ea6",
+          "routeServiceVips": {},
+          "useRemoteGateways": false
+        },
+        "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+      },
+      {
+        "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+        "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/virtualNetworkPeerings/RemoteVnetToHubPeering_75d244df-339d-40c5-8b68-f4125b5eac31",
+        "name": "RemoteVnetToHubPeering_75d244df-339d-40c5-8b68-f4125b5eac31",
+        "properties": {
+          "allowForwardedTraffic": false,
+          "allowGatewayTransit": false,
+          "allowVirtualNetworkAccess": true,
+          "doNotVerifyRemoteGateways": true,
+          "peerCompleteVnets": true,
+          "peeringState": "Connected",
+          "peeringSyncLevel": "FullyInSync",
+          "provisioningState": "Succeeded",
+          "remoteAddressSpace": {
+            "addressPrefixes": [
+              "172.25.0.0/23"
+            ]
+          },
+          "remoteGateways": [
+            {
+              "id": "/subscriptions/e20a43d8-eb35-4dd2-b223-8849a06b780b/resourceGroups/RG_sechub-apcdtqconn-aueast_8a4cd79e-351d-46b5-88ca-2d258e863429/providers/Microsoft.Network/virtualNetworkGateways/CG_637daa76-4fd8-40f1-8db0-83c8fdd73216"
+            }
+          ],
+          "remoteVirtualNetwork": {
+            "id": "/subscriptions/e20a43d8-eb35-4dd2-b223-8849a06b780b/resourceGroups/RG_sechub-apcdtqconn-aueast_8a4cd79e-351d-46b5-88ca-2d258e863429/providers/Microsoft.Network/virtualNetworks/HV_sechub-apcdtqconn-au_a4107b7f-90d0-4886-9da0-0b33052634f4"
+          },
+          "remoteVirtualNetworkAddressSpace": {
+            "addressPrefixes": [
+              "172.25.0.0/23"
+            ]
+          },
+          "resourceGuid": "fd7e50be-5a03-0572-08b1-f3b2549148de",
+          "routeServiceVips": {
+            "af36ba88-8c99-43f4-a5e3-8fa90652cc96": "20.248.216.217"
+          },
+          "useRemoteGateways": true
+        },
+        "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+      },
+      {
+        "etag": "W/\"1472da10-0b95-4b62-97b6-feba7fe42606\"",
+        "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-apcdtqshared-automon/virtualNetworkPeerings/peer-hapdtqpshared-automon",
+        "name": "peer-hapdtqpshared-automon",
+        "properties": {
+          "allowForwardedTraffic": true,
+          "allowGatewayTransit": false,
+          "allowVirtualNetworkAccess": true,
+          "doNotVerifyRemoteGateways": false,
+          "peerCompleteVnets": true,
+          "peeringState": "Connected",
+          "peeringSyncLevel": "FullyInSync",
+          "provisioningState": "Succeeded",
+          "remoteAddressSpace": {
+            "addressPrefixes": [
+              "172.27.0.0/19"
+            ]
+          },
+          "remoteVirtualNetwork": {
+            "id": "/subscriptions/c77b7e3c-4ec7-459a-9d30-93d5ac47a0ff/resourceGroups/rg-hapdtqshared-automon/providers/Microsoft.Network/virtualNetworks/vnet-hapdtqshared-automon"
+          },
+          "remoteVirtualNetworkAddressSpace": {
+            "addressPrefixes": [
+              "172.27.0.0/19"
+            ]
+          },
+          "resourceGuid": "0b8b5284-a021-0e24-0039-51ccacb53d2b",
+          "routeServiceVips": {},
+          "useRemoteGateways": false
+        },
+        "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+      }
+    ]
+  },
+  "tags": {
+    "cost_group": "management",
+    "env": "red-dtq",
+    "managed_by": "terraform"
+  },
+  "type": "Microsoft.Network/virtualNetworks"
+}
