@@ -433,7 +433,7 @@ func listAllTenantIpAddresses(token azure.MultiAuthToken) IPAddressList {
 	lib.CheckFatalError(err)
 
 	for _, sub := range allSubs {
-		go listAllSubscriptionVnets(token.TenantId, sub.SubscriptionID, token.TokenData, vnets)
+		go listAllSubscriptionVnets(sub.SubscriptionID, token.TokenData, vnets)
 		// for _, vnet := range vnets {
 		// 	vnetIps := getAllVnetIPAddresses(token.TenantId, sub.SubscriptionID, vnet.ResourceGroup, vnet.Name, token.TokenData)
 		// 	allIpAddresses.PrivateAddresses = append(allIpAddresses.PrivateAddresses, vnetIps.PrivateAddresses...)
@@ -448,7 +448,7 @@ func listAllTenantIpAddresses(token azure.MultiAuthToken) IPAddressList {
 	return allIpAddresses
 }
 
-func listAllSubscriptionVnets(tenantId string, subscriptionId string, token azure.TokenData, vnets chan<- Vnet) {
+func listAllSubscriptionVnets(subscriptionId string, mat azure.MultiAuthToken, vnets chan<- Vnet) {
 	var (
 		listVnets VnetListResponse
 	)
@@ -464,7 +464,7 @@ func listAllSubscriptionVnets(tenantId string, subscriptionId string, token azur
 	lib.CheckFatalError(err)
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+token.Token)
+	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
 	res, err := http.DefaultClient.Do(req)
 	lib.CheckFatalError(err)
@@ -517,7 +517,7 @@ func listAllSubscriptionVnets(tenantId string, subscriptionId string, token azur
 	// return allVnets
 }
 
-func getAllVnetIPAddresses(tenantId string, token azure.TokenData, vnets <-chan Vnet) IPAddressList {
+func getAllVnetIPAddresses(mat azure.MultiAuthToken, vnets <-chan Vnet) IPAddressList {
 	var (
 		allIpAddresses IPAddressList
 	)
@@ -538,7 +538,7 @@ func getAllVnetIPAddresses(tenantId string, token azure.TokenData, vnets <-chan 
 		lib.CheckFatalError(err)
 
 		req.Header.Add("Content-Type", "application/json")
-		req.Header.Add("Authorization", "Bearer "+token.Token)
+		req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
 		res, err := http.DefaultClient.Do(req)
 		lib.CheckFatalError(err)
