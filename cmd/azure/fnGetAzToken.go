@@ -109,11 +109,12 @@ func (tokens *AllTenantTokens) CheckExpiry() {
 
 func (tokens AllTenantTokens) SelectTenant(tenantName string) (*MultiAuthToken, error) {
 	// var tenantToken MultiAuthToken
+	// fmt.Println(tenantName)
 	var tenantToken *MultiAuthToken
 
 	for _, token := range tokens {
 		if token.TenantName == tenantName {
-			*tenantToken = token
+			tenantToken = &token
 			break
 		}
 	}
@@ -150,7 +151,7 @@ func GetCachedTokens() AllTenantTokens {
 	json.Unmarshal(byteData, &tokens)
 	if len(tokens) == 0 {
 		fmt.Println("Fetching new tokens")
-		tokens, err = GetAllTenantSPTokens(AzureRequestOptions{})
+		tokens, err = GetAllTenantSPTokens(MultiAuthTokenRequestOptions{})
 		lib.CheckFatalError(err)
 	}
 	fmt.Println(tokens)
@@ -312,7 +313,7 @@ func GetToken(tenantName string) MultiAuthToken {
 // Default path is ~/.config/cld/config.json
 //
 // First parameter passed into this function overwrites the config file path
-func GetAllTenantSPTokens(options AzureRequestOptions) (AllTenantTokens, error) {
+func GetAllTenantSPTokens(options MultiAuthTokenRequestOptions) (AllTenantTokens, error) {
 	var (
 		config       = lib.GetCldConfig(lib.CldConfigOptions{})
 		tenantTokens []MultiAuthToken
@@ -321,7 +322,7 @@ func GetAllTenantSPTokens(options AzureRequestOptions) (AllTenantTokens, error) 
 		err          error
 	)
 
-	for _, tenant := range config.Azure.Tenants {
+	for _, tenant := range config.Azure.MultiTenantAuth.Tenants {
 		wg.Add(1)
 		go func() {
 			var tokenData *TokenData
@@ -349,7 +350,7 @@ func GetAllTenantSPTokens(options AzureRequestOptions) (AllTenantTokens, error) 
 	return tenantTokens, nil
 }
 
-func GetSingleTenantSPToken(options AzureRequestOptions) (MultiAuthToken, error) {
+func GetSingleTenantSPToken(options MultiAuthTokenRequestOptions) (MultiAuthToken, error) {
 	var (
 		configPath string
 		config     lib.CldConfig
@@ -375,7 +376,7 @@ func GetSingleTenantSPToken(options AzureRequestOptions) (MultiAuthToken, error)
 	byteValue, _ := io.ReadAll(jsonConfig)
 	json.Unmarshal(byteValue, &config)
 
-	for _, tenant := range config.Azure.Tenants {
+	for _, tenant := range config.Azure.MultiTenantAuth.Tenants {
 		fmt.Println(tenant)
 	}
 	// os.Exit(0)

@@ -8,6 +8,10 @@ type AzureRequestOptions struct {
 	TenantId          string
 	TenantName        string
 
+	ConfigFilePath string
+}
+
+type MultiAuthTokenRequestOptions struct {
 	GetWriteToken  bool
 	ConfigFilePath string
 }

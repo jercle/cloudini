@@ -103,7 +103,7 @@ type ContainerRegistriesPerSub struct {
 	ContainerRegistries []ContainerRegistry
 }
 
-func listAllTenantACRs(tenantName string, tenantId string, token *TokenData) {
+func listAllTenantACRs(tenantName string, tenantId string, token *TokenData) []ContainerRegistry {
 	var (
 		allTenantACRs []ContainerRegistry
 		wg            sync.WaitGroup

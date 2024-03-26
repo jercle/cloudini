@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"sync"
 
 	"github.com/jercle/azg/cmd/azure"
 	"github.com/jercle/azg/lib"
@@ -105,6 +104,8 @@ type Vnet struct {
 	ID                     string                 `json:"id"`
 	Location               string                 `json:"location"`
 	Name                   string                 `json:"name"`
+	ResourceGroup          string                 `json:"resourceGroup"`
+	SubscriptionID         string                 `json:"subscriptionId`
 	AddressSpace           []string               `json:"addressSpace"`
 	Subnets                []SubnetResponse       `json:"subnets"`
 	ProvisioningState      string                 `json:"provisioningState"`
@@ -407,27 +408,50 @@ func main() {
 	lib.CheckFatalError(err)
 	redToken, err := tokens.SelectTenant("REDDTQ")
 	lib.CheckFatalError(err)
-	jsonStr, err := json.MarshalIndent(redToken, "", "  ")
+
+	allIps := listAllTenantIpAddresses(*redToken)
+
+	fmt.Println(allIps)
+
+	jsonStr, err := json.MarshalIndent(allIps, "", "  ")
 	lib.CheckFatalError(err)
 
-	fmt.Print(string(jsonStr))
-
+	fmt.Println(string(jsonStr))
 	// config := lib.GetCldConfig(lib.CldConfigOptions{})
 
 	// fmt.Println(config.Azure.MultiTenantAuth.Tenants)
-}
-
-func listAllTenantIpAddresses(tenantId string, token azure.TokenData) {
 
 }
 
-func listAllSubscriptionVnets(tenantId string, subscriptionId string, token azure.TokenData) []Vnet {
+func listAllTenantIpAddresses(token azure.MultiAuthToken) IPAddressList {
+	var allIpAddresses IPAddressList
+	vnets := make(chan Vnet, 25)
+	publicIpAddresses := make(chan IPAddressItem, 25)
+	privateIpAddresses := make(chan IPAddressItem, 25)
+
+	allSubs, err := azure.ListSubscriptions(token)
+	lib.CheckFatalError(err)
+
+	for _, sub := range allSubs {
+		go listAllSubscriptionVnets(token.TenantId, sub.SubscriptionID, token.TokenData, vnets)
+		// for _, vnet := range vnets {
+		// 	vnetIps := getAllVnetIPAddresses(token.TenantId, sub.SubscriptionID, vnet.ResourceGroup, vnet.Name, token.TokenData)
+		// 	allIpAddresses.PrivateAddresses = append(allIpAddresses.PrivateAddresses, vnetIps.PrivateAddresses...)
+		// 	allIpAddresses.PublicAddresses = append(allIpAddresses.PublicAddresses, vnetIps.PublicAddresses...)
+		// }
+	}
+
+	for vnet := range vnets {
+
+	}
+
+	return allIpAddresses
+}
+
+func listAllSubscriptionVnets(tenantId string, subscriptionId string, token azure.TokenData, vnets chan<- Vnet) {
 	var (
 		listVnets VnetListResponse
-		allVnets  []Vnet
 	)
-
-	_ = allVnets
 
 	urlString := "https://management.azure.com/subscriptions/" +
 		subscriptionId +
@@ -457,11 +481,13 @@ func listAllSubscriptionVnets(tenantId string, subscriptionId string, token azur
 
 		currentVnet.Name = vnet.Name
 		currentVnet.ID = vnet.ID
+		currentVnet.ResourceGroup = strings.Split(strings.Split(vnet.ID, "resourceGroups/")[1], "/")[0]
 		currentVnet.AddressSpace = vnet.Properties.AddressSpace.AddressPrefixes
 		currentVnet.ProvisioningState = vnet.Properties.ProvisioningState
 		currentVnet.Location = vnet.Location
 		currentVnet.Type = vnet.Type
 		currentVnet.Tags = vnet.Tags
+		currentVnet.SubscriptionID = subscriptionId
 		for _, peering := range vnet.Properties.VirtualNetworkPeerings {
 			var remoteGateways []string
 			for _, rgw := range peering.Properties.RemoteGateways {
@@ -483,95 +509,93 @@ func listAllSubscriptionVnets(tenantId string, subscriptionId string, token azur
 			vnetPeerings = append(vnetPeerings, currentPeering)
 		}
 		currentVnet.VirtualNetworkPeerings = append(currentVnet.VirtualNetworkPeerings, vnetPeerings...)
-		allVnets = append(allVnets, currentVnet)
+		// allVnets = append(allVnets, currentVnet)
+		vnets <- currentVnet
+
 	}
 
-	return allVnets
+	// return allVnets
 }
 
-func getAllSubscriptionIPAddresses(tenantId string, subscriptionId string, resourceGroupName string, virtualNetworkName string, token azure.TokenData) IPAddressList {
+func getAllVnetIPAddresses(tenantId string, token azure.TokenData, vnets <-chan Vnet) IPAddressList {
 	var (
 		allIpAddresses IPAddressList
-		wg             sync.WaitGroup
-		mutex          sync.Mutex
 	)
 
-	urlString := "https://management.azure.com/subscriptions/" +
-		subscriptionId +
-		"/resourceGroups/" +
-		resourceGroupName +
-		"/providers/Microsoft.Network/virtualNetworks/" +
-		virtualNetworkName +
-		"?api-version=2023-02-01&$expand=subnets/ipConfigurations"
+	for vnet := range vnets {
+		urlString := "https://management.azure.com/subscriptions/" +
+			vnet.SubscriptionID +
+			"/resourceGroups/" +
+			vnet.ResourceGroup +
+			"/providers/Microsoft.Network/virtualNetworks/" +
+			vnet.Name +
+			"?api-version=2023-02-01&$expand=subnets/ipConfigurations"
 
-	// token, err := azure.GetServicePrincipalToken(tenantId, spDetails)
-	// lib.CheckFatalError(err)
+		// token, err := azure.GetServicePrincipalToken(tenantId, spDetails)
+		// lib.CheckFatalError(err)
 
-	req, err := http.NewRequest(http.MethodGet, urlString, nil)
-	lib.CheckFatalError(err)
+		req, err := http.NewRequest(http.MethodGet, urlString, nil)
+		lib.CheckFatalError(err)
 
-	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+token.Token)
+		req.Header.Add("Content-Type", "application/json")
+		req.Header.Add("Authorization", "Bearer "+token.Token)
 
-	res, err := http.DefaultClient.Do(req)
-	lib.CheckFatalError(err)
+		res, err := http.DefaultClient.Do(req)
+		lib.CheckFatalError(err)
 
-	responseBody, err := io.ReadAll(res.Body)
-	lib.CheckFatalError(err)
+		responseBody, err := io.ReadAll(res.Body)
+		lib.CheckFatalError(err)
 
-	var vnet SubnetIPConfigResponse
-	err = json.Unmarshal(responseBody, &vnet)
-	lib.CheckFatalError(err)
+		var vnet SubnetIPConfigResponse
+		err = json.Unmarshal(responseBody, &vnet)
+		lib.CheckFatalError(err)
 
-	subnets := vnet.Properties.Subnets
+		subnets := vnet.Properties.Subnets
 
-	for _, sn := range subnets {
-		ipConfigs := sn.Properties.IpConfigurations
-		for _, conf := range ipConfigs {
-			wg.Add(1)
-			go func() {
-				confId := strings.Split(conf.ID, "ipConfigurations")[0]
-				confUrl := "https://management.azure.com" + confId + "?api-version=2023-02-01"
-				var resourceResp IPAddressItem
-				result := printHttpGetResult(confUrl)
-				json.Unmarshal(result, &resourceResp)
+		for _, sn := range subnets {
+			ipConfigs := sn.Properties.IpConfigurations
+			for _, conf := range ipConfigs {
+				go func() {
+					confId := strings.Split(conf.ID, "ipConfigurations")[0]
+					confUrl := "https://management.azure.com" + confId + "?api-version=2023-02-01"
+					var resourceResp IPAddressItem
+					result := printHttpGetResult(confUrl)
+					json.Unmarshal(result, &resourceResp)
 
-				ipAddressItem := IPAddressItem{
-					ResourceName: resourceResp.ResourceName,
-					ResourceID:   resourceResp.ResourceID,
-					ResourceType: resourceResp.ResourceType,
-					Subnet:       sn.Name,
-					Vnet:         vnet.Name,
-					Tags:         resourceResp.Tags,
-				}
+					ipAddressItem := IPAddressItem{
+						ResourceName: resourceResp.ResourceName,
+						ResourceID:   resourceResp.ResourceID,
+						ResourceType: resourceResp.ResourceType,
+						Subnet:       sn.Name,
+						Vnet:         vnet.Name,
+						Tags:         resourceResp.Tags,
+					}
 
-				if conf.Properties.PrivateIpAddress != "" {
-					// Is a private IP
-					ipAddressItem.IpAddress = conf.Properties.PrivateIpAddress
-					allIpAddresses.PublicAddresses = append(allIpAddresses.PrivateAddresses, ipAddressItem)
-				} else {
-					// Is a public IP
-					pubAddressUrl := "https://management.azure.com" + conf.Properties.PublicIpAddress.ID + "?api-version=2023-02-01"
-					result := printHttpGetResult(pubAddressUrl)
+					if conf.Properties.PrivateIpAddress != "" {
+						// Is a private IP
+						ipAddressItem.IpAddress = conf.Properties.PrivateIpAddress
 
-					var publicIp PublicIpAddress
-					json.Unmarshal(result, &publicIp)
-					ipAddressItem.IpAddress = publicIp.Properties.IpAddress
-					ipAddressItem.ResourceName = publicIp.Name
-					ipAddressItem.ResourceID = publicIp.ID
-					ipAddressItem.ResourceType = publicIp.Type
-					ipAddressItem.Tags = publicIp.Tags
+						allIpAddresses.PrivateAddresses = append(allIpAddresses.PrivateAddresses, ipAddressItem)
+					} else {
+						// Is a public IP
+						pubAddressUrl := "https://management.azure.com" + conf.Properties.PublicIpAddress.ID + "?api-version=2023-02-01"
+						result := printHttpGetResult(pubAddressUrl)
 
-					mutex.Lock()
-					allIpAddresses.PublicAddresses = append(allIpAddresses.PublicAddresses, ipAddressItem)
-					mutex.Unlock()
-					wg.Done()
-				}
-			}()
+						var publicIp PublicIpAddress
+						json.Unmarshal(result, &publicIp)
+						ipAddressItem.IpAddress = publicIp.Properties.IpAddress
+						ipAddressItem.ResourceName = publicIp.Name
+						ipAddressItem.ResourceID = publicIp.ID
+						ipAddressItem.ResourceType = publicIp.Type
+						ipAddressItem.Tags = publicIp.Tags
+
+						allIpAddresses.PublicAddresses = append(allIpAddresses.PublicAddresses, ipAddressItem)
+
+					}
+				}()
+			}
 		}
 	}
-
-	wg.Done()
 
 	return allIpAddresses
 }

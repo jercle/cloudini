@@ -2,7 +2,9 @@ package lib
 
 type CldConfig struct {
 	Azure struct {
-		Tenants []CldConfigTenantAuth `json:"tenants"`
+		MultiTenantAuth struct {
+			Tenants []CldConfigTenantAuth `json:"tenants"`
+		} `json:"multiTenantAuth"`
 	} `json:"azure"`
 }
 

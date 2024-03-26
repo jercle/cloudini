@@ -89,7 +89,7 @@ func (config *CldConfig) SaveToFile() {
 
 func (config *CldConfig) AddAzureTenant(tenantId string, tenantName string) {
 
-	for _, t := range config.Azure.Tenants {
+	for _, t := range config.Azure.MultiTenantAuth.Tenants {
 		fmt.Println(t.TenantID)
 		if t.TenantID == tenantId {
 			CheckFatalError(fmt.Errorf("Identical tenant config already exists"))
@@ -100,7 +100,7 @@ func (config *CldConfig) AddAzureTenant(tenantId string, tenantName string) {
 		var newTenant CldConfigTenantAuth
 		newTenant.TenantName = tenantName
 		newTenant.TenantID = tenantId
-		config.Azure.Tenants = append(config.Azure.Tenants, newTenant)
+		config.Azure.MultiTenantAuth.Tenants = append(config.Azure.MultiTenantAuth.Tenants, newTenant)
 		jsonData, _ := json.MarshalIndent(config, "", "  ")
 		fmt.Println(string(jsonData))
 		// config.SaveToFile()

@@ -178,41 +178,6 @@ func getAllSubscriptionVMs(token azure.MultiAuthToken, subscriptionId string) []
 	return allVirtualMachines
 }
 
-// Lists Azure subscriptions availabe to a given auth token
-func listSubscriptions(token azure.MultiAuthToken) ([]azure.FetchedSubscription, error) {
-	urlString := "https://management.azure.com/subscriptions?api-version=2022-12-01"
-	req, err := http.NewRequest(http.MethodGet, urlString, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+token.TokenData.Token)
-
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		// log.Fatal("Error fetching list of Subscriptions")
-		return nil, err
-	}
-
-	responseBody, err := io.ReadAll(res.Body)
-	if res.StatusCode == 400 {
-		// log.Fatal("Error fetching list of Subscriptions: ", string(responseBody))
-		return nil, err
-	}
-	if err != nil {
-		// log.Fatal(err)
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	var subsList azure.SubsReqResBody
-	json.Unmarshal(responseBody, &subsList)
-	subsList.UpdateTenantName(token.TenantName)
-	// lib.MarshalAndPrintJson(subsList.Value)
-
-	return subsList.Value, nil
-}
-
 func main() {
 
 	// config := lib.GetCldConfig(lib.CldConfigOptions{})
