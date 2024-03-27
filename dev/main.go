@@ -405,9 +405,19 @@ func main() {
 	// fmt.Println(string(resp))
 	// listAllSubscriptionVnets(tenantId, subscriptionId, spDetails)
 	// listAllTenantIpAddresses(tenantId)
-	tokens, err := azure.GetAllTenantSPTokens(azure.MultiAuthTokenRequestOptions{})
+	// init := lib.InitConfig(lib.CldConfigOptions{})
+	// fmt.Println(init)
+	// config := lib.GetCldConfig(lib.CldConfigOptions{})
+	// jsonStr, _ := json.MarshalIndent(config, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// os.Exit(0)
+
+	tokens, err := azure.GetAllTenantSPTokens(azure.MultiAuthTokenRequestOptions{
+		GetWriteToken: true,
+	})
+
 	lib.CheckFatalError(err)
-	redToken, err := tokens.SelectTenant("REDDTQ")
+	redToken, err := tokens.SelectTenant("StackCats")
 	lib.CheckFatalError(err)
 
 	done := make(chan bool, 1)
@@ -454,10 +464,10 @@ func listAllTenantIpAddresses(token azure.MultiAuthToken, done chan bool, ips ch
 		wg.Add(1)
 		go getAllVnetIPAddresses(token, vnet, publicIpAddresses, privateIpAddresses, &wg)
 	case publicIp := <-publicIpAddresses:
-		fmt.Println("APPEND PUBLIC", publicIp.ResourceName)
+		lib.PrintSrcLoc("APPEND PUBLIC", publicIp.ResourceName)
 		allIpAddresses.PublicAddresses = append(allIpAddresses.PublicAddresses, publicIp)
 	case privateIp := <-privateIpAddresses:
-		fmt.Println("APPEND PRIVATE", privateIp.ResourceName)
+		lib.PrintSrcLoc("APPEND PRIVATE", privateIp.ResourceName)
 		allIpAddresses.PrivateAddresses = append(allIpAddresses.PrivateAddresses, privateIp)
 	}
 
@@ -479,7 +489,7 @@ func listAllSubscriptionVnets(subscriptionId string, mat azure.MultiAuthToken, v
 		listVnets VnetListResponse
 	)
 
-	fmt.Println("get vnets", subscriptionId)
+	lib.PrintSrcLoc("get vnets", subscriptionId)
 
 	urlString := "https://management.azure.com/subscriptions/" +
 		subscriptionId +
@@ -550,7 +560,7 @@ func getAllVnetIPAddresses(mat azure.MultiAuthToken, vnet Vnet, publicIps chan<-
 	var (
 	// 	allIpAddresses IPAddressList
 	)
-	fmt.Println("get vnet ips ", vnet.Name)
+	lib.PrintSrcLoc("get vnet ips ", vnet.Name)
 
 	// for vnet := range vnets {
 	urlString := "https://management.azure.com/subscriptions/" +
@@ -570,7 +580,7 @@ func getAllVnetIPAddresses(mat azure.MultiAuthToken, vnet Vnet, publicIps chan<-
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
-	fmt.Println("get vnet ips - get vnet", vnet.Name)
+	lib.PrintSrcLoc("get vnet ips - get vnet", vnet.Name)
 	res, err := http.DefaultClient.Do(req)
 	lib.CheckFatalError(err)
 
@@ -583,18 +593,18 @@ func getAllVnetIPAddresses(mat azure.MultiAuthToken, vnet Vnet, publicIps chan<-
 
 	subnets := vnetIpConfig.Properties.Subnets
 
-	fmt.Println("get vnet ips - got", len(subnets), "subnets", vnet.Name)
+	lib.PrintSrcLoc("get vnet ips - got", len(subnets), "subnets", vnet.Name)
 
 	for _, sn := range subnets {
 		ipConfigs := sn.Properties.IpConfigurations
-		fmt.Println("get vnet ips - range over subnets", vnet.Name, sn.Name)
+		lib.PrintSrcLoc("get vnet ips - range over subnets", vnet.Name, sn.Name)
 		for _, conf := range ipConfigs {
 			confId := strings.Split(conf.ID, "ipConfigurations")[0]
-			fmt.Println("get vnet ips - range over subnets - get ipconf", vnet.Name, sn.Name)
+			lib.PrintSrcLoc("get vnet ips - range over subnets - get ipconf", vnet.Name, sn.Name)
 
 			confUrl := "https://management.azure.com" + confId + "?api-version=2023-02-01"
 			var resourceResp IPAddressItem
-			result := printHttpGetResult(confUrl)
+			result := azureHttpGet(confUrl, mat)
 			json.Unmarshal(result, &resourceResp)
 
 			ipAddressItem := IPAddressItem{
@@ -607,21 +617,21 @@ func getAllVnetIPAddresses(mat azure.MultiAuthToken, vnet Vnet, publicIps chan<-
 			}
 
 			if conf.Properties.PrivateIpAddress != "" {
-				fmt.Println("found pvtIp", vnet.Name, sn.Name)
+				lib.PrintSrcLoc("found pvtIp", vnet.Name, sn.Name)
 
 				// Is a private IP
 				ipAddressItem.IpAddress = conf.Properties.PrivateIpAddress
 
 				// allIpAddresses.PrivateAddresses = append(allIpAddresses.PrivateAddresses, ipAddressItem)
-				fmt.Println("pass pvtIp ", vnet.Name, sn.Name)
+				lib.PrintSrcLoc("pass pvtIp ", vnet.Name, sn.Name)
 				privateIps <- ipAddressItem
 			}
 
 			if conf.Properties.PublicIpAddress != nil {
 				// Is a public IP
-				fmt.Println("get pub ip", vnet.Name, sn.Name)
+				lib.PrintSrcLoc("get pub ip", vnet.Name, sn.Name)
 				pubAddressUrl := "https://management.azure.com" + conf.Properties.PublicIpAddress.ID + "?api-version=2023-02-01"
-				result := printHttpGetResult(pubAddressUrl)
+				result := azureHttpGet(pubAddressUrl, mat)
 
 				var publicIp PublicIpAddress
 				json.Unmarshal(result, &publicIp)
@@ -632,7 +642,7 @@ func getAllVnetIPAddresses(mat azure.MultiAuthToken, vnet Vnet, publicIps chan<-
 				ipAddressItem.Tags = publicIp.Tags
 
 				// allIpAddresses.PublicAddresses = append(allIpAddresses.PublicAddresses, ipAddressItem)
-				fmt.Println("pass pubIp", vnet.Name, sn.Name)
+				lib.PrintSrcLoc("pass pubIp", vnet.Name, sn.Name)
 				publicIps <- ipAddressItem
 			}
 		}
@@ -642,25 +652,12 @@ func getAllVnetIPAddresses(mat azure.MultiAuthToken, vnet Vnet, publicIps chan<-
 	// return allIpAddresses
 }
 
-func printHttpGetResult(urlString string) []byte {
-	var (
-		tenantId = os.Getenv("AZURE_TENANT_ID")
-		// subscriptionId     = os.Getenv("AZURE_SUBSCRIPTION_ID")
-		spDetails lib.CldConfigClientAuthDetails
-		// resourceGroupName  = "rg-apcdtqshared-automon"
-		// virtualNetworkName = "vnet-apcdtqshared-automon"
-	)
-	spDetails.ClientID = os.Getenv("AZURE_CLIENT_ID")
-	spDetails.ClientSecret = os.Getenv("AZURE_CLIENT_SECRET")
-
-	token, err := azure.GetServicePrincipalToken(tenantId, spDetails)
-	lib.CheckFatalError(err)
-
+func azureHttpGet(urlString string, mat azure.MultiAuthToken) []byte {
 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
 	lib.CheckFatalError(err)
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+token.Token)
+	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
 	res, err := http.DefaultClient.Do(req)
 	lib.CheckFatalError(err)
@@ -668,6 +665,5 @@ func printHttpGetResult(urlString string) []byte {
 	responseBody, err := io.ReadAll(res.Body)
 	lib.CheckFatalError(err)
 
-	// fmt.Println(string(responseBody))
 	return responseBody
 }
