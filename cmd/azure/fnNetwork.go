@@ -526,7 +526,8 @@ func ListAllVnetIPAddressesWithChan(mat MultiAuthToken, vnet Vnet, publicIps cha
 				confId := strings.Split(conf.ID, "ipConfigurations")[0]
 				confUrl := "https://management.azure.com" + confId + "?api-version=2023-02-01"
 				var resourceResp IPAddressItem
-				result := HttpGet(confUrl, mat)
+				result, err := HttpGet(confUrl, mat)
+				lib.CheckFatalError(err)
 				json.Unmarshal(result, &resourceResp)
 
 				ipAddressItem := IPAddressItem{
@@ -547,7 +548,8 @@ func ListAllVnetIPAddressesWithChan(mat MultiAuthToken, vnet Vnet, publicIps cha
 				if conf.Properties.PublicIpAddress != nil {
 					// Is a public IP
 					pubAddressUrl := "https://management.azure.com" + conf.Properties.PublicIpAddress.ID + "?api-version=2023-02-01"
-					result := HttpGet(pubAddressUrl, mat)
+					result, err := HttpGet(pubAddressUrl, mat)
+					lib.CheckFatalError(err)
 
 					var publicIp PublicIpAddress
 					json.Unmarshal(result, &publicIp)
@@ -601,7 +603,8 @@ func ListAllVnetIPAddresses(mat MultiAuthToken, vnet Vnet) IPAddressList {
 				confId := strings.Split(conf.ID, "ipConfigurations")[0]
 				confUrl := "https://management.azure.com" + confId + "?api-version=2023-02-01"
 				var resourceResp IPAddressItem
-				result := HttpGet(confUrl, mat)
+				result, err := HttpGet(confUrl, mat)
+				lib.CheckFatalError(err)
 				json.Unmarshal(result, &resourceResp)
 
 				ipAddressItem := IPAddressItem{
@@ -622,7 +625,8 @@ func ListAllVnetIPAddresses(mat MultiAuthToken, vnet Vnet) IPAddressList {
 				if conf.Properties.PublicIpAddress != nil {
 					// Is a public IP
 					pubAddressUrl := "https://management.azure.com" + conf.Properties.PublicIpAddress.ID + "?api-version=2023-02-01"
-					result := HttpGet(pubAddressUrl, mat)
+					result, err := HttpGet(pubAddressUrl, mat)
+					lib.CheckFatalError(err)
 
 					var publicIp PublicIpAddress
 					json.Unmarshal(result, &publicIp)
@@ -715,7 +719,9 @@ func ListVnetSubnets(subscriptionId string, resourceGroupName string, virtualNet
 		virtualNetworkName +
 		"/subnets?api-version=2023-09-01"
 
-	response := HttpGet(urlString, mat)
+	response, err := HttpGet(urlString, mat)
+	lib.CheckFatalError(err)
+
 	json.Unmarshal(response, &listSubnetResponse)
 
 	return listSubnetResponse.Value

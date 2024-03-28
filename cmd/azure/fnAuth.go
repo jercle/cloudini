@@ -16,86 +16,12 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/charmbracelet/log"
 	"github.com/jercle/azg/lib"
+	"github.com/jercle/azg/lib/cldTypes"
 )
 
 // var usrHomeDir, err = os.UserHomeDir()
-var configPath = lib.InitConfig(lib.CldConfigOptions{})
+var configPath = lib.InitConfig(cldTypes.CldConfigOptions{})
 var tCacheFile = configPath + "/tCache"
-
-type MultiAuthTokenRequestOptions struct {
-	GetWriteToken  bool
-	ConfigFilePath string
-}
-
-type MultiAuthToken struct {
-	TenantId   string
-	TenantName string
-	TokenData  TokenData
-}
-
-type Request struct {
-	Url     string
-	Outfile string
-}
-
-type TokenData struct {
-	Token     string
-	ExpiresOn string
-}
-
-type TokenRequestResponse struct {
-	AccessToken  string `json:"access_token"`
-	ExpiresIn    string `json:"expires_in"`
-	ExpiresOn    string `json:"expires_on"`
-	ExtExpiresIn string `json:"ext_expires_in"`
-	NotBefore    string `json:"not_before"`
-	Resource     string `json:"resource"`
-	TokenType    string `json:"token_type"`
-}
-
-type azureAuthDetails struct {
-	AZURE_TENANT_ID       string
-	AZURE_SUBSCRIPTION_ID string
-	AZURE_CLIENT_ID       string
-	AZURE_CLIENT_SECRET   string
-	AZURE_RESOURCE_GROUP  string
-	AZURE_RESOURCE_NAME   string
-}
-
-type azureAuthRequirements struct {
-	AZURE_TENANT_ID       bool
-	AZURE_SUBSCRIPTION_ID bool
-	AZURE_CLIENT_ID       bool
-	AZURE_CLIENT_SECRET   bool
-	AZURE_RESOURCE_GROUP  bool
-	AZURE_RESOURCE_NAME   bool
-}
-
-type FetchedSubscription struct {
-	AuthorizationSource  string   `json:"authorizationSource"`
-	DisplayName          string   `json:"displayName"`
-	ID                   string   `json:"id"`
-	ManagedByTenants     []string `json:"managedByTenants"`
-	State                string   `json:"state"`
-	SubscriptionID       string   `json:"subscriptionId"`
-	SubscriptionPolicies struct {
-		LocationPlacementID string `json:"locationPlacementId"`
-		QuotaID             string `json:"quotaId"`
-		SpendingLimit       string `json:"spendingLimit"`
-	} `json:"subscriptionPolicies"`
-	TenantID   string `json:"tenantId"`
-	TenantName string `json:"tenantName"`
-}
-
-type SubsReqResBody struct {
-	Count struct {
-		Type  string  `json:"type"`
-		Value float64 `json:"value"`
-	} `json:"count"`
-	Value []FetchedSubscription `json:"value"`
-}
-
-type AllTenantTokens []MultiAuthToken
 
 func (tokens *AllTenantTokens) SaveToFile() {
 
@@ -164,15 +90,17 @@ func GetCachedTokens() AllTenantTokens {
 	return tokens
 }
 
-func GetServicePrincipalToken(tenant string, spDetails lib.CldConfigClientAuthDetails) (*TokenData, error) {
+func GetServicePrincipalToken(tenant string, spDetails MultiAuthTokenRequestOptions) (*TokenData, error) {
 	ctx := context.Background()
+	var tokenRequestOptions policy.TokenRequestOptions
 
-	tokenRequestOptions := policy.TokenRequestOptions{
-		Scopes: []string{
-			"https://management.core.windows.net/.default",
-		},
-		EnableCAE: true,
+	switch spDetails.Scope {
+	case "graph":
+		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
+	default:
+		tokenRequestOptions.Scopes = []string{"https://management.core.windows.net/.default"}
 	}
+	tokenRequestOptions.EnableCAE = true
 
 	cred, err := azidentity.NewClientSecretCredential(tenant, spDetails.ClientID, spDetails.ClientSecret, nil)
 	if err != nil {
@@ -331,13 +259,49 @@ func GetAllTenantSPTokens(options MultiAuthTokenRequestOptions) (AllTenantTokens
 	for _, tenant := range config.Azure.MultiTenantAuth.Tenants {
 		wg.Add(1)
 		go func() {
-			var tokenData *TokenData
+			var (
+				tokenData *TokenData
+				authOpts  MultiAuthTokenRequestOptions
+			)
+
 			// fmt.Println("Getting token for " + tenant.TenantName)
+
+			jsonTok, _ := json.Marshal(options)
+
+			options.ClientID = tenant.Writer.ClientID
+			options.ClientSecret = tenant.Writer.ClientSecret
+
+			switch options.GetWriteToken {
+			case true:
+				options.ClientID = tenant.Writer.ClientID
+				options.ClientSecret = tenant.Writer.ClientSecret
+			default:
+				options.ClientID = tenant.Reader.ClientID
+				options.ClientSecret = tenant.Reader.ClientSecret
+			}
+
+			switch options.Scope {
+			case "graph":
+
+			default:
+			}
+
 			if options.GetWriteToken {
-				tokenData, err = GetServicePrincipalToken(tenant.TenantID, tenant.Writer)
+				// var authOpts MultiAuthTokenRequestOptions
+				// authOpts := MultiAuthTokenRequestOptions(tenant.Writer)
+
+				// if options.Scope == "graph" {
+				// 	// authOpts.AzureGraph = true
+
+				// }
+				tokenData, err = GetServicePrincipalToken(tenant.TenantID, authOpts)
 				lib.CheckFatalError(err)
 			} else if !options.GetWriteToken {
-				tokenData, err = GetServicePrincipalToken(tenant.TenantID, tenant.Reader)
+				authOpts := tenant.Reader
+				// if options.AzureGraph {
+				// 	authOpts.AzureGraph = true
+				// }
+				tokenData, err = GetServicePrincipalToken(tenant.TenantID, authOpts)
 				lib.CheckFatalError(err)
 			}
 			tenantToken := MultiAuthToken{
@@ -356,47 +320,43 @@ func GetAllTenantSPTokens(options MultiAuthTokenRequestOptions) (AllTenantTokens
 	return tenantTokens, nil
 }
 
-func GetSingleTenantSPToken(options MultiAuthTokenRequestOptions) (MultiAuthToken, error) {
+func GetTenantSPToken(tenantName string, options MultiAuthTokenRequestOptions) (*MultiAuthToken, error) {
 	var (
-		configPath string
-		config     lib.CldConfig
-		// multiAuthToken MultiAuthToken
-		homeDir, _ = os.UserHomeDir()
+		config      = lib.GetCldConfig(lib.CldConfigOptions{})
+		tenantToken MultiAuthToken
+		err         error
 	)
 
-	if options.ConfigFilePath != "" {
-		configPath = options.ConfigFilePath
-	} else {
-		configPath = homeDir + "/.config/cld/config.json"
-	}
+	// if tenant.TenantName == tenantName {
+	// 	return nil, fmt.Errorf("Tenant not in config")
+	// }
 
-	if !lib.CheckDirExists(configPath) {
-		os.MkdirAll(configPath, os.ModePerm)
-	}
+	tenant := config.Azure.MultiTenantAuth.Tenants[tenantName]
 
-	jsonConfig, err := os.Open(configPath)
-	lib.CheckFatalError(err)
-
-	defer jsonConfig.Close()
-
-	byteValue, _ := io.ReadAll(jsonConfig)
-	json.Unmarshal(byteValue, &config)
-
-	for _, tenant := range config.Azure.MultiTenantAuth.Tenants {
-		fmt.Println(tenant)
-	}
-	// os.Exit(0)
-	// tokens := GetAllTenantTokens()
-	// lib.CldConfigClientAuthDetails
-
-	var tokenData MultiAuthToken
-	// fmt.Println("Getting token for " + options.TenantName)
+	var tokenData *TokenData
+	// fmt.Println("Getting token for " + tenant.TenantName)
 	if options.GetWriteToken {
-		// tokenData, err = GetServicePrincipalToken(options.TenantId, options.ten)
+		authOpts := tenant.Writer
+		if options.AzureGraph {
+			authOpts.AzureGraph = true
+		}
+		tokenData, err = GetServicePrincipalToken(tenant.TenantID, authOpts)
+		lib.CheckFatalError(err)
 	} else if !options.GetWriteToken {
-		// tokenData, err = GetServicePrincipalToken(tenant.TenantId, tenant.Reader)
+		authOpts := tenant.Reader
+		if options.AzureGraph {
+			authOpts.AzureGraph = true
+		}
+		tokenData, err = GetServicePrincipalToken(tenant.TenantID, authOpts)
+		lib.CheckFatalError(err)
 	}
-	lib.CheckFatalError(err)
+	mat := MultiAuthToken{
+		TenantId:   tenant.TenantID,
+		TenantName: tenant.TenantName,
+		TokenData:  *tokenData,
+	}
 
-	return tokenData, nil
+	tenantToken = mat
+
+	return &tenantToken, nil
 }
