@@ -30,3 +30,6 @@ dev/cldConf.json
 dev/tCache
 dev/outputs
 dev/tok.txt
+dev/listVnets.json
+dev/publicIp.json
+dev/subnets.json

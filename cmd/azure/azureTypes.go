@@ -10,8 +10,3 @@ type AzureRequestOptions struct {
 
 	ConfigFilePath string
 }
-
-type MultiAuthTokenRequestOptions struct {
-	GetWriteToken  bool
-	ConfigFilePath string
-}

@@ -22,11 +22,17 @@ import (
 var configPath = lib.InitConfig(lib.CldConfigOptions{})
 var tCacheFile = configPath + "/tCache"
 
+type MultiAuthTokenRequestOptions struct {
+	GetWriteToken  bool
+	ConfigFilePath string
+}
+
 type MultiAuthToken struct {
 	TenantId   string
 	TenantName string
 	TokenData  TokenData
 }
+
 type Request struct {
 	Url     string
 	Outfile string
