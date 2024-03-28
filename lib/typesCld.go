@@ -1,16 +1,25 @@
-package cldTypes
+package lib
+
+type CldConfigRoot struct {
+	CldConfig CldConfig   `json:"cldConfig"`
+	Azure     AzureConfig `json:"azure"`
+}
 
 type CldConfig struct {
-	Azure struct {
-		MultiTenantAuth struct {
-			Tenants map[string]CldConfigTenantAuth `json:"tenants"`
-		} `json:"multiTenantAuth"`
-	} `json:"azure"`
+	EncodeConfig bool `json:"encodeConfig"`
+}
+
+type AzureConfig struct {
+	MultiTenantAuth struct {
+		Tenants CldConfigTenants `json:"tenants"`
+	} `json:"multiTenantAuth"`
 }
 
 type CldConfigOptions struct {
 	ConfigFilePath string
 }
+
+type CldConfigTenants map[string]CldConfigTenantAuth
 
 type CldConfigTenantAuth struct {
 	TenantName string                     `json:"tenantName"`
@@ -22,5 +31,4 @@ type CldConfigTenantAuth struct {
 type CldConfigClientAuthDetails struct {
 	ClientID     string `json:"clientId"`
 	ClientSecret string `json:"clientSecret"`
-	Scope        string `json:"scope"`
 }

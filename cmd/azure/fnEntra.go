@@ -3,7 +3,7 @@ package azure
 import (
 	"encoding/json"
 
-	"github.com/jercle/azg/lib/cldTypes"
+	"github.com/jercle/azg/lib"
 )
 
 type EntraRoleDefinition struct {
@@ -23,7 +23,7 @@ type ListEntraRoleDefinitionsResponse struct {
 	Value          []EntraRoleDefinition `json:"value"`
 }
 
-func ListEntraRoleDefinitions(mat cldTypes.MultiAuthToken) ([]EntraRoleDefinition, error) {
+func ListEntraRoleDefinitions(mat lib.MultiAuthToken) ([]EntraRoleDefinition, error) {
 	var (
 		unmarshResponse ListEntraRoleDefinitionsResponse
 		roleDefs        []EntraRoleDefinition

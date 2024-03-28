@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/charmbracelet/log"
+	"github.com/jercle/azg/lib"
 )
 
 // func GetTenant() {
@@ -127,7 +128,7 @@ func (s *AzureProfile) Sort() {
 }
 
 // Lists Azure subscriptions availabe to a given auth token
-func ListSubscriptions(token MultiAuthToken) ([]FetchedSubscription, error) {
+func ListSubscriptions(token lib.MultiAuthToken) ([]lib.FetchedSubscription, error) {
 	urlString := "https://management.azure.com/subscriptions?api-version=2022-12-01"
 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
 	if err != nil {
@@ -153,7 +154,7 @@ func ListSubscriptions(token MultiAuthToken) ([]FetchedSubscription, error) {
 	}
 	defer res.Body.Close()
 
-	var subsList SubsReqResBody
+	var subsList lib.SubsReqResBody
 	json.Unmarshal(responseBody, &subsList)
 	subsList.UpdateTenantName(token.TenantName)
 	// lib.MarshalAndPrintJson(subsList.Value)

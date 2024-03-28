@@ -1,13 +1,12 @@
-package cldTypes
+package lib
 
 type MultiAuthTokenRequestOptions struct {
 	// unicorn
 	GetWriteToken  bool   `json:"getWriteToken"`
 	ConfigFilePath string `json:"configFilePath"`
-	// ClientID       string `json:"clientId"`
-	// ClientSecret   string `json:"clientSecret"`
-	// Scope          string `json:"scope"`
-	CldConfigClientAuthDetails
+	ClientID       string `json:"clientId"`
+	ClientSecret   string `json:"clientSecret"`
+	Scope          string `json:"scope"`
 }
 
 type MultiAuthToken struct {
@@ -36,7 +35,7 @@ type TokenRequestResponse struct {
 	TokenType    string `json:"token_type"`
 }
 
-type azureAuthDetails struct {
+type AzureAuthDetails struct {
 	AZURE_TENANT_ID       string
 	AZURE_SUBSCRIPTION_ID string
 	AZURE_CLIENT_ID       string
@@ -45,7 +44,7 @@ type azureAuthDetails struct {
 	AZURE_RESOURCE_NAME   string
 }
 
-type azureAuthRequirements struct {
+type AzureAuthRequirements struct {
 	AZURE_TENANT_ID       bool
 	AZURE_SUBSCRIPTION_ID bool
 	AZURE_CLIENT_ID       bool

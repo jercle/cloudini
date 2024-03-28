@@ -13,8 +13,8 @@ import (
 
 func main() {
 	ctx := context.Background()
-	clientId := "4ca69554-1c1c-4eb5-84d6-a7e61551929a"
-	tenantId := "e9f4bce2-7308-461a-91ce-3f663d079f47"
+	clientId := ""
+	tenantId := ""
 
 	client, err := public.New(clientId, public.WithAuthority("https://login.microsoftonline.com/"+tenantId))
 	lib.CheckFatalError(err)

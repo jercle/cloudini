@@ -103,19 +103,19 @@ type ContainerRegistriesPerSub struct {
 	ContainerRegistries []ContainerRegistry
 }
 
-func listAllTenantACRs(tenantName string, tenantId string, token *TokenData) []ContainerRegistry {
+func listAllTenantACRs(tenantName string, tenantId string, token *lib.TokenData) []ContainerRegistry {
 	var (
 		allTenantACRs []ContainerRegistry
 		wg            sync.WaitGroup
 		mutex         sync.Mutex
 	)
-	subsToken := MultiAuthToken{
+	subsToken := lib.MultiAuthToken{
 		TenantName: tenantName,
 		TenantId:   tenantId,
 		TokenData:  *token,
 	}
 
-	subsList, err := listSubscriptions(MultiAuthToken(subsToken))
+	subsList, err := listSubscriptions(lib.MultiAuthToken(subsToken))
 	lib.CheckFatalError(err)
 
 	for _, sub := range subsList {
@@ -133,19 +133,19 @@ func listAllTenantACRs(tenantName string, tenantId string, token *TokenData) []C
 	return allTenantACRs
 }
 
-func listAllTenantACRsBySub(tenantName string, tenantId string, token *TokenData) []ContainerRegistriesPerSub {
+func listAllTenantACRsBySub(tenantName string, tenantId string, token *lib.TokenData) []ContainerRegistriesPerSub {
 	var (
 		allTenantACRs []ContainerRegistriesPerSub
 		wg            sync.WaitGroup
 		mutex         sync.Mutex
 	)
-	subsToken := MultiAuthToken{
+	subsToken := lib.MultiAuthToken{
 		TenantName: tenantName,
 		TenantId:   tenantId,
 		TokenData:  *token,
 	}
 
-	subsList, err := listSubscriptions(MultiAuthToken(subsToken))
+	subsList, err := listSubscriptions(lib.MultiAuthToken(subsToken))
 	lib.CheckFatalError(err)
 
 	for _, sub := range subsList {
@@ -176,7 +176,7 @@ func listAllTenantACRsBySub(tenantName string, tenantId string, token *TokenData
 }
 
 // Get all Azure Container Registries for subscription
-func listSubscriptionACRs(tenantId string, subscriptionId string, token *TokenData) []ContainerRegistry {
+func listSubscriptionACRs(tenantId string, subscriptionId string, token *lib.TokenData) []ContainerRegistry {
 	urlString := "https://management.com/subscriptions/" +
 		subscriptionId +
 		"/providers/Microsoft.ContainerRegistry/registries?api-version=2023-01-01-preview"
@@ -208,7 +208,7 @@ func listSubscriptionACRs(tenantId string, subscriptionId string, token *TokenDa
 	return allSubscriptionContainerRegistries
 }
 
-func listSubscriptions(token MultiAuthToken) ([]FetchedSubscription, error) {
+func listSubscriptions(token lib.MultiAuthToken) ([]lib.FetchedSubscription, error) {
 	urlString := "https://management.azure.com/subscriptions?api-version=2022-12-01"
 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
 	if err != nil {
@@ -234,7 +234,7 @@ func listSubscriptions(token MultiAuthToken) ([]FetchedSubscription, error) {
 	}
 	defer res.Body.Close()
 
-	var subsList SubsReqResBody
+	var subsList lib.SubsReqResBody
 	json.Unmarshal(responseBody, &subsList)
 	subsList.UpdateTenantName(token.TenantName)
 

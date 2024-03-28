@@ -16,81 +16,33 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/charmbracelet/log"
 	"github.com/jercle/azg/lib"
-	"github.com/jercle/azg/lib/cldTypes"
 )
 
 // var usrHomeDir, err = os.UserHomeDir()
-var configPath = lib.InitConfig(cldTypes.CldConfigOptions{})
-var tCacheFile = configPath + "/tCache"
 
-func (tokens *AllTenantTokens) SaveToFile() {
-
-	byteData, err := json.Marshal(tokens)
-	lib.CheckFatalError(err)
-	if _, err := os.Stat(tCacheFile); err != nil {
-		os.Create(tCacheFile)
+func GetCachedTokens() lib.AllTenantTokens {
+	var tokens lib.AllTenantTokens
+	if _, err := os.Stat(lib.ConfigPath); err != nil {
+		os.MkdirAll(lib.ConfigPath, os.ModePerm)
 	}
-	encodedData := b64.StdEncoding.EncodeToString(byteData)
-	os.WriteFile(tCacheFile, []byte(encodedData), os.ModePerm)
-	fmt.Println(encodedData)
-}
-
-func (tokens *AllTenantTokens) CheckExpiry() {
-	fmt.Println(tokens)
-}
-
-func (tokens AllTenantTokens) SelectTenant(tenantName string) (*MultiAuthToken, error) {
-	// var tenantToken MultiAuthToken
-	// fmt.Println(tenantName)
-	var tenantToken *MultiAuthToken
-
-	for _, token := range tokens {
-		if token.TenantName == tenantName {
-			tenantToken = &token
-			break
-		}
+	if _, err := os.Stat(lib.TokenCacheFile); err != nil {
+		os.Create(lib.TokenCacheFile)
 	}
-
-	if tenantToken != nil {
-		return tenantToken, nil
-	} else {
-		return nil, fmt.Errorf("Token not found for supplied tenant name")
-	}
-}
-
-func (subs *SubsReqResBody) UpdateTenantName(tenantName string) {
-	var localSubs SubsReqResBody
-	localSubs.Count = subs.Count
-	for _, sub := range subs.Value {
-		sub.TenantName = tenantName
-		localSubs.Value = append(localSubs.Value, sub)
-	}
-	*subs = localSubs
-}
-
-func GetCachedTokens() AllTenantTokens {
-	var tokens AllTenantTokens
-	if _, err := os.Stat(configPath); err != nil {
-		os.MkdirAll(configPath, os.ModePerm)
-	}
-	if _, err := os.Stat(tCacheFile); err != nil {
-		os.Create(tCacheFile)
-	}
-	fileData, err := os.ReadFile(tCacheFile)
+	fileData, err := os.ReadFile(lib.TokenCacheFile)
 	lib.CheckFatalError(err)
 	byteData, err := b64.StdEncoding.DecodeString(string(fileData))
 	lib.CheckFatalError(err)
 	json.Unmarshal(byteData, &tokens)
 	if len(tokens) == 0 {
 		fmt.Println("Fetching new tokens")
-		tokens, err = GetAllTenantSPTokens(MultiAuthTokenRequestOptions{})
+		tokens, err = GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
 		lib.CheckFatalError(err)
 	}
 	fmt.Println(tokens)
 	return tokens
 }
 
-func GetServicePrincipalToken(tenant string, spDetails MultiAuthTokenRequestOptions) (*TokenData, error) {
+func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequestOptions) (*lib.TokenData, error) {
 	ctx := context.Background()
 	var tokenRequestOptions policy.TokenRequestOptions
 
@@ -118,7 +70,7 @@ func GetServicePrincipalToken(tenant string, spDetails MultiAuthTokenRequestOpti
 		return nil, err
 	}
 
-	token := TokenData{
+	token := lib.TokenData{
 		Token:     tokenResponse.Token,
 		ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
 	}
@@ -127,7 +79,7 @@ func GetServicePrincipalToken(tenant string, spDetails MultiAuthTokenRequestOpti
 	return &token, nil
 }
 
-func GetAzCliToken() TokenData {
+func GetAzCliToken() lib.TokenData {
 	ctx := context.Background()
 	tokenRequestOptions := policy.TokenRequestOptions{
 		Scopes: []string{
@@ -146,7 +98,7 @@ func GetAzCliToken() TokenData {
 		log.Error("Unable to obtain Azure token", err, err)
 	}
 
-	token := TokenData{
+	token := lib.TokenData{
 		Token:     tokenResponse.Token,
 		ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
 	}
@@ -155,10 +107,10 @@ func GetAzCliToken() TokenData {
 	return token
 }
 
-func GetLogAnalyticsToken() (*TokenRequestResponse, error) {
+func GetLogAnalyticsToken() (*lib.TokenRequestResponse, error) {
 	var (
-		authDetails         azureAuthDetails
-		authRequestResponse *TokenRequestResponse
+		authDetails         lib.AzureAuthDetails
+		authRequestResponse *lib.TokenRequestResponse
 	)
 	// ctx := context.Background()
 
@@ -191,8 +143,8 @@ func GetLogAnalyticsToken() (*TokenRequestResponse, error) {
 	return authRequestResponse, nil
 }
 
-func GetAzureEnvVariables(requiredEnvVars azureAuthRequirements) *azureAuthDetails {
-	envs := azureAuthDetails{
+func GetAzureEnvVariables(requiredEnvVars lib.AzureAuthRequirements) *lib.AzureAuthDetails {
+	envs := lib.AzureAuthDetails{
 		AZURE_TENANT_ID:       os.Getenv("AZURE_TENANT_ID"),
 		AZURE_SUBSCRIPTION_ID: os.Getenv("AZURE_SUBSCRIPTION_ID"),
 		AZURE_CLIENT_ID:       os.Getenv("AZURE_CLIENT_ID"),
@@ -211,7 +163,7 @@ func GetAzureEnvVariables(requiredEnvVars azureAuthRequirements) *azureAuthDetai
 	return &envs
 }
 
-func GetToken(tenantName string) MultiAuthToken {
+func GetToken(tenantName string) lib.MultiAuthToken {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	lib.CheckFatalError(err)
 
@@ -230,10 +182,10 @@ func GetToken(tenantName string) MultiAuthToken {
 	tokenResponse, err := cred.GetToken(ctx, tokenRequestOptions)
 	lib.CheckFatalError(err)
 
-	multiAuthToken := MultiAuthToken{
+	multiAuthToken := lib.MultiAuthToken{
 		TenantId:   sub.TenantID,
 		TenantName: tenantName,
-		TokenData: TokenData{
+		TokenData: lib.TokenData{
 			Token:     tokenResponse.Token,
 			ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
 		},
@@ -247,26 +199,17 @@ func GetToken(tenantName string) MultiAuthToken {
 // Default path is ~/.config/cld/config.json
 //
 // First parameter passed into this function overwrites the config file path
-func GetAllTenantSPTokens(options MultiAuthTokenRequestOptions) (AllTenantTokens, error) {
+func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions) (lib.AllTenantTokens, error) {
 	var (
-		config       = lib.GetCldConfig(lib.CldConfigOptions{})
-		tenantTokens []MultiAuthToken
+		config       = lib.GetCldConfig(nil)
+		tenantTokens []lib.MultiAuthToken
 		wg           sync.WaitGroup
 		mut          sync.Mutex
-		err          error
 	)
 
 	for _, tenant := range config.Azure.MultiTenantAuth.Tenants {
 		wg.Add(1)
 		go func() {
-			var (
-				tokenData *TokenData
-				authOpts  MultiAuthTokenRequestOptions
-			)
-
-			// fmt.Println("Getting token for " + tenant.TenantName)
-
-			jsonTok, _ := json.Marshal(options)
 
 			options.ClientID = tenant.Writer.ClientID
 			options.ClientSecret = tenant.Writer.ClientSecret
@@ -280,31 +223,10 @@ func GetAllTenantSPTokens(options MultiAuthTokenRequestOptions) (AllTenantTokens
 				options.ClientSecret = tenant.Reader.ClientSecret
 			}
 
-			switch options.Scope {
-			case "graph":
+			tokenData, err := GetServicePrincipalToken(tenant.TenantID, options)
+			lib.CheckFatalError(err)
 
-			default:
-			}
-
-			if options.GetWriteToken {
-				// var authOpts MultiAuthTokenRequestOptions
-				// authOpts := MultiAuthTokenRequestOptions(tenant.Writer)
-
-				// if options.Scope == "graph" {
-				// 	// authOpts.AzureGraph = true
-
-				// }
-				tokenData, err = GetServicePrincipalToken(tenant.TenantID, authOpts)
-				lib.CheckFatalError(err)
-			} else if !options.GetWriteToken {
-				authOpts := tenant.Reader
-				// if options.AzureGraph {
-				// 	authOpts.AzureGraph = true
-				// }
-				tokenData, err = GetServicePrincipalToken(tenant.TenantID, authOpts)
-				lib.CheckFatalError(err)
-			}
-			tenantToken := MultiAuthToken{
+			tenantToken := lib.MultiAuthToken{
 				TenantId:   tenant.TenantID,
 				TenantName: tenant.TenantName,
 				TokenData:  *tokenData,
@@ -320,37 +242,45 @@ func GetAllTenantSPTokens(options MultiAuthTokenRequestOptions) (AllTenantTokens
 	return tenantTokens, nil
 }
 
-func GetTenantSPToken(tenantName string, options MultiAuthTokenRequestOptions) (*MultiAuthToken, error) {
+func GetTenantSPToken(tenantName string, options lib.MultiAuthTokenRequestOptions) (*lib.MultiAuthToken, error) {
 	var (
-		config      = lib.GetCldConfig(lib.CldConfigOptions{})
-		tenantToken MultiAuthToken
-		err         error
+		config      = lib.GetCldConfig(nil)
+		tenantToken lib.MultiAuthToken
+		flag        bool
 	)
 
-	// if tenant.TenantName == tenantName {
-	// 	return nil, fmt.Errorf("Tenant not in config")
+	// for key, _ := range config.Azure.MultiTenantAuth.Tenants {
+	// 	if key == tenantName {
+	// 		flag = true
+	// 	}
 	// }
 
+	tst, tenantExists := config.Azure.MultiTenantAuth.Tenants[tenantName]
 	tenant := config.Azure.MultiTenantAuth.Tenants[tenantName]
-
-	var tokenData *TokenData
-	// fmt.Println("Getting token for " + tenant.TenantName)
-	if options.GetWriteToken {
-		authOpts := tenant.Writer
-		if options.AzureGraph {
-			authOpts.AzureGraph = true
-		}
-		tokenData, err = GetServicePrincipalToken(tenant.TenantID, authOpts)
-		lib.CheckFatalError(err)
-	} else if !options.GetWriteToken {
-		authOpts := tenant.Reader
-		if options.AzureGraph {
-			authOpts.AzureGraph = true
-		}
-		tokenData, err = GetServicePrincipalToken(tenant.TenantID, authOpts)
-		lib.CheckFatalError(err)
+	fmt.Println(tst)
+	if !tenantExists {
+		return nil, fmt.Errorf("Tenant not found in config")
 	}
-	mat := MultiAuthToken{
+	os.Exit(0)
+	if !flag {
+		return nil, fmt.Errorf("Tenant not found in config")
+	}
+
+	switch options.GetWriteToken {
+	case true:
+		options.ClientID = tenant.Writer.ClientID
+		options.ClientSecret = tenant.Writer.ClientSecret
+	default:
+		options.ClientID = tenant.Reader.ClientID
+		options.ClientSecret = tenant.Reader.ClientSecret
+	}
+
+	fmt.Println(options)
+
+	tokenData, err := GetServicePrincipalToken(tenant.TenantID, options)
+	lib.CheckFatalError(err)
+
+	mat := lib.MultiAuthToken{
 		TenantId:   tenant.TenantID,
 		TenantName: tenant.TenantName,
 		TokenData:  *tokenData,

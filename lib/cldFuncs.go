@@ -2,45 +2,36 @@ package lib
 
 import (
 	"encoding/json"
-	"io"
 	"os"
 )
 
-func GetCldConfig(options CldConfigOptions) CldConfig {
+var ConfigPath = InitConfig(nil)
+var TokenCacheFile = ConfigPath + "/tCache"
+
+func GetCldConfig(options *CldConfigOptions) CldConfigRoot {
 	var (
-		config     CldConfig
-		jsonConfig *os.File
-		byteValue  []byte
-		err        error
+		config CldConfigRoot
 	)
 
-	configFilePath := InitConfig(CldConfigOptions{})
+	configFilePath := InitConfig(nil)
 
-	if _, err = os.Stat(configFilePath); err != nil {
-		jsonConfig, err = os.Create(configFilePath)
-		CheckFatalError(err)
-		defer jsonConfig.Close()
+	byteValue, err := os.ReadFile(configFilePath)
+	CheckFatalError(err)
 
-		byteValue, err = json.Marshal(config)
-		CheckFatalError(err)
+	// decodedBytes, err := b64.StdEncoding.DecodeString(string(byteValue))
+	// CheckFatalError(err)
 
-		os.WriteFile(configFilePath, byteValue, os.ModePerm)
+	// fmt.Println(string(byteValue))
+	// os.Exit(0)
 
-	} else {
-		jsonConfig, err = os.Open(configFilePath)
-		CheckFatalError(err)
-		defer jsonConfig.Close()
-		byteValue, _ = io.ReadAll(jsonConfig)
-		json.Unmarshal(byteValue, &config)
-		CheckFatalError(err)
-	}
-
-	// fmt.Println(config)
+	// err = json.Unmarshal(decodedBytes, &config)
+	err = json.Unmarshal(byteValue, &config)
+	CheckFatalError(err)
 
 	return config
 }
 
-func InitConfig(options CldConfigOptions) string {
+func InitConfig(options *CldConfigOptions) string {
 	usrHomeDir, err := os.UserHomeDir()
 	var (
 		configPath     = usrHomeDir + "/.config/cld"
@@ -49,39 +40,26 @@ func InitConfig(options CldConfigOptions) string {
 	)
 	CheckFatalError(err)
 
-	if options.ConfigFilePath != "" {
+	if options != nil && options.ConfigFilePath != "" {
 		configFilePath = options.ConfigFilePath
 	} else {
 		configFilePath = configFile
 	}
 
-	if _, err := os.Stat(configFilePath); err != nil {
-		os.MkdirAll(configFilePath, os.ModePerm)
+	if _, err := os.Stat(configPath); err != nil {
+		os.MkdirAll(configPath, os.ModePerm)
 	}
 
-	// fmt.Println(configFilePath)
+	fileStat, err := os.Stat(configFilePath)
+
+	if err != nil || fileStat.Size() == 0 {
+		config := CldConfigRoot{}
+		config.Azure.MultiTenantAuth.Tenants = make(CldConfigTenants)
+		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
+
+		// encodedData := b64.StdEncoding.EncodeToString(jsonBytes)
+		os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
+	}
 
 	return configFilePath
-}
-
-func (config *CldConfig) SaveToFile() {
-	// fmt.Println(config)
-
-	jsonData, _ := json.MarshalIndent(config, "", "  ")
-
-	// fmt.Println(string(jsonData))
-	configPath := InitConfig(CldConfigOptions{})
-
-	os.WriteFile(configPath, jsonData, os.ModePerm)
-	// fmt.Println("test")
-	// configPath := InitConfig(CldConfigOptions{})
-
-	// byteData, err := json.Marshal(config)
-	// lib.CheckFatalError(err)
-	// if _, err := os.Stat(tCacheFile); err != nil {
-	// 	os.Create(tCacheFile)
-	// }
-	// encodedData := b64.StdEncoding.EncodeToString(byteData)
-	// os.WriteFile(tCacheFile, []byte(encodedData), os.ModePerm)
-	// fmt.Println(encodedData)
 }

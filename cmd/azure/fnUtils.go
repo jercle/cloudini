@@ -3,9 +3,11 @@ package azure
 import (
 	"io"
 	"net/http"
+
+	"github.com/jercle/azg/lib"
 )
 
-func HttpGet(urlString string, mat MultiAuthToken) ([]byte, error) {
+func HttpGet(urlString string, mat lib.MultiAuthToken) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
 	if err != nil {
 		return nil, err
