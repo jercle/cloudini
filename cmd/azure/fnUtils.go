@@ -7,7 +7,7 @@ import (
 	"github.com/jercle/azg/lib"
 )
 
-func azureHttpGet(urlString string, mat MultiAuthToken) []byte {
+func HttpGet(urlString string, mat MultiAuthToken) []byte {
 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
 	lib.CheckFatalError(err)
 
