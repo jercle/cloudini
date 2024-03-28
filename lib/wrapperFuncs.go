@@ -6,8 +6,7 @@ import (
 	"log"
 	"runtime"
 	"strconv"
-	"sync"
-	"sync/atomic"
+	"strings"
 )
 
 // Simple wrapper to
@@ -23,8 +22,9 @@ func CheckFatalError(err error) {
 }
 
 func PrintSrcLoc(str ...string) {
+func PrintSrcLoc(str ...string) {
 	_, file, no, _ := runtime.Caller(1)
-	fmt.Println(file+":"+strconv.Itoa(no)+":0", str)
+	fmt.Println(file+":"+strconv.Itoa(no)+":0", strings.Join(str, " "))
 }
 
 // Simple wraper around
