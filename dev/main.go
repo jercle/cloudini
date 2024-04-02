@@ -5,7 +5,6 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -17,6 +16,7 @@ import (
 	"github.com/go-acme/lego/v4/providers/dns/azuredns"
 	"github.com/go-acme/lego/v4/registration"
 	"github.com/jercle/azg/lib"
+	// "github.com/jercle/lego/providers/dns/azuredns"
 )
 
 // You'll need a user or account type that implements acme.User
@@ -76,16 +76,20 @@ func main() {
 	conf.SubscriptionID = os.Getenv("AZURE_SUBSCRIPTION_ID")
 
 	cred, err := azidentity.NewClientSecretCredential(conf.TenantID, conf.ClientID, conf.ClientSecret, nil)
+	_ = cred
+	// azDnsProvider, err := azuredns.NewDNSProviderPublic(&conf, cred)
+	// lib.CheckFatalError(err)
 
-	azDnsProvider, err := azuredns.NewDNSProviderPublic(&conf, cred)
+	// // fmt.Println(azDnsProvider)
+	// jsonBytes, _ := json.MarshalIndent(conf, "", "  ")
+	// lib.PrintJsonBytes(jsonBytes)
+
+	err = azDnsProvider.Present("nothing.stkcat.dev", "", "")
 	lib.CheckFatalError(err)
 
-	// fmt.Println(azDnsProvider)
-	jsonBytes, _ := json.MarshalIndent(conf, "", "  ")
-	lib.PrintJsonBytes(jsonBytes)
-
-	err = azDnsProvider.Present("nothing.acmetest.stkcat.dev", "", "")
-	lib.CheckFatalError(err)
+	joelTest("testing", "testing2", "testing3", "testing4")
+	joelTest("testing", "testing2", "testing3")
+	joelTest("testing", "testing2")
 
 	os.Exit(0)
 
@@ -134,4 +138,11 @@ func main() {
 	fmt.Printf("%#v\n", certificates)
 
 	// ... all done.
+
+}
+
+func joelTest(name string, day string, options ...string) {
+	_ = name
+	_ = day
+	fmt.Println(options)
 }
