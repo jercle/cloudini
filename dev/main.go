@@ -84,7 +84,7 @@ func main() {
 	// jsonBytes, _ := json.MarshalIndent(conf, "", "  ")
 	// lib.PrintJsonBytes(jsonBytes)
 
-	err = azDnsProvider.Present("nothing.stkcat.dev", "", "")
+	err = azDnsProvider.Present("nothing.acmetest.stkcat.dev", "", "")
 	lib.CheckFatalError(err)
 
 	joelTest("testing", "testing2", "testing3", "testing4")
