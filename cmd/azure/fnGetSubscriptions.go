@@ -4,12 +4,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 	"sort"
 
 	// "log"
 	"os"
 
 	"github.com/charmbracelet/log"
+	"github.com/jercle/azg/lib"
 )
 
 // func GetTenant() {
@@ -64,23 +67,23 @@ type Subscription struct {
 	TenantID  string `json:"tenantId"`
 }
 
-func GetActiveSub() (string, error) {
+func GetActiveSub() (*Subscription, error) {
 	subs, _ := getSubs()
 
 	for _, sub := range subs.Subscriptions {
 		if sub.IsDefault {
-			return sub.ID, nil
+			return &sub, nil
 		}
 	}
 
-	return "", fmt.Errorf("no default subscription")
+	return nil, fmt.Errorf("no default subscription")
 }
 
 func getSubs() (AzureProfile, []byte) {
 	userHomeDir, _ := os.UserHomeDir()
 	content, readError := os.ReadFile(userHomeDir + "/.azure/azureProfile.json")
 	// content, readError := os.ReadFile("/home/jercle/git/azg/testData/azCliProfile.json")
-
+	// fmt.Println(string(content))
 	if readError != nil {
 		log.Fatal("Error when opening Azure Profile. Have you logged into az-cli?", readError)
 	}
@@ -122,4 +125,39 @@ func (s *AzureProfile) Sort() {
 	for k := range keys {
 		fmt.Println(s.Subscriptions[k])
 	}
+}
+
+// Lists Azure subscriptions availabe to a given auth token
+func ListSubscriptions(token lib.MultiAuthToken) ([]lib.FetchedSubscription, error) {
+	urlString := "https://management.azure.com/subscriptions?api-version=2022-12-01"
+	req, err := http.NewRequest(http.MethodGet, urlString, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+token.TokenData.Token)
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		// log.Fatal("Error fetching list of Subscriptions")
+		return nil, err
+	}
+
+	responseBody, err := io.ReadAll(res.Body)
+	if res.StatusCode == 400 {
+		// log.Fatal("Error fetching list of Subscriptions: ", string(responseBody))
+		return nil, err
+	}
+	if err != nil {
+		// log.Fatal(err)
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	var subsList lib.SubsReqResBody
+	json.Unmarshal(responseBody, &subsList)
+	subsList.UpdateTenantName(token.TenantName)
+	// lib.MarshalAndPrintJson(subsList.Value)
+
+	return subsList.Value, nil
 }

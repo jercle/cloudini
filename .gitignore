@@ -22,3 +22,14 @@ go.work
 dev/nsglogs
 .env
 dev/la-tables.json
+dev/cost-exports
+dev/res.json
+dev/config.json
+dev/billing.json
+dev/cldConf.json
+dev/tCache
+dev/outputs
+dev/tok.txt
+dev/listVnets.json
+dev/publicIp.json
+dev/subnets.json

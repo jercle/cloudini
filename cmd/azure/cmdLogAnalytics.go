@@ -12,7 +12,7 @@ var workspaceName string
 // subsCmd represents the subs command
 var logAnalyticsCmd = &cobra.Command{
 	Use:     "la",
-	Aliases: []string{"logAnalytics"},
+	Aliases: []string{"la"},
 	Short:   "Commands relating to Log Analytics and Azure Monitor",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:

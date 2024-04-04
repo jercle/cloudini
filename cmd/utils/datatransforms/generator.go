@@ -255,7 +255,7 @@ func (g *Generator) ObserveValue(value any) {
 // ObserveJSONReader observes JSON values from r.
 func (g *Generator) ObserveJSONReader(r io.Reader) error {
 	decoder := json.NewDecoder(r)
-	decoder.UseNumber()
+	// decoder.UseNumber()
 	for {
 		var value any
 		err := decoder.Decode(&value)
@@ -289,6 +289,7 @@ func (g *Generator) ObserveJSONFile(filename string) error {
 		return err
 	}
 	defer file.Close()
+	fmt.Println(file.Stat())
 	return g.ObserveJSONReader(file)
 }
 

@@ -51,6 +51,7 @@ func Generate(opts GenerateOptions) (string, error) {
 	if opts.Stdin {
 		generator.ObserveJSONReader(os.Stdin)
 	} else if opts.JsonFile != "" {
+		// fmt.Println(opts.JsonFile)
 		generator.ObserveJSONFile(opts.JsonFile)
 	} else if opts.JsonString != "" {
 		generator.ObserveJSONString(opts.JsonString)

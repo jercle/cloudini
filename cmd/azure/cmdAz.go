@@ -36,11 +36,11 @@ func init() {
 	azCmd.PersistentFlags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")
 
 	if subscriptionId == "" {
-		id, err := GetActiveSub()
+		sub, err := GetActiveSub()
 		if err != nil {
 			log.Fatalln(err)
 		}
-		subscriptionId = id
+		subscriptionId = sub.ID
 	}
 
 	// Here you will define your flags and configuration settings.
