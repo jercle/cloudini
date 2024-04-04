@@ -43,7 +43,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Create Release with artifacts
-      - name: Create azg Release
+      - name: Create cld Release
         id: create_release
         if: ${{ steps.check-tag-exists.outputs.exists == 'false'}}
         uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564 # v2.0.4
@@ -106,62 +106,62 @@ jobs:
       #   id: snapbuild
 
       - name: Zip
-        uses: montudor/action-zip@a8e75c9faefcd80fac3baf53ef40b9b119d5b702 # v1
+        uses: ncipollo/release-action@v1.12.0 # v1
         with:
-          args: zip -qq -r azg.zip bin
+          args: zip -qq -r cloudini.zip bin
 
       - name: Zip (win-amd64)
-        uses: montudor/action-zip@a8e75c9faefcd80fac3baf53ef40b9b119d5b702 # v1
+        uses: ncipollo/release-action@v1.12.0 # v1
         with:
-          args: zip -qq azg-win-amd64.zip bin/windows_amd64/azg.exe
+          args: zip -qq cloudini-win-amd64.zip bin/windows_amd64/cld.exe
 
       - name: Zip (win-arm64)
-        uses: montudor/action-zip@a8e75c9faefcd80fac3baf53ef40b9b119d5b702 # v1
+        uses: ncipollo/release-action@v1.12.0 # v1
         with:
-          args: zip -qq azg-win-arm64.zip bin/windows_arm64/azg.exe
+          args: zip -qq cloudini-win-arm64.zip bin/windows_arm64/cld.exe
 
       - name: Zip (darwin-amd64)
-        uses: montudor/action-zip@a8e75c9faefcd80fac3baf53ef40b9b119d5b702 # v1
+        uses: ncipollo/release-action@v1.12.0 # v1
         with:
-          args: zip -qq azg-darwin-amd64.zip bin/darwin_amd64/azg
+          args: zip -qq cloudini-darwin-amd64.zip bin/darwin_amd64/cld
 
       - name: Zip (darwin-arm64)
-        uses: montudor/action-zip@a8e75c9faefcd80fac3baf53ef40b9b119d5b702 # v1
+        uses: ncipollo/release-action@v1.12.0 # v1
         with:
-          args: zip -qq azg-darwin-arm64.zip bin/darwin_arm64/azg
+          args: zip -qq cloudini-darwin-arm64.zip bin/darwin_arm64/cld
 
       - name: Zip (linux-amd64)
-        uses: montudor/action-zip@a8e75c9faefcd80fac3baf53ef40b9b119d5b702 # v1
+        uses: ncipollo/release-action@v1.12.0 # v1
         with:
-          args: zip -qq azg-linux-amd64.zip bin/linux_amd64/azg
+          args: zip -qq cloudini-linux-amd64.zip bin/linux_amd64/cld
 
       - name: Zip (linux-arm64)
-        uses: montudor/action-zip@a8e75c9faefcd80fac3baf53ef40b9b119d5b702 # v1
+        uses: ncipollo/release-action@v1.12.0 # v1
         with:
-          args: zip -qq azg-linux-arm64.zip bin/linux_arm64/azg
+          args: zip -qq cloudini-linux-arm64.zip bin/linux_arm64/cld
 
       - name: Zip (linux-armv7)
-        uses: montudor/action-zip@a8e75c9faefcd80fac3baf53ef40b9b119d5b702 # v1
+        uses: ncipollo/release-action@v1.12.0 # v1
         with:
-          args: zip -qq azg-linux-armv7.zip bin/linux_armv7/azg
+          args: zip -qq cloudini-linux-armv7.zip bin/linux_armv7/cld
 
       - name: Create sha256 Checksums
         run: |
-          sha256sum azg.zip > azg.zip.sha256
-          sha256sum azg-win-amd64.zip > azg-win-amd64.zip.sha256
-          sha256sum azg-win-arm64.zip > azg-win-arm64.zip.sha256
-          sha256sum azg-darwin-amd64.zip > azg-darwin-amd64.zip.sha256
-          sha256sum azg-darwin-arm64.zip > azg-darwin-arm64.zip.sha256
-          sha256sum azg-linux-amd64.zip > azg-linux-amd64.zip.sha256
-          sha256sum azg-linux-arm64.zip > azg-linux-arm64.zip.sha256
-          sha256sum azg-linux-armv7.zip > azg-linux-armv7.zip.sha256
+          sha256sum cloudini.zip > cloudini.zip.sha256
+          sha256sum cloudini-win-amd64.zip > cloudini-win-amd64.zip.sha256
+          sha256sum cloudini-win-arm64.zip > cloudini-win-arm64.zip.sha256
+          sha256sum cloudini-darwin-amd64.zip > cloudini-darwin-amd64.zip.sha256
+          sha256sum cloudini-darwin-arm64.zip > cloudini-darwin-arm64.zip.sha256
+          sha256sum cloudini-linux-amd64.zip > cloudini-linux-amd64.zip.sha256
+          sha256sum cloudini-linux-arm64.zip > cloudini-linux-arm64.zip.sha256
+          sha256sum cloudini-linux-armv7.zip > cloudini-linux-armv7.zip.sha256
 
       - name: Publish
         uses: skx/github-action-publish-binaries@44887b225ceca96efd8a912d39c09ad70312af31 # master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: azg.zip azg-win-amd64.zip azg-win-arm64.zip azg-darwin-amd64.zip azg-darwin-arm64.zip azg-linux-amd64.zip azg-linux-arm64.zip azg-linux-armv7.zip azg.zip.sha256 azg-win-amd64.zip.sha256 azg-win-arm64.zip.sha256 azg-darwin-amd64.zip.sha256 azg-darwin-arm64.zip.sha256 azg-linux-amd64.zip.sha256 azg-linux-arm64.zip.sha256 azg-linux-armv7.zip.sha256
+          args: cloudini.zip cloudini-win-amd64.zip cloudini-win-arm64.zip cloudini-darwin-amd64.zip cloudini-darwin-arm64.zip cloudini-linux-amd64.zip cloudini-linux-arm64.zip cloudini-linux-armv7.zip cloudini.zip.sha256 cloudini-win-amd64.zip.sha256 cloudini-win-arm64.zip.sha256 cloudini-darwin-amd64.zip.sha256 cloudini-darwin-arm64.zip.sha256 cloudini-linux-amd64.zip.sha256 cloudini-linux-arm64.zip.sha256 cloudini-linux-armv7.zip.sha256
           releaseId: ${{ steps.create_release.outputs.id }}
 
       # - name: Publish to Snap Store
