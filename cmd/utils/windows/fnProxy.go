@@ -16,7 +16,7 @@ func SetProxySettings(config lib.ProxyConfig, ignoreOverrides bool) {
 
 	err = k.SetDWordValue("ProxyEnable", 1)
 	lib.CheckFatalError(err)
-	err = k.SetStringValue("ProxyServer", config.Server)
+	err = k.SetStringValue("ProxyServer", config.Server+":"+config.Port)
 	lib.CheckFatalError(err)
 
 	if config.Overrides != "" || !ignoreOverrides {
@@ -25,12 +25,13 @@ func SetProxySettings(config lib.ProxyConfig, ignoreOverrides bool) {
 	}
 }
 
-func GetProxySettings() {
+func GetProxySettings() lib.ProxyConfig {
 	k, err := registry.OpenKey(registry.CURRENT_USER, `SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings`, registry.READ)
 	lib.CheckFatalError(err)
 	defer k.Close()
 
 	valueNames, err := k.ReadValueNames(0)
+	lib.CheckFatalError(err)
 	if !slices.Contains(valueNames, "ProxyServer") {
 		fmt.Println("Proxy not enabled")
 		os.Exit(0)
@@ -40,7 +41,7 @@ func GetProxySettings() {
 	lib.CheckFatalError(err)
 	proxyEnabledValue, _, err := k.GetIntegerValue("ProxyEnable")
 	lib.CheckFatalError(err)
-	proxyOverride, _, err := k.GetStringValue("ProxyOverride")
+	proxyOverrides, _, err := k.GetStringValue("ProxyOverride")
 	lib.CheckFatalError(err)
 
 	var proxyEnabled bool
@@ -48,14 +49,21 @@ func GetProxySettings() {
 		proxyEnabled = true
 	}
 
-	if proxyServer == "" || proxyEnabled == false {
+	if proxyServer == "" || !proxyEnabled {
 		fmt.Println("Proxy not enabled")
 		os.Exit(0)
 	}
 
-	fmt.Println("Proxy enabled?", proxyEnabled)
-	fmt.Println("Proxy Server:", proxyServer)
-	fmt.Println("Proxy Overrides:", proxyOverride)
+	var proxyConfig lib.ProxyConfig
+	proxyConfig.Enabled = proxyEnabled
+	proxyConfig.Server = proxyServer
+	proxyConfig.Overrides = proxyOverrides
+
+	return proxyConfig
+
+	// fmt.Println("Proxy enabled?", proxyEnabled)
+	// fmt.Println("Proxy Server:", proxyServer)
+	// fmt.Println("Proxy Overrides:", proxyOverrides)
 }
 
 func RemoveProxyConfig() {
