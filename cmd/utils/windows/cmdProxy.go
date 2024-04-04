@@ -6,21 +6,17 @@ Copyright © 2024 Evan Colwell ercolwell@gmail.com
 package windows
 
 import (
-	"encoding/json"
-	"fmt"
-	"sort"
-	"strings"
-
-	"github.com/charmbracelet/log"
+	"github.com/jercle/azg/lib"
 	"github.com/spf13/cobra"
 )
 
-var appName string
-var fullData bool
+var setProxyConfig string
+var getProxyConfig bool
+var deleteProxyConfig bool
 
 // checkInstalledAppCmd represents the checkInstalledApp command
-var checkInstalledAppCmd = &cobra.Command{
-	Use:     "checkInstalledApp",
+var proxyCmd = &cobra.Command{
+	Use:     "proxy",
 	Aliases: []string{"installed"},
 	Short:   "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
@@ -30,32 +26,31 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		apps := getInstalledApps()
-		sort.Slice(apps, func(i, j int) bool {
-			return strings.ToLower(apps[i].DisplayName) < strings.ToLower(apps[j].DisplayName)
-		})
 
-		if appName == "" {
-			if fullData {
-				jsonApps, err := json.MarshalIndent(apps, "", "  ")
-				if err != nil {
-					log.Error(err, err)
-				}
-				fmt.Println(string(jsonApps))
-			} else {
-				for _, app := range apps {
-					fmt.Println(app.DisplayName)
-				}
-			}
+		if getProxyConfig {
+			GetProxySettings()
+		}
 
+		if setProxyConfig != "" {
+			cldConf := lib.GetCldConfig(nil)
+			SetProxySettings(cldConf.ProxyConfig[setProxyConfig], false)
+			GetProxySettings()
+		}
+
+		if deleteProxyConfig {
+			RemoveProxyConfig()
 		}
 
 	},
 }
 
 func init() {
-	checkInstalledAppCmd.Flags().StringVarP(&appName, "appName", "n", "", "-n [Application Name]")
-	checkInstalledAppCmd.Flags().BoolVarP(&fullData, "fullData", "f", false, "Return full data instead of just app names")
+	proxyCmd.Flags().BoolVarP(&getProxyConfig, "getProxyConfig", "g", false, "Shows current proxy configuration")
+	proxyCmd.Flags().BoolVarP(&deleteProxyConfig, "deleteProxyConfig", "d", false, "Shows current proxy configuration")
+	proxyCmd.Flags().StringVarP(&setProxyConfig, "setProxyConfig", "s", "", "Shows current proxy configuration")
+
+	proxyCmd.MarkFlagsOneRequired("getProxyConfig", "setProxyConfig", "deleteProxyConfig")
+	proxyCmd.MarkFlagsMutuallyExclusive("getProxyConfig", "setProxyConfig", "deleteProxyConfig")
 
 	// checkInstalledAppCmd.MarkFlagRequired("appName")
 

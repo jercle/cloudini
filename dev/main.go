@@ -1,19 +1,16 @@
 package main
 
-import (
-	"fmt"
-
-	"github.com/jercle/azg/lib"
-	"golang.org/x/sys/windows/registry"
-)
-
 func main() {
 	// GetProxySettings()
 	// RemoveProxyConfig()
 	// GetProxySettings()
 
-	confLocation := lib.InitConfig(&lib.CldConfigOptions{})
-	fmt.Println(confLocation)
+	// confLocation := lib.InitConfig(&lib.CldConfigOptions{})
+	// fmt.Println(confLocation)
+	// cldConf := lib.GetCldConfig(nil)
+	// SetProxySettings(cldConf.ProxyConfig["default"])
+	// fmt.Println(cldConf)
+	// GetProxySettings()
 
 	// k, err := registry.OpenKey(registry.CURRENT_USER, `SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings`, registry.READ)
 	// lib.CheckFatalError(err)
@@ -35,42 +32,6 @@ func main() {
 	// fmt.Println(valueNames)
 
 	// proxyServer, _, err := k.GetStringValue("ProxyServer")
-
-}
-func SetProxySettings(config string) {
-	k, err := registry.OpenKey(registry.CURRENT_USER, `SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings`, registry.WRITE)
-	lib.CheckFatalError(err)
-	defer k.Close()
-
-}
-
-func GetProxySettings() {
-	k, err := registry.OpenKey(registry.CURRENT_USER, `SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings`, registry.QUERY_VALUE)
-	lib.CheckFatalError(err)
-	defer k.Close()
-
-	proxyServer, _, err := k.GetStringValue("ProxyServer")
-	lib.CheckFatalError(err)
-	proxyEnable, _, err := k.GetIntegerValue("ProxyEnable")
-	lib.CheckFatalError(err)
-	proxyOverride, _, err := k.GetStringValue("ProxyOverride")
-	lib.CheckFatalError(err)
-
-	fmt.Println("Current proxy server settings:", proxyServer)
-	fmt.Println("Current proxy enabl settings:", proxyEnable)
-	fmt.Println("Current proxy enabl settings:", proxyOverride)
-}
-
-func RemoveProxyConfig() {
-	k, err := registry.OpenKey(registry.CURRENT_USER, `SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings`, registry.SET_VALUE)
-	lib.CheckFatalError(err)
-	defer k.Close()
-
-	// k.DeleteValue("ProxyServer")
-
-	k.SetStringValue("ProxyServer", "")
-
-	// k.
 
 }
 

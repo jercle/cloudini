@@ -7,9 +7,10 @@ type CldConfigRoot struct {
 }
 
 type ProxyConfig struct {
-	Server  string `json:"server"`
-	Port    string `json:"port"`
-	Enabled bool   `json:"enabled"`
+	Server    string `json:"server"`
+	Port      string `json:"port"`
+	Enabled   bool   `json:"enabled"`
+	Overrides string `json:"overrides"`
 }
 
 type CldConfig struct {
