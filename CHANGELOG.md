@@ -9,13 +9,20 @@
 
 * Bump dep versions
 * Utils
-  * Updates and refactors to windows registry functions for getting installed apps
-  * Add windows registry functions for updating proxy settings
+  * Feature: Updates and refactors to windows registry functions for getting installed apps
+  * Feature: Add windows registry functions for updating proxy settings
 * Azure
-  * Log analytics functions
-  * NSG flow log IP search
-  * Authentication improvements for multiple tenants
-  * Standardised Azure REST API requests
+  * Feature: Log analytics functions
+  * Feature: NSG flow log IP search
+    * Bug: Using bad method of file iteration, greatly increased performance
+  * Feature: Authentication improvements for multiple tenants
+  * Feature: Standardised Azure REST API requests
+  * Feature: Begin working on Azure Container Registry cleanup functionality
+    * Will list all images, and prune all no longer in use with parameters
+  * Feature: Retrieve Entra roles
+* Azure DevOps
+  * Feature: Add pipeline search
+  * Feature: Begin working on listing top run pipelines
 * Config
-  * Added config functionality, intialisation, and structs
-* Refactoring
+  * Feature: Added config functionality, intialisation, and structs
+* Maintenance: Refactoring
