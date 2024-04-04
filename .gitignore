@@ -34,3 +34,4 @@ dev/listVnets.json
 dev/publicIp.json
 dev/subnets.json
 dist/
+gpg_pwd
