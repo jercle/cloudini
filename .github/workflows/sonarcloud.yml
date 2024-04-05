@@ -7,7 +7,6 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   sonarcloud:
-    environment: sonar
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
