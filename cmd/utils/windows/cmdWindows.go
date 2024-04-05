@@ -1,7 +1,7 @@
 //go:build windows
 
 /*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
 */
 package windows
 
@@ -29,6 +29,7 @@ to quickly create a Cobra application.`,
 
 func init() {
 	WindowsCmd.AddCommand(checkInstalledAppCmd)
+	WindowsCmd.AddCommand(proxyCmd)
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

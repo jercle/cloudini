@@ -1,7 +1,7 @@
 //go:build windows
 
 /*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
 */
 package windows
 

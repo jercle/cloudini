@@ -8,6 +8,7 @@ package utils
 import (
 	"runtime"
 
+	"github.com/jercle/azg/cmd"
 	"github.com/jercle/azg/cmd/utils/windows"
 
 	"github.com/spf13/cobra"
@@ -31,6 +32,7 @@ to quickly create a Cobra application.`,
 
 func init() {
 	if runtime.GOOS == "windows" {
+		cmd.RootCmd.AddCommand(utilsCmd)
 		utilsCmd.AddCommand(windows.WindowsCmd)
 	}
 
