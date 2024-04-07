@@ -49,6 +49,8 @@ func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequest
 	switch spDetails.Scope {
 	case "graph":
 		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
+	case "storage":
+		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
 	default:
 		tokenRequestOptions.Scopes = []string{"https://management.core.windows.net/.default"}
 	}
@@ -246,7 +248,7 @@ func GetTenantSPToken(tenantName string, options lib.MultiAuthTokenRequestOption
 	var (
 		config      = lib.GetCldConfig(nil)
 		tenantToken lib.MultiAuthToken
-		flag        bool
+		// flag        bool
 	)
 
 	// for key, _ := range config.Azure.MultiTenantAuth.Tenants {
@@ -255,16 +257,14 @@ func GetTenantSPToken(tenantName string, options lib.MultiAuthTokenRequestOption
 	// 	}
 	// }
 
-	tst, tenantExists := config.Azure.MultiTenantAuth.Tenants[tenantName]
-	tenant := config.Azure.MultiTenantAuth.Tenants[tenantName]
-	fmt.Println(tst)
+	tenant, tenantExists := config.Azure.MultiTenantAuth.Tenants[tenantName]
+
 	if !tenantExists {
 		return nil, fmt.Errorf("Tenant not found in config")
 	}
-	os.Exit(0)
-	if !flag {
-		return nil, fmt.Errorf("Tenant not found in config")
-	}
+	// if !flag {
+	// 	return nil, fmt.Errorf("Tenant not found in config")
+	// }
 
 	switch options.GetWriteToken {
 	case true:
@@ -274,8 +274,6 @@ func GetTenantSPToken(tenantName string, options lib.MultiAuthTokenRequestOption
 		options.ClientID = tenant.Reader.ClientID
 		options.ClientSecret = tenant.Reader.ClientSecret
 	}
-
-	fmt.Println(options)
 
 	tokenData, err := GetServicePrincipalToken(tenant.TenantID, options)
 	lib.CheckFatalError(err)
