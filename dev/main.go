@@ -1,14 +1,11 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"time"
 
-	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
-	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob/container"
 	"github.com/jercle/azg/cmd/azure"
 	"github.com/jercle/azg/lib"
 )
@@ -153,46 +150,110 @@ func main() {
 
 func ListStorageContainerBlobs(options StorageAccountRequestOptions) []BlobItem {
 	var (
-		cred     *azidentity.ClientSecretCredential
-		err      error
-		ctx      = context.Background()
+		// cred     *azidentity.ClientSecretCredential
+		// err      error
+		// ctx      = context.Background()
 		BlobList []BlobItem
 	)
 
 	config := lib.GetCldConfig(nil)
 
-	tenant := config.Azure.MultiTenantAuth.Tenants[options.ConfiguredTenantName]
-	if options.GetWriteToken {
-		cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Writer.ClientID, tenant.Writer.ClientSecret, nil)
-		lib.CheckFatalError(err)
-	} else {
-		cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Reader.ClientID, tenant.Reader.ClientSecret, nil)
-		lib.CheckFatalError(err)
+	// tenant := config.Azure.MultiTenantAuth.Tenants[options.ConfiguredTenantName]
+
+	token, err := azure.GetTenantSPToken("Stack Cats", lib.MultiAuthTokenRequestOptions{Scope: "storage"})
+	lib.CheckFatalError(err)
+
+	// if options.GetWriteToken {
+	// 	cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Writer.ClientID, tenant.Writer.ClientSecret, nil)
+	// 	lib.CheckFatalError(err)
+	// } else {
+	// 	cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Reader.ClientID, tenant.Reader.ClientSecret, nil)
+	// 	lib.CheckFatalError(err)
+	// }
+
+	urlString := config.Azure.MultiTenantAuth.Tenants[options.ConfiguredTenantName].CostExportsLocation + "?restype=container&comp=list"
+
+	response, err := azure.StorageBlobHttpGet(urlString, *token)
+
+	v := ContainerClientListBlobFlatSegmentResponse{}
+	err = xml.Unmarshal(response, &v)
+	if err != nil {
+		err = fmt.Errorf("unmarshalling type %T: %s", v, err)
 	}
 
-	serviceURL := "https://" + options.StorageAccountName + ".blob.core.windows.net"
+	jsonBytes, _ := json.MarshalIndent(v, "", "  ")
 
-	client, err := azblob.NewClient(serviceURL, cred, nil)
+	fmt.Println(string(jsonBytes))
+	// serviceURL := "https://" + options.StorageAccountName + ".blob.core.windows.net"
 
-	pager := client.NewListBlobsFlatPager(options.ContainerName, &azblob.ListBlobsFlatOptions{
-		Include: container.ListBlobsInclude{Deleted: false, Versions: false},
-	})
+	// client, err := azblob.NewClient(serviceURL, cred, nil)
 
-	for pager.More() {
-		resp, err := pager.NextPage(ctx)
-		lib.CheckFatalError(err)
-		// jsonBytes, _ := json.MarshalIndent(resp, "", "  ")
-		// fmt.Println(string(jsonBytes))
-		for _, blob := range resp.Segment.BlobItems {
-			var blobItem BlobItem
-			jsonBytes, _ := json.Marshal(blob)
-			json.Unmarshal(jsonBytes, &blobItem)
-			BlobList = append(BlobList, blobItem)
-			// fmt.Println(*_blob.Name)
-			// BlobList = append(BlobList, *_blob
-			// )
-		}
-	}
+	// pager := client.NewListBlobsFlatPager(options.ContainerName, &azblob.ListBlobsFlatOptions{
+	// 	Include: container.ListBlobsInclude{Deleted: false, Versions: false},
+	// })
+
+	// for pager.More() {
+	// 	resp, err := pager.NextPage(ctx)
+	// 	lib.CheckFatalError(err)
+	// 	// jsonBytes, _ := json.MarshalIndent(resp, "", "  ")
+	// 	// fmt.Println(string(jsonBytes))
+	// 	for _, blob := range resp.Segment.BlobItems {
+	// 		var blobItem BlobItem
+	// 		jsonBytes, _ := json.Marshal(blob)
+	// 		json.Unmarshal(jsonBytes, &blobItem)
+	// 		BlobList = append(BlobList, blobItem)
+	// 		// fmt.Println(*_blob.Name)
+	// 		// BlobList = append(BlobList, *_blob
+	// 		// )
+	// 	}
+	// }
 
 	return BlobList
+}
+
+type ListBlobsFlatSegmentResponse struct {
+	// REQUIRED
+	ContainerName *string `xml:"ContainerName,attr"`
+
+	// REQUIRED
+	Segment *BlobFlatListSegment `xml:"Blobs"`
+
+	// REQUIRED
+	ServiceEndpoint *string `xml:"ServiceEndpoint,attr"`
+	Marker          *string `xml:"Marker"`
+	MaxResults      *int32  `xml:"MaxResults"`
+	NextMarker      *string `xml:"NextMarker"`
+	Prefix          *string `xml:"Prefix"`
+}
+type ContainerClientListBlobFlatSegmentResponse struct {
+	// An enumeration of blobs
+	ListBlobsFlatSegmentResponse
+
+	// ClientRequestID contains the information returned from the x-ms-client-request-id header response.
+	ClientRequestID *string
+
+	// ContentType contains the information returned from the Content-Type header response.
+	ContentType *string
+
+	// Date contains the information returned from the Date header response.
+	Date *time.Time
+
+	// RequestID contains the information returned from the x-ms-request-id header response.
+	RequestID *string
+
+	// Version contains the information returned from the x-ms-version header response.
+	Version *string
+}
+
+type BlobFlatListSegment struct {
+	// REQUIRED
+	BlobItems []BlobItem `xml:"Blob"`
+}g
+
+type BlobTag struct {
+	// REQUIRED
+	Key *string `xml:"Key"`
+
+	// REQUIRED
+	Value *string `xml:"Value"`
 }

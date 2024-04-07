@@ -58,7 +58,6 @@ func SimpleGetRequestWithToken(urlString string, token string) []byte {
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+token)
-	req.Header.Add("x-ms-version", "2023-11-03")
 
 	res, err := http.DefaultClient.Do(req)
 	lib.CheckFatalError(err)
@@ -86,3 +85,16 @@ func SimpleGetRequest(urlString string, token string) []byte {
 
 	return responseBody
 }
+
+// func RemoveBOM(resp *http.Response) error {
+// 	_, err := exported.Payload(resp, &exported.PayloadOptions{
+// 		BytesModifier: func(b []byte) []byte {
+// 			// UTF8
+// 			return bytes.TrimPrefix(b, []byte("\xef\xbb\xbf"))
+// 		},
+// 	})
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
