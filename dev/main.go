@@ -19,32 +19,32 @@ type rowData struct {
 	DepartmentName   string  `csv:"-"`
 	AccountName      string  `csv:"-"`
 	AccountOwnerId   string  `csv:"-"`
-	SubscriptionGuid string  `csv:"SubscriptionGuid"`
-	SubscriptionName string  `csv:"SubscriptionName"`
-	ResourceGroup    string  `csv:"ResourceGroup"`
+	SubscriptionGuid string  `csv:"SubscriptionGuid" json:"SubscriptionGuid"`
+	SubscriptionName string  `csv:"SubscriptionName" json:"SubscriptionName"`
+	ResourceGroup    string  `csv:"ResourceGroup" json:"ResourceGroup"`
 	ResourceLocation string  `csv:"-"`
 	AvailabilityZone string  `csv:"-"`
-	UsageDateTime    string  `csv:"UsageDateTime"`
-	ProductName      string  `csv:"ProductName"`
+	UsageDateTime    string  `csv:"UsageDateTime" json:"UsageDateTime"`
+	ProductName      string  `csv:"ProductName" json:"ProductName"`
 	MeterCategory    string  `csv:"-"`
 	MeterSubcategory string  `csv:"-"`
 	MeterId          string  `csv:"-"`
-	MeterName        string  `csv:"MeterName"`
+	MeterName        string  `csv:"MeterName" json:"MeterName"`
 	MeterRegion      string  `csv:"-"`
-	UnitOfMeasure    string  `csv:"UnitOfMeasure"`
-	UsageQuantity    float64 `csv:"UsageQuantity"`
-	ResourceRate     float64 `csv:"ResourceRate"`
-	PreTaxCost       float64 `csv:"PreTaxCost"`
+	UnitOfMeasure    string  `csv:"UnitOfMeasure" json:"UnitOfMeasure"`
+	UsageQuantity    float64 `csv:"UsageQuantity" json:"UsageQuantity"`
+	ResourceRate     float64 `csv:"ResourceRate" json:"ResourceRate"`
+	PreTaxCost       float64 `csv:"PreTaxCost" json:"PreTaxCost"`
 	CostCenter       string  `csv:"-"`
-	ConsumedService  string  `csv:"ConsumedService"`
-	ResourceType     string  `csv:"ResourceType"`
-	InstanceId       string  `csv:"InstanceId"`
+	ConsumedService  string  `csv:"ConsumedService" json:"ConsumedService"`
+	ResourceType     string  `csv:"ResourceType" json:"ResourceType"`
+	InstanceId       string  `csv:"InstanceId" json:"InstanceId"`
 	Tags             string  `csv:"-"`
 	OfferId          string  `csv:"-"`
 	AdditionalInfo   string  `csv:"-"`
 	ServiceInfo1     string  `csv:"-"`
 	ServiceInfo2     string  `csv:"-"`
-	Currency         string  `csv:"Currency"`
+	Currency         string  `csv:"Currency" json:"Currency"`
 	Datafile         string
 }
 
@@ -62,7 +62,7 @@ type UnsupportedType struct {
 	Type string
 }
 
-type transformedCostItem struct {
+type TransformedCostItem struct {
 	ResourceGroup    string
 	PreTaxCost       float64
 	SubscriptionName string
@@ -72,7 +72,7 @@ type transformedCostItem struct {
 
 type TransformedTenantData struct {
 	PreTaxCost float64
-	ResGroups  []transformedCostItem
+	ResGroups  []TransformedCostItem
 }
 
 // type TransformedCostItemsByTenant map[string]TransformedTenantData
@@ -88,75 +88,32 @@ type TransformedCostItemsByTenant struct {
 	PurpleDTQ TransformedTenantData
 }
 
-type TransformedCostItemsByTenantMap map[string]*TransformedTenantData
+type TransformedCostItemsByTenantMap map[string]TransformedTenantData
 
-func (tenants *TransformedCostItemsByTenantMap) addPreTaxCost(tci transformedCostItem) {
-	// ptc := (*tenants)[tci.Datafile].PreTaxCost
-	// ptc = tci.PreTaxCost
+func (tenants *TransformedCostItemsByTenantMap) addPreTaxCost(tci TransformedCostItem) {
 	t := *tenants
 
 	thing := t[tci.Datafile]
 	thing.PreTaxCost += tci.PreTaxCost
 
 	fmt.Println(t)
-
 }
 
-func (t TransformedCostItemsByTenantMap) appendTenantData(tci transformedCostItem) {
-	// newMap := make(map[string]TransformedTenantData)
-	// tst := tenants[tci.Tenant]
-
-	// t := *tenants
-
-	entry, exists := t[tci.Tenant]
+func (t *TransformedCostItemsByTenantMap) appendTenantData(tci TransformedCostItem) {
+	tenants := *t
+	entry, exists := tenants[tci.Tenant]
 	if !exists {
-		var td *TransformedTenantData
-		td.PreTaxCost = tci.PreTaxCost
-		td.ResGroups = append(td.ResGroups, tci)
-		// t[tci.Tenant] = TransformedTenantData{
-		// 	PreTaxCost: tci.PreTaxCost,
-		// 	ResGroups:  []transformedCostItem{tci},
-		// }
-		fmt.Println(entry)
+		tenant := TransformedTenantData{}
+		tenant.PreTaxCost += tci.PreTaxCost
+		tenant.ResGroups = append(tenant.ResGroups, tci)
+		tenants[tci.Tenant] = tenant
 	} else {
-
+		tenant := entry
+		tenant.PreTaxCost += tci.PreTaxCost
+		tenant.ResGroups = append(tenant.ResGroups, tci)
+		tenants[tci.Tenant] = tenant
 	}
-	// tenants[tci.Tenant].ResGroups = append(tenants[tci.Tenant].ResGroups, tci)
-
-	fmt.Println(&t)
-	fmt.Println("exiting")
-	os.Exit(0)
-	// t[tci.Tenant].ResGroups = append(t[tci.Tenant].ResGroups, tci)
-
-	// switch tci.Tenant {
-	// case "BLUE":
-	// 	tenants.Blue.ResGroups = append(tenants.Blue.ResGroups, tci)
-	// 	tenants.Blue.PreTaxCost += tci.PreTaxCost
-	// case "BLUEDTQ":
-	// 	tenants.BlueDTQ.ResGroups = append(tenants.BlueDTQ.ResGroups, tci)
-	// 	tenants.BlueDTQ.PreTaxCost += tci.PreTaxCost
-	// case "RED":
-	// 	tenants.Red.ResGroups = append(tenants.Red.ResGroups, tci)
-	// 	tenants.Red.PreTaxCost += tci.PreTaxCost
-	// case "REDDTQ":
-	// 	tenants.RedDTQ.ResGroups = append(tenants.RedDTQ.ResGroups, tci)
-	// 	tenants.RedDTQ.PreTaxCost += tci.PreTaxCost
-	// case "YELLOW":
-	// 	tenants.Yellow.ResGroups = append(tenants.Yellow.ResGroups, tci)
-	// 	tenants.Yellow.PreTaxCost += tci.PreTaxCost
-	// case "PUD":
-	// 	tenants.PUD.ResGroups = append(tenants.PUD.ResGroups, tci)
-	// 	tenants.PUD.PreTaxCost += tci.PreTaxCost
-	// case "PUDDTQ":
-	// 	tenants.PUDDTQ.ResGroups = append(tenants.PUDDTQ.ResGroups, tci)
-	// 	tenants.PUDDTQ.PreTaxCost += tci.PreTaxCost
-	// case "PURPLE":
-	// 	tenants.Purple.ResGroups = append(tenants.Purple.ResGroups, tci)
-	// 	tenants.Purple.PreTaxCost += tci.PreTaxCost
-	// case "PURPLEDTQ":
-	// 	tenants.PurpleDTQ.ResGroups = append(tenants.PurpleDTQ.ResGroups, tci)
-	// 	tenants.PurpleDTQ.PreTaxCost += tci.PreTaxCost
-	// }
+	*t = tenants
 }
 
 type ConvertCsvDataToExcelOptions struct {
@@ -172,9 +129,17 @@ func main() {
 	// month := fmt.Sprintf("%02d", int(now.Month()))
 	// fileName := "MonthlyReport-" + year + month + ".xlsx"
 
-	var dataPath = "./cost-exports"
+	var dataPath = "./fakedata/cost-data"
+	// var combinedCostData costExportData
 
-	combinedCostData := combineCostExportData(dataPath)
+	// jsonFile, err := os.Open("fakedata/cost-data/blue.json")
+	// lib.CheckFatalError(err)
+	// defer jsonFile.Close()
+
+	// byteValue, _ := io.ReadAll(jsonFile)
+	// json.Unmarshal(byteValue, &combinedCostData)
+
+	combinedCostData := combineCostExportJSONData(dataPath)
 
 	// ccdJson, _ := json.MarshalIndent(combinedCostData, "", "  ")
 	// fmt.Println(string(ccdJson))
@@ -183,20 +148,22 @@ func main() {
 
 	transformedData := transformCostData(combinedCostData)
 
-	// costData, err := getCostExportFileData("cost-exports/monthly-cost-exports_BLUEDTQ.csv")
+	CostDataToExcel(transformedData, "outputs/combined.xlsx")
+
+	// costData, err := getCostExportCSVFileData("cost-exports/monthly-cost-exports_BLUEDTQ.csv")
 	// if err != nil {
 	// 	panic(err)
 	// }
 
 	// fmt.Println(combinedCostData)
-	jsonData, _ := json.MarshalIndent(transformedData, "", "  ")
-	fmt.Println(string(jsonData))
+	// jsonData, _ := json.MarshalIndent(transformedData, "", "  ")
+	// fmt.Println(string(jsonData))
 	// _ = jsonData
 	// fmt.Println(len(costData))
 
 }
 
-func combineCostExportData(dataPath string) costExportData {
+func combineCostExportCSVData(dataPath string) costExportData {
 	var (
 		wg             sync.WaitGroup
 		costExportData costExportData
@@ -214,12 +181,52 @@ func combineCostExportData(dataPath string) costExportData {
 		// offerIds           []string
 	)
 	for _, file := range filePaths {
-		if strings.HasSuffix(file, ".csv") {
+		if true {
+			// if strings.HasSuffix(file, ".csv") {
 			wg.Add(1)
 			go func() {
 				defer wg.Done()
 				// fmt.Println(file)
-				data, err := getCostExportFileData(file)
+				data, err := getCostExportCSVFileData(file)
+				if err != nil {
+					panic(err)
+				}
+				mutex.Lock()
+				// productNames = append(productNames)
+				costExportData = append(costExportData, data...)
+				mutex.Unlock()
+			}()
+		}
+	}
+	wg.Wait()
+	return costExportData
+}
+
+func combineCostExportJSONData(dataPath string) costExportData {
+	var (
+		wg             sync.WaitGroup
+		costExportData costExportData
+		mutex          sync.Mutex
+		filePaths      = lib.GetFullFilePaths(dataPath)
+		// productNames       []string
+		// meterCategories    []string
+		// meterSubcategories []string
+		// meterIds           []string
+		// meterNames         []string
+		// meterRegions       []string
+		// unitsOfMeasure     []string
+		// consumedServices   []string
+		// resourceTypes      []string
+		// offerIds           []string
+	)
+	for _, file := range filePaths {
+		if true {
+			// if strings.HasSuffix(file, ".csv") {
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				// fmt.Println(file)
+				data, err := getCostExportJSONFileData(file)
 				if err != nil {
 					panic(err)
 				}
@@ -239,9 +246,10 @@ func transformCostData(data costExportData) TransformedCostItemsByTenantMap {
 
 	var (
 		// transformedTenantData transformedTenantData
-		allData          TransformedCostItemsByTenantMap
+		// allData
 		allSubscriptions []string
 	)
+	allData := TransformedCostItemsByTenantMap{}
 	allSubscriptions = lib.UniqueNonEmptyElementsOf(allSubscriptions)
 	// type transformedCostItem struct {
 	// 	ResourceGroup    string
@@ -274,13 +282,17 @@ func transformCostData(data costExportData) TransformedCostItemsByTenantMap {
 			tenantName = "REDDTQ"
 		case strings.Contains(sn, "apc") && costData.Datafile != "REDDTQ":
 			tenantName = "RED"
-		case strings.Contains(sn, "hapdtq"):
+		case costData.Datafile == "BLUEDTQ":
 			tenantName = "BLUEDTQ"
+		case costData.Datafile == "BLUE":
+			tenantName = "BLUE"
+		case costData.Datafile == "PUD":
+			tenantName = "PUD"
 		default:
 			tenantName = strings.ToUpper(costData.Datafile)
 		}
 
-		tci := transformedCostItem{
+		tci := TransformedCostItem{
 			ResourceGroup:    costData.ResourceGroup,
 			PreTaxCost:       costData.PreTaxCost,
 			SubscriptionName: costData.SubscriptionName,
@@ -297,11 +309,10 @@ func transformCostData(data costExportData) TransformedCostItemsByTenantMap {
 		// fmt.Println(tci)
 		// os.Exit(0)
 	}
-
 	return allData
 }
 
-func (tenants *TransformedCostItemsByTenant) addPreTaxCost(tci transformedCostItem) {
+func (tenants *TransformedCostItemsByTenant) addPreTaxCost(tci TransformedCostItem) {
 	switch tci.Datafile {
 	case "Blue":
 		tenants.Blue.PreTaxCost += tci.PreTaxCost
@@ -324,7 +335,7 @@ func (tenants *TransformedCostItemsByTenant) addPreTaxCost(tci transformedCostIt
 	}
 }
 
-func (tenants *TransformedCostItemsByTenant) appendTenantData(tci transformedCostItem) {
+func (tenants *TransformedCostItemsByTenant) appendTenantData(tci TransformedCostItem) {
 	switch tci.Tenant {
 	case "BLUE":
 		tenants.Blue.ResGroups = append(tenants.Blue.ResGroups, tci)
@@ -356,7 +367,7 @@ func (tenants *TransformedCostItemsByTenant) appendTenantData(tci transformedCos
 	}
 }
 
-func getCostExportFileData(fileName string) (costExportData, error) {
+func getCostExportCSVFileData(fileName string) (costExportData, error) {
 	file, err := os.Open(fileName)
 	if err != nil {
 		return nil, err
@@ -380,6 +391,17 @@ func getCostExportFileData(fileName string) (costExportData, error) {
 			costExport = append(costExport, rowData)
 		}
 	}
+	return costExport, nil
+}
+
+func getCostExportJSONFileData(fileName string) (costExportData, error) {
+	var costExport costExportData
+	jsonFile, err := os.ReadFile(fileName)
+	if err != nil {
+		return nil, err
+	}
+
+	json.Unmarshal(jsonFile, &costExport)
 	return costExport, nil
 }
 
@@ -517,11 +539,7 @@ func ConvertCsvDataToExcel(sheetName string, inFileName string, outFileName stri
 	lib.CheckFatalError(err)
 }
 
-func ConvertCsvDataToExcelMultpleSheets(sheetName string, inFileName string, outFileName string) {
-
-	csvFile, err := os.Open(inFileName)
-	lib.CheckFatalError(err)
-	reader := csv.NewReader(csvFile)
+func CostDataToExcel(data TransformedCostItemsByTenantMap, outFileName string) {
 	f := excelize.NewFile()
 	defer func() {
 		if err := f.Close(); err != nil {
@@ -529,30 +547,56 @@ func ConvertCsvDataToExcelMultpleSheets(sheetName string, inFileName string, out
 		}
 	}()
 
-	f.NewSheet(sheetName)
+	for tenant, tData := range data {
+		// fmt.Println(tenant)
+		// fmt.Println(tData)
+		_, err := f.NewSheet(tenant)
+		err = f.SetSheetRow(tenant, "A1", &[]string{
+			"Subscription",
+			"Resource Group",
+			"PreTaxCost",
+		})
 
-	err = f.DeleteSheet("Sheet1")
-	lib.CheckFatalError(err)
+		row := 2
+		for _, rowData := range tData.ResGroups {
+			var cell string
+			cell, _ = excelize.CoordinatesToCellName(1, row)
+			f.SetCellValue(tenant, cell, rowData.SubscriptionName)
+			cell, _ = excelize.CoordinatesToCellName(2, row)
+			f.SetCellValue(tenant, cell, rowData.ResourceGroup)
+			cell, _ = excelize.CoordinatesToCellName(3, row)
+			f.SetCellValue(tenant, cell, rowData.PreTaxCost)
 
-	row := 1
-
-	for {
-		record, err := reader.Read()
-		if err == io.EOF {
-			break
+			// err = f.SetCellValue(tenant, cell, rowData.ResourceGroup)
+			lib.CheckFatalError(err)
+			row++
 		}
 
-		lib.CheckFatalError(err)
+		// TODO: Add pivot table
+		// if err := f.AddPivotTable(&excelize.PivotTableOptions{
+		// 	DataRange:       tenant + "!A1:C" + strconv.Itoa(row),
+		// 	PivotTableRange: tenant + "!G2:M34",
+		// 	// Rows: []excelize.PivotTableField{
+		// 	// 	{Data: "Subscription", Subtotal: "Sum"}, {Data: "PreTaxCost"}},
+		// 	// Columns: []excelize.PivotTableField{
+		// 	// 	{Data: "Subscription", DefaultSubtotal: true}},
+		// 	// Data: []excelize.PivotTableField{
+		// 	// 	{Data: "PreTaxCost", Name: "Summarize", Subtotal: "Sum"}},
+		// 	RowGrandTotals: true,
+		// 	ColGrandTotals: true,
+		// 	ShowDrill:      true,
+		// 	ShowRowHeaders: true,
+		// 	ShowColHeaders: true,
+		// 	ShowLastColumn: true,
+		// }); err != nil {
+		// 	fmt.Println(err)
+		// 	return
+		// }
 
-		cell, err := excelize.CoordinatesToCellName(1, row)
-		lib.CheckFatalError(err)
-
-		err = f.SetSheetRow(sheetName, cell, &record)
-		lib.CheckFatalError(err)
-
-		row++
 	}
 
+	err := f.DeleteSheet("Sheet1")
+	lib.CheckFatalError(err)
 	err = f.SaveAs(outFileName)
 	lib.CheckFatalError(err)
 }
