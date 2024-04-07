@@ -30,10 +30,11 @@ type CldConfigOptions struct {
 type CldConfigTenants map[string]CldConfigTenantAuth
 
 type CldConfigTenantAuth struct {
-	TenantName string                     `json:"tenantName"`
-	TenantID   string                     `json:"tenantId"`
-	Reader     CldConfigClientAuthDetails `json:"reader"`
-	Writer     CldConfigClientAuthDetails `json:"writer"`
+	TenantName          string                     `json:"tenantName"`
+	TenantID            string                     `json:"tenantId"`
+	Reader              CldConfigClientAuthDetails `json:"reader"`
+	Writer              CldConfigClientAuthDetails `json:"writer"`
+	CostExportsLocation string                     `json:"costExportsLocation"`
 }
 
 type CldConfigClientAuthDetails struct {

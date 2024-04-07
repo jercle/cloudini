@@ -58,6 +58,24 @@ func SimpleGetRequestWithToken(urlString string, token string) []byte {
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+token)
+	req.Header.Add("x-ms-version", "2023-11-03")
+
+	res, err := http.DefaultClient.Do(req)
+	lib.CheckFatalError(err)
+
+	responseBody, err := io.ReadAll(res.Body)
+	lib.CheckFatalError(err)
+	defer res.Body.Close()
+
+	return responseBody
+}
+
+// Returns response body
+func SimpleGetRequest(urlString string, token string) []byte {
+	req, err := http.NewRequest(http.MethodGet, urlString, nil)
+	lib.CheckFatalError(err)
+
+	req.Header.Add("Content-Type", "application/json")
 
 	res, err := http.DefaultClient.Do(req)
 	lib.CheckFatalError(err)
