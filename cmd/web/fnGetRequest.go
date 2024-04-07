@@ -68,3 +68,33 @@ func SimpleGetRequestWithToken(urlString string, token string) []byte {
 
 	return responseBody
 }
+
+// Returns response body
+func SimpleGetRequest(urlString string, token string) []byte {
+	req, err := http.NewRequest(http.MethodGet, urlString, nil)
+	lib.CheckFatalError(err)
+
+	req.Header.Add("Content-Type", "application/json")
+
+	res, err := http.DefaultClient.Do(req)
+	lib.CheckFatalError(err)
+
+	responseBody, err := io.ReadAll(res.Body)
+	lib.CheckFatalError(err)
+	defer res.Body.Close()
+
+	return responseBody
+}
+
+// func RemoveBOM(resp *http.Response) error {
+// 	_, err := exported.Payload(resp, &exported.PayloadOptions{
+// 		BytesModifier: func(b []byte) []byte {
+// 			// UTF8
+// 			return bytes.TrimPrefix(b, []byte("\xef\xbb\xbf"))
+// 		},
+// 	})
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
