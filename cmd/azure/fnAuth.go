@@ -244,27 +244,22 @@ func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions) (lib.AllTena
 	return tenantTokens, nil
 }
 
-func GetTenantSPToken(tenantName string, options lib.MultiAuthTokenRequestOptions) (*lib.MultiAuthToken, error) {
+func GetTenantSPToken(options lib.MultiAuthTokenRequestOptions) (*lib.MultiAuthToken, error) {
 	var (
 		config      = lib.GetCldConfig(nil)
 		tenantToken lib.MultiAuthToken
-		// flag        bool
+		tenant      lib.CldConfigTenantAuth
 	)
 
-	// for key, _ := range config.Azure.MultiTenantAuth.Tenants {
-	// 	if key == tenantName {
-	// 		flag = true
-	// 	}
-	// }
-
-	tenant, tenantExists := config.Azure.MultiTenantAuth.Tenants[tenantName]
-
-	if !tenantExists {
-		return nil, fmt.Errorf("Tenant not found in config")
+	if options.TenantName == "" {
+		tenant = config.Azure.GetDefaultTenant()
+	} else {
+		t, tenantExists := config.Azure.MultiTenantAuth.Tenants[options.TenantName]
+		if !tenantExists {
+			return nil, fmt.Errorf("Tenant not found in config")
+		}
+		tenant = t
 	}
-	// if !flag {
-	// 	return nil, fmt.Errorf("Tenant not found in config")
-	// }
 
 	switch options.GetWriteToken {
 	case true:
@@ -287,4 +282,23 @@ func GetTenantSPToken(tenantName string, options lib.MultiAuthTokenRequestOption
 	tenantToken = mat
 
 	return &tenantToken, nil
+}
+
+func GetTenantAzCred(tenantName string, getWriteToken bool) *azidentity.ClientSecretCredential {
+	var (
+		cred *azidentity.ClientSecretCredential
+		err  error
+	)
+	config := lib.GetCldConfig(nil)
+	tenant := config.Azure.MultiTenantAuth.Tenants[tenantName]
+
+	if getWriteToken {
+		cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Writer.ClientID, tenant.Writer.ClientSecret, nil)
+		lib.CheckFatalError(err)
+	} else {
+		cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Reader.ClientID, tenant.Reader.ClientSecret, nil)
+		lib.CheckFatalError(err)
+	}
+
+	return cred
 }
