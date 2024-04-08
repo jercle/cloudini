@@ -64,8 +64,8 @@ func main() {
 	// fmt.Println(string(jsonBytes))
 
 	DownloadAllConfiguredTenantLastMonthCostExports(DownloadAllConfiguredTenantLastMonthCostExportsOptions{
-		BlobPrefix:  "daily-month-to-date-exports/202403",
-		OutfilePath: "outputs/monthly-cost-exports",
+		BlobPrefix:  "monthly-cost-exports/202403",
+		OutfilePath: "cost-exports/monthly-cost-exports",
 	})
 	elapsed := time.Since(startTime)
 	_ = elapsed
@@ -107,7 +107,7 @@ func DownloadAllConfiguredTenantLastMonthCostExports(opts DownloadAllConfiguredT
 			}
 
 			blobList := ListStorageContainerBlobs(options)
-			// blobList.Filter(BlobListFilterOptions{FilterPrefix: opts.BlobPrefix})
+			blobList.Filter(BlobListFilterOptions{FilterPrefix: opts.BlobPrefix})
 			blobList.SortByCreateDate("descending")
 
 			cred := azure.GetTenantAzCred(tenant.TenantName, false)

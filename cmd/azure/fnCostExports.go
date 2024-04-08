@@ -14,6 +14,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"unicode/utf8"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
@@ -253,26 +254,45 @@ func CostDataToExcel(data TransformedCostItemsByTenantMap, outFileName string) {
 		}
 
 		// TODO: Add pivot table
-		// if err := f.AddPivotTable(&excelize.PivotTableOptions{
-		// 	DataRange:       tenant + "!A1:C" + strconv.Itoa(row),
-		// 	PivotTableRange: tenant + "!G2:M34",
-		// 	// Rows: []excelize.PivotTableField{
-		// 	// 	{Data: "Subscription", Subtotal: "Sum"}, {Data: "PreTaxCost"}},
-		// 	// Columns: []excelize.PivotTableField{
-		// 	// 	{Data: "Subscription", DefaultSubtotal: true}},
-		// 	// Data: []excelize.PivotTableField{
-		// 	// 	{Data: "PreTaxCost", Name: "Summarize", Subtotal: "Sum"}},
-		// 	RowGrandTotals: true,
-		// 	ColGrandTotals: true,
-		// 	ShowDrill:      true,
-		// 	ShowRowHeaders: true,
-		// 	ShowColHeaders: true,
-		// 	ShowLastColumn: true,
-		// }); err != nil {
-		// 	fmt.Println(err)
-		// 	return
-		// }
+		if err := f.AddPivotTable(&excelize.PivotTableOptions{
+			DataRange:       tenant + "!A1:C" + strconv.Itoa(row),
+			PivotTableRange: tenant + "!G2:M34",
+			Rows: []excelize.PivotTableField{
+				{Data: "Subscription"}},
+			// Columns: []excelize.PivotTableField{
+			// 	{Data: "Subscription", DefaultSubtotal: true}},
+			Data: []excelize.PivotTableField{
+				{Data: "PreTaxCost", Name: "Sum of PreTaxcost", Subtotal: "Sum"}},
+			RowGrandTotals: true,
+			ColGrandTotals: true,
+			ShowDrill:      true,
+			ShowRowHeaders: true,
+			ShowColHeaders: true,
+			ShowLastColumn: true,
+		}); err != nil {
+			fmt.Println(err)
+			return
+		}
 
+		// Autofit all columns according to their text content
+		cols, err := f.GetCols(tenant)
+		if err != nil {
+			fmt.Println(err)
+		}
+		for idx, col := range cols {
+			largestWidth := 0
+			for _, rowCell := range col {
+				cellWidth := utf8.RuneCountInString(rowCell) + 2 // + 2 for margin
+				if cellWidth > largestWidth {
+					largestWidth = cellWidth
+				}
+			}
+			name, err := excelize.ColumnNumberToName(idx + 1)
+			if err != nil {
+				fmt.Println(err)
+			}
+			f.SetColWidth(tenant, name, name, float64(largestWidth))
+		}
 	}
 
 	err := f.DeleteSheet("Sheet1")
