@@ -1,0 +1,18 @@
+{
+  "cldConfig": {
+    "encodeConfig": false
+  },
+  "azure": {
+    "multiTenantAuth": {
+      "tenants": {}
+    }
+  },
+  "proxyConfig": {
+    "default": {
+      "server": "",
+      "port": "",
+      "enabled": false,
+      "overrides": ""
+    }
+  }
+}

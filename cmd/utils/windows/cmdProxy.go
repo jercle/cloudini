@@ -6,6 +6,7 @@ Copyright © 2024 Evan Colwell ercolwell@gmail.com
 package windows
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/jercle/azg/lib"
@@ -32,8 +33,8 @@ to quickly create a Cobra application.`,
 
 		if !setProxyConfig && !deleteProxyConfig {
 			proxyConfig := GetProxySettings()
-			fmt.Println(proxyConfig)
-			// if cmd.
+			jsonBytes, _ := json.MarshalIndent(proxyConfig, "", "  ")
+			fmt.Println(string(jsonBytes))
 		}
 
 		if setProxyConfig {
@@ -44,11 +45,15 @@ to quickly create a Cobra application.`,
 				SetProxySettings(cldConf.ProxyConfig[selectProxyConfig], false)
 			}
 			proxyConfig := GetProxySettings()
-			fmt.Println(proxyConfig)
+			jsonBytes, _ := json.MarshalIndent(proxyConfig, "", "  ")
+			fmt.Println(string(jsonBytes))
 		}
 
 		if deleteProxyConfig {
 			RemoveProxyConfig()
+			proxyConfig := GetProxySettings()
+			jsonBytes, _ := json.MarshalIndent(proxyConfig, "", "  ")
+			fmt.Println(string(jsonBytes))
 		}
 
 	},
