@@ -32,7 +32,7 @@ func GetProxySettings() lib.ProxyConfig {
 
 	valueNames, err := k.ReadValueNames(0)
 	lib.CheckFatalError(err)
-	if !slices.Contains(valueNames, "ProxyServer") {
+	if !slices.Contains(valueNames, "ProxyServer") || !slices.Contains(valueNames, "ProxyEnable") {
 		fmt.Println("Proxy not enabled")
 		os.Exit(0)
 	}
@@ -41,8 +41,11 @@ func GetProxySettings() lib.ProxyConfig {
 	lib.CheckFatalError(err)
 	proxyEnabledValue, _, err := k.GetIntegerValue("ProxyEnable")
 	lib.CheckFatalError(err)
-	proxyOverrides, _, err := k.GetStringValue("ProxyOverride")
-	lib.CheckFatalError(err)
+	var proxyOverrides string
+	if slices.Contains(valueNames, "ProxyOverride") {
+		proxyOverrides, _, err = k.GetStringValue("ProxyOverride")
+		lib.CheckFatalError(err)
+	}
 
 	var proxyEnabled bool
 	if proxyEnabledValue == 1 {
