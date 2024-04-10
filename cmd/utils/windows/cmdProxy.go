@@ -6,15 +6,22 @@ Copyright © 2024 Evan Colwell ercolwell@gmail.com
 package windows
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
+	"os/exec"
 
 	"github.com/jercle/azg/lib"
 	"github.com/spf13/cobra"
 )
 
-var setProxyConfig bool
-var selectProxyConfig string
-var deleteProxyConfig bool
+var (
+	setProxyConfig      bool
+	selectProxyConfig   string
+	deleteProxyConfig   bool
+	listConfig          bool
+	openInternetOptions bool
+)
 
 // checkInstalledAppCmd represents the checkInstalledApp command
 var proxyCmd = &cobra.Command{
@@ -30,10 +37,23 @@ to quickly create a Cobra application.`,
 
 		// var proxyConfig lib.ProxyConfig
 
+		if openInternetOptions {
+			command := exec.Command("control", "inetcpl.cpl")
+			command.Run()
+			os.Exit(0)
+		}
+
+		if listConfig {
+			proxyConfig := lib.GetCldConfig(nil).ProxyConfig
+			jsonBytes, _ := json.MarshalIndent(proxyConfig, "", "  ")
+			fmt.Println(string(jsonBytes))
+			os.Exit(0)
+		}
+
 		if !setProxyConfig && !deleteProxyConfig {
 			proxyConfig := GetProxySettings()
-			fmt.Println(proxyConfig)
-			// if cmd.
+			jsonBytes, _ := json.MarshalIndent(proxyConfig, "", "  ")
+			fmt.Println(string(jsonBytes))
 		}
 
 		if setProxyConfig {
@@ -44,11 +64,15 @@ to quickly create a Cobra application.`,
 				SetProxySettings(cldConf.ProxyConfig[selectProxyConfig], false)
 			}
 			proxyConfig := GetProxySettings()
-			fmt.Println(proxyConfig)
+			jsonBytes, _ := json.MarshalIndent(proxyConfig, "", "  ")
+			fmt.Println(string(jsonBytes))
 		}
 
 		if deleteProxyConfig {
 			RemoveProxyConfig()
+			proxyConfig := GetProxySettings()
+			jsonBytes, _ := json.MarshalIndent(proxyConfig, "", "  ")
+			fmt.Println(string(jsonBytes))
 		}
 
 	},
@@ -57,9 +81,11 @@ to quickly create a Cobra application.`,
 func init() {
 	proxyCmd.Flags().BoolVarP(&deleteProxyConfig, "deleteProxyConfig", "d", false, "Removes proxy configuration")
 	proxyCmd.Flags().BoolVarP(&setProxyConfig, "setProxyConfig", "s", false, "Set proxy configration")
+	proxyCmd.Flags().BoolVarP(&listConfig, "listConfig", "l", false, "List proxy settings configured in cld")
+	proxyCmd.Flags().BoolVarP(&openInternetOptions, "openInternetOptions", "o", false, "Opens Windows Internet Options cmdlet")
 	proxyCmd.Flags().StringVarP(&selectProxyConfig, "selectProxyConfig", "n", "", "Select proxy configuration from cld config file")
 
 	// proxyCmd.MarkFlagsOneRequired("setProxyConfig", "deleteProxyConfig")
-	proxyCmd.MarkFlagsMutuallyExclusive("setProxyConfig", "deleteProxyConfig")
-	proxyCmd.MarkFlagsMutuallyExclusive("selectProxyConfig", "deleteProxyConfig")
+	proxyCmd.MarkFlagsMutuallyExclusive("setProxyConfig", "deleteProxyConfig", "listConfig", "openInternetOptions")
+	proxyCmd.MarkFlagsMutuallyExclusive("selectProxyConfig", "deleteProxyConfig", "listConfig", "openInternetOptions")
 }
