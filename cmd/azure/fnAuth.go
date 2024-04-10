@@ -49,6 +49,8 @@ func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequest
 	switch spDetails.Scope {
 	case "graph":
 		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
+	case "storage":
+		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
 	default:
 		tokenRequestOptions.Scopes = []string{"https://management.core.windows.net/.default"}
 	}
@@ -242,28 +244,21 @@ func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions) (lib.AllTena
 	return tenantTokens, nil
 }
 
-func GetTenantSPToken(tenantName string, options lib.MultiAuthTokenRequestOptions) (*lib.MultiAuthToken, error) {
+func GetTenantSPToken(options lib.MultiAuthTokenRequestOptions) (*lib.MultiAuthToken, error) {
 	var (
 		config      = lib.GetCldConfig(nil)
 		tenantToken lib.MultiAuthToken
-		flag        bool
+		tenant      lib.CldConfigTenantAuth
 	)
 
-	// for key, _ := range config.Azure.MultiTenantAuth.Tenants {
-	// 	if key == tenantName {
-	// 		flag = true
-	// 	}
-	// }
-
-	tst, tenantExists := config.Azure.MultiTenantAuth.Tenants[tenantName]
-	tenant := config.Azure.MultiTenantAuth.Tenants[tenantName]
-	fmt.Println(tst)
-	if !tenantExists {
-		return nil, fmt.Errorf("Tenant not found in config")
-	}
-	os.Exit(0)
-	if !flag {
-		return nil, fmt.Errorf("Tenant not found in config")
+	if options.TenantName == "" {
+		tenant = config.Azure.GetDefaultTenant()
+	} else {
+		t, tenantExists := config.Azure.MultiTenantAuth.Tenants[options.TenantName]
+		if !tenantExists {
+			return nil, fmt.Errorf("Tenant not found in config")
+		}
+		tenant = t
 	}
 
 	switch options.GetWriteToken {
@@ -274,8 +269,6 @@ func GetTenantSPToken(tenantName string, options lib.MultiAuthTokenRequestOption
 		options.ClientID = tenant.Reader.ClientID
 		options.ClientSecret = tenant.Reader.ClientSecret
 	}
-
-	fmt.Println(options)
 
 	tokenData, err := GetServicePrincipalToken(tenant.TenantID, options)
 	lib.CheckFatalError(err)
@@ -289,4 +282,23 @@ func GetTenantSPToken(tenantName string, options lib.MultiAuthTokenRequestOption
 	tenantToken = mat
 
 	return &tenantToken, nil
+}
+
+func GetTenantAzCred(tenantName string, getWriteToken bool) *azidentity.ClientSecretCredential {
+	var (
+		cred *azidentity.ClientSecretCredential
+		err  error
+	)
+	config := lib.GetCldConfig(nil)
+	tenant := config.Azure.MultiTenantAuth.Tenants[tenantName]
+
+	if getWriteToken {
+		cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Writer.ClientID, tenant.Writer.ClientSecret, nil)
+		lib.CheckFatalError(err)
+	} else {
+		cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Reader.ClientID, tenant.Reader.ClientSecret, nil)
+		lib.CheckFatalError(err)
+	}
+
+	return cred
 }

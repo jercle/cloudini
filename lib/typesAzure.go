@@ -2,6 +2,7 @@ package lib
 
 type MultiAuthTokenRequestOptions struct {
 	// unicorn
+	TenantName     string `json:"tenantName"`
 	GetWriteToken  bool   `json:"getWriteToken"`
 	ConfigFilePath string `json:"configFilePath"`
 	ClientID       string `json:"clientId"`

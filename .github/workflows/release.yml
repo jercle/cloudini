@@ -106,42 +106,42 @@ jobs:
       #   id: snapbuild
 
       - name: Zip
-        uses: ncipollo/release-action@v1.12.0 # v1
+        uses: ncipollo/release-action@v1.14.0 # v1
         with:
           args: zip -qq -r cloudini.zip bin
 
       - name: Zip (win-amd64)
-        uses: ncipollo/release-action@v1.12.0 # v1
+        uses: ncipollo/release-action@v1.14.0 # v1
         with:
           args: zip -qq cloudini-win-amd64.zip bin/windows_amd64/cld.exe
 
       - name: Zip (win-arm64)
-        uses: ncipollo/release-action@v1.12.0 # v1
+        uses: ncipollo/release-action@v1.14.0 # v1
         with:
           args: zip -qq cloudini-win-arm64.zip bin/windows_arm64/cld.exe
 
       - name: Zip (darwin-amd64)
-        uses: ncipollo/release-action@v1.12.0 # v1
+        uses: ncipollo/release-action@v1.14.0 # v1
         with:
           args: zip -qq cloudini-darwin-amd64.zip bin/darwin_amd64/cld
 
       - name: Zip (darwin-arm64)
-        uses: ncipollo/release-action@v1.12.0 # v1
+        uses: ncipollo/release-action@v1.14.0 # v1
         with:
           args: zip -qq cloudini-darwin-arm64.zip bin/darwin_arm64/cld
 
       - name: Zip (linux-amd64)
-        uses: ncipollo/release-action@v1.12.0 # v1
+        uses: ncipollo/release-action@v1.14.0 # v1
         with:
           args: zip -qq cloudini-linux-amd64.zip bin/linux_amd64/cld
 
       - name: Zip (linux-arm64)
-        uses: ncipollo/release-action@v1.12.0 # v1
+        uses: ncipollo/release-action@v1.14.0 # v1
         with:
           args: zip -qq cloudini-linux-arm64.zip bin/linux_arm64/cld
 
       - name: Zip (linux-armv7)
-        uses: ncipollo/release-action@v1.12.0 # v1
+        uses: ncipollo/release-action@v1.14.0 # v1
         with:
           args: zip -qq cloudini-linux-armv7.zip bin/linux_armv7/cld
 

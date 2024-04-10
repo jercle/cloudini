@@ -1,40 +1,37 @@
 package main
 
+import (
+	"fmt"
+	"time"
+
+	"github.com/jercle/azg/cmd/azure"
+	"github.com/jercle/azg/lib"
+)
+
 func main() {
-	// GetProxySettings()
-	// RemoveProxyConfig()
-	// GetProxySettings()
-
-	// confLocation := lib.InitConfig(&lib.CldConfigOptions{})
-	// fmt.Println(confLocation)
-	// cldConf := lib.GetCldConfig(nil)
-	// SetProxySettings(cldConf.ProxyConfig["default"])
-	// fmt.Println(cldConf)
-	// GetProxySettings()
-
-	// k, err := registry.OpenKey(registry.CURRENT_USER, `SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings`, registry.READ)
+	startTime := time.Now()
+	config := lib.GetCldConfig(nil)
+	_ = config
+	// tokens, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
 	// lib.CheckFatalError(err)
+	token, err := azure.GetTenantSPToken(lib.MultiAuthTokenRequestOptions{})
+	lib.CheckFatalError(err)
+	// _ = tokens
+	_ = token
+	firewallPolicyName := ""
+	// azureFirewallName := ""
+	subscriptionId := ""
+	resourceGroupName := ""
+	fwpRuleCollectionName := ""
+	urlString := "https://management.azure.com/subscriptions/" + subscriptionId + "/resourceGroups/" + resourceGroupName + "/providers/Microsoft.Network/firewallPolicies/" + firewallPolicyName + "/ruleCollectionGroups/" + fwpRuleCollectionName + "?api-version=2023-09-01"
+	// urlString := "https://management.azure.com/subscriptions/" + subscriptionId + "/resourceGroups/" + resourceGroupName + "/providers/Microsoft.Network/azureFirewalls/" + azureFirewallName + "?api-version=2023-09-01"
 
-	// defer k.Close()
+	resp, err := azure.HttpGet(urlString, *token)
+	lib.CheckFatalError(err)
 
-	// subKeyNames, err := k.ReadSubKeyNames(0)
-	// lib.CheckFatalError(err)
+	fmt.Println(string(resp))
 
-	// valueNames, err := k.ReadValueNames(0)
-	// lib.CheckFatalError(err)
-
-	// fmt.Println("subKeyNames")
-	// subKeyBytes, _ := json.MarshalIndent(subKeyNames, "", "  ")
-	// fmt.Println(string(subKeyBytes))
-	// fmt.Println("valueNames")
-	// valueBytes, _ := json.MarshalIndent(valueNames, "", "  ")
-	// fmt.Println(string(valueBytes))
-	// fmt.Println(valueNames)
-
-	// proxyServer, _, err := k.GetStringValue("ProxyServer")
-
+	elapsed := time.Since(startTime)
+	_ = elapsed
+	// fmt.Println(elapsed)
 }
-
-// func GetRegistryValues
-// *.apetp.gov.au;172.*;<local>
-// *.apetp.gov.au;172.*;localhost;127.0.0.;10.;192.168.*;*.apetp.gov.au;*.azure.net;*.azure.com;*.windows.net;*.visualstudio.com;*.microsoft.com

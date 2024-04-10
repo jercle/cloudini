@@ -1,5 +1,7 @@
 package lib
 
+import "fmt"
+
 type CldConfigRoot struct {
 	CldConfig   CldConfig              `json:"cldConfig"`
 	Azure       AzureConfig            `json:"azure"`
@@ -23,6 +25,19 @@ type AzureConfig struct {
 	} `json:"multiTenantAuth"`
 }
 
+func (config AzureConfig) GetDefaultTenant() CldConfigTenantAuth {
+	var tenant *CldConfigTenantAuth
+	for _, tConf := range config.MultiTenantAuth.Tenants {
+		if tConf.Default {
+			tenant = &tConf
+		}
+	}
+	if tenant == nil {
+		CheckFatalError(fmt.Errorf("No default Azure tenant configured"))
+	}
+	return *tenant
+}
+
 type CldConfigOptions struct {
 	ConfigFilePath string
 }
@@ -30,10 +45,12 @@ type CldConfigOptions struct {
 type CldConfigTenants map[string]CldConfigTenantAuth
 
 type CldConfigTenantAuth struct {
-	TenantName string                     `json:"tenantName"`
-	TenantID   string                     `json:"tenantId"`
-	Reader     CldConfigClientAuthDetails `json:"reader"`
-	Writer     CldConfigClientAuthDetails `json:"writer"`
+	TenantName          string                     `json:"tenantName"`
+	Default             bool                       `json:"default"`
+	TenantID            string                     `json:"tenantId"`
+	Reader              CldConfigClientAuthDetails `json:"reader"`
+	Writer              CldConfigClientAuthDetails `json:"writer"`
+	CostExportsLocation string                     `json:"costExportsLocation"`
 }
 
 type CldConfigClientAuthDetails struct {
