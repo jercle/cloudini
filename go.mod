@@ -10,7 +10,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.3.2
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.2.2
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
-	github.com/alecthomas/assert/v2 v2.8.0
+	github.com/alecthomas/assert/v2 v2.8.1
 	github.com/brianvoe/gofakeit/v7 v7.0.2
 	github.com/charmbracelet/bubbles v0.18.0
 	github.com/charmbracelet/bubbletea v0.25.0
@@ -77,7 +77,6 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/xuri/efp v0.0.0-20240408161823-9ad904a10d6d // indirect
 	github.com/xuri/nfp v0.0.0-20240318013403-ab9948c2c4a7 // indirect
-	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.22.0 // indirect
 	golang.org/x/exp/shiny v0.0.0-20240409090435-93d18d7e34b8 // indirect
