@@ -1,83 +1,154 @@
-// Citrix Cloud stuff
-
 package main
 
 import (
 	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-	"net/url"
 	"os"
-	"strings"
+	"strconv"
 
+	"github.com/jercle/azg/cmd/azure"
 	"github.com/jercle/azg/lib"
 )
 
-type TokenRequestResponse struct {
-	AccessToken string `json:"access_token"`
-	ExpiresIn   string `json:"expires_in"`
-	TokenType   string `json:"token_type"`
+type ListSubResGrpsResponse struct {
+	Value []ResourceGroupListResponse `json:"value"`
 }
 
-type CitrixResourceLocationResponse struct {
-	Items []CitrixResourceLocationResponseItem `json:"items"`
+type ResourceGroupListResponse struct {
+	ID       string `json:"id"`
+	Location string `json:"location"`
+	Name     string `json:"name"`
+	Tags     *struct {
+		CreatedBy                      string `json:"createdBy,omitempty"`
+		ImageTemplateName              string `json:"imageTemplateName,omitempty"`
+		ImageTemplateResourceGroupName string `json:"imageTemplateResourceGroupName,omitempty"`
+	} `json:"tags,omitempty"`
 }
 
-type CitrixResourceLocationResponseItem struct {
-	ID           string `json:"id"`
-	InternalOnly bool   `json:"internalOnly"`
-	Name         string `json:"name"`
-	ReadOnly     bool   `json:"readOnly"`
-	TimeZone     string `json:"timeZone"`
+type ResourceGroup struct {
+	ResourceGroupListResponse
+	SubscriptionName string `json:"subscriptionName"`
+	TenantName       string `json:"tenantName"`
 }
+
+type ListByResourceGroupResponse struct {
+	Value []interface{} `json:"value"`
+}
+
+// List resources by resource group
+// https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/resources?api-version=2021-04-01
 
 func main() {
-	token := GetCitrixCloudToken()
+	tokens, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
+	lib.CheckFatalError(err)
+
+	SaveAllResourcesToFile(tokens)
+
+	// jsonStr, _ := json.MarshalIndent(emptyResourceGroups, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// fmt.Println(len(emptyResourceGroups))
 
 }
 
-func GetCitrixCloudResourceLocations(token TokenRequestResponse) {
-	customerId := os.Getenv("CUSTOMER_ID")
-	urlString := "https://registry.citrixworkspacesapi.net/" + customerId + "/resourcelocations"
+func ListAllEmptyResourceGroups(tokens lib.AllTenantTokens) []ResourceGroup {
+	var (
+		emptyResourceGroups []ResourceGroup
+	)
 
-	req, err := http.NewRequest(http.MethodGet, urlString, nil)
+	for _, token := range tokens {
+		allSubs, _ := azure.ListSubscriptions(token)
+		for _, sub := range allSubs {
+			var subResourceGroups ListSubResGrpsResponse
+			urlString := "https://management.azure.com/subscriptions/" +
+				sub.SubscriptionID +
+				"/resourcegroups?api-version=2021-04-01"
+			res, err := azure.HttpGet(urlString, token)
+			lib.CheckFatalError(err)
+			json.Unmarshal(res, &subResourceGroups)
 
-	lib.CheckFatalError(err)
-	req.Header.Add("Authorization", "CwsAuth Bearer="+token.AccessToken)
+			for _, resGrp := range subResourceGroups.Value {
+				var resourceGroup ResourceGroup
+				resGrpJson, err := json.Marshal(resGrp)
+				json.Unmarshal(resGrpJson, &resourceGroup)
+				resourceGroup.SubscriptionName = sub.DisplayName
+				resourceGroup.TenantName = token.TenantName
 
-	res, err := http.DefaultClient.Do(req)
-	lib.CheckFatalError(err)
+				var resourceList ListByResourceGroupResponse
 
-	responseBody, err := io.ReadAll(res.Body)
-	lib.CheckFatalError(err)
+				urlString := "https://management.azure.com/subscriptions/" +
+					sub.SubscriptionID +
+					"/resourceGroups/" +
+					resGrp.Name +
+					"/resources?api-version=2021-04-01"
 
-	fmt.Println(string(responseBody))
+				res, err := azure.HttpGet(urlString, token)
+				lib.CheckFatalError(err)
+				json.Unmarshal(res, &resourceList)
+
+				if len(resourceList.Value) == 0 {
+					emptyResourceGroups = append(emptyResourceGroups, resourceGroup)
+				}
+			}
+		}
+	}
+
+	return emptyResourceGroups
 }
 
-func GetCitrixCloudToken() TokenRequestResponse {
-	tokenUrl := "https://api-ap-s.cloud.com/cctrustoauth2/root/tokens/clients"
+func SaveAllResourcesToFile(tokens lib.AllTenantTokens) {
+	for _, token := range tokens {
+		allSubs, _ := azure.ListSubscriptions(token)
+		for _, sub := range allSubs {
+			var (
+				subResourceGroups ListSubResGrpsResponse
+				subResources      []interface{}
+			)
+			urlString := "https://management.azure.com/subscriptions/" +
+				sub.SubscriptionID +
+				"/resourcegroups?api-version=2021-04-01"
+			res, err := azure.HttpGet(urlString, token)
+			lib.CheckFatalError(err)
 
-	tokenReqBody := url.Values{}
-	tokenReqBody.Set("grant_type", "client_credentials")
-	tokenReqBody.Set("client_id", os.Getenv("CLIENT_ID"))
-	tokenReqBody.Set("client_secret", os.Getenv("CLIENT_SECRET"))
+			json.Unmarshal(res, &subResourceGroups)
 
-	req, err := http.NewRequest(http.MethodPost, tokenUrl, strings.NewReader(tokenReqBody.Encode()))
+			for _, resGrp := range subResourceGroups.Value {
+				var resourceGroup ResourceGroup
+				resGrpJson, err := json.Marshal(resGrp)
+				json.Unmarshal(resGrpJson, &resourceGroup)
+				resourceGroup.SubscriptionName = sub.DisplayName
+				resourceGroup.TenantName = token.TenantName
 
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+				var resourceList ListByResourceGroupResponse
 
-	lib.CheckFatalError(err)
+				urlString := "https://management.azure.com/subscriptions/" +
+					sub.SubscriptionID +
+					"/resourceGroups/" +
+					resGrp.Name +
+					"/resources?api-version=2021-04-01"
 
-	res, err := http.DefaultClient.Do(req)
-	lib.CheckFatalError(err)
+				res, err := azure.HttpGet(urlString, token)
+				lib.CheckFatalError(err)
+				json.Unmarshal(res, &resourceList)
 
-	responseBody, err := io.ReadAll(res.Body)
-	lib.CheckFatalError(err)
+				subResources = append(subResources, resourceList.Value...)
 
-	var tokenResp TokenRequestResponse
+			}
 
-	json.Unmarshal(responseBody, &tokenResp)
+			baseDir := "outputs/resourceLists/"
 
-	return tokenResp
+			if _, err := os.Stat(baseDir + token.TenantName); err != nil {
+				os.MkdirAll(baseDir+token.TenantName, os.ModePerm)
+			}
+
+			jsonBytes, _ := json.MarshalIndent(subResources, "", "  ")
+
+			err = os.WriteFile(baseDir+
+				token.TenantName+
+				"/"+
+				sub.DisplayName+
+				"-"+
+				strconv.Itoa(len(subResources))+
+				".json", jsonBytes, os.ModePerm)
+			lib.CheckFatalError(err)
+		}
+	}
 }
