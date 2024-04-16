@@ -1,154 +1,34 @@
+// main-nsgFlowLogs.go
 package main
 
 import (
-	"encoding/json"
-	"os"
-	"strconv"
+	"fmt"
 
 	"github.com/jercle/azg/cmd/azure"
-	"github.com/jercle/azg/lib"
 )
 
-type ListSubResGrpsResponse struct {
-	Value []ResourceGroupListResponse `json:"value"`
-}
-
-type ResourceGroupListResponse struct {
-	ID       string `json:"id"`
-	Location string `json:"location"`
-	Name     string `json:"name"`
-	Tags     *struct {
-		CreatedBy                      string `json:"createdBy,omitempty"`
-		ImageTemplateName              string `json:"imageTemplateName,omitempty"`
-		ImageTemplateResourceGroupName string `json:"imageTemplateResourceGroupName,omitempty"`
-	} `json:"tags,omitempty"`
-}
-
-type ResourceGroup struct {
-	ResourceGroupListResponse
-	SubscriptionName string `json:"subscriptionName"`
-	TenantName       string `json:"tenantName"`
-}
-
-type ListByResourceGroupResponse struct {
-	Value []interface{} `json:"value"`
-}
-
-// List resources by resource group
-// https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/resources?api-version=2021-04-01
-
 func main() {
-	tokens, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
-	lib.CheckFatalError(err)
 
-	SaveAllResourcesToFile(tokens)
+	// var filePaths = getFullFilePaths("./fakedata/nsgLogs")
+	// var dataPath = "../../azgo/dev/nsgLogs"
+	var dataPath = "./outputs/dan"
 
-	// jsonStr, _ := json.MarshalIndent(emptyResourceGroups, "", "  ")
-	// fmt.Println(string(jsonStr))
-	// fmt.Println(len(emptyResourceGroups))
+	combinedData := azure.CombineLogFileRecords(dataPath)
+	combinedData.FilterIp("172.233.228.93,144.172.79.92,66.235.168.222", "source")
+	combinedData.FilterIp("172.233.228.93,144.172.79.92,66.235.168.222", "dest")
+	// combinedData.filterIp("192.168.0.1,192.168.0.2,200.197.39.223", "dest")
+	uniqueIps := azure.GetUniqueIpAddresses(combinedData.NsgFlowLogs)
 
-}
+	// fmt.Println()
+	fmt.Println("Files processed: ", combinedData.FileCount)
+	// uniqueIps.filterSourceIp("192.168.0.1,192.168.0.2,130.111.165.184")
+	// fmt.Println(len(combinedData.nsgFlowLogs))
+	// uniqueIps.PrintCount()
+	uniqueIps.PrintTable()
 
-func ListAllEmptyResourceGroups(tokens lib.AllTenantTokens) []ResourceGroup {
-	var (
-		emptyResourceGroups []ResourceGroup
-	)
-
-	for _, token := range tokens {
-		allSubs, _ := azure.ListSubscriptions(token)
-		for _, sub := range allSubs {
-			var subResourceGroups ListSubResGrpsResponse
-			urlString := "https://management.azure.com/subscriptions/" +
-				sub.SubscriptionID +
-				"/resourcegroups?api-version=2021-04-01"
-			res, err := azure.HttpGet(urlString, token)
-			lib.CheckFatalError(err)
-			json.Unmarshal(res, &subResourceGroups)
-
-			for _, resGrp := range subResourceGroups.Value {
-				var resourceGroup ResourceGroup
-				resGrpJson, err := json.Marshal(resGrp)
-				json.Unmarshal(resGrpJson, &resourceGroup)
-				resourceGroup.SubscriptionName = sub.DisplayName
-				resourceGroup.TenantName = token.TenantName
-
-				var resourceList ListByResourceGroupResponse
-
-				urlString := "https://management.azure.com/subscriptions/" +
-					sub.SubscriptionID +
-					"/resourceGroups/" +
-					resGrp.Name +
-					"/resources?api-version=2021-04-01"
-
-				res, err := azure.HttpGet(urlString, token)
-				lib.CheckFatalError(err)
-				json.Unmarshal(res, &resourceList)
-
-				if len(resourceList.Value) == 0 {
-					emptyResourceGroups = append(emptyResourceGroups, resourceGroup)
-				}
-			}
-		}
-	}
-
-	return emptyResourceGroups
-}
-
-func SaveAllResourcesToFile(tokens lib.AllTenantTokens) {
-	for _, token := range tokens {
-		allSubs, _ := azure.ListSubscriptions(token)
-		for _, sub := range allSubs {
-			var (
-				subResourceGroups ListSubResGrpsResponse
-				subResources      []interface{}
-			)
-			urlString := "https://management.azure.com/subscriptions/" +
-				sub.SubscriptionID +
-				"/resourcegroups?api-version=2021-04-01"
-			res, err := azure.HttpGet(urlString, token)
-			lib.CheckFatalError(err)
-
-			json.Unmarshal(res, &subResourceGroups)
-
-			for _, resGrp := range subResourceGroups.Value {
-				var resourceGroup ResourceGroup
-				resGrpJson, err := json.Marshal(resGrp)
-				json.Unmarshal(resGrpJson, &resourceGroup)
-				resourceGroup.SubscriptionName = sub.DisplayName
-				resourceGroup.TenantName = token.TenantName
-
-				var resourceList ListByResourceGroupResponse
-
-				urlString := "https://management.azure.com/subscriptions/" +
-					sub.SubscriptionID +
-					"/resourceGroups/" +
-					resGrp.Name +
-					"/resources?api-version=2021-04-01"
-
-				res, err := azure.HttpGet(urlString, token)
-				lib.CheckFatalError(err)
-				json.Unmarshal(res, &resourceList)
-
-				subResources = append(subResources, resourceList.Value...)
-
-			}
-
-			baseDir := "outputs/resourceLists/"
-
-			if _, err := os.Stat(baseDir + token.TenantName); err != nil {
-				os.MkdirAll(baseDir+token.TenantName, os.ModePerm)
-			}
-
-			jsonBytes, _ := json.MarshalIndent(subResources, "", "  ")
-
-			err = os.WriteFile(baseDir+
-				token.TenantName+
-				"/"+
-				sub.DisplayName+
-				"-"+
-				strconv.Itoa(len(subResources))+
-				".json", jsonBytes, os.ModePerm)
-			lib.CheckFatalError(err)
-		}
-	}
+	// for _, r := range combinedData.nsgFlowLogs {
+	// 	fmt.Println(record)
+	// 	r.printJSON()
+	// 	os.Exit(0)
+	// }
 }
