@@ -9,6 +9,11 @@ This CLI is still very much under development, and functions with the `test-` or
 
 Any help with testing would be greatly appreciated, as that area is my biggest weakness.
 
+- [Cloudini](#cloudini)
+  - [Getting started](#getting-started)
+  - [Functionality](#functionality)
+    - [Proxy settings (Windows only)](#proxy-settings-windows-only)
+
 
 ## Getting started
 Copy [cldConf.json](https://raw.githubusercontent.com/jercle/cloudini/develop/cldConf.json) to `$HOME\.config\cld\` on mac/linux `%userprofile%\.config\cld\` on Windows
