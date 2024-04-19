@@ -27,12 +27,16 @@ var (
 var proxyCmd = &cobra.Command{
 	Use:   "proxy",
 	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Long: `* Set default proxy configured in cloudini
+	* cld.exe u win proxy -s
+* Get currently configured proxy in Windows
+	* cld.exe u win proxy
+* Open 'Internet Options' control panel cmdlet
+	* cld.exe u win proxy -o
+* Remove proxy configuration
+	* cld.exe u win proxy -d
+* Set proxy configuration from a proxyConfig object in the cloudini config file
+	* cld.exe u win proxy -s -n NAME`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// var proxyConfig lib.ProxyConfig
