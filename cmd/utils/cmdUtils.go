@@ -6,7 +6,7 @@ Copyright © 2024 Evan Colwell ercolwell@gmail.com
 package utils
 
 import (
-	"github.com/jercle/azg/cmd"
+	"github.com/jercle/cloudini/cmd"
 	"github.com/spf13/cobra"
 )
 

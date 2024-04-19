@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 	"github.com/rodaine/table"
 )
 

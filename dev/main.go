@@ -4,7 +4,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/jercle/azg/cmd/azure"
+	"github.com/jercle/cloudini/cmd/azure"
 )
 
 func main() {

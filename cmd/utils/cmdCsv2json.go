@@ -6,7 +6,7 @@ package utils
 import (
 	"fmt"
 
-	dt "github.com/jercle/azg/cmd/utils/datatransforms"
+	dt "github.com/jercle/cloudini/cmd/utils/datatransforms"
 	"github.com/spf13/cobra"
 )
 

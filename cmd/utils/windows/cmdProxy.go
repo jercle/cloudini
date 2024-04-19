@@ -11,7 +11,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 	"github.com/spf13/cobra"
 )
 

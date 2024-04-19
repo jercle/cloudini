@@ -3,7 +3,7 @@ package azure
 import (
 	"encoding/json"
 
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 )
 
 type EntraRoleDefinition struct {

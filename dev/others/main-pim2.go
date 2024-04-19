@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 
 	"github.com/AzureAD/microsoft-authentication-library-for-go/apps/public"
 )

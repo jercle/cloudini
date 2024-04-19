@@ -13,8 +13,8 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob/container"
-	"github.com/jercle/azg/cmd/azure"
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/cmd/azure"
+	"github.com/jercle/cloudini/lib"
 )
 
 type BlobItem struct {

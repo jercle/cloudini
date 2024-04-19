@@ -8,8 +8,8 @@ package utils
 import (
 	"runtime"
 
-	"github.com/jercle/azg/cmd"
-	"github.com/jercle/azg/cmd/utils/windows"
+	"github.com/jercle/cloudini/cmd"
+	"github.com/jercle/cloudini/cmd/utils/windows"
 
 	"github.com/spf13/cobra"
 )

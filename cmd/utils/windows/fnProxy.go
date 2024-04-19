@@ -5,7 +5,7 @@ import (
 	"os"
 	"slices"
 
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 	"golang.org/x/sys/windows/registry"
 )
 

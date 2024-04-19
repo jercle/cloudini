@@ -4,13 +4,13 @@ Copyright © 2024 Evan Colwell ercolwell@gmail.com
 package main
 
 import (
-	"github.com/jercle/azg/cmd"
-	_ "github.com/jercle/azg/cmd/ado"
-	_ "github.com/jercle/azg/cmd/azure"
-	_ "github.com/jercle/azg/cmd/config"
-	_ "github.com/jercle/azg/cmd/jira"
-	_ "github.com/jercle/azg/cmd/utils"
-	_ "github.com/jercle/azg/cmd/web"
+	"github.com/jercle/cloudini/cmd"
+	_ "github.com/jercle/cloudini/cmd/ado"
+	_ "github.com/jercle/cloudini/cmd/azure"
+	_ "github.com/jercle/cloudini/cmd/config"
+	_ "github.com/jercle/cloudini/cmd/jira"
+	_ "github.com/jercle/cloudini/cmd/utils"
+	_ "github.com/jercle/cloudini/cmd/web"
 )
 
 func main() {

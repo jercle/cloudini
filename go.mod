@@ -1,4 +1,4 @@
-module github.com/jercle/azg
+module github.com/jercle/cloudini
 
 go 1.22.0
 

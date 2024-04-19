@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/jercle/azg/cmd/azure"
+	"github.com/jercle/cloudini/cmd/azure"
 )
 
 func main() {

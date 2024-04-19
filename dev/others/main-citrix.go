@@ -11,7 +11,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 )
 
 type TokenRequestResponse struct {
