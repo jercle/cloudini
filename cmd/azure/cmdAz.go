@@ -4,8 +4,6 @@ Copyright © 2024 Evan Colwell ercolwell@gmail.com
 package azure
 
 import (
-	"log"
-
 	"github.com/jercle/cloudini/cmd"
 	"github.com/spf13/cobra"
 )
@@ -35,13 +33,13 @@ func init() {
 	azCmd.PersistentFlags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")
 	azCmd.PersistentFlags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")
 
-	if subscriptionId == "" {
-		sub, err := GetActiveSub()
-		if err != nil {
-			log.Fatalln(err)
-		}
-		subscriptionId = sub.ID
-	}
+	// if subscriptionId == "" {
+	// 	sub, err := GetActiveSub()
+	// 	if err != nil {
+	// 		log.Fatalln(err)
+	// 	}
+	// 	subscriptionId = sub.ID
+	// }
 
 	// Here you will define your flags and configuration settings.
 

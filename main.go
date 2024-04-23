@@ -16,5 +16,4 @@ import (
 func main() {
 	// defer lib.TimeTrack(time.Now(), "main")
 	cmd.Execute()
-
 }
