@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/jercle/azg/cmd/azure"
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/cmd/azure"
+	"github.com/jercle/cloudini/lib"
 )
 
 type providerListResult struct {

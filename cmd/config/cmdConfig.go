@@ -6,7 +6,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/jercle/azg/cmd"
+	"github.com/jercle/cloudini/cmd"
 	"github.com/spf13/cobra"
 )
 

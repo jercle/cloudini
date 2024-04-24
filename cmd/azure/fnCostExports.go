@@ -18,7 +18,7 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 	"github.com/xuri/excelize/v2"
 )
 

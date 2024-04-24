@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.1.3]
+ * Bug fix: #37 - remove GetActiveSub() call in cmdAz.go init() - fixes #37
+ * Update proxy functions
+ * Refactoring
+
 ## [0.1.2]
  * https://github.com/jercle/cloudini/pull/1
  * Added submodules for generated Azure fake data

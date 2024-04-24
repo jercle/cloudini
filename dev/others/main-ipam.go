@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/jercle/azg/cmd/web"
+	"github.com/jercle/cloudini/cmd/web"
 )
 
 func main() {

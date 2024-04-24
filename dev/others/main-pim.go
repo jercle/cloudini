@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/AzureAD/microsoft-authentication-library-for-go/apps/public"
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 )
 
 type roleAssignmentRequestOptions struct {

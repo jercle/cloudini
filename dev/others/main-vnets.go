@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"sync"
 
-	"github.com/jercle/azg/cmd/azure"
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/cmd/azure"
+	"github.com/jercle/cloudini/lib"
 )
 
 func main() {

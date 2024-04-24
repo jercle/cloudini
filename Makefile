@@ -1,4 +1,4 @@
-TARGET     := azg
+TARGET     := cld
 OS         := $(if $(GOOS),$(GOOS),$(shell go env GOOS))
 ARCH       := $(if $(GOARCH),$(GOARCH),$(shell go env GOARCH))
 GOARM      := $(if $(GOARM),$(GOARM),)

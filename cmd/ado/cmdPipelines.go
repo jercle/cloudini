@@ -8,7 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v7"
 	"github.com/spf13/cobra"
 )

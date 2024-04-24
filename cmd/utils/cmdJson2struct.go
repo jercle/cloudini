@@ -10,7 +10,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	dt "github.com/jercle/azg/cmd/utils/datatransforms"
+	dt "github.com/jercle/cloudini/cmd/utils/datatransforms"
 )
 
 // var jsonString io.Reader

@@ -17,7 +17,7 @@ import (
 
 var (
 	// The name of our config file, without the file extension because viper supports many different config file languages.
-	defaultConfigFilename = "cloudini"
+	defaultConfigFilename = "cldConf"
 
 	// The environment variable prefix of all environment variables bound to our command line flags.
 	// For example, --number is bound to STING_NUMBER.
@@ -36,12 +36,11 @@ var RootCmd = &cobra.Command{
 	Use:     "cld",
 	Version: "0.1.2",
 	Short:   "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Long: `This CLI has been created to add additional functionality
+to https://docs.microsoft.com/en-us/cli/azure/ such as data
+aggregation from multiple 'az' commands, reporting,
+and pulling data from both Azure DevOps and Azure,
+as well as other functionality.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },

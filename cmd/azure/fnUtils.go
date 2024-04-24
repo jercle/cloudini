@@ -4,7 +4,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 )
 
 func HttpGet(urlString string, mat lib.MultiAuthToken) ([]byte, error) {

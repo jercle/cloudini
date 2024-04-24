@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 	"github.com/spf13/cobra"
 )
 

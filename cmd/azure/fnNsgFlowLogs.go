@@ -12,11 +12,11 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 	"github.com/rodaine/table"
 )
 
-type nsgFlowLogRecord struct {
+type NsgFlowLogRecord struct {
 	Category      string `json:"category"`
 	MacAddress    string `json:"macAddress"`
 	OperationName string `json:"operationName"`
@@ -35,27 +35,27 @@ type nsgFlowLogRecord struct {
 	Time       time.Time `json:"time"`
 }
 
-type nsgFlowLog struct {
-	Records []nsgFlowLogRecord
+type NsgFlowLog struct {
+	Records []NsgFlowLogRecord
 }
 
-type combinedFlowLogs struct {
-	nsgFlowLogs []nsgFlowLogRecord
+type CombinedFlowLogs struct {
+	NsgFlowLogs []NsgFlowLogRecord
 	FileCount   int
 }
 
-type ipList struct {
+type IpList struct {
 	SourceIps []string
 	DestIps   []string
 }
 
-func (m *ipList) printCount() {
+func (m *IpList) PrintCount() {
 	fmt.Println("Source IPs:      ", len(m.SourceIps))
 	fmt.Println("Destination IPs: ", len(m.DestIps))
 }
 
-func getUniqueIpAddresses(dataset []nsgFlowLogRecord) ipList {
-	var ipList ipList
+func GetUniqueIpAddresses(dataset []NsgFlowLogRecord) IpList {
+	var ipList IpList
 
 	for _, record := range dataset {
 		for _, outerFlow := range record.Properties.Flows {
@@ -73,8 +73,8 @@ func getUniqueIpAddresses(dataset []nsgFlowLogRecord) ipList {
 	return ipList
 }
 
-func getFlowLogData(path string) nsgFlowLog {
-	var flowLogData nsgFlowLog
+func GetFlowLogData(path string) NsgFlowLog {
+	var flowLogData NsgFlowLog
 
 	jsonFile, err := os.Open(path)
 	if err != nil {
@@ -88,10 +88,10 @@ func getFlowLogData(path string) nsgFlowLog {
 	return flowLogData
 }
 
-func combineLogFileRecords(dataPath string) combinedFlowLogs {
+func CombineLogFileRecords(dataPath string) CombinedFlowLogs {
 	var (
 		wg             sync.WaitGroup
-		allFlowLogData combinedFlowLogs
+		allFlowLogData CombinedFlowLogs
 		mutex          sync.Mutex
 	)
 
@@ -102,9 +102,9 @@ func combineLogFileRecords(dataPath string) combinedFlowLogs {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			data := getFlowLogData(file).Records
+			data := GetFlowLogData(file).Records
 			mutex.Lock()
-			allFlowLogData.nsgFlowLogs = append(allFlowLogData.nsgFlowLogs, data...)
+			allFlowLogData.NsgFlowLogs = append(allFlowLogData.NsgFlowLogs, data...)
 			mutex.Unlock()
 		}()
 	}
@@ -113,7 +113,7 @@ func combineLogFileRecords(dataPath string) combinedFlowLogs {
 	return allFlowLogData
 }
 
-func (m *ipList) printTable() {
+func (m *IpList) PrintTable() {
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
 	columnFmt := color.New(color.FgYellow).SprintfFunc()
 
@@ -129,12 +129,12 @@ func (m *ipList) printTable() {
 	tbl.Print()
 }
 
-func (r *combinedFlowLogs) filterIp(filter string, filterDirection string) {
-	var filteredLogs combinedFlowLogs
+func (r *CombinedFlowLogs) FilterIp(filter string, filterDirection string) {
+	var filteredLogs CombinedFlowLogs
 	filteredLogs.FileCount = r.FileCount
 	filterSlice := strings.Split(filter, ",")
 
-	for _, record := range r.nsgFlowLogs {
+	for _, record := range r.NsgFlowLogs {
 	recordLoop:
 		for _, outerFlow := range record.Properties.Flows {
 			for _, innerFlow := range outerFlow.Flows {
@@ -142,13 +142,13 @@ func (r *combinedFlowLogs) filterIp(filter string, filterDirection string) {
 					split := strings.Split(tuple, ",")
 					if strings.ToLower(filterDirection) == "source" {
 						if slices.Contains(filterSlice, split[1]) {
-							filteredLogs.nsgFlowLogs = append(filteredLogs.nsgFlowLogs, record)
+							filteredLogs.NsgFlowLogs = append(filteredLogs.NsgFlowLogs, record)
 							break recordLoop
 						}
 					}
 					if strings.ToLower(filterDirection) == "dest" {
 						if slices.Contains(filterSlice, split[2]) {
-							filteredLogs.nsgFlowLogs = append(filteredLogs.nsgFlowLogs, record)
+							filteredLogs.NsgFlowLogs = append(filteredLogs.NsgFlowLogs, record)
 							break recordLoop
 						}
 					}
@@ -159,8 +159,8 @@ func (r *combinedFlowLogs) filterIp(filter string, filterDirection string) {
 	*r = filteredLogs
 }
 
-func (m *ipList) filterSourceIp(filter string) {
-	var filteredTables ipList
+func (m *IpList) FilterSourceIp(filter string) {
+	var filteredTables IpList
 	filterSlice := strings.Split(filter, ",")
 
 	for _, ipAddress := range *&m.SourceIps {
@@ -173,7 +173,7 @@ func (m *ipList) filterSourceIp(filter string) {
 	*m = filteredTables
 }
 
-func (r *nsgFlowLogRecord) printJSON() {
+func (r *NsgFlowLogRecord) PrintJSON() {
 	jsonData, err := json.MarshalIndent(r, "", "  ")
 	if err != nil {
 		log.Fatal(err)

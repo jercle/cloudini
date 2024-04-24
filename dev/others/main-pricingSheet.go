@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 )
 
 type PriceSheetItem struct {

@@ -1,0 +1,24 @@
+{
+  "cldConfig": {
+    "encodeConfig": false
+  },
+  "azure": {
+    "multiTenantAuth": {
+      "tenants": {}
+    }
+  },
+  "proxyConfig": {
+    "default": {
+      "server": "proxyserver.domain.com",
+      "port": "8080",
+      "enabled": true,
+      "overrides": "m.clarity.ms;localhost;127.0.0.;10.*;192.168.*;*.azure.net;*.azure.com;*.windows.net;*.visualstudio.com;*.microsoft.com"
+    },
+    "kv": {
+      "server": "proxyserver.domain.com",
+      "port": "8080",
+      "enabled": true,
+      "overrides": ""
+    }
+  }
+}

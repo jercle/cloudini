@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/jercle/azg/lib"
+	"github.com/jercle/cloudini/lib"
 )
 
 type VnetResponse struct {
