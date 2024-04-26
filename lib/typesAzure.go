@@ -1,13 +1,16 @@
 package lib
 
+import "time"
+
 type MultiAuthTokenRequestOptions struct {
 	// unicorn
-	TenantName     string `json:"tenantName"`
-	GetWriteToken  bool   `json:"getWriteToken"`
-	ConfigFilePath string `json:"configFilePath"`
-	ClientID       string `json:"clientId"`
-	ClientSecret   string `json:"clientSecret"`
-	Scope          string `json:"scope"`
+	TenantName                   string `json:"tenantName"`
+	GetWriteToken                bool   `json:"getWriteToken"`
+	ConfigFilePath               string `json:"configFilePath"`
+	ClientID                     string `json:"clientId"`
+	ClientSecret                 string `json:"clientSecret"`
+	Scope                        string `json:"scope"`
+	AzureContainerRepositoryName string `json:"azureContainerRepositoryName"`
 }
 
 type MultiAuthToken struct {
@@ -24,6 +27,10 @@ type Request struct {
 type TokenData struct {
 	Token     string
 	ExpiresOn string
+}
+
+type AcrAccessToken struct {
+	AccessToken string
 }
 
 type TokenRequestResponse struct {
@@ -79,3 +86,66 @@ type SubsReqResBody struct {
 }
 
 type AllTenantTokens []MultiAuthToken
+
+type ListSIGImageVersionsResponse struct {
+	Value []struct {
+		ID         string `json:"id"`
+		Location   string `json:"location"`
+		Name       string `json:"name"`
+		Properties struct {
+			ProvisioningState string `json:"provisioningState"`
+			PublishingProfile struct {
+				ExcludeFromLatest  bool      `json:"excludeFromLatest"`
+				PublishedDate      time.Time `json:"publishedDate"`
+				ReplicaCount       float64   `json:"replicaCount"`
+				ReplicationMode    string    `json:"replicationMode,omitempty"`
+				StorageAccountType string    `json:"storageAccountType"`
+				TargetRegions      []struct {
+					Name                 string  `json:"name"`
+					RegionalReplicaCount float64 `json:"regionalReplicaCount"`
+					StorageAccountType   string  `json:"storageAccountType"`
+				} `json:"targetRegions"`
+			} `json:"publishingProfile"`
+			SafetyProfile struct {
+				AllowDeletionOfReplicatedLocations bool `json:"allowDeletionOfReplicatedLocations"`
+				ReportedForPolicyViolation         bool `json:"reportedForPolicyViolation"`
+			} `json:"safetyProfile"`
+			StorageProfile struct {
+				OSDiskImage *struct {
+					HostCaching string   `json:"hostCaching"`
+					SizeInGb    float64  `json:"sizeInGB"`
+					Source      struct{} `json:"source"`
+				} `json:"osDiskImage,omitempty"`
+				Source struct {
+					VirtualMachineID string `json:"virtualMachineId"`
+				} `json:"source"`
+			} `json:"storageProfile"`
+		} `json:"properties"`
+		Tags struct {
+			CreationDate string `json:"CreationDate,omitempty"`
+			CostGroup    string `json:"cost_group,omitempty"`
+			Dept         string `json:"dept,omitempty"`
+			Env          string `json:"env,omitempty"`
+			ManagedBy    string `json:"managed_by,omitempty"`
+			Task         string `json:"task,omitempty"`
+		} `json:"tags"`
+		Type string `json:"type"`
+	} `json:"value"`
+}
+
+type SIGImageVersion struct {
+	ID         string `json:"id"`
+	Location   string `json:"location"`
+	Name       string `json:"name"`
+	Properties struct {
+		ProvisioningState string `json:"provisioningState"`
+		PublishingProfile struct {
+			ExcludeFromLatest bool      `json:"excludeFromLatest"`
+			PublishedDate     time.Time `json:"publishedDate"`
+		} `json:"publishingProfile"`
+	} `json:"properties"`
+	Tags   map[string]string `json:"tags"`
+	Latest bool              `json:"latest"`
+}
+
+type SIGImageVersionList []SIGImageVersion
