@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+
+	"golang.org/x/mod/semver"
 )
 
 func (tokens *AllTenantTokens) SaveToFile() {
@@ -50,4 +52,20 @@ func (subs *SubsReqResBody) UpdateTenantName(tenantName string) {
 		localSubs.Value = append(localSubs.Value, sub)
 	}
 	*subs = localSubs
+}
+
+func (versions *SIGImageVersionList) Latest() SIGImageVersion {
+	var latestImage *SIGImageVersion
+
+	for _, version := range *versions {
+		if latestImage == nil {
+			latestImage = &version
+		} else {
+			if semver.Compare("v"+version.Name, "v"+latestImage.Name) == 1 {
+				latestImage = &version
+			}
+		}
+	}
+
+	return *latestImage
 }

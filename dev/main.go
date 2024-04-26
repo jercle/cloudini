@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/jercle/cloudini/cmd/azure"
@@ -10,34 +9,29 @@ import (
 )
 
 func main() {
-	// var (
-	// 	acrName  string
-	// 	repoName string
-	// )
-	acrName := "acrapcdtqautomon"
-	repoName := "ubuntu-packer"
-
+	var (
+		subscriptionId    = "fdeee0c2-5569-40ea-9ad9-81dd325f6e1e"
+		resourceGroupName = "rg-apcdtqdesktop-aib"
+		galleryName       = "sigapcdtqdesktopaibimages"
+		galleryImageName  = "imgdef-specialised-win10-multi-session-gen2"
+	)
 	startTime := time.Now()
 	config := lib.GetCldConfig(nil)
 	_ = config
 	// tokens, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
 	// lib.CheckFatalError(err)
-	token, err := azure.GetTenantSPToken(lib.MultiAuthTokenRequestOptions{TenantName: "REDDTQ", AzureContainerRepositoryName: acrName, Scope: "acr"})
+	token, err := azure.GetTenantSPToken(lib.MultiAuthTokenRequestOptions{})
 	lib.CheckFatalError(err)
 	// _ = tokens
 	_ = token
 
-	fmt.Println(token)
-	os.Exit(0)
-	urlString := "https://" +
-		acrName +
-		".azurecr.io/acr/v1/" +
-		repoName +
-		"/_tags"
-	res, err := azure.HttpGet(urlString, *token)
-	lib.CheckFatalError(err)
+	images := azure.GetSIGImageVersions(subscriptionId, resourceGroupName, galleryName, galleryImageName, token)
 
-	fmt.Println(string(res))
+	_ = images
+
+	latest := images.Latest()
+
+	fmt.Println(latest)
 
 	elapsed := time.Since(startTime)
 	_ = elapsed
