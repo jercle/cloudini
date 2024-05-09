@@ -11,7 +11,7 @@ func main() {
 	// month := fmt.Sprintf("%02d", int(now.Month()))
 	// fileName := "MonthlyReport-" + year + month + ".xlsx"
 
-	var dataPath = "./cost-exports"
+	var dataPath = "./outputs/cost-exports"
 	// var dataPath = "./fakedata/cost-exports"
 	// var combinedCostData costExportData
 
