@@ -63,22 +63,22 @@ func main() {
 	// jsonBytes, _ := json.MarshalIndent(blobList, "", "  ")
 	// fmt.Println(string(jsonBytes))
 
-	config := lib.GetCldConfig(nil)
+	// config := lib.GetCldConfig(nil)
 
-	tenant := config.Azure.MultiTenantAuth.Tenants["REDDTQ"]
-	split := strings.Split(tenant.CostExportsLocation, "/")
+	// tenant := config.Azure.MultiTenantAuth.Tenants["REDDTQ"]
+	// split := strings.Split(tenant.CostExportsLocation, "/")
 
-	options := StorageAccountRequestOptions{
-		StorageAccountName:   strings.Split(split[2], ".")[0],
-		ContainerName:        split[3],
-		ConfiguredTenantName: tenant.TenantName,
-	}
-	blobs := ListStorageContainerBlobs(options)
-	fmt.Println(len(blobs))
-	// DownloadAllConfiguredTenantLastMonthCostExports(DownloadAllConfiguredTenantLastMonthCostExportsOptions{
-	// 	BlobPrefix:  "monthly-cost-exports/202403",
-	// 	OutfilePath: "cost-exports/monthly-cost-exports",
-	// })
+	// options := StorageAccountRequestOptions{
+	// 	StorageAccountName:   strings.Split(split[2], ".")[0],
+	// 	ContainerName:        split[3],
+	// 	ConfiguredTenantName: tenant.TenantName,
+	// }
+	// blobs := ListStorageContainerBlobs(options)
+	// fmt.Println(len(blobs))
+	DownloadAllConfiguredTenantLastMonthCostExports(DownloadAllConfiguredTenantLastMonthCostExportsOptions{
+		BlobPrefix:  "monthly-cost-exports/202404",
+		OutfilePath: "cost-exports/monthly-cost-exports",
+	})
 	elapsed := time.Since(startTime)
 	_ = elapsed
 }

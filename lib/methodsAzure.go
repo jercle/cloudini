@@ -5,6 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
+
 
 	"golang.org/x/mod/semver"
 )
@@ -54,18 +57,46 @@ func (subs *SubsReqResBody) UpdateTenantName(tenantName string) {
 	*subs = localSubs
 }
 
-func (versions *SIGImageVersionList) Latest() SIGImageVersion {
-	var latestImage *SIGImageVersion
+func (list *GalleryImageVersionList) Latest() (GalleryImageVersion, string) {
+	latestVersion := GalleryImageVersion{}
 
-	for _, version := range *versions {
-		if latestImage == nil {
-			latestImage = &version
+	for _, version := range *list {
+		currentVersion := ""
+
+		if !strings.HasPrefix(version.Name, "v") {
+			currentVersion = "v" + version.Name
 		} else {
-			if semver.Compare("v"+version.Name, "v"+latestImage.Name) == 1 {
-				latestImage = &version
-			}
+			currentVersion = version.Name
+		}
+
+		if semver.Compare(currentVersion, latestVersion.Name) == 1 {
+			latestVersion = version
 		}
 	}
 
-	return *latestImage
+	return latestVersion, latestVersion.Name
+}
+
+func (imgVersion *GalleryImageVersion) IncrementPatchVersion() string {
+	version := imgVersion.Name
+	var v string
+	if !strings.HasPrefix(version, "v") {
+		v = "v" + version
+	} else {
+		v = version
+	}
+	isValid := semver.IsValid(v)
+	if !isValid {
+		CheckFatalError(fmt.Errorf("Provide valid semantic version"))
+	}
+
+	vnums := strings.Split(version, ".")
+	patchVersion, err := strconv.Atoi(vnums[2])
+	CheckFatalError(err)
+
+	patchVersion++
+
+	vnums[2] = strconv.Itoa(patchVersion)
+
+	return strings.Join(vnums, ".")
 }

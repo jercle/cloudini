@@ -8,11 +8,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// azCmd represents the az command
-
-var subscriptionId string
-
-var resourceGroup string
+var (
+	tenantId       string
+	subscriptionId string
+	resourceGroup  string
+	clientSecret   string
+	clientId       string
+)
 
 var azCmd = &cobra.Command{
 	Use:   "az",
@@ -32,6 +34,9 @@ func init() {
 	cmd.RootCmd.AddCommand(azCmd)
 	azCmd.PersistentFlags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")
 	azCmd.PersistentFlags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")
+	azCmd.PersistentFlags().StringVar(&clientId, "clientId", "", "Client ID for Service Principal authentication.")
+	azCmd.PersistentFlags().StringVar(&clientSecret, "clientSecret", "", "Client Secret for Service Principal authentication.")
+	azCmd.PersistentFlags().StringVarP(&tenantId, "tenantId", "t", "", "Tenant ID.")
 
 	// if subscriptionId == "" {
 	// 	sub, err := GetActiveSub()

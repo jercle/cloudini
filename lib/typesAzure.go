@@ -4,13 +4,14 @@ import "time"
 
 type MultiAuthTokenRequestOptions struct {
 	// unicorn
-	TenantName                   string `json:"tenantName"`
-	GetWriteToken                bool   `json:"getWriteToken"`
-	ConfigFilePath               string `json:"configFilePath"`
-	ClientID                     string `json:"clientId"`
-	ClientSecret                 string `json:"clientSecret"`
-	Scope                        string `json:"scope"`
-	AzureContainerRepositoryName string `json:"azureContainerRepositoryName"`
+	TenantID       string `json:"tenantID"`
+	TenantName     string `json:"tenantName"`
+	GetWriteToken  bool   `json:"getWriteToken"`
+	ConfigFilePath string `json:"configFilePath"`
+	ClientID       string `json:"clientId"`
+	ClientSecret   string `json:"clientSecret"`
+	Scope          string `json:"scope"`
+  AzureContainerRepositoryName string `json:"azureContainerRepositoryName"`
 }
 
 type MultiAuthToken struct {
@@ -87,65 +88,63 @@ type SubsReqResBody struct {
 
 type AllTenantTokens []MultiAuthToken
 
-type ListSIGImageVersionsResponse struct {
-	Value []struct {
-		ID         string `json:"id"`
-		Location   string `json:"location"`
-		Name       string `json:"name"`
-		Properties struct {
-			ProvisioningState string `json:"provisioningState"`
-			PublishingProfile struct {
-				ExcludeFromLatest  bool      `json:"excludeFromLatest"`
-				PublishedDate      time.Time `json:"publishedDate"`
-				ReplicaCount       float64   `json:"replicaCount"`
-				ReplicationMode    string    `json:"replicationMode,omitempty"`
-				StorageAccountType string    `json:"storageAccountType"`
-				TargetRegions      []struct {
-					Name                 string  `json:"name"`
-					RegionalReplicaCount float64 `json:"regionalReplicaCount"`
-					StorageAccountType   string  `json:"storageAccountType"`
-				} `json:"targetRegions"`
-			} `json:"publishingProfile"`
-			SafetyProfile struct {
-				AllowDeletionOfReplicatedLocations bool `json:"allowDeletionOfReplicatedLocations"`
-				ReportedForPolicyViolation         bool `json:"reportedForPolicyViolation"`
-			} `json:"safetyProfile"`
-			StorageProfile struct {
-				OSDiskImage *struct {
-					HostCaching string   `json:"hostCaching"`
-					SizeInGb    float64  `json:"sizeInGB"`
-					Source      struct{} `json:"source"`
-				} `json:"osDiskImage,omitempty"`
-				Source struct {
-					VirtualMachineID string `json:"virtualMachineId"`
-				} `json:"source"`
-			} `json:"storageProfile"`
-		} `json:"properties"`
-		Tags struct {
-			CreationDate string `json:"CreationDate,omitempty"`
-			CostGroup    string `json:"cost_group,omitempty"`
-			Dept         string `json:"dept,omitempty"`
-			Env          string `json:"env,omitempty"`
-			ManagedBy    string `json:"managed_by,omitempty"`
-			Task         string `json:"task,omitempty"`
-		} `json:"tags"`
-		Type string `json:"type"`
-	} `json:"value"`
-}
 
-type SIGImageVersion struct {
+type ListGalleryImageVersionsResponse struct {
+	Value []GalleryImageVersionResponse `json:"value"`
+}
+type GalleryImageVersionResponse struct {
 	ID         string `json:"id"`
 	Location   string `json:"location"`
 	Name       string `json:"name"`
 	Properties struct {
 		ProvisioningState string `json:"provisioningState"`
 		PublishingProfile struct {
-			ExcludeFromLatest bool      `json:"excludeFromLatest"`
-			PublishedDate     time.Time `json:"publishedDate"`
+			ExcludeFromLatest  bool      `json:"excludeFromLatest"`
+			PublishedDate      time.Time `json:"publishedDate"`
+			ReplicaCount       float64   `json:"replicaCount"`
+			ReplicationMode    string    `json:"replicationMode"`
+			StorageAccountType string    `json:"storageAccountType"`
+			TargetRegions      []struct {
+				Name                 string  `json:"name"`
+				RegionalReplicaCount float64 `json:"regionalReplicaCount"`
+				StorageAccountType   string  `json:"storageAccountType"`
+			} `json:"targetRegions"`
 		} `json:"publishingProfile"`
+		SafetyProfile struct {
+			AllowDeletionOfReplicatedLocations bool `json:"allowDeletionOfReplicatedLocations"`
+			ReportedForPolicyViolation         bool `json:"reportedForPolicyViolation"`
+		} `json:"safetyProfile"`
+		StorageProfile struct {
+			OSDiskImage struct {
+				HostCaching string   `json:"hostCaching"`
+				SizeInGb    float64  `json:"sizeInGB"`
+				Source      struct{} `json:"source"`
+			} `json:"osDiskImage"`
+			Source struct {
+				VirtualMachineID string `json:"virtualMachineId"`
+			} `json:"source"`
+		} `json:"storageProfile"`
 	} `json:"properties"`
-	Tags   map[string]string `json:"tags"`
-	Latest bool              `json:"latest"`
+	Tags struct {
+		CostGroup string `json:"cost_group"`
+		Env       string `json:"env"`
+		ManagedBy string `json:"managed_by"`
+	} `json:"tags"`
+	Type string `json:"type"`
 }
 
-type SIGImageVersionList []SIGImageVersion
+type GalleryImageVersion struct {
+	ID         string `json:"id"`
+
+	Name       string `json:"name"`
+	Properties struct {
+		ProvisioningState string `json:"provisioningState"`
+		PublishingProfile struct {
+
+			ExcludeFromLatest bool `json:"excludeFromLatest"`
+		} `json:"publishingProfile"`
+	} `json:"properties"`
+}
+
+type GalleryImageVersionList []GalleryImageVersion
+

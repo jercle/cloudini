@@ -9,29 +9,30 @@ import (
 )
 
 func main() {
-	var (
-		subscriptionId    = "fdeee0c2-5569-40ea-9ad9-81dd325f6e1e"
-		resourceGroupName = "rg-apcdtqdesktop-aib"
-		galleryName       = "sigapcdtqdesktopaibimages"
-		galleryImageName  = "imgdef-specialised-win10-multi-session-gen2"
-	)
 	startTime := time.Now()
 	config := lib.GetCldConfig(nil)
 	_ = config
+
+	var (
+		subscriptionId   = "fdeee0c2-5569-40ea-9ad9-81dd325f6e1e"
+		resourceGroup    = "rg-apcdtqdesktop-aib"
+		galleryName      = "sigapcdtqdesktopaibimages"
+		galleryImageName = "imgdef-base-winupdrun"
+	)
 	// tokens, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
 	// lib.CheckFatalError(err)
-	token, err := azure.GetTenantSPToken(lib.MultiAuthTokenRequestOptions{})
-	lib.CheckFatalError(err)
 	// _ = tokens
+	token, err := azure.GetTenantSPToken(lib.MultiAuthTokenRequestOptions{
+		TenantName: "REDDTQ",
+	})
+	lib.CheckFatalError(err)
 	_ = token
 
-	images := azure.GetSIGImageVersions(subscriptionId, resourceGroupName, galleryName, galleryImageName, token)
+	versions := azure.GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
 
-	_ = images
+	latest, _ := versions.Latest()
 
-	latest := images.Latest()
-
-	fmt.Println(latest)
+	fmt.Println(latest.IncrementPatchVersion())
 
 	elapsed := time.Since(startTime)
 	_ = elapsed
