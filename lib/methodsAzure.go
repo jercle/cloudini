@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"golang.org/x/mod/semver"
@@ -73,4 +74,28 @@ func (list *GalleryImageVersionList) Latest() (GalleryImageVersion, string) {
 	}
 
 	return latestVersion, latestVersion.Name
+}
+
+func (imgVersion *GalleryImageVersion) IncrementPatchVersion() string {
+	version := imgVersion.Name
+	var v string
+	if !strings.HasPrefix(version, "v") {
+		v = "v" + version
+	} else {
+		v = version
+	}
+	isValid := semver.IsValid(v)
+	if !isValid {
+		CheckFatalError(fmt.Errorf("Provide valid semantic version"))
+	}
+
+	vnums := strings.Split(version, ".")
+	patchVersion, err := strconv.Atoi(vnums[2])
+	CheckFatalError(err)
+
+	patchVersion++
+
+	vnums[2] = strconv.Itoa(patchVersion)
+
+	return strings.Join(vnums, ".")
 }

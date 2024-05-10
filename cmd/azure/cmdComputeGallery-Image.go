@@ -12,6 +12,7 @@ import (
 
 var galleryImageName string
 var getLatestVersionNumber bool
+var getNewVersionPatchNumber bool
 
 // subsCmd represents the subs command
 var cmdComputeGalleryImage = &cobra.Command{
@@ -71,4 +72,6 @@ func init() {
 	cmdComputeGalleryImage.Flags().StringVarP(&galleryImageName, "imageName", "i", "", "Compute Gallery Image name")
 	cmdComputeGalleryImage.MarkFlagRequired("galleryImageName")
 	cmdComputeGalleryImage.Flags().BoolVarP(&getLatestVersionNumber, "getLatestVersionNumber", "l", false, "Get latest version number")
+	cmdComputeGalleryImage.Flags().BoolVarP(&getNewVersionPatchNumber, "getNewVersionPatchNumber", "p", false, "Increment version patch number")
+	cmdComputeGalleryImage.MarkFlagsMutuallyExclusive("getLatestVersionNumber", "getNewVersionPatchNumber")
 }
