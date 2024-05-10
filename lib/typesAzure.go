@@ -11,6 +11,7 @@ type MultiAuthTokenRequestOptions struct {
 	ClientID       string `json:"clientId"`
 	ClientSecret   string `json:"clientSecret"`
 	Scope          string `json:"scope"`
+  AzureContainerRepositoryName string `json:"azureContainerRepositoryName"`
 }
 
 type MultiAuthToken struct {
@@ -27,6 +28,10 @@ type Request struct {
 type TokenData struct {
 	Token     string
 	ExpiresOn string
+}
+
+type AcrAccessToken struct {
+	AccessToken string
 }
 
 type TokenRequestResponse struct {
@@ -83,6 +88,7 @@ type SubsReqResBody struct {
 
 type AllTenantTokens []MultiAuthToken
 
+
 type ListGalleryImageVersionsResponse struct {
 	Value []GalleryImageVersionResponse `json:"value"`
 }
@@ -129,13 +135,16 @@ type GalleryImageVersionResponse struct {
 
 type GalleryImageVersion struct {
 	ID         string `json:"id"`
+
 	Name       string `json:"name"`
 	Properties struct {
 		ProvisioningState string `json:"provisioningState"`
 		PublishingProfile struct {
+
 			ExcludeFromLatest bool `json:"excludeFromLatest"`
 		} `json:"publishingProfile"`
 	} `json:"properties"`
 }
 
 type GalleryImageVersionList []GalleryImageVersion
+

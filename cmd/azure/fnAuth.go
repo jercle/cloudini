@@ -38,7 +38,7 @@ func GetCachedTokens() lib.AllTenantTokens {
 		tokens, err = GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
 		lib.CheckFatalError(err)
 	}
-	fmt.Println(tokens)
+	// fmt.Println(tokens)
 	return tokens
 }
 
@@ -46,11 +46,49 @@ func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequest
 	ctx := context.Background()
 	var tokenRequestOptions policy.TokenRequestOptions
 
+	// jsonBytes, _ := json.MarshalIndent(spDetails, "", "  ")
+	// fmt.Println(string(jsonBytes))
+	// os.Exit(0)
+
 	switch spDetails.Scope {
 	case "graph":
 		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
 	case "storage":
 		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
+	case "acr":
+		tokenRequestOptions.Scopes = []string{}
+		encodedData := b64.StdEncoding.EncodeToString([]byte(spDetails.ClientID + ":" + spDetails.ClientSecret))
+		urlString := "https://" +
+			spDetails.AzureContainerRepositoryName +
+			".azurecr.io/oauth2/token?service=" +
+			spDetails.AzureContainerRepositoryName +
+			".azurecr.io&scope=repository:*:*"
+		req, err := http.NewRequest(http.MethodGet, urlString, nil)
+		lib.CheckFatalError(err)
+
+		req.Header.Add("Content-Type", "application/json")
+		req.Header.Add("Authorization", "Basic "+encodedData)
+
+		res, err := http.DefaultClient.Do(req)
+		lib.CheckFatalError(err)
+
+		responseBody, err := io.ReadAll(res.Body)
+		lib.CheckFatalError(err)
+		defer res.Body.Close()
+
+		var token lib.AcrAccessToken
+		json.Unmarshal(responseBody, &token)
+
+		jsonBytes, _ := json.MarshalIndent(token, "", "  ")
+		fmt.Println(string(jsonBytes))
+
+		tokenData := lib.TokenData{
+			Token: token.AccessToken,
+		}
+
+		return &tokenData, nil
+
+		// os.Exit(0)
 	default:
 		tokenRequestOptions.Scopes = []string{"https://management.core.windows.net/.default"}
 	}
@@ -58,7 +96,8 @@ func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequest
 
 	cred, err := azidentity.NewClientSecretCredential(tenant, spDetails.ClientID, spDetails.ClientSecret, nil)
 	if err != nil {
-		log.Error("Unable to obtain Azure token", err, err)
+		// log.Error("Unable to obtain Azure token", err, err)
+		lib.CheckFatalError(err)
 		return nil, err
 	}
 	// envCred, err := azidentity.NewEnvironmentCredential(nil)
@@ -68,7 +107,8 @@ func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequest
 
 	tokenResponse, err := cred.GetToken(ctx, tokenRequestOptions)
 	if err != nil {
-		log.Error("Unable to obtain Azure token", err, err)
+		// log.Error("Unable to obtain Azure token", err, err)
+		lib.CheckFatalError(err)
 		return nil, err
 	}
 

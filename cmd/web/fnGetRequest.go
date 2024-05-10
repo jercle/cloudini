@@ -21,7 +21,7 @@ type Request struct {
 	Outfile string
 }
 
-func get(opts Request) {
+func Get(opts Request) {
 
 	_, err := url.ParseRequestURI(opts.Url)
 	if err != nil {
