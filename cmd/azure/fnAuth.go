@@ -81,6 +81,48 @@ func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequest
 	return &token, nil
 }
 
+func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.MultiAuthTokenRequestOptions) (*lib.MultiAuthToken, error) {
+	ctx := context.Background()
+	var tokenRequestOptions policy.TokenRequestOptions
+
+	switch spDetails.Scope {
+	case "graph":
+		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
+	case "storage":
+		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
+	default:
+		tokenRequestOptions.Scopes = []string{"https://management.core.windows.net/.default"}
+	}
+	tokenRequestOptions.EnableCAE = true
+
+	cred, err := azidentity.NewClientSecretCredential(tenantId, spDetails.ClientID, spDetails.ClientSecret, nil)
+	if err != nil {
+		log.Error("Unable to obtain Azure token", err, err)
+		return nil, err
+	}
+	// envCred, err := azidentity.NewEnvironmentCredential(nil)
+	// if err != nil {
+	// 	log.Error("Unable to obtain Azure token", err, err)
+	// }
+
+	tokenResponse, err := cred.GetToken(ctx, tokenRequestOptions)
+	if err != nil {
+		log.Error("Unable to obtain Azure token", err, err)
+		return nil, err
+	}
+
+	token := lib.MultiAuthToken{
+		TenantId: tenantId,
+		TokenData: lib.TokenData{
+			Token:     tokenResponse.Token,
+			ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
+		},
+	}
+
+	// fmt.Println(token)
+	return &token, nil
+}
+
 func GetAzCliToken() lib.TokenData {
 	ctx := context.Background()
 	tokenRequestOptions := policy.TokenRequestOptions{

@@ -11,63 +11,6 @@ import (
 	"golang.org/x/mod/semver"
 )
 
-type ListGalleryImageVersionsResponse struct {
-	Value []GalleryImageVersionResponse `json:"value"`
-}
-type GalleryImageVersionResponse struct {
-	ID         string `json:"id"`
-	Location   string `json:"location"`
-	Name       string `json:"name"`
-	Properties struct {
-		ProvisioningState string `json:"provisioningState"`
-		PublishingProfile struct {
-			ExcludeFromLatest  bool      `json:"excludeFromLatest"`
-			PublishedDate      time.Time `json:"publishedDate"`
-			ReplicaCount       float64   `json:"replicaCount"`
-			ReplicationMode    string    `json:"replicationMode"`
-			StorageAccountType string    `json:"storageAccountType"`
-			TargetRegions      []struct {
-				Name                 string  `json:"name"`
-				RegionalReplicaCount float64 `json:"regionalReplicaCount"`
-				StorageAccountType   string  `json:"storageAccountType"`
-			} `json:"targetRegions"`
-		} `json:"publishingProfile"`
-		SafetyProfile struct {
-			AllowDeletionOfReplicatedLocations bool `json:"allowDeletionOfReplicatedLocations"`
-			ReportedForPolicyViolation         bool `json:"reportedForPolicyViolation"`
-		} `json:"safetyProfile"`
-		StorageProfile struct {
-			OSDiskImage struct {
-				HostCaching string   `json:"hostCaching"`
-				SizeInGb    float64  `json:"sizeInGB"`
-				Source      struct{} `json:"source"`
-			} `json:"osDiskImage"`
-			Source struct {
-				VirtualMachineID string `json:"virtualMachineId"`
-			} `json:"source"`
-		} `json:"storageProfile"`
-	} `json:"properties"`
-	Tags struct {
-		CostGroup string `json:"cost_group"`
-		Env       string `json:"env"`
-		ManagedBy string `json:"managed_by"`
-	} `json:"tags"`
-	Type string `json:"type"`
-}
-
-type GalleryImageVersion struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
-	Properties struct {
-		ProvisioningState string `json:"provisioningState"`
-		PublishingProfile struct {
-			ExcludeFromLatest bool `json:"excludeFromLatest"`
-		} `json:"publishingProfile"`
-	} `json:"properties"`
-}
-
-type GalleryImageVersionList []GalleryImageVersion
-
 func main() {
 	startTime := time.Now()
 	config := lib.GetCldConfig(nil)

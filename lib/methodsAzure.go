@@ -5,6 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
+
+	"golang.org/x/mod/semver"
 )
 
 func (tokens *AllTenantTokens) SaveToFile() {
@@ -50,4 +53,24 @@ func (subs *SubsReqResBody) UpdateTenantName(tenantName string) {
 		localSubs.Value = append(localSubs.Value, sub)
 	}
 	*subs = localSubs
+}
+
+func (list *GalleryImageVersionList) Latest() (GalleryImageVersion, string) {
+	latestVersion := GalleryImageVersion{}
+
+	for _, version := range *list {
+		currentVersion := ""
+
+		if !strings.HasPrefix(version.Name, "v") {
+			currentVersion = "v" + version.Name
+		} else {
+			currentVersion = version.Name
+		}
+
+		if semver.Compare(currentVersion, latestVersion.Name) == 1 {
+			latestVersion = version
+		}
+	}
+
+	return latestVersion, latestVersion.Name
 }

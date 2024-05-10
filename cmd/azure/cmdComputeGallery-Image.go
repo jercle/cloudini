@@ -1,0 +1,74 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
+package azure
+
+import (
+	"fmt"
+
+	"github.com/jercle/cloudini/lib"
+	"github.com/spf13/cobra"
+)
+
+var galleryImageName string
+var getLatestVersionNumber bool
+
+// subsCmd represents the subs command
+var cmdComputeGalleryImage = &cobra.Command{
+	Use: "image",
+	// Aliases: []string{"image"},
+	Short: "Commands relating to Log Analytics and Azure Monitor",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		var (
+			authOpts lib.MultiAuthTokenRequestOptions
+			token    *lib.MultiAuthToken
+			err      error
+		)
+
+		if clientId != "" && clientSecret != "" && tenantId != "" {
+			authOpts.ClientID = clientId
+			authOpts.ClientSecret = clientSecret
+			authOpts.TenantID = tenantId
+
+			token, err = GetServicePrincipalMultiAuthToken(tenantId, authOpts)
+			lib.CheckFatalError(err)
+
+			if getLatestVersionNumber {
+
+				versions := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
+				_, latest := versions.Latest()
+
+				fmt.Println(latest)
+			}
+		} else {
+			fmt.Println("Please provide --clientId, --clientSecret, and --tenantId")
+		}
+
+		// fmt.Println(authOpts)
+		// os.Exit(0)
+
+	},
+	// PersistentPreRun: func(cmd *cobra.Command, args []string) {
+
+	// },
+
+	// PersistentPreRunE: func(ccmd *cobra.Command, args []string) error {
+	// 	// set resourceGroup flag as required for subcommands of this
+	// 	azCmd.MarkPersistentFlagRequired("resourceGroup")
+	// 	// You can bind cobra and viper in a few locations, but PersistencePreRunE on the root command works well
+	// 	return cmd.InitializeConfig(ccmd)
+	// },
+}
+
+func init() {
+	cmdComputeGallery.AddCommand(cmdComputeGalleryImage)
+	cmdComputeGalleryImage.Flags().StringVarP(&galleryImageName, "imageName", "i", "", "Compute Gallery Image name")
+	cmdComputeGalleryImage.MarkFlagRequired("galleryImageName")
+	cmdComputeGalleryImage.Flags().BoolVarP(&getLatestVersionNumber, "getLatestVersionNumber", "l", false, "Get latest version number")
+}
