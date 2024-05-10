@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.1.5]
+*  Bump dep versions
+*  Add functions for Shared Image Gallery/Compute Gallery
+*  Add incrementing Compute Gallery image patch version command
+
+## [0.1.4]
+
 ## [0.1.3]
  * Bug fix: #37 - remove GetActiveSub() call in cmdAz.go init() - fixes #37
  * Update proxy functions

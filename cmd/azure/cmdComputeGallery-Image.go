@@ -47,6 +47,14 @@ to quickly create a Cobra application.`,
 
 				fmt.Println(latest)
 			}
+
+			if getNewVersionPatchNumber {
+				versions := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
+				latest, _ := versions.Latest()
+
+				fmt.Println(latest.IncrementPatchVersion())
+			}
+
 		} else {
 			fmt.Println("Please provide --clientId, --clientSecret, and --tenantId")
 		}
