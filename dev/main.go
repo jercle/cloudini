@@ -13,10 +13,10 @@ func main() {
 	_ = config
 
 	var (
-		subscriptionId   = "fdeee0c2-5569-40ea-9ad9-81dd325f6e1e"
-		resourceGroup    = "rg-apcdtqdesktop-aib"
-		galleryName      = "sigapcdtqdesktopaibimages"
-		galleryImageName = "imgdef-apc-oftadtqs"
+		subscriptionId   = ""
+		resourceGroup    = "rg--aib"
+		galleryName      = ""
+		galleryImageName = "imgdef-"
 	)
 	// tokens, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
 	// lib.CheckFatalError(err)
