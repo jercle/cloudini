@@ -16,13 +16,5 @@ import (
 func main() {
 	// defer lib.TimeTrack(time.Now(), "main")
 
-	var (
-		version = "dev"
-		commit  = "none"
-		date    = "unknown"
-	)
-
-	cmd.SetVersionInfo(version, commit, date)
-
 	cmd.Execute()
 }
