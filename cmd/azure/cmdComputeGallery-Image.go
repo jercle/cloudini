@@ -40,6 +40,9 @@ to quickly create a Cobra application.`,
 			token, err = GetServicePrincipalMultiAuthToken(tenantId, authOpts)
 			lib.CheckFatalError(err)
 
+			imageDefinition := GetGalleryImage(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
+			_ = imageDefinition
+
 			if getLatestVersionNumber {
 
 				versions := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)

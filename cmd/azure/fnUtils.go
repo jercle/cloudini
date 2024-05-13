@@ -1,6 +1,7 @@
 package azure
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 
@@ -24,7 +25,13 @@ func HttpGet(urlString string, mat lib.MultiAuthToken) ([]byte, error) {
 	// }
 
 	responseBody, err := io.ReadAll(res.Body)
-	lib.CheckFatalError(err)
+
+	if res.StatusCode == 404 {
+		fmt.Println(string(responseBody))
+		lib.CheckFatalError(fmt.Errorf(res.Status))
+	}
+
+	// fmt.Println()
 	// if err != nil {
 	// 	return nil, err
 	// }
