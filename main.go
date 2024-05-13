@@ -4,6 +4,8 @@ Copyright © 2024 Evan Colwell ercolwell@gmail.com
 package main
 
 import (
+	"flag"
+	"fmt"
 	"time"
 
 	"github.com/jercle/cloudini/cmd"
@@ -33,6 +35,16 @@ func main() {
 		// Goreleaser doesn't prefix with a `v`, which we expect
 		version = "v" + version
 	}
+	fmt.Println("Version:", versioninfo.Version)
+	fmt.Println("Revision:", versioninfo.Revision)
+	fmt.Println("DirtyBuild:", versioninfo.DirtyBuild)
+	fmt.Println("LastCommit:", versioninfo.LastCommit)
+
+	fmt.Println("ShortInfo:", versioninfo.Short())
+
+	versioninfo.AddFlag(nil)
+	flag.Parse()
+	fmt.Println("done")
 
 	cmd.SetVersionInfo(version, commit, date)
 	cmd.Execute()
