@@ -29,6 +29,16 @@ signs:
     # stdin: "{{ .Env.GPG_PASSWORD }}"
     stdin_file: ./gpg_pwd
 
+brews:
+  -
+    repository:
+      owner: jercle
+      name: homebrew-tap
+    homepage: "https://github.com/jercle/cloudini"
+    description: "Cloud CLI providing functionality Azure CLI doesn't. Soon to add GCP and AWS features."
+    test: |
+      system "#{bin}/cld", "--version"
+
 archives:
   - format: tar.gz
     # this name template makes the OS and Arch compatible with the results of `uname`.

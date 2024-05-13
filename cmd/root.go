@@ -33,9 +33,9 @@ var (
 
 // rootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:     "cld",
-	Version: "0.1.2",
-	Short:   "A brief description of your application",
+	Use: "cld",
+	// Version: "0.1.5",
+	Short: "A brief description of your application",
 	Long: `This CLI has been created to add additional functionality
 to https://docs.microsoft.com/en-us/cli/azure/ such as data
 aggregation from multiple 'az' commands, reporting,
@@ -89,6 +89,10 @@ as well as other functionality.`,
 		}
 		return InitializeConfig(cmd)
 	},
+}
+
+func SetVersionInfo(version, commit, date string) {
+	RootCmd.Version = fmt.Sprintf("%s (Built on %s from Git SHA %s)", version, date, commit)
 }
 
 func InitializeConfig(cmd *cobra.Command) error {

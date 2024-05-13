@@ -29,6 +29,7 @@ require (
 	github.com/spf13/viper v1.18.2
 	github.com/tidwall/pretty v1.2.1
 	github.com/xuri/excelize/v2 v2.8.1
+	gitlab.com/tanna.dev/go-cobra-goreleaser-version-example v0.0.0-20230527093601-6f01ccfccd1c
 	golang.design/x/clipboard v0.7.0
 	golang.org/x/exp v0.0.0-20240409090435-93d18d7e34b8
 	golang.org/x/mod v0.17.0
@@ -41,6 +42,7 @@ require (
 	github.com/alecthomas/repr v0.4.0 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
+	github.com/carlmjohnson/versioninfo v0.22.5 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
