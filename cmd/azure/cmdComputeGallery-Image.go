@@ -54,7 +54,7 @@ to quickly create a Cobra application.`,
 			if getNewVersionPatchNumber {
 				versions := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
 				if len(versions) == 0 {
-					fmt.Println("no")
+					fmt.Println("")
 				} else {
 					latest, _ := versions.Latest()
 					fmt.Println(latest.IncrementPatchVersion())
