@@ -14,9 +14,9 @@ func main() {
 
 	var (
 		subscriptionId   = ""
-		resourceGroup    = "rg--aib"
+		resourceGroup    = ""
 		galleryName      = ""
-		galleryImageName = "imgdef-"
+		galleryImageName = ""
 	)
 	// tokens, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
 	// lib.CheckFatalError(err)

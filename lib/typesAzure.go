@@ -4,14 +4,14 @@ import "time"
 
 type MultiAuthTokenRequestOptions struct {
 	// unicorn
-	TenantID       string `json:"tenantID"`
-	TenantName     string `json:"tenantName"`
-	GetWriteToken  bool   `json:"getWriteToken"`
-	ConfigFilePath string `json:"configFilePath"`
-	ClientID       string `json:"clientId"`
-	ClientSecret   string `json:"clientSecret"`
-	Scope          string `json:"scope"`
-  AzureContainerRepositoryName string `json:"azureContainerRepositoryName"`
+	TenantID                     string `json:"tenantID"`
+	TenantName                   string `json:"tenantName"`
+	GetWriteToken                bool   `json:"getWriteToken"`
+	ConfigFilePath               string `json:"configFilePath"`
+	ClientID                     string `json:"clientId"`
+	ClientSecret                 string `json:"clientSecret"`
+	Scope                        string `json:"scope"`
+	AzureContainerRepositoryName string `json:"azureContainerRepositoryName"`
 }
 
 type MultiAuthToken struct {
@@ -88,7 +88,6 @@ type SubsReqResBody struct {
 
 type AllTenantTokens []MultiAuthToken
 
-
 type ListGalleryImageVersionsResponse struct {
 	Value []GalleryImageVersionResponse `json:"value"`
 }
@@ -134,13 +133,12 @@ type GalleryImageVersionResponse struct {
 }
 
 type GalleryImageVersion struct {
-	ID         string `json:"id"`
+	ID string `json:"id"`
 
 	Name       string `json:"name"`
 	Properties struct {
 		ProvisioningState string `json:"provisioningState"`
 		PublishingProfile struct {
-
 			ExcludeFromLatest bool `json:"excludeFromLatest"`
 		} `json:"publishingProfile"`
 	} `json:"properties"`
@@ -148,3 +146,35 @@ type GalleryImageVersion struct {
 
 type GalleryImageVersionList []GalleryImageVersion
 
+type GalleryImageResponse struct {
+	ID         string `json:"id"`
+	Location   string `json:"location"`
+	Name       string `json:"name"`
+	Properties struct {
+		Architecture string `json:"architecture"`
+		Description  string `json:"description"`
+		Disallowed   struct {
+			DiskTypes []any `json:"diskTypes"`
+		} `json:"disallowed"`
+		HyperVGeneration string `json:"hyperVGeneration"`
+		Identifier       struct {
+			Offer     string `json:"offer"`
+			Publisher string `json:"publisher"`
+			Sku       string `json:"sku"`
+		} `json:"identifier"`
+		OSState           string `json:"osState"`
+		OSType            string `json:"osType"`
+		ProvisioningState string `json:"provisioningState"`
+		Recommended       struct {
+			Memory struct{} `json:"memory"`
+			VCpUs  struct{} `json:"vCPUs"`
+		} `json:"recommended"`
+	} `json:"properties"`
+	Tags struct {
+		CostGroup         string `json:"cost_group"`
+		Env               string `json:"env"`
+		ManagedBy         string `json:"managed_by"`
+		VersionsManagedBy string `json:"versions_managed_by"`
+	} `json:"tags"`
+	Type string `json:"type"`
+}

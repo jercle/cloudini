@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.1.6]
+*  Bump dep versions
+*  Update azure.HttpGet to error on 404
+
 ## [0.1.5]
 *  Bump dep versions
 *  Add functions for Shared Image Gallery/Compute Gallery
