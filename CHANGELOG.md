@@ -3,6 +3,7 @@
 ## [0.1.6]
 *  Bump dep versions
 *  Update azure.HttpGet to error on 404
+*  Add GetImage function
 
 ## [0.1.5]
 *  Bump dep versions
