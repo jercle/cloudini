@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-
 	"golang.org/x/mod/semver"
 )
 
@@ -80,6 +79,7 @@ func (list *GalleryImageVersionList) Latest() (GalleryImageVersion, string) {
 func (imgVersion *GalleryImageVersion) IncrementPatchVersion() string {
 	version := imgVersion.Name
 	var v string
+
 	if !strings.HasPrefix(version, "v") {
 		v = "v" + version
 	} else {

@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.8]
+*  azure compute gallery: Remove error when no attempting to increment versions where non exist
+
 ## [0.1.7]
 *  azure compute gallery: Remove failure when no image versions
 

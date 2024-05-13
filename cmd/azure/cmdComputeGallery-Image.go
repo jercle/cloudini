@@ -53,9 +53,12 @@ to quickly create a Cobra application.`,
 
 			if getNewVersionPatchNumber {
 				versions := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
-				latest, _ := versions.Latest()
-
-				fmt.Println(latest.IncrementPatchVersion())
+				if len(versions) == 0 {
+					fmt.Println("no")
+				} else {
+					latest, _ := versions.Latest()
+					fmt.Println(latest.IncrementPatchVersion())
+				}
 			}
 
 		} else {
