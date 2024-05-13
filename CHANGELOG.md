@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.7]
+*  azure compute gallery: Remove failure when no image versions
+
 ## [0.1.6]
 *  Bump dep versions
 *  Update azure.HttpGet to error on 404

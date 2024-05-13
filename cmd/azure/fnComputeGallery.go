@@ -2,7 +2,6 @@ package azure
 
 import (
 	"encoding/json"
-	"log"
 
 	"github.com/jercle/cloudini/lib"
 )
@@ -28,10 +27,6 @@ func GetGalleryImageVersions(subscriptionId string, resourceGroup string, galler
 	lib.CheckFatalError(err)
 
 	json.Unmarshal(res, &listResponse)
-
-	if len(listResponse.Value) == 0 {
-		log.Fatalln("No versions exist")
-	}
 
 	for _, val := range listResponse.Value {
 		str, _ := json.Marshal(val)
