@@ -17,7 +17,7 @@ require (
 	github.com/charmbracelet/lipgloss v0.10.0
 	github.com/charmbracelet/log v0.4.0
 	github.com/fatih/camelcase v1.0.0
-	github.com/fatih/color v1.16.0
+	github.com/fatih/color v1.17.0
 	github.com/fatih/structtag v1.2.0
 	github.com/gernest/wow v0.1.0
 	github.com/mattn/go-sqlite3 v1.14.22
