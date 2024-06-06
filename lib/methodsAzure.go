@@ -58,17 +58,35 @@ func (subs *SubsReqResBody) UpdateTenantName(tenantName string) {
 
 func (list *GalleryImageVersionList) Latest() (GalleryImageVersion, string) {
 	latestVersion := GalleryImageVersion{}
+	var versionList []string
+	vAppended := false
+	latestVersionNum := ""
 
 	for _, version := range *list {
 		currentVersion := ""
 
 		if !strings.HasPrefix(version.Name, "v") {
 			currentVersion = "v" + version.Name
+			vAppended = true
 		} else {
 			currentVersion = version.Name
 		}
 
-		if semver.Compare(currentVersion, latestVersion.Name) == 1 {
+		versionList = append(versionList, currentVersion)
+
+	}
+
+	semver.Sort(versionList)
+	latest := versionList[len(versionList)-1]
+
+	if vAppended {
+		latestVersionNum = strings.TrimPrefix(latest, "v")
+	} else {
+		latestVersionNum = latest
+	}
+
+	for _, version := range *list {
+		if version.Name == latestVersionNum {
 			latestVersion = version
 		}
 	}
