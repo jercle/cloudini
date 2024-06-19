@@ -1,9 +1,9 @@
+// Get vm images
 // https://learn.microsoft.com/en-us/rest/api/compute/virtual-machine-images/list?view=rest-compute-2024-03-01&tabs=HTTP
 
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -17,36 +17,48 @@ func main() {
 	_ = config
 	// tokens, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
 	// lib.CheckFatalError(err)
-	token, err := azure.GetTenantSPToken(lib.MultiAuthTokenRequestOptions{})
+	// token, err := azure.GetTenantSPToken(lib.MultiAuthTokenRequestOptions{})
+	tokenReq, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
+	lib.CheckFatalError(err)
+	token, err := tokenReq.SelectTenant("RED")
 	lib.CheckFatalError(err)
 	// _ = tokens
 	_ = token
 
 	subscriptionId := ""
-	location := "australiaeast"
-	publisherName := "MicrosoftWindowsDesktop"
-	offer := "office-365"
-	skus := "win10-22h2-avd-m365-g2"
+	resourceGroupName := "rg-apcconn"
+	firewallPolicyName := "fwp-apcconn"
+	ruleCollectionGroupName := "fwrulecoll-group-network-microsoft365-allow"
 
 	urlString := "https://management.azure.com/subscriptions/" +
 		subscriptionId +
-		"/providers/Microsoft.Compute/locations/" +
-		location + "/publishers/" +
-		publisherName + "/artifacttypes/vmimage/offers/" +
-		offer + "/skus/" +
-		skus + "/versions?api-version=2024-03-01&$orderby=name"
+		"/resourceGroups/" +
+		resourceGroupName +
+		"/providers/Microsoft.Network/firewallPolicies/" +
+		firewallPolicyName +
+		"/ruleCollectionGroups/" +
+		ruleCollectionGroupName +
+		"?api-version=2023-09-01"
+
+	// "https://management.azure.com/subscriptions/" +
+	// 	subscriptionId +
+	// 	"/providers/Microsoft.Compute/locations/" +
+	// 	location + "/publishers/" +
+	// 	publisherName + "/artifacttypes/vmimage/offers/" +
+	// 	offer + "/skus/" +
+	// 	skus + "/versions?api-version=2024-03-01&$orderby=name"
 
 	res, err := azure.HttpGet(urlString, *token)
 	lib.CheckFatalError(err)
 
-	// fmt.Println(string(res))
+	fmt.Println(string(res))
 
-	var imageList ListVirtualMachineImagesResponse
-	json.Unmarshal(res, &imageList)
+	// var imageList ListVirtualMachineImagesResponse
+	// json.Unmarshal(res, &imageList)
 
-	for _, image := range imageList {
-		fmt.Println(image.Name)
-	}
+	// for _, image := range imageList {
+	// 	fmt.Println(image.Name)
+	// }
 
 	elapsed := time.Since(startTime)
 	_ = elapsed

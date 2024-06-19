@@ -76,8 +76,8 @@ func main() {
 	// blobs := ListStorageContainerBlobs(options)
 	// fmt.Println(len(blobs))
 	DownloadAllConfiguredTenantLastMonthCostExports(DownloadAllConfiguredTenantLastMonthCostExportsOptions{
-		BlobPrefix:  "monthly-cost-exports/202404",
-		OutfilePath: "cost-exports/monthly-cost-exports",
+		BlobPrefix:  "monthly-cost-exports/202405",
+		OutfilePath: "outputs/cost-exports/cost-export",
 	})
 	elapsed := time.Since(startTime)
 	_ = elapsed

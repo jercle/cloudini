@@ -34,7 +34,7 @@ func main() {
 
 	// fmt.Println(transformedData)
 
-	azure.CostDataToExcel(transformedData, "outputs/combined.xlsx")
+	azure.CostDataToExcel(transformedData, "outputs/cost-exports/combined.xlsx")
 
 	// costData, err := getCostExportCSVFileData("cost-exports/monthly-cost-exports_BLUEDTQ.csv")
 	// if err != nil {
