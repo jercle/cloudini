@@ -23,7 +23,7 @@ func main() {
 	// _ = tokens
 	_ = token
 
-	subscriptionId := "2ff9367c-2183-4ef6-9ba2-102c2b014d94"
+	subscriptionId := ""
 	location := "australiaeast"
 	publisherName := "MicrosoftWindowsDesktop"
 	offer := "office-365"
