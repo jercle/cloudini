@@ -11,7 +11,9 @@ func main() {
 	// month := fmt.Sprintf("%02d", int(now.Month()))
 	// fileName := "MonthlyReport-" + year + month + ".xlsx"
 
-	var dataPath = "./outputs/cost-exports"
+	costExportMonth := "202406"
+
+	var dataPath = "./cost-exports/to-process/"
 	// var dataPath = "./fakedata/cost-exports"
 	// var combinedCostData costExportData
 
@@ -23,6 +25,12 @@ func main() {
 	// json.Unmarshal(byteValue, &combinedCostData)
 
 	// combinedCostData := azure.CombineCostExportJSONData(dataPath)
+
+	azure.DownloadAllConfiguredTenantLastMonthCostExports(azure.DownloadAllConfiguredTenantLastMonthCostExportsOptions{
+		BlobPrefix:  "monthly-cost-exports/" + costExportMonth,
+		OutfilePath: dataPath + "cost-export",
+	})
+
 	combinedCostData := azure.CombineCostExportCSVData(dataPath)
 
 	// ccdJson, _ := json.MarshalIndent(combinedCostData, "", "  ")
@@ -34,7 +42,7 @@ func main() {
 
 	// fmt.Println(transformedData)
 
-	azure.CostDataToExcel(transformedData, "outputs/cost-exports/combined.xlsx")
+	azure.CostDataToExcel(transformedData, dataPath+"MonthlyCostReport-"+costExportMonth+".xlsx")
 
 	// costData, err := getCostExportCSVFileData("cost-exports/monthly-cost-exports_BLUEDTQ.csv")
 	// if err != nil {
