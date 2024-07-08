@@ -82,7 +82,7 @@ func main() {
 		Timeframe: to.Ptr(armcostmanagement.TimeframeTypeMonthToDate),
 	}
 
-	managementGroup := "ea508bc7-b43c-4b96-8470-489756e59a14"
+	managementGroup := ""
 
 	res, err := client.Usage(
 		ctx,

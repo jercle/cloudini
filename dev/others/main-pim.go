@@ -87,20 +87,20 @@ func main() {
 // func main() {
 // 	ctx := context.Background()
 // 	// token, err := azure.GetAllTenantSPTokens(azure.AzureRequestOptions{
-// 	// 	TenantId: "e9f4bce2-7308-461a-91ce-3f663d079f47",
+// 	// 	TenantId: "TENANT",
 // 	// })
 // 	// token := azure.GetAzCliToken()
 // 	token, err := azidentity.NewAzureCLICredential(&azidentity.AzureCLICredentialOptions{})
 // 	lib.CheckFatalError(err)
 // 	tokData, err := token.GetToken(ctx, policy.TokenRequestOptions{
 // 		Scopes: []string{
-// 			"api://4ca69554-1c1c-4eb5-84d6-a7e61551929a/Directory.Read",
+// 			"SCOPE/Directory.Read",
 // 			// "https://management.core.windows.net//.default",
 // 		},
 // 	})
 // 	lib.CheckFatalError(err)
 // 	fmt.Println(tokData)
-// 	// token := azure.GetToken("e9f4bce2-7308-461a-91ce-3f663d079f47")
+// 	// token := azure.GetToken("TENANT")
 // 	// os.Exit(0)
 // 	urlString := "https://graph.microsoft.com/v1.0/roleManagement/directory/roleAssignmentScheduleRequests/filterByCurrentUser(on='principal')"
 // 	// lib.CheckFatalError(err)

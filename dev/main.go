@@ -33,7 +33,7 @@ func main() {
 		// fmt.Println(rule.Name)
 		importString := "terraform import 'azurerm_network_security_rule.[\"" +
 			rule.Name +
-			"\"]' '/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourceGroups/rg-apcdtqshared-vnet-aueast/providers/Microsoft.Network/networkSecurityGroups/nsg-apcdtqshared-adcback-aueast/securityRules/" +
+			"\"]' '/subscriptions/SUBID/resourceGroups/RES_GRP/providers/Microsoft.Network/networkSecurityGroups/NSG_NAME/securityRules/" +
 			rule.Name +
 			"'"
 		fmt.Println(importString)

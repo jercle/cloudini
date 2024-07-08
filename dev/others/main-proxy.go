@@ -34,7 +34,3 @@ func main() {
 	// proxyServer, _, err := k.GetStringValue("ProxyServer")
 
 }
-
-// func GetRegistryValues
-// *.apetp.gov.au;172.*;<local>
-// *.apetp.gov.au;172.*;localhost;127.0.0.;10.;192.168.*;*.apetp.gov.au;*.azure.net;*.azure.com;*.windows.net;*.visualstudio.com;*.microsoft.com
