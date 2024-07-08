@@ -37,6 +37,7 @@ require (
 )
 
 require (
+	github.com/3th1nk/cidr v0.2.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.5.2 // indirect
 	github.com/alecthomas/repr v0.4.0 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect
