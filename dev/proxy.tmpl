@@ -1,0 +1,80 @@
+// This PAC file is generated automatically using code to amalgamate data from various
+// sources.  This file should not be updated manually.
+
+function FindProxyForURL(url, host) {
+
+const directIps = [
+{{range $key, $val := .Direct.IpEndpoints}}
+{{range $key, $val := .}}
+{$key: "$val"},
+{{end}}
+{{end}}
+]
+const directHostnames = {{.Direct.HostEndpoints}}
+const proxiedtIps = {{.Proxied.IpEndpoints}}
+const proxiedHostnames = {{.Proxied.HostEndpoints}}
+
+	/* Variables for return paths */
+	var proxyServer = "PROXY proxy.stkc.at:8080";
+	var direct = "DIRECT";
+
+	/* Flip host names and URLs to lowercase */
+	host = host.toLowerCase();
+	url = url.toLowerCase();
+
+	/* Build a variable containing the host IP for use in later checks */
+	var hostIP;
+	var isIpV4Addr = /^(\d+.){3}\d+$/;
+	if (isIpV4Addr.test(host)) {
+		hostIP = host;
+	}
+	else {
+		hostIP = dnsResolve(host);
+	}
+
+	/* Handle non-existing host (e.g. user entered bad data in browser address bar) */
+	if (hostIP == 0) {
+		return proxyServer;
+	}
+
+	/* Don't proxy local hosts */
+	if (isPlainHostName(host)) {
+		return direct;
+	}
+
+	/* Don't proxy local domains */
+	if (shExpMatch(host, "*.int.stkc.at") ||
+		shExpMatch(host, "*.platform.stkc.at")) {
+		return direct;
+	}
+
+	/* Don't proxy non-routable addresses (RFC 3330) */
+	if (isInNet(hostIP, "0.0.0.0", "255.0.0.0") ||
+		isInNet(hostIP, "10.0.0.0", "255.0.0.0") ||
+		isInNet(hostIP, "127.0.0.0", "255.0.0.0") ||
+		isInNet(hostIP, "224.0.0.0", "240.0.0.0") ||
+		isInNet(hostIP, "240.0.0.0", "240.0.0.0")) {
+		return direct;
+	}
+
+	/* Don't proxy these Microsoft hosts */
+	if {{ range $url := .Direct.HostEndpoints }}
+	(shExpMatch(host, "{{$url}}") ||
+	{{ end }}
+
+	(shExpMatch(host, "kms.core.windows.net") ||
+		shExpMatch(host, "azkms.core.windows.net"))
+	{
+		return direct;
+	}
+
+	/* Proxy these Office 365 hosts */
+	if (shExpMatch(host, "cdn.odc.officeapps.live.com") ||
+		shExpMatch(host, "cdn.uci.officeapps.live.com")) {
+		return proxyServer;
+	}
+
+	/* All other request through the proxy server */
+	return proxyServer;
+
+}
