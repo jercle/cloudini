@@ -14,11 +14,7 @@ require (
 	github.com/alecthomas/assert/v2 v2.10.0
 	github.com/brianvoe/gofakeit/v7 v7.0.3
 	github.com/charmbracelet/bubbles v0.18.0
-<<<<<<< HEAD
-	github.com/charmbracelet/bubbletea v1.1.1
-=======
 	github.com/charmbracelet/bubbletea v0.26.2
->>>>>>> e856c0b (Bump github.com/charmbracelet/lipgloss from 0.10.0 to 0.13.0)
 	github.com/charmbracelet/lipgloss v0.13.0
 	github.com/charmbracelet/log v0.4.0
 	github.com/fatih/camelcase v1.0.0
@@ -46,12 +42,8 @@ require (
 	github.com/alecthomas/repr v0.4.0 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
-<<<<<<< HEAD
 	github.com/charmbracelet/x/ansi v0.2.3 // indirect
 	github.com/charmbracelet/x/term v0.2.0 // indirect
-=======
-	github.com/charmbracelet/x/ansi v0.1.4 // indirect
->>>>>>> e856c0b (Bump github.com/charmbracelet/lipgloss from 0.10.0 to 0.13.0)
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
