@@ -57,41 +57,90 @@ func (subs *SubsReqResBody) UpdateTenantName(tenantName string) {
 }
 
 func (list *GalleryImageVersionList) Latest() (GalleryImageVersion, string) {
-	latestVersion := GalleryImageVersion{}
-	var versionList []string
-	vAppended := false
-	latestVersionNum := ""
+	l := *list
 
-	for _, version := range *list {
+	if !list.Sorted {
+		l = l.Sort()
+	}
+	latest := l.Versions[len(l.Versions)-1]
+
+	return latest, latest.Name
+}
+
+func (list *GalleryImageVersionList) Sort() GalleryImageVersionList {
+	l := *list
+	var (
+		versionList       []string
+		processedVersions []GalleryImageVersion
+		sortedVersions    []GalleryImageVersion
+	)
+
+	for _, version := range l.Versions {
 		currentVersion := ""
-
+		processedVersion := version
 		if !strings.HasPrefix(version.Name, "v") {
 			currentVersion = "v" + version.Name
-			vAppended = true
+			processedVersion.SuffixAdded = true
 		} else {
 			currentVersion = version.Name
+			processedVersion.SuffixAdded = false
 		}
 
+		processedVersions = append(processedVersions, processedVersion)
 		versionList = append(versionList, currentVersion)
 
 	}
 
 	semver.Sort(versionList)
-	latest := versionList[len(versionList)-1]
 
-	if vAppended {
-		latestVersionNum = strings.TrimPrefix(latest, "v")
-	} else {
-		latestVersionNum = latest
-	}
-
-	for _, version := range *list {
-		if version.Name == latestVersionNum {
-			latestVersion = version
+	for _, version := range versionList {
+		for _, usv := range processedVersions {
+			currVers := usv
+			compareVersion := version
+			if currVers.SuffixAdded {
+				compareVersion = strings.TrimPrefix(compareVersion, "v")
+			}
+			if currVers.Name == compareVersion {
+				sortedVersions = append(sortedVersions, currVers)
+			}
 		}
 	}
 
-	return latestVersion, latestVersion.Name
+	l.Sorted = true
+	l.Versions = sortedVersions
+
+	return l
+}
+
+func (list *GalleryImageVersionList) ListVersions() []string {
+	var sortedVersionNumbers []string
+
+	l := *list
+	if !l.Sorted {
+		l = l.Sort()
+	}
+
+	for _, v := range l.Versions {
+		sortedVersionNumbers = append(sortedVersionNumbers, v.Name)
+	}
+
+	return sortedVersionNumbers
+}
+
+func (list *GalleryImageVersionList) CheckVersionExists(compareVersion string) bool {
+	l := *list
+	if !l.Sorted {
+		l = l.Sort()
+	}
+	versionExists := false
+Check:
+	for _, version := range l.Versions {
+		if version.Name == compareVersion {
+			versionExists = true
+			break Check
+		}
+	}
+	return versionExists
 }
 
 func (imgVersion *GalleryImageVersion) IncrementPatchVersion() string {

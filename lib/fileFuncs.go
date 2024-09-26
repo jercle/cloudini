@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -31,5 +32,20 @@ func CheckDirExists(path string) bool {
 		return false
 	} else {
 		return true
+	}
+}
+
+func DeleteFilesInDirMatchingString(dir string, strMatch string) {
+	if !CheckDirExists(dir) {
+		fmt.Println("Directory does not exist")
+		os.Exit(1)
+	}
+
+	files, err := filepath.Glob(dir + strMatch)
+	CheckFatalError(err)
+
+	for _, f := range files {
+		err := os.Remove(f)
+		CheckFatalError(err)
 	}
 }

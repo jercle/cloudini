@@ -34,7 +34,7 @@ func GetGalleryImageVersions(subscriptionId string, resourceGroup string, galler
 		var imgVer lib.GalleryImageVersion
 
 		json.Unmarshal(str, &imgVer)
-		imageVersions = append(imageVersions, imgVer)
+		imageVersions.Versions = append(imageVersions.Versions, imgVer)
 	}
 
 	// fmt.Println(string(res))
