@@ -5,6 +5,8 @@ package azure
 
 import (
 	"fmt"
+	"os"
+	"strings"
 
 	"github.com/jercle/cloudini/lib"
 	"github.com/spf13/cobra"
@@ -13,6 +15,7 @@ import (
 var galleryImageName string
 var getLatestVersionNumber bool
 var getNewVersionPatchNumber bool
+var checkVersionExists string
 
 // subsCmd represents the subs command
 var cmdComputeGalleryImage = &cobra.Command{
@@ -53,11 +56,25 @@ to quickly create a Cobra application.`,
 
 			if getNewVersionPatchNumber {
 				versions := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
-				if len(versions) == 0 {
+				if len(versions.Versions) == 0 {
 					fmt.Println("")
 				} else {
 					latest, _ := versions.Latest()
 					fmt.Println(latest.IncrementPatchVersion())
+				}
+			}
+
+			if checkVersionExists != "" {
+				versions := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
+				versionExists := versions.CheckVersionExists(checkVersionExists)
+
+				if versionExists {
+					fmt.Println("Version " + checkVersionExists + " exists")
+					os.Exit(0)
+				} else {
+					sortedVersions := versions.ListVersions()
+					err := fmt.Errorf("Version " + checkVersionExists + " does not exist. Available versions: " + strings.Join(sortedVersions, ", "))
+					lib.CheckFatalError(err)
 				}
 			}
 
@@ -84,6 +101,7 @@ to quickly create a Cobra application.`,
 func init() {
 	cmdComputeGallery.AddCommand(cmdComputeGalleryImage)
 	cmdComputeGalleryImage.Flags().StringVarP(&galleryImageName, "imageName", "i", "", "Compute Gallery Image name")
+	cmdComputeGalleryImage.Flags().StringVarP(&checkVersionExists, "checkVersionExists", "c", "", "Compute Gallery Image version")
 	cmdComputeGalleryImage.MarkFlagRequired("galleryImageName")
 	cmdComputeGalleryImage.Flags().BoolVarP(&getLatestVersionNumber, "getLatestVersionNumber", "l", false, "Get latest version number")
 	cmdComputeGalleryImage.Flags().BoolVarP(&getNewVersionPatchNumber, "getNewVersionPatchNumber", "p", false, "Increment version patch number")

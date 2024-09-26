@@ -142,9 +142,13 @@ type GalleryImageVersion struct {
 			ExcludeFromLatest bool `json:"excludeFromLatest"`
 		} `json:"publishingProfile"`
 	} `json:"properties"`
+	SuffixAdded bool `json:"suffixAdded,omitempty"`
 }
 
-type GalleryImageVersionList []GalleryImageVersion
+type GalleryImageVersionList struct {
+	Versions []GalleryImageVersion
+	Sorted   bool
+}
 
 type GalleryImageResponse struct {
 	ID         string `json:"id"`
