@@ -105,4 +105,5 @@ func init() {
 	cmdComputeGalleryImage.Flags().BoolVarP(&getLatestVersionNumber, "getLatestVersionNumber", "l", false, "Get latest version number")
 	cmdComputeGalleryImage.Flags().BoolVarP(&getNewVersionPatchNumber, "getNewVersionPatchNumber", "p", false, "Increment version patch number")
 	cmdComputeGalleryImage.MarkFlagsMutuallyExclusive("getLatestVersionNumber", "getNewVersionPatchNumber")
+	cmdComputeGalleryImage.Flags().StringVarP(&checkVersionExists, "checkVersionExists", "c", "", "Compute Gallery Image version")
 }
