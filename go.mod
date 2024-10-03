@@ -30,7 +30,7 @@ require (
 	github.com/tidwall/pretty v1.2.1
 	golang.design/x/clipboard v0.7.0
 	golang.org/x/exp v0.0.0-20240409090435-93d18d7e34b8
-	golang.org/x/mod v0.17.0
+	golang.org/x/mod v0.20.0
 	golang.org/x/sys v0.20.0
 	gopkg.in/yaml.v3 v3.0.1
 )
