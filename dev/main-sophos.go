@@ -100,7 +100,7 @@ func HttpPost(urlString string, body string, contentType string, authToken strin
 	proxy := http.ProxyURL(proxyURL)
 
 	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		TLSClientConfig: &tls.Config{},
 		Proxy:           proxy,
 	}
 	client := &http.Client{
