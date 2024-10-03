@@ -1,5 +1,19 @@
 # Change Log
 
+## [0.1.11]
+* Updates to azure compute gallery, azure auth, and entra funcs
+* Add m365 funcs
+* Bug fix for config file location checking
+
+## [0.1.10]
+* Add functions to check if image version exists
+* Add vm image version list functionality
+* Removal of stale code
+
+## [0.1.9]
+* Update latest acp image getter
+* Bump deps
+
 ## [0.1.8]
 *  azure compute gallery: Remove error when no attempting to increment versions where non exist
 
