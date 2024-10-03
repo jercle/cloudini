@@ -142,7 +142,6 @@ Check:
 	}
 	return versionExists
 }
-
 func (imgVersion *GalleryImageVersion) IncrementPatchVersion() string {
 	version := imgVersion.Name
 	var v string

@@ -19,8 +19,8 @@ type EntraRoleDefinition struct {
 }
 
 type ListEntraRoleDefinitionsResponse struct {
-	_Odata_Context string                `json:"@odata.context"`
-	Value          []EntraRoleDefinition `json:"value"`
+	Odata_Context string                `json:"@odata.context"`
+	Value         []EntraRoleDefinition `json:"value"`
 }
 
 func ListEntraRoleDefinitions(mat lib.MultiAuthToken) ([]EntraRoleDefinition, error) {

@@ -3,9 +3,11 @@ package lib
 import "fmt"
 
 type CldConfigRoot struct {
-	CldConfig   CldConfig              `json:"cldConfig"`
-	Azure       AzureConfig            `json:"azure"`
-	ProxyConfig map[string]ProxyConfig `json:"proxyConfig"`
+	CldConfig    CldConfig              `json:"cldConfig"`
+	Azure        AzureConfig            `json:"azure"`
+	ProxyConfig  map[string]ProxyConfig `json:"proxyConfig"`
+	SophosConfig SophosConfig           `json:"sophos"`
+	Domains      map[string]string
 }
 
 type ProxyConfig struct {
@@ -14,6 +16,14 @@ type ProxyConfig struct {
 	Enabled   bool   `json:"enabled"`
 	Overrides string `json:"overrides"`
 }
+
+type SophosConfig struct {
+	Servers map[string]ServerList `json:"servers"`
+	ApiKey  string                `json:"api_key"`
+	ApiUser string                `json:"api_user"`
+}
+
+type ServerList map[string]string
 
 type CldConfig struct {
 	EncodeConfig bool `json:"encodeConfig"`
@@ -39,7 +49,7 @@ func (config AzureConfig) GetDefaultTenant() CldConfigTenantAuth {
 }
 
 type CldConfigOptions struct {
-	ConfigFilePath string
+	ConfigFile string
 }
 
 type CldConfigTenants map[string]CldConfigTenantAuth
