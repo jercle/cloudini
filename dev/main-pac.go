@@ -71,7 +71,7 @@ func main() {
 	// token, err := azure.GetTenantSPToken(lib.MultiAuthTokenRequestOptions{})
 	tokenReq, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
 	lib.CheckFatalError(err)
-	token, err := tokenReq.SelectTenant("REDDTQ")
+	token, err := tokenReq.SelectTenant("")
 	lib.CheckFatalError(err)
 	// _ = tokens
 	_ = token
@@ -83,7 +83,7 @@ func main() {
 
 	webserviceUrl := "https://endpoints.office.com"
 	clientRequestId := "b10c5ed1-bad1-445f-b386-b919946339a7"
-	tenantName := "REDDTQ"
+	tenantName := ""
 
 	// Get the latest versioning data from the Office 365 IP Address and URL web service
 	// urlString := webserviceUrl +

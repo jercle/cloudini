@@ -74,7 +74,7 @@ func main() {
 		log.Fatalf("failed to create client: %v", err)
 	}
 
-	subscriptionId := "bae338c7-6098-4d52-b173-e2147e107dfa"
+	subscriptionId := ""
 
 	// Create the query request, Run the query and get the results. Update the Tags and subscriptionID details below.
 	results, err := client.Resources(ctx,

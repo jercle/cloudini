@@ -13,18 +13,13 @@ func GetCldConfig(options *CldConfigOptions) CldConfigRoot {
 		config CldConfigRoot
 	)
 
-	configFilePath := InitConfig(nil)
+	configFile := InitConfig(options)
 
-	byteValue, err := os.ReadFile(configFilePath)
+	// fmt.Println("Getting config from", configFile)
+	byteValue, err := os.ReadFile(configFile)
+
 	CheckFatalError(err)
 
-	// decodedBytes, err := b64.StdEncoding.DecodeString(string(byteValue))
-	// CheckFatalError(err)
-
-	// fmt.Println(string(byteValue))
-	// os.Exit(0)
-
-	// err = json.Unmarshal(decodedBytes, &config)
 	err = json.Unmarshal(byteValue, &config)
 	CheckFatalError(err)
 
@@ -35,22 +30,26 @@ func InitConfig(options *CldConfigOptions) string {
 	usrHomeDir, err := os.UserHomeDir()
 	var (
 		configPath     = usrHomeDir + "/.config/cld"
-		configFile     = configPath + "/cldConf.json"
-		configFilePath string
+		configFilePath = configPath + "/cldConf.json"
+		configFile     string
 	)
 	CheckFatalError(err)
 
-	if options != nil && options.ConfigFilePath != "" {
-		configFilePath = options.ConfigFilePath
+	CLD_CONFIG_PATH := os.Getenv("CLD_CONFIG_PATH")
+
+	if options != nil && options.ConfigFile != "" {
+		configFile = options.ConfigFile
+	} else if CLD_CONFIG_PATH != "" {
+		configFile = CLD_CONFIG_PATH
 	} else {
-		configFilePath = configFile
+		configFile = configFilePath
 	}
 
 	if _, err := os.Stat(configPath); err != nil {
 		os.MkdirAll(configPath, os.ModePerm)
 	}
 
-	fileStat, err := os.Stat(configFilePath)
+	fileStat, err := os.Stat(configFile)
 
 	if err != nil || fileStat.Size() == 0 {
 		config := CldConfigRoot{}
@@ -58,8 +57,8 @@ func InitConfig(options *CldConfigOptions) string {
 		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
 
 		// encodedData := b64.StdEncoding.EncodeToString(jsonBytes)
-		os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
+		os.WriteFile(configFile, jsonBytes, os.ModePerm)
 	}
 
-	return configFilePath
+	return configFile
 }

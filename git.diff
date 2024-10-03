@@ -1,0 +1,1161 @@
+diff --git a/cmd/azure/azureTypes.go b/cmd/azure/azureTypes.go
+deleted file mode 100644
+index f0407b3..0000000
+--- a/cmd/azure/azureTypes.go
++++ /dev/null
+@@ -1,12 +0,0 @@
+-package azure
+-
+-type AzureRequestOptions struct {
+-	SubscriptionId    string
+-	ResourceId        string
+-	ResourceGroupName string
+-	ResourceName      string
+-	TenantId          string
+-	TenantName        string
+-
+-	ConfigFilePath string
+-}
+diff --git a/cmd/azure/cmdComputeGallery-Image.go b/cmd/azure/cmdComputeGallery-Image.go
+index ab1f420..75bf1a9 100644
+--- a/cmd/azure/cmdComputeGallery-Image.go
++++ b/cmd/azure/cmdComputeGallery-Image.go
+@@ -13,9 +13,9 @@ import (
+ )
+ 
+ var galleryImageName string
++var checkVersionExists string
+ var getLatestVersionNumber bool
+ var getNewVersionPatchNumber bool
+-var checkVersionExists string
+ 
+ // subsCmd represents the subs command
+ var cmdComputeGalleryImage = &cobra.Command{
+@@ -101,7 +101,6 @@ to quickly create a Cobra application.`,
+ func init() {
+ 	cmdComputeGallery.AddCommand(cmdComputeGalleryImage)
+ 	cmdComputeGalleryImage.Flags().StringVarP(&galleryImageName, "imageName", "i", "", "Compute Gallery Image name")
+-	cmdComputeGalleryImage.Flags().StringVarP(&checkVersionExists, "checkVersionExists", "c", "", "Compute Gallery Image version")
+ 	cmdComputeGalleryImage.MarkFlagRequired("galleryImageName")
+ 	cmdComputeGalleryImage.Flags().BoolVarP(&getLatestVersionNumber, "getLatestVersionNumber", "l", false, "Get latest version number")
+ 	cmdComputeGalleryImage.Flags().BoolVarP(&getNewVersionPatchNumber, "getNewVersionPatchNumber", "p", false, "Increment version patch number")
+diff --git a/cmd/azure/fnAuth.go b/cmd/azure/fnAuth.go
+index 10068e2..ea00338 100644
+--- a/cmd/azure/fnAuth.go
++++ b/cmd/azure/fnAuth.go
+@@ -20,7 +20,7 @@ import (
+ 
+ // var usrHomeDir, err = os.UserHomeDir()
+ 
+-func GetCachedTokens() lib.AllTenantTokens {
++func GetCachedTokens(cldConfOpts *lib.CldConfigOptions) lib.AllTenantTokens {
+ 	var tokens lib.AllTenantTokens
+ 	if _, err := os.Stat(lib.ConfigPath); err != nil {
+ 		os.MkdirAll(lib.ConfigPath, os.ModePerm)
+@@ -35,7 +35,7 @@ func GetCachedTokens() lib.AllTenantTokens {
+ 	json.Unmarshal(byteData, &tokens)
+ 	if len(tokens) == 0 {
+ 		fmt.Println("Fetching new tokens")
+-		tokens, err = GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
++		tokens, err = GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{}, cldConfOpts)
+ 		lib.CheckFatalError(err)
+ 	}
+ 	// fmt.Println(tokens)
+@@ -48,7 +48,6 @@ func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequest
+ 
+ 	// jsonBytes, _ := json.MarshalIndent(spDetails, "", "  ")
+ 	// fmt.Println(string(jsonBytes))
+-	// os.Exit(0)
+ 
+ 	switch spDetails.Scope {
+ 	case "graph":
+@@ -88,7 +87,6 @@ func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequest
+ 
+ 		return &tokenData, nil
+ 
+-		// os.Exit(0)
+ 	default:
+ 		tokenRequestOptions.Scopes = []string{"https://management.core.windows.net/.default"}
+ 	}
+@@ -128,6 +126,8 @@ func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.MultiAuthT
+ 	switch spDetails.Scope {
+ 	case "graph":
+ 		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
++	// case "apc-sharepoint":
++	// 	tokenRequestOptions.Scopes = []string{"https://asiogovau.sharepoint.com/.default"}
+ 	case "storage":
+ 		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
+ 	default:
+@@ -163,7 +163,7 @@ func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.MultiAuthT
+ 	return &token, nil
+ }
+ 
+-func GetAzCliToken() lib.TokenData {
++func GetAzCliToken() lib.MultiAuthToken {
+ 	ctx := context.Background()
+ 	tokenRequestOptions := policy.TokenRequestOptions{
+ 		Scopes: []string{
+@@ -182,9 +182,15 @@ func GetAzCliToken() lib.TokenData {
+ 		log.Error("Unable to obtain Azure token", err, err)
+ 	}
+ 
+-	token := lib.TokenData{
+-		Token:     tokenResponse.Token,
+-		ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
++	token := lib.MultiAuthToken{
++		// tokenre
++		TokenData: lib.TokenData{
++			Token:     tokenResponse.Token,
++			ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
++		},
++
++		// Token:     tokenResponse.Token,
++		// ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
+ 	}
+ 
+ 	// fmt.Println(token)
+@@ -254,7 +260,6 @@ func GetToken(tenantName string) lib.MultiAuthToken {
+ 	sub, err := GetActiveSub()
+ 	lib.CheckFatalError(err)
+ 	// fmt.Println(sub.TenantID)
+-	// os.Exit(0)
+ 
+ 	ctx := context.Background()
+ 	tokenRequestOptions := policy.TokenRequestOptions{
+@@ -280,17 +285,19 @@ func GetToken(tenantName string) lib.MultiAuthToken {
+ 
+ // Gets a token for each tenant configured in the cld config file
+ //
+-// Default path is ~/.config/cld/config.json
++// Default path for config file is ~/.config/cld/cldConfig.json
+ //
+ // First parameter passed into this function overwrites the config file path
+-func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions) (lib.AllTenantTokens, error) {
++func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions, cldConfOpts *lib.CldConfigOptions) (lib.AllTenantTokens, error) {
+ 	var (
+-		config       = lib.GetCldConfig(nil)
++		config       lib.CldConfigRoot
+ 		tenantTokens []lib.MultiAuthToken
+ 		wg           sync.WaitGroup
+ 		mut          sync.Mutex
+ 	)
+ 
++	config = lib.GetCldConfig(cldConfOpts)
++
+ 	for _, tenant := range config.Azure.MultiTenantAuth.Tenants {
+ 		wg.Add(1)
+ 		go func() {
+@@ -326,13 +333,15 @@ func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions) (lib.AllTena
+ 	return tenantTokens, nil
+ }
+ 
+-func GetTenantSPToken(options lib.MultiAuthTokenRequestOptions) (*lib.MultiAuthToken, error) {
++func GetTenantSPToken(options lib.MultiAuthTokenRequestOptions, cldConfOpts *lib.CldConfigOptions) (*lib.MultiAuthToken, error) {
+ 	var (
+-		config      = lib.GetCldConfig(nil)
++		config      lib.CldConfigRoot
+ 		tenantToken lib.MultiAuthToken
+ 		tenant      lib.CldConfigTenantAuth
+ 	)
+ 
++	config = lib.GetCldConfig(cldConfOpts)
++
+ 	if options.TenantName == "" {
+ 		tenant = config.Azure.GetDefaultTenant()
+ 	} else {
+@@ -366,12 +375,12 @@ func GetTenantSPToken(options lib.MultiAuthTokenRequestOptions) (*lib.MultiAuthT
+ 	return &tenantToken, nil
+ }
+ 
+-func GetTenantAzCred(tenantName string, getWriteToken bool) *azidentity.ClientSecretCredential {
++func GetTenantAzCred(tenantName string, getWriteToken bool, cldConfOpts *lib.CldConfigOptions) *azidentity.ClientSecretCredential {
+ 	var (
+ 		cred *azidentity.ClientSecretCredential
+ 		err  error
+ 	)
+-	config := lib.GetCldConfig(nil)
++	config := lib.GetCldConfig(cldConfOpts)
+ 	tenant := config.Azure.MultiTenantAuth.Tenants[tenantName]
+ 
+ 	if getWriteToken {
+@@ -384,3 +393,16 @@ func GetTenantAzCred(tenantName string, getWriteToken bool) *azidentity.ClientSe
+ 
+ 	return cred
+ }
++
++// envUpp := strings.ToUpper(env)
++// tenantID := os.Getenv(envUpp + "-TENANT-ID")
++// clientID := os.Getenv(envUpp + "-CLIENT-ID-AUTOMON-READ")
++// serviceConnectionID := os.Getenv(envUpp + "-SERVICE-CONN-ID")
++// systemAccessToken := os.Getenv("SYSTEM_ACCESSTOKEN")
++
++type GetAzureDevOpsPipelineTokensOptionsTenantConfig struct {
++	TenantName          string
++	TenantID            string
++	ClientID            string
++	ServiceConnectionID string
++}
+diff --git a/cmd/azure/fnEntra.go b/cmd/azure/fnEntra.go
+index d3972d0..f848d13 100644
+--- a/cmd/azure/fnEntra.go
++++ b/cmd/azure/fnEntra.go
+@@ -19,8 +19,8 @@ type EntraRoleDefinition struct {
+ }
+ 
+ type ListEntraRoleDefinitionsResponse struct {
+-	_Odata_Context string                `json:"@odata.context"`
+-	Value          []EntraRoleDefinition `json:"value"`
++	Odata_Context string                `json:"@odata.context"`
++	Value         []EntraRoleDefinition `json:"value"`
+ }
+ 
+ func ListEntraRoleDefinitions(mat lib.MultiAuthToken) ([]EntraRoleDefinition, error) {
+diff --git a/cmd/azure/fnUtils.go b/cmd/azure/fnUtils.go
+index 1fe11aa..3eac3c0 100644
+--- a/cmd/azure/fnUtils.go
++++ b/cmd/azure/fnUtils.go
+@@ -1,6 +1,7 @@
+ package azure
+ 
+ import (
++	"bytes"
+ 	"encoding/json"
+ 	"fmt"
+ 	"io"
+@@ -40,7 +41,48 @@ func HttpGet(urlString string, mat lib.MultiAuthToken) ([]byte, error) {
+ 	return responseBody, nil
+ }
+ 
+-func HttpPost(urlString string, mat lib.MultiAuthToken) ([]byte, []byte, error) {
++func HttpPost(urlString string, body string, mat lib.MultiAuthToken) ([]byte, []byte, error) {
++	bodyReader := bytes.NewReader([]byte(body))
++
++	req, err := http.NewRequest(http.MethodPost, urlString, bodyReader)
++	lib.CheckFatalError(err)
++	// if err != nil {
++	// 	return nil, err
++	// }
++
++	req.Header.Add("Content-Type", "application/json")
++	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
++
++	fmt.Println(body)
++
++	res, err := http.DefaultClient.Do(req)
++	lib.CheckFatalError(err)
++	// if err != nil {
++	// 	return nil, err
++	// }
++
++	responseBody, err := io.ReadAll(res.Body)
++
++	// jsonStr, _ := json.MarshalIndent(res.Header, "", "  ")
++	// fmt.Println(string(jsonStr))
++	// fmt.Println(responseBody)
++	lib.CheckFatalError(err)
++	if res.StatusCode == 404 {
++		fmt.Println(string(responseBody))
++		lib.CheckFatalError(fmt.Errorf(res.Status))
++	}
++
++	resHeader, _ := json.MarshalIndent(res.Header, "", "  ")
++
++	// fmt.Println()
++	// if err != nil {
++	// 	return nil, err
++	// }
++
++	return responseBody, resHeader, nil
++}
++
++func HttpPut(urlString string, mat lib.MultiAuthToken) ([]byte, []byte, error) {
+ 	req, err := http.NewRequest(http.MethodPost, urlString, nil)
+ 	lib.CheckFatalError(err)
+ 	// if err != nil {
+diff --git a/dev/main-get-m3650endpoints.go b/dev/main-get-m3650endpoints.go
+index cbc8ab1..127a303 100644
+--- a/dev/main-get-m3650endpoints.go
++++ b/dev/main-get-m3650endpoints.go
+@@ -38,7 +38,7 @@ func main() {
+ 	// token, err := azure.GetTenantSPToken(lib.MultiAuthTokenRequestOptions{})
+ 	tokenReq, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
+ 	lib.CheckFatalError(err)
+-	token, err := tokenReq.SelectTenant("REDDTQ")
++	token, err := tokenReq.SelectTenant("")
+ 	lib.CheckFatalError(err)
+ 	// _ = tokens
+ 	_ = token
+@@ -102,7 +102,7 @@ func main() {
+ 	// lib.CheckFatalError(err)
+ 
+ 	var fwprcAppM365Allow FirewallPolicyRuleCollectionGroup
+-	fwprcAppM365Allow.ID = "fwrulecoll-group-automated-apcdtq-app-microsoft365-allow"
++	fwprcAppM365Allow.ID = "fwrulecoll-group-app-microsoft365-allow"
+ 	fwprcAppM365Allow.Schema = "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#"
+ 	fwprcAppM365Allow.ContentVersion = "1.0.0.0"
+ 	fwprcAppM365Allow.Parameters.Priority.Value = 32000
+@@ -110,7 +110,7 @@ func main() {
+ 	var fwprcAppM365AllowRuleCollection RuleCollection
+ 	fwprcAppM365AllowRuleCollection.Action.Type = "allow"
+ 	fwprcAppM365AllowRuleCollection.RuleCollectionType = "FirewallPolicyFilterRuleCollection"
+-	fwprcAppM365AllowRuleCollection.Name = "fwrulecoll-apcdtq-app-microsoft365-allow"
++	fwprcAppM365AllowRuleCollection.Name = "fwrulecoll-app-microsoft365-allow"
+ 	fwprcAppM365AllowRuleCollection.Priority = 32001
+ 
+ 	for _, ep := range appEndpoints {
+diff --git a/dev/main-pac.go b/dev/main-pac.go
+index 20387c1..f58ed2e 100644
+--- a/dev/main-pac.go
++++ b/dev/main-pac.go
+@@ -71,7 +71,7 @@ func main() {
+ 	// token, err := azure.GetTenantSPToken(lib.MultiAuthTokenRequestOptions{})
+ 	tokenReq, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
+ 	lib.CheckFatalError(err)
+-	token, err := tokenReq.SelectTenant("REDDTQ")
++	token, err := tokenReq.SelectTenant("")
+ 	lib.CheckFatalError(err)
+ 	// _ = tokens
+ 	_ = token
+@@ -83,7 +83,7 @@ func main() {
+ 
+ 	webserviceUrl := "https://endpoints.office.com"
+ 	clientRequestId := "b10c5ed1-bad1-445f-b386-b919946339a7"
+-	tenantName := "REDDTQ"
++	tenantName := ""
+ 
+ 	// Get the latest versioning data from the Office 365 IP Address and URL web service
+ 	// urlString := webserviceUrl +
+diff --git a/dev/main.go b/dev/main.go
+index 6b0ebfc..c0396ee 100644
+--- a/dev/main.go
++++ b/dev/main.go
+@@ -2,63 +2,76 @@ package main
+ 
+ import (
+ 	"encoding/json"
+-	"fmt"
+ 	"os"
+ 	"time"
+ 
+-	"github.com/jercle/cloudini/lib"
++	"github.com/jercle/cloudini/cmd/azure"
+ )
+ 
++type envConfig struct {
++	ClientId          string
++	TenantId          string
++	ServiceConnection string
++}
++
+ func main() {
+-	startTime := time.Now()
+-	config := lib.GetCldConfig(nil)
+-	_ = config
+-	// tokens, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
+-	// lib.CheckFatalError(err)
+-	// token, err := azure.GetTenantSPToken(lib.MultiAuthTokenRequestOptions{})
+-	// lib.CheckFatalError(err)
+-	// _ = tokens
+-	// _ = token
++	lastMonth := time.Now().AddDate(0, -1, 0)
++	month := lastMonth.Format("01")
++	year := lastMonth.Format("2006")
++	costExportMonth := year + month
++
++	// agentTempDir := os.Getenv("AGENT_TEMPDIRECTORY")
++	// fileDirectory := os.Getenv("AGENT_TEMPDIRECTORY")
++	fileDirectory := "."
++	dataPath := fileDirectory + "/cost-exports/" + costExportMonth + "/"
++	// outputFileName := dataPath + "MonthlyCostReport-" + costExportMonth + ".xlsx"
++	// _ = outputFileName
++	outputJsonName := dataPath + "MonthlyCostReport-" + costExportMonth + ".json"
++	_ = outputJsonName
++
++	// os.RemoveAll(dataPath)
++
++	// azure.GenerateMonthlyCostReport(dataPath, outputFileName, "monthly-cost-exports", costExportMonth)
++
++	// func GenerateMonthlyCostReport(outputDirectory string, outputFileName string, blobPrefix string, costExportMonth string) {
++	// if !lib.CheckDirExists(dataPath) {
++	// 	os.MkdirAll(dataPath, os.ModePerm)
++	// }
+ 
+-	path := "/home/jercle/git/evan-tooling/terraform/apc/dtq/subs/apcdtqshared/out.json"
++	// cldConfOpts := &lib.CldConfigOptions{
++	// 	ConfigFilePath: configFilePath,
++	// }
+ 
+-	byteValue, err := os.ReadFile(path)
+-	lib.CheckFatalError(err)
++	// DownloadAllConfiguredTenantLastMonthCostExports(DownloadAllConfiguredTenantLastMonthCostExportsOptions{
++	// 	BlobPrefix:  blobPrefix + "/" + costExportMonth,
++	// 	OutfilePath: outputDirectory + "cost-export",
++	// }, nil)
+ 
+-	var rules []AzureNSGRule
++	combinedCostData := azure.CombineCostExportCSVData(dataPath)
++	transformedData := azure.TransformCostDataNew(combinedCostData)
++	_ = transformedData
++	jsonStr, _ := json.MarshalIndent(transformedData, "", "  ")
++	os.WriteFile(outputJsonName, jsonStr, os.ModePerm)
+ 
+-	err = json.Unmarshal(byteValue, &rules)
++	// transformedData.SumCosts()
++
++	// CostDataToExcel(transformedData, outputFileName)
++	// }
++
++	// siteId := ""
++	// driveId := """
++
++	// fileName := "MonthlyCostReport-" + costExportMonth + ".xlsx"
++	// folderPath := ""
++
++	// tokenReq, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{
++	// 	Scope:         "graph",
++	// 	GetWriteToken: true,
++	// }, nil)
++	// lib.CheckFatalError(err)
++
++	// token, err := tokenReq.SelectTenant("")
+ 	// lib.CheckFatalError(err)
+-	for _, rule := range rules {
+-		// fmt.Println(rule.Name)
+-		importString := "terraform import 'azurerm_network_security_rule.[\"" +
+-			rule.Name +
+-			"\"]' '/subscriptions/SUBID/resourceGroups/RES_GRP/providers/Microsoft.Network/networkSecurityGroups/NSG_NAME/securityRules/" +
+-			rule.Name +
+-			"'"
+-		fmt.Println(importString)
+-	}
+-
+-	elapsed := time.Since(startTime)
+-	_ = elapsed
+-	// fmt.Println(elapsed)
+-}
+ 
+-type AzureNSGRule struct {
+-	Access                                 string   `json:"access"`
+-	Description                            *string  `json:"description"`
+-	DestinationAddressPrefix               string   `json:"destination_address_prefix"`
+-	DestinationAddressPrefixes             []any    `json:"destination_address_prefixes"`
+-	DestinationApplicationSecurityGroupIds []any    `json:"destination_application_security_group_ids"`
+-	DestinationPortRange                   *string  `json:"destination_port_range"`
+-	DestinationPortRanges                  []string `json:"destination_port_ranges"`
+-	Direction                              string   `json:"direction"`
+-	Name                                   string   `json:"name"`
+-	Priority                               float64  `json:"priority"`
+-	Protocol                               string   `json:"protocol"`
+-	SourceAddressPrefix                    *string  `json:"source_address_prefix"`
+-	SourceAddressPrefixes                  []string `json:"source_address_prefixes"`
+-	SourceApplicationSecurityGroupIds      []any    `json:"source_application_security_group_ids"`
+-	SourcePortRange                        string   `json:"source_port_range"`
+-	SourcePortRanges                       []any    `json:"source_port_ranges"`
++	// m365.UploadFileToSharepoint(dataPath, siteId, driveId, folderPath, fileName, token.TokenData.Token)
+ }
+diff --git a/dev/others/main-arm-resource-graph.go b/dev/others/main-arm-resource-graph.go
+index b20c371..e9bd477 100644
+--- a/dev/others/main-arm-resource-graph.go
++++ b/dev/others/main-arm-resource-graph.go
+@@ -74,7 +74,7 @@ func main() {
+ 		log.Fatalf("failed to create client: %v", err)
+ 	}
+ 
+-	subscriptionId := "bae338c7-6098-4d52-b173-e2147e107dfa"
++	subscriptionId := ""
+ 
+ 	// Create the query request, Run the query and get the results. Update the Tags and subscriptionID details below.
+ 	results, err := client.Resources(ctx,
+diff --git a/dev/others/main-azureAuth.go b/dev/others/main-azureAuth.go
+index 4f372b8..d969b08 100644
+--- a/dev/others/main-azureAuth.go
++++ b/dev/others/main-azureAuth.go
+@@ -186,7 +186,7 @@ func armGetRequest(token TokenRequestResponse, env azureAuthDetails) {
+ 	// os.Exit(0)
+ 	req.Header.Add("Content-Type", "application/json")
+ 	req.Header.Add("Authorization", "Bearer "+token.AccessToken)
+-	// req.Header.Add("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlhSdmtvOFA3QTNVYVdTblU3Yk05blQwTWpoQSIsImtpZCI6IlhSdmtvOFA3QTNVYVdTblU3Yk05blQwTWpoQSJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldCIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzY0OGE1ZWQ3LWM1YWMtNDViNy1iNDA2LTc5MWYwZDQzMzRhNi8iLCJpYXQiOjE3MTAyMDU0MzUsIm5iZiI6MTcxMDIwNTQzNSwiZXhwIjoxNzEwMjEwMTA0LCJhY3IiOiIxIiwiYWlvIjoiQVZRQXEvOFdBQUFBdkJQbTU4eVVOMzBvUjRwUWdpN3pEMlZyam9VT0xYVEJuS0tVTDA4SllyY25tejg1L0tYb3IvOEZtVTVuaXM3d3YrNzQrbXROaEpaUERaUjI5TFhrK2xVWWhFRmhlMzN4SVE3bjFBT0Q3Q2c9IiwiYW1yIjpbInB3ZCIsIm1mYSJdLCJhcHBpZCI6IjE4ZmJjYTE2LTIyMjQtNDVmNi04NWIwLWY3YmYyYjM5YjNmMyIsImFwcGlkYWNyIjoiMCIsImZhbWlseV9uYW1lIjoiYWRtLjExNDQwZSIsImdpdmVuX25hbWUiOiJFIiwiZ3JvdXBzIjpbImNhMTgxYzg5LTEwYjUtNDA4MC1iZTg0LTYzNGRiNmJlOGZmNCIsIjQyMjk4N2E4LTMwNGEtNGY5ZC04ODM1LWZkNzU0YzQ5OWQ5YyIsImFhYWY0MzBiLTRlNTgtNDlhMC1iNjI5LTRiYzIxY2EzYjY1MCIsImQ3Y2ViMjBiLTc4YWUtNDQ0OC04MGFkLWMxMjc2ZGVlZWJlNyIsIjhmZTk0ODBmLWY3ZTItNDhhZi1iZDcxLWQ2Y2UyYmVkOTllNiIsIjFlYTgxMzEwLTRiZTEtNGMwYy1hN2MwLTY5NDZmOWIzNjU0ZSIsImY2MmQ3ZTEyLTAzZWMtNDUxYi05MjU3LWU5OWExNWRkMWZjMiIsImM0NTI2OTE2LTIyYjItNDE4OS05NTM1LTUxMjZiN2VjMGQ2YiIsIjI3MGVhYzM2LTZiYjYtNGQ5Yi1iNDBiLTJjMTY1NWFmM2YwMCIsIjRjYmIyZTM4LTg3ZWUtNDU4NS04N2NhLTIxNzYwZTNkMzYxZCIsIjgwMzcxMjQzLTQxMDktNDU2ZC05N2QzLTA0ZTliZGY1MWY5OCIsIjU2OWMyYTQ2LWM5YmItNDc3ZC1hODhkLWFmMTgyOWI3NmIxNyIsImJkYjRhYzQ5LWQwY2QtNDdjNy1iMWQxLWJkZmExN2VlZjdjYyIsIjdiZmY5MjU3LThhMWYtNDA5Ny05NzkwLTBmYzRkYTY5MGJhYyIsIjUzZGIwZTU5LTU3OWMtNDFmYy1hNmYzLTU1YTA4ZjBmMmJlNSIsImQ4ODU5NzViLWU3NTEtNDYzYy04YzAxLWFiYWZkMmI4OTAwYyIsIjdkMDMwNDYzLWUwZGUtNDg5Ny1hZjUyLWVmODQ4MWFhNjI3YiIsIjQ3NTJlZTc0LTA4MjEtNGEwZC1hZWNiLTczZjFmOWE1MmEwYiIsIjY3YjVmYTc0LTlhMmItNGU2ZS04NjZlLWIyNDZhN2QxNjRhMCIsIjUxMjQyNjg0LTU0MjYtNGZhZi05NzFhLTE1ZjVjYThiZWRmZSIsImVmY2Y0MTg3LTE4YzctNGE3OC1hMjM3LTVhYWJkOGIzNDYwZiIsIjBlZTVhYzhiLWYwNDktNDYxZi05ZjMwLTBiM2U0YmIyNWIyMCIsImVlMDA1ODkzLWE3ODMtNGNjMC1iNTgxLWYxZTJlNWEyNzM0MyIsImMzNzBkNjliLTA2MTItNGI3My1hOWRlLTNlMTg0NGQ1MjM5NyIsImE0N2VmNTljLWY3YzQtNDhkMi05NmIyLWZmOGJkNGI5NmJkZiIsIjRjMTMxYTllLWRkZTYtNGMwMC1hYmE0LTEwYWE0ZTU3ZGRmZCIsImVhMWE4MDllLTc3ZDgtNGJlYS05NGVlLTI5YjYwYzk3MjhmNiIsIjE4NjkwMDlmLWZjZDctNGU5Ny05YmM1LTliNTUxMjU0MTExMSIsImRlYmYxZGEwLWFkOTUtNDFlYi1iYTQ3LTQ0ODBiM2Y0ODBkYSIsImUwMGYxNmFkLTUwMjYtNDY1OC05Y2E5LTBmOTI0NGNlNmI1MCIsImY0ZjdkZGIyLTBhYTItNDBkNi05Mzg0LTc4MmRjYWE0ZjFlMiIsIjBiZjQ2MmI4LTI0NDgtNGIwMS1iZTRjLTIzOTI1M2UxNDEyMSIsIjA3ZDlmY2NjLWMzMTYtNGY3Mi04NTU3LTE5NzExYTkxZTYzZCIsIjg3ZDdhM2Q2LTFkZmItNDBiNC04NTM3LTZhMDc2MjZjMzc5MSIsIjlhNDVkYmRkLTE3ZWItNDgyMS1iNmMxLWMwOTI1YzM1MmM3YSIsIjI1NzdkMGVlLTU4ZTktNGNlNi04NzkxLWMwMWZiMWJlMWQ0YSIsIjJhOTY5NGZiLTExN2MtNDNmNC05YzQxLTQ5ZDgzZGMwYTgyYiIsImFkMmUwMWZlLTg5MGQtNDNhZC1hMWY3LTQxZWVhMmQ3NTVlYyIsImZmNjRiMGZlLWRlY2QtNDJhYy04OWIxLTc1NTA5ODc1NTEyNSJdLCJpZHR5cCI6InVzZXIiLCJpcGFkZHIiOiIxNDQuMTQwLjE1MC41IiwibmFtZSI6ImFkbS4xMTQ0MGUiLCJvaWQiOiJjMWYwZTNiNy00OTVlLTQ2NjEtOTAyNS1hZjQxNDUzYzNjODUiLCJvbnByZW1fc2lkIjoiUy0xLTUtMjEtMTA5Mzk4NjEwMC0xNzU3NDc3MjUyLTI4NDc3NTk5NzUtODYwNyIsInB1aWQiOiIxMDAzMjAwMzNCOTYxNjNBIiwicmgiOiIwLkFVSUExMTZLWkt6RnQwVzBCbmtmRFVNMHBrWklmM2tBdXRkUHVrUGF3ZmoyTUJOQ0FMUS4iLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJ0N1Vvb2VNZVM4ZS16Ynl3ZlgxZTZ1UGVGT3I0Vl83VUtnQ3pqVkZTamdNIiwidGlkIjoiNjQ4YTVlZDctYzVhYy00NWI3LWI0MDYtNzkxZjBkNDMzNGE2IiwidW5pcXVlX25hbWUiOiJhZG0uMTE0NDBlQGFzaW8uZ292LmF1IiwidXBuIjoiYWRtLjExNDQwZUBhc2lvLmdvdi5hdSIsInV0aSI6Il9jLWdQTGVZQkVDbjNaYTJJbXNGQUEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbImIwZjU0NjYxLTJkNzQtNGM1MC1hZmEzLTFlYzgwM2YxMmVmZSIsIjYyZTkwMzk0LTY5ZjUtNDIzNy05MTkwLTAxMjE3NzE0NWUxMCIsImI3OWZiZjRkLTNlZjktNDY4OS04MTQzLTc2YjE5NGU4NTUwOSJdLCJ4bXNfY2FlIjoiMSIsInhtc190Y2R0IjoxNjA2ODYxNDUwfQ.UDjV7WWeRELnw6EDOtbiUStSDexz3DjAuJNFEx_gQpl9daUFwNuE8J4sf40FHHTlh_OvCEMP6llDmFFElP0i9hDZZdvXrDRTnialdfMYk6KRTzeflES8wVguSk3Tf_J80Njt8ymkmJUPf-7212rdfGPVywG7qGiYl-VSIUu3wB1lLpAjF9HQ0Y1yyjJTUVrgOcYiX4UsJRMJFca76m437KRao2qb2DsdJuQ_oCk1MhAXNcI20wzpwitEAQz6aOlmGFLQLn0xd8dcD4sh4XVsJeZgBxrGemij9otuZ-8TvQ8ytqGWK52fOYe52WNlhnqCVys0jhcSzNfLvJ5tkmBk_Q")
++	// req.Header.Add("Authorization", "Bearer ")
+ 
+ 	res, err := http.DefaultClient.Do(req)
+ 	if err != nil {
+diff --git a/dev/others/main-pim.go b/dev/others/main-pim.go
+index ecffe3c..63a9d87 100644
+--- a/dev/others/main-pim.go
++++ b/dev/others/main-pim.go
+@@ -87,20 +87,20 @@ func main() {
+ // func main() {
+ // 	ctx := context.Background()
+ // 	// token, err := azure.GetAllTenantSPTokens(azure.AzureRequestOptions{
+-// 	// 	TenantId: "TENANT",
++// 	// 	TenantId: "",
+ // 	// })
+ // 	// token := azure.GetAzCliToken()
+ // 	token, err := azidentity.NewAzureCLICredential(&azidentity.AzureCLICredentialOptions{})
+ // 	lib.CheckFatalError(err)
+ // 	tokData, err := token.GetToken(ctx, policy.TokenRequestOptions{
+ // 		Scopes: []string{
+-// 			"SCOPE/Directory.Read",
++// 			"api:///Directory.Read",
+ // 			// "https://management.core.windows.net//.default",
+ // 		},
+ // 	})
+ // 	lib.CheckFatalError(err)
+ // 	fmt.Println(tokData)
+-// 	// token := azure.GetToken("TENANT")
++// 	// token := azure.GetToken("")
+ // 	// os.Exit(0)
+ // 	urlString := "https://graph.microsoft.com/v1.0/roleManagement/directory/roleAssignmentScheduleRequests/filterByCurrentUser(on='principal')"
+ // 	// lib.CheckFatalError(err)
+diff --git a/dev/others/main-vms.go b/dev/others/main-vms.go
+deleted file mode 100644
+index 542ec93..0000000
+--- a/dev/others/main-vms.go
++++ /dev/null
+@@ -1,321 +0,0 @@
+-package main
+-
+-import (
+-	"encoding/json"
+-	"fmt"
+-	"io"
+-	"log"
+-	"net/http"
+-	"time"
+-
+-	"github.com/jercle/cloudini/cmd/azure"
+-	"github.com/jercle/cloudini/lib"
+-)
+-
+-type AzgConfig struct {
+-	Azure struct {
+-		MultiTenantAuth struct {
+-			Tenants []struct {
+-				Reader struct {
+-					ClientID     string `json:"clientId"`
+-					ClientSecret string `json:"clientSecret"`
+-				} `json:"reader"`
+-				TenantID   string `json:"tenantId"`
+-				TenantName string `json:"tenantName"`
+-				Writer     struct {
+-					ClientID     string `json:"clientId"`
+-					ClientSecret string `json:"clientSecret"`
+-				} `json:"writer"`
+-			} `json:"tenants"`
+-		} `json:"multiTenantAuth"`
+-	} `json:"azure"`
+-}
+-
+-type MultiAuthToken struct {
+-	TenantId   string
+-	TenantName string
+-	TokenData  azure.TokenData
+-}
+-type virtualMachine struct {
+-	ID         string `json:"id"`
+-	Location   string `json:"location"`
+-	Name       string `json:"name"`
+-	Properties struct {
+-		AdditionalCapabilities struct {
+-			HibernationEnabled bool `json:"hibernationEnabled"`
+-		} `json:"additionalCapabilities"`
+-		DiagnosticsProfile struct {
+-			BootDiagnostics struct {
+-				Enabled bool `json:"enabled"`
+-			} `json:"bootDiagnostics"`
+-		} `json:"diagnosticsProfile"`
+-		HardwareProfile struct {
+-			VmSize string `json:"vmSize"`
+-		} `json:"hardwareProfile"`
+-		NetworkProfile struct {
+-			NetworkInterfaces []struct {
+-				ID         string `json:"id"`
+-				Properties struct {
+-					DeleteOption string `json:"deleteOption"`
+-				} `json:"properties"`
+-			} `json:"networkInterfaces"`
+-		} `json:"networkProfile"`
+-		OSProfile struct {
+-			AdminUsername            string `json:"adminUsername"`
+-			AllowExtensionOperations bool   `json:"allowExtensionOperations"`
+-			ComputerName             string `json:"computerName"`
+-			LinuxConfiguration       struct {
+-				DisablePasswordAuthentication bool `json:"disablePasswordAuthentication"`
+-				EnableVmAgentPlatformUpdates  bool `json:"enableVMAgentPlatformUpdates"`
+-				PatchSettings                 struct {
+-					AssessmentMode              string `json:"assessmentMode"`
+-					AutomaticByPlatformSettings struct {
+-						BypassPlatformSafetyChecksOnUserSchedule bool   `json:"bypassPlatformSafetyChecksOnUserSchedule"`
+-						RebootSetting                            string `json:"rebootSetting"`
+-					} `json:"automaticByPlatformSettings"`
+-					PatchMode string `json:"patchMode"`
+-				} `json:"patchSettings"`
+-				ProvisionVmAgent bool `json:"provisionVMAgent"`
+-				SSH              struct {
+-					PublicKeys []struct {
+-						KeyData string `json:"keyData"`
+-						Path    string `json:"path"`
+-					} `json:"publicKeys"`
+-				} `json:"ssh"`
+-			} `json:"linuxConfiguration"`
+-			RequireGuestProvisionSignal bool  `json:"requireGuestProvisionSignal"`
+-			Secrets                     []any `json:"secrets"`
+-		} `json:"osProfile"`
+-		ProvisioningState string `json:"provisioningState"`
+-		SecurityProfile   struct {
+-			SecurityType string `json:"securityType"`
+-			UefiSettings struct {
+-				SecureBootEnabled bool `json:"secureBootEnabled"`
+-				VTpmEnabled       bool `json:"vTpmEnabled"`
+-			} `json:"uefiSettings"`
+-		} `json:"securityProfile"`
+-		StorageProfile struct {
+-			DataDisks          []any  `json:"dataDisks"`
+-			DiskControllerType string `json:"diskControllerType"`
+-			ImageReference     struct {
+-				ExactVersion string `json:"exactVersion"`
+-				Offer        string `json:"offer"`
+-				Publisher    string `json:"publisher"`
+-				Sku          string `json:"sku"`
+-				Version      string `json:"version"`
+-			} `json:"imageReference"`
+-			OSDisk struct {
+-				Caching      string  `json:"caching"`
+-				CreateOption string  `json:"createOption"`
+-				DeleteOption string  `json:"deleteOption"`
+-				DiskSizeGb   float64 `json:"diskSizeGB"`
+-				ManagedDisk  struct {
+-					StorageAccountType string `json:"storageAccountType"`
+-				} `json:"managedDisk"`
+-				OSType string `json:"osType"`
+-			} `json:"osDisk"`
+-		} `json:"storageProfile"`
+-		TimeCreated time.Time `json:"timeCreated"`
+-		VmID        string    `json:"vmId"`
+-	} `json:"properties"`
+-	Type  string   `json:"type"`
+-	Zones []string `json:"zones"`
+-}
+-
+-type allVmReqResponseBody struct {
+-	Value []virtualMachine `json:"value"`
+-}
+-
+-// type singleVm
+-
+-// Lists all Virtual Machines in a given subscription
+-func getAllSubscriptionVMs(token azure.MultiAuthToken, subscriptionId string) []virtualMachine {
+-	// https://learn.microsoft.com/en-us/rest/api/compute/virtual-machines/list-all?view=rest-compute-2023-10-02&tabs=HTTP
+-	// GET https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.Compute/virtualMachines?api-version=2023-09-01
+-	// cred, err := azidentity.NewDefaultAzureCredential(nil)
+-	// subscriptionId := "bae338c7-6098-4d52-b173-e2147e107dfa"
+-	// var allVirtualMachines virtualMachines
+-	// ctx := context.Background()
+-	// tokenRequestOptions := policy.TokenRequestOptions{
+-	// 	Scopes: []string{
+-	// 		"https://management.core.windows.net/.default",
+-	// 	},
+-	// }
+-
+-	// token, err := cred.GetToken(ctx, tokenRequestOptions)
+-	// if err != nil {
+-	// 	log.Fatal(err)
+-	// }
+-	urlString := "https://management.azure.com/subscriptions/" +
+-		subscriptionId +
+-		"/providers/Microsoft.Compute/virtualMachines?api-version=2023-09-01"
+-	req, err := http.NewRequest(http.MethodGet, urlString, nil)
+-	if err != nil {
+-		log.Fatal(err)
+-	}
+-	req.Header.Add("Content-Type", "application/json")
+-	req.Header.Add("Authorization", "Bearer "+token.TokenData.Token)
+-
+-	res, err := http.DefaultClient.Do(req)
+-	if err != nil {
+-		log.Fatal("Error fetching LA Workspace Tables")
+-	}
+-
+-	responseBody, err := io.ReadAll(res.Body)
+-	if res.StatusCode == 400 {
+-		log.Fatal("Error fetching LA Workspace Tables: ", string(responseBody))
+-	}
+-	if err != nil {
+-		log.Fatal(err)
+-	}
+-	defer res.Body.Close()
+-
+-	// fmt.Println(string(responseBody))
+-
+-	var responseBodyUnmarshal allVmReqResponseBody
+-	json.Unmarshal(responseBody, &responseBodyUnmarshal)
+-	allVirtualMachines := responseBodyUnmarshal.Value
+-	return allVirtualMachines
+-}
+-
+-func main() {
+-
+-	// config := lib.GetCldConfig(lib.CldConfigOptions{})
+-	// sub, err := azure.GetActiveSub()
+-	// lib.CheckFatalError(err)
+-
+-	// var allSecrets
+-
+-	// config.AddAzureTenant("e9f4bce2-7308-461a-91ce-3f663d079f47", "FakeTest")
+-	tokens, err := azure.GetAllTenantTokens(azure.AzureRequestOptions{})
+-	// fmt.Println(tokens)
+-	lib.CheckFatalError(err)
+-
+-	for _, tenant := range tokens {
+-		subs, err := listSubscriptions(tenant)
+-		lib.CheckFatalError(err)
+-		for _, sub := range subs {
+-			lib.PrintSrcLoc("getting kvs")
+-			GetAllSubscriptionKeyvaults(tenant, sub.ID, sub.DisplayName)
+-		}
+-	}
+-}
+-
+-type KeyVault struct {
+-	ID         string `json:"id"`
+-	Location   string `json:"location"`
+-	Name       string `json:"name"`
+-	Properties struct {
+-		AccessPolicies               []any  `json:"accessPolicies"`
+-		EnableRbacAuthorization      bool   `json:"enableRbacAuthorization"`
+-		EnableSoftDelete             bool   `json:"enableSoftDelete"`
+-		EnabledForDeployment         bool   `json:"enabledForDeployment"`
+-		EnabledForDiskEncryption     bool   `json:"enabledForDiskEncryption"`
+-		EnabledForTemplateDeployment bool   `json:"enabledForTemplateDeployment"`
+-		ProvisioningState            string `json:"provisioningState"`
+-		PublicNetworkAccess          string `json:"publicNetworkAccess"`
+-		Sku                          struct {
+-			Family string `json:"family"`
+-			Name   string `json:"name"`
+-		} `json:"sku"`
+-		SoftDeleteRetentionInDays float64 `json:"softDeleteRetentionInDays"`
+-		TenantID                  string  `json:"tenantId"`
+-		VaultURI                  string  `json:"vaultUri"`
+-	} `json:"properties"`
+-	SystemData struct {
+-		CreatedAt          time.Time `json:"createdAt"`
+-		CreatedBy          string    `json:"createdBy"`
+-		CreatedByType      string    `json:"createdByType"`
+-		LastModifiedAt     time.Time `json:"lastModifiedAt"`
+-		LastModifiedBy     string    `json:"lastModifiedBy"`
+-		LastModifiedByType string    `json:"lastModifiedByType"`
+-	} `json:"systemData"`
+-	Tags struct{} `json:"tags"`
+-	Type string   `json:"type"`
+-}
+-
+-type GetSubscriptionKeyvaultsResponse struct {
+-	NextLink string        `json:"nextLink"`
+-	Value    []interface{} `json:"value"`
+-}
+-
+-func GetAllSubscriptionKeyvaults(token azure.MultiAuthToken, subscriptionId string, subscriptionName string) {
+-	var allKeyvaults interface{}
+-	// urlString := "https://management.azure.com" + subscriptionId + "/resources?$filter=resourceType eq 'Microsoft.KeyVault/vaults'&api-version=2015-11-01" // resources query
+-	urlString := "https://management.azure.com" + subscriptionId + "/providers/Microsoft.KeyVault/vaults?api-version=2022-07-01" // keyvault api
+-	// fmt.Println(subscriptionId)
+-	// fmt.Println(urlString)
+-
+-	lib.PrintSrcLoc(subscriptionName)
+-	req, err := http.NewRequest(http.MethodGet, urlString, nil)
+-	if err != nil {
+-		log.Fatal(err)
+-	}
+-	req.Header.Add("Content-Type", "application/json")
+-	req.Header.Add("Authorization", "Bearer "+token.TokenData.Token)
+-
+-	res, err := http.DefaultClient.Do(req)
+-	lib.CheckFatalError(err)
+-
+-	responseBody, err := io.ReadAll(res.Body)
+-	defer res.Body.Close()
+-
+-	fmt.Println(string(responseBody))
+-
+-	var unmarshedBody GetSubscriptionKeyvaultsResponse
+-
+-	json.Unmarshal(responseBody, unmarshedBody)
+-
+-	for _, kv := range unmarshedBody.Value {
+-		allKeyvaults = append(allKeyvaults, kv)
+-		fmt.Println(kv)
+-	}
+-
+-	// lib.MarshalAndPrintJson(allKeyvaults)
+-
+-	fmt.Println(allKeyvaults)
+-
+-}
+-
+-func GetVmDetails(options azure.AzureRequestOptions, token string) {
+-	var urlString string
+-
+-	if options.ResourceId != "" {
+-		urlString = "https://management.azure.com" + options.ResourceId + "?api-version=2023-09-01"
+-	} else {
+-		urlString = "https://management.azure.com/subscriptions/" +
+-			options.SubscriptionId +
+-			"resourceGroups/" +
+-			options.ResourceGroupName +
+-			"/providers/Microsoft.Compute/virtualMachines/" +
+-			options.ResourceName +
+-			"?api-version=2023-09-01"
+-	}
+-
+-	req, err := http.NewRequest(http.MethodGet, urlString, nil)
+-	if err != nil {
+-		log.Fatal(err)
+-	}
+-	req.Header.Add("Content-Type", "application/json")
+-	req.Header.Add("Authorization", "Bearer "+token)
+-
+-	res, err := http.DefaultClient.Do(req)
+-	if err != nil {
+-		log.Fatal("Error fetching LA Workspace Tables")
+-	}
+-
+-	responseBody, err := io.ReadAll(res.Body)
+-	if res.StatusCode == 400 {
+-		log.Fatal("Error fetching LA Workspace Tables: ", string(responseBody))
+-	}
+-	if err != nil {
+-		lib.CheckFatalError(err)
+-	}
+-	defer res.Body.Close()
+-
+-	fmt.Println(string(responseBody))
+-	// var responseBodyUnmarshal vmReqResponseBody
+-	// json.Unmarshal(responseBody, &responseBodyUnmarshal)
+-	// vmDetails := responseBodyUnmarshal.Value
+-	// return vmDetails
+-}
+diff --git a/go.mod b/go.mod
+index fbe2dde..2f8005c 100644
+--- a/go.mod
++++ b/go.mod
+@@ -4,10 +4,11 @@ go 1.22.0
+ 
+ require (
+ 	github.com/3th1nk/cidr v0.2.0
+-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.11.1
+-	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.5.2
++	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.14.0
++	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.7.0
+ 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/costmanagement/armcostmanagement v1.1.1
+ 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resourcegraph/armresourcegraph v0.9.0
++	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.4.1
+ 	github.com/AzureAD/microsoft-authentication-library-for-go v1.2.2
+ 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
+ 	github.com/alecthomas/assert/v2 v2.10.0
+@@ -28,6 +29,7 @@ require (
+ 	github.com/spf13/pflag v1.0.5
+ 	github.com/spf13/viper v1.19.0
+ 	github.com/tidwall/pretty v1.2.1
++	github.com/xuri/excelize/v2 v2.8.1
+ 	golang.design/x/clipboard v0.7.0
+ 	golang.org/x/exp v0.0.0-20240409090435-93d18d7e34b8
+ 	golang.org/x/mod v0.20.0
+@@ -36,7 +38,7 @@ require (
+ )
+ 
+ require (
+-	github.com/Azure/azure-sdk-for-go/sdk/internal v1.5.2 // indirect
++	github.com/Azure/azure-sdk-for-go/sdk/internal v1.10.0 // indirect
+ 	github.com/alecthomas/repr v0.4.0 // indirect
+ 	github.com/atotto/clipboard v0.1.4 // indirect
+ 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
+@@ -60,12 +62,15 @@ require (
+ 	github.com/mattn/go-runewidth v0.0.15 // indirect
+ 	github.com/mitchellh/go-homedir v1.1.0 // indirect
+ 	github.com/mitchellh/mapstructure v1.5.0 // indirect
++	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
+ 	github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 // indirect
+ 	github.com/muesli/cancelreader v0.2.2 // indirect
+ 	github.com/muesli/reflow v0.3.0 // indirect
+ 	github.com/muesli/termenv v0.15.2 // indirect
+ 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
+ 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
++	github.com/richardlehane/mscfb v1.0.4 // indirect
++	github.com/richardlehane/msoleps v1.0.3 // indirect
+ 	github.com/rivo/uniseg v0.4.7 // indirect
+ 	github.com/sagikazarmark/locafero v0.4.0 // indirect
+ 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
+@@ -74,14 +79,16 @@ require (
+ 	github.com/spf13/afero v1.11.0 // indirect
+ 	github.com/spf13/cast v1.6.0 // indirect
+ 	github.com/subosito/gotenv v1.6.0 // indirect
++	github.com/xuri/efp v0.0.0-20231025114914-d1ff6096ae53 // indirect
++	github.com/xuri/nfp v0.0.0-20230919160717-d98342af3f05 // indirect
+ 	go.uber.org/multierr v1.11.0 // indirect
+-	golang.org/x/crypto v0.22.0 // indirect
++	golang.org/x/crypto v0.25.0 // indirect
+ 	golang.org/x/exp/shiny v0.0.0-20240409090435-93d18d7e34b8 // indirect
+ 	golang.org/x/image v0.15.0 // indirect
+ 	golang.org/x/mobile v0.0.0-20240404231514-09dbf07665ed // indirect
+-	golang.org/x/net v0.24.0 // indirect
++	golang.org/x/net v0.27.0 // indirect
+ 	golang.org/x/sync v0.8.0 // indirect
+-	golang.org/x/term v0.20.0 // indirect
+-	golang.org/x/text v0.14.0 // indirect
++	golang.org/x/term v0.22.0 // indirect
++	golang.org/x/text v0.16.0 // indirect
+ 	gopkg.in/ini.v1 v1.67.0 // indirect
+ )
+diff --git a/go.sum b/go.sum
+index 846b26a..7032c78 100644
+--- a/go.sum
++++ b/go.sum
+@@ -1,15 +1,19 @@
+ github.com/3th1nk/cidr v0.2.0 h1:81jjEknszD8SHPLVTPPk+BZjNVqq1ND2YXLSChl6Lrs=
+ github.com/3th1nk/cidr v0.2.0/go.mod h1:XsSQnS4rEYyB2veDfnIGgViulFpIITPKtp3f0VxpiLw=
+-github.com/Azure/azure-sdk-for-go/sdk/azcore v1.11.1 h1:E+OJmp2tPvt1W+amx48v1eqbjDYsgN+RzP4q16yV5eM=
+-github.com/Azure/azure-sdk-for-go/sdk/azcore v1.11.1/go.mod h1:a6xsAQUZg+VsS3TJ05SRp524Hs4pZ/AeFSr5ENf0Yjo=
+-github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.5.2 h1:FDif4R1+UUR+00q6wquyX90K7A8dN+R5E8GEadoP7sU=
+-github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.5.2/go.mod h1:aiYBYui4BJ/BJCAIKs92XiPyQfTaBWqvHujDwKb6CBU=
+-github.com/Azure/azure-sdk-for-go/sdk/internal v1.5.2 h1:LqbJ/WzJUwBf8UiaSzgX7aMclParm9/5Vgp+TY51uBQ=
+-github.com/Azure/azure-sdk-for-go/sdk/internal v1.5.2/go.mod h1:yInRyqWXAuaPrgI7p70+lDDgh3mlBohis29jGMISnmc=
++github.com/Azure/azure-sdk-for-go/sdk/azcore v1.14.0 h1:nyQWyZvwGTvunIMxi1Y9uXkcyr+I7TeNrr/foo4Kpk8=
++github.com/Azure/azure-sdk-for-go/sdk/azcore v1.14.0/go.mod h1:l38EPgmsp71HHLq9j7De57JcKOWPyhrsW1Awm1JS6K0=
++github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.7.0 h1:tfLQ34V6F7tVSwoTf/4lH5sE0o6eCJuNDTmH09nDpbc=
++github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.7.0/go.mod h1:9kIvujWAA58nmPmWB1m23fyWic1kYZMxD9CxaWn4Qpg=
++github.com/Azure/azure-sdk-for-go/sdk/internal v1.10.0 h1:ywEEhmNahHBihViHepv3xPBn1663uRv2t2q/ESv9seY=
++github.com/Azure/azure-sdk-for-go/sdk/internal v1.10.0/go.mod h1:iZDifYGJTIgIIkYRNWPENUnqx6bJ2xnSDFI2tjwZNuY=
+ github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/costmanagement/armcostmanagement v1.1.1 h1:ehSLdbLah6kk6HTVc6e/lrbmbz7MMbpNxkOd3OYlhB0=
+ github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/costmanagement/armcostmanagement v1.1.1/go.mod h1:Am1cUioOk0HdZIsjpXJkQ4RIeQbwYsW6LkNIc5z/5XY=
+ github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resourcegraph/armresourcegraph v0.9.0 h1:zLzoX5+W2l95UJoVwiyNS4dX8vHyQ6x2xRLoBBL9wMk=
+ github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resourcegraph/armresourcegraph v0.9.0/go.mod h1:wVEOJfGTj0oPAUGA1JuRAvz/lxXQsWW16axmHPP47Bk=
++github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/storage/armstorage v1.6.0 h1:PiSrjRPpkQNjrM8H0WwKMnZUdu1RGMtd/LdGKUrOo+c=
++github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/storage/armstorage v1.6.0/go.mod h1:oDrbWx4ewMylP7xHivfgixbfGBT6APAwsSoHRKotnIc=
++github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.4.1 h1:cf+OIKbkmMHBaC3u78AXomweqM0oxQSgBXRZf3WH4yM=
++github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.4.1/go.mod h1:ap1dmS6vQKJxSMNiGJcq4QuUQkOynyD93gLw6MDF7ek=
+ github.com/AzureAD/microsoft-authentication-library-for-go v1.2.2 h1:XHOnouVk1mxXfQidrMEnLlPk9UMeRtyBTnEFtxkV0kU=
+ github.com/AzureAD/microsoft-authentication-library-for-go v1.2.2/go.mod h1:wP83P5OoQ5p6ip3ScPr0BAq0BvuPAvacpEuSzyouqAI=
+ github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2 h1:ZBbLwSJqkHBuFDA6DUhhse0IGJ7T5bemHyNILUjvOq4=
+@@ -41,8 +45,6 @@ github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSs
+ github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+ github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=
+ github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+-github.com/dnaeon/go-vcr v1.2.0 h1:zHCHvJYTMh1N7xnV7zf1m1GPBF9Ad0Jk/whtQ1663qI=
+-github.com/dnaeon/go-vcr v1.2.0/go.mod h1:R4UdLID7HZT3taECzJs4YgbbH6PIGXB6W/sc5OLb6RQ=
+ github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f h1:Y/CXytFA4m6baUTXGLOoWe4PQhGxaX0KpnayAqC48p4=
+ github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f/go.mod h1:vw97MGsxSvLiUE2X8qFplwetxpGLQrlU1Q9AUEIzCaM=
+ github.com/fatih/camelcase v1.0.0 h1:hxNvNX/xYBp0ovncs8WyWZrOrpBNub/JfaMvbURyft8=
+@@ -102,6 +104,8 @@ github.com/mitchellh/go-homedir v1.1.0 h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG
+ github.com/mitchellh/go-homedir v1.1.0/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=
+ github.com/mitchellh/mapstructure v1.5.0 h1:jeMsZIYE/09sWLaz43PL7Gy6RuMjD2eJVyuac5Z2hdY=
+ github.com/mitchellh/mapstructure v1.5.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
++github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 h1:RWengNIwukTxcDr9M+97sNutRR1RKhG96O6jWumTTnw=
++github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826/go.mod h1:TaXosZuwdSHYgviHp1DAtfrULt5eUgsSMsZf+YrPgl8=
+ github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 h1:ZK8zHtRHOkbHy6Mmr5D264iyp3TiX5OmNcI5cIARiQI=
+ github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6/go.mod h1:CJlz5H+gyd6CUWT45Oy4q24RdLyn7Md9Vj2/ldJBSIo=
+ github.com/muesli/cancelreader v0.2.2 h1:3I4Kt4BQjOR54NavqnDogx/MIoWBFa0StPA8ELUXHmA=
+@@ -119,14 +123,19 @@ github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c/go.mod h1:7rwL4CYBLnjL
+ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+ github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=
+ github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
++github.com/richardlehane/mscfb v1.0.4 h1:WULscsljNPConisD5hR0+OyZjwK46Pfyr6mPu5ZawpM=
++github.com/richardlehane/mscfb v1.0.4/go.mod h1:YzVpcZg9czvAuhk9T+a3avCpcFPMUWm7gK3DypaEsUk=
++github.com/richardlehane/msoleps v1.0.1/go.mod h1:BWev5JBpU9Ko2WAgmZEuiz4/u3ZYTKbjLycmwiWUfWg=
++github.com/richardlehane/msoleps v1.0.3 h1:aznSZzrwYRl3rLKRT3gUk9am7T/mLNSnJINvN0AQoVM=
++github.com/richardlehane/msoleps v1.0.3/go.mod h1:BWev5JBpU9Ko2WAgmZEuiz4/u3ZYTKbjLycmwiWUfWg=
+ github.com/rivo/uniseg v0.1.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
+ github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
+ github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
+ github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
+ github.com/rodaine/table v1.2.0 h1:38HEnwK4mKSHQJIkavVj+bst1TEY7j9zhLMWu4QJrMA=
+ github.com/rodaine/table v1.2.0/go.mod h1:wejb/q/Yd4T/SVmBSRMr7GCq3KlcZp3gyNYdLSBhkaE=
+-github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZVejAe8=
+-github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
++github.com/rogpeppe/go-internal v1.12.0 h1:exVL4IDcn6na9z1rAb56Vxr+CgyK3nn3O+epU5NdKM8=
++github.com/rogpeppe/go-internal v1.12.0/go.mod h1:E+RYuTGaKKdloAfM02xzb0FW3Paa99yedzYV+kq4uf4=
+ github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
+ github.com/sagikazarmark/locafero v0.4.0 h1:HApY1R9zGo4DBgr7dqsTH/JJxLTTsOt7u6keLGt6kNQ=
+ github.com/sagikazarmark/locafero v0.4.0/go.mod h1:Pe1W6UlPYUk/+wc/6KFhbORCfqzgYEpgQ3O5fPuL3H4=
+@@ -160,13 +169,19 @@ github.com/subosito/gotenv v1.6.0 h1:9NlTDc1FTs4qu0DDq7AEtTPNw6SVm7uBMsUCUjABIf8
+ github.com/subosito/gotenv v1.6.0/go.mod h1:Dk4QP5c2W3ibzajGcXpNraDfq2IrhjMIvMSWPKKo0FU=
+ github.com/tidwall/pretty v1.2.1 h1:qjsOFOWWQl+N3RsoF5/ssm1pHmJJwhjlSbZ51I6wMl4=
+ github.com/tidwall/pretty v1.2.1/go.mod h1:ITEVvHYasfjBbM0u2Pg8T2nJnzm8xPwvNhhsoaGGjNU=
++github.com/xuri/efp v0.0.0-20231025114914-d1ff6096ae53 h1:Chd9DkqERQQuHpXjR/HSV1jLZA6uaoiwwH3vSuF3IW0=
++github.com/xuri/efp v0.0.0-20231025114914-d1ff6096ae53/go.mod h1:ybY/Jr0T0GTCnYjKqmdwxyxn2BQf2RcQIIvex5QldPI=
++github.com/xuri/excelize/v2 v2.8.1 h1:pZLMEwK8ep+CLIUWpWmvW8IWE/yxqG0I1xcN6cVMGuQ=
++github.com/xuri/excelize/v2 v2.8.1/go.mod h1:oli1E4C3Pa5RXg1TBXn4ENCXDV5JUMlBluUhG7c+CEE=
++github.com/xuri/nfp v0.0.0-20230919160717-d98342af3f05 h1:qhbILQo1K3mphbwKh1vNm4oGezE1eF9fQWmNiIpSfI4=
++github.com/xuri/nfp v0.0.0-20230919160717-d98342af3f05/go.mod h1:WwHg+CVyzlv/TX9xqBFXEZAuxOPxn2k1GNHwG41IIUQ=
+ go.uber.org/multierr v1.11.0 h1:blXXJkSxSSfBVBlC76pxqeO+LN3aDfLQo+309xJstO0=
+ go.uber.org/multierr v1.11.0/go.mod h1:20+QtiLqy0Nd6FdQB9TLXag12DsQkrbs3htMFfDN80Y=
+ golang.design/x/clipboard v0.7.0 h1:4Je8M/ys9AJumVnl8m+rZnIvstSnYj1fvzqYrU3TXvo=
+ golang.design/x/clipboard v0.7.0/go.mod h1:PQIvqYO9GP29yINEfsEn5zSQKAz3UgXmZKzDA6dnq2E=
+ golang.org/x/crypto v0.0.0-20190103213133-ff983b9c42bc/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
+-golang.org/x/crypto v0.22.0 h1:g1v0xeRhjcugydODzvb3mEM9SQ0HGp9s/nh3COQ/C30=
+-golang.org/x/crypto v0.22.0/go.mod h1:vr6Su+7cTlO45qkww3VDJlzDn0ctJvRgYbC2NvXHt+M=
++golang.org/x/crypto v0.25.0 h1:ypSNr+bnYL2YhwoMt2zPxHFmbAN1KZs/njMG3hxUp30=
++golang.org/x/crypto v0.25.0/go.mod h1:T+wALwcMOSE0kXgUAnPAHqTLW+XHgcELELW8VaDgm/M=
+ golang.org/x/exp v0.0.0-20240409090435-93d18d7e34b8 h1:ESSUROHIBHg7USnszlcdmjBEwdMj9VUvU+OPk4yl2mc=
+ golang.org/x/exp v0.0.0-20240409090435-93d18d7e34b8/go.mod h1:/lliqkxwWAhPjf5oSOIJup2XcqJaw8RGS6k3TGEc7GI=
+ golang.org/x/exp/shiny v0.0.0-20240409090435-93d18d7e34b8 h1:hYHwiFyEh3Z8hNGBbrVTT3FjsHiJ0ZqjHRH8sQgopUc=
+@@ -177,8 +192,8 @@ golang.org/x/mobile v0.0.0-20240404231514-09dbf07665ed h1:vZhAhVr5zF1IJaVKTawyTq
+ golang.org/x/mobile v0.0.0-20240404231514-09dbf07665ed/go.mod h1:z041I2NhLjANgIfD0XbB2AmUZ8sLUcSgyLaSNGEP50M=
+ golang.org/x/mod v0.20.0 h1:utOm6MM3R3dnawAiJgn0y+xvuYRsm1RKM/4giyfDgV0=
+ golang.org/x/mod v0.20.0/go.mod h1:hTbmBsO62+eylJbnUtE2MGJUyE7QWk4xUqPFrRgJ+7c=
+-golang.org/x/net v0.24.0 h1:1PcaxkF854Fu3+lvBIx5SYn9wRlBzzcnHZSiaFFAb0w=
+-golang.org/x/net v0.24.0/go.mod h1:2Q7sJY5mzlzWjKtYUEXSlBWCdyaioyXzRB2RtU8KVE8=
++golang.org/x/net v0.27.0 h1:5K3Njcw06/l2y9vpGCSdcxWOYHOUk3dVNGDXN+FvAys=
++golang.org/x/net v0.27.0/go.mod h1:dDi0PyhWNoiUOrAS8uXv/vnScO4wnHQO4mj9fn/RytE=
+ golang.org/x/sync v0.8.0 h1:3NFvSEYkUoMifnESzZl15y791HH1qU2xm6eCJU5ZPXQ=
+ golang.org/x/sync v0.8.0/go.mod h1:Czt+wKu1gCyEFDUtn0jG5QVvpJ6rzVqr5aXyt9drQfk=
+ golang.org/x/sys v0.0.0-20190116161447-11f53e031339/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+@@ -188,17 +203,15 @@ golang.org/x/sys v0.1.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+ golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+ golang.org/x/sys v0.24.0 h1:Twjiwq9dn6R1fQcyiK+wQyHWfaz/BJB+YIpzU/Cv3Xg=
+ golang.org/x/sys v0.24.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
+-golang.org/x/term v0.20.0 h1:VnkxpohqXaOBYJtBmEppKUG6mXpi+4O6purfc2+sMhw=
+-golang.org/x/term v0.20.0/go.mod h1:8UkIAJTvZgivsXaD6/pH6U9ecQzZ45awqEOzuCvwpFY=
+-golang.org/x/text v0.14.0 h1:ScX5w1eTa3QqT8oi6+ziP7dTV1S2+ALU0bI+0zXKWiQ=
+-golang.org/x/text v0.14.0/go.mod h1:18ZOQIKpY8NJVqYksKHtTdi31H5itFRjB5/qKTNYzSU=
++golang.org/x/term v0.22.0 h1:BbsgPEJULsl2fV/AT3v15Mjva5yXKQDyKf+TbDz7QJk=
++golang.org/x/term v0.22.0/go.mod h1:F3qCibpT5AMpCRfhfT53vVJwhLtIVHhB9XDjfFvnMI4=
++golang.org/x/text v0.16.0 h1:a94ExnEXNtEwYLGJSIUxnWoxoRz/ZcCsV63ROupILh4=
++golang.org/x/text v0.16.0/go.mod h1:GhwF1Be+LQoKShO3cGOHzqOgRrGaYc9AvblQOmPVHnI=
+ gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+-gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 h1:YR8cESwS4TdDjEe65xsg0ogRM/Nc3DYOhEAlW+xobZo=
+-gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
++gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c h1:Hei/4ADfdWqJk1ZMxUNpqntNwaWcugrBjAiHlqqRiVk=
++gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c/go.mod h1:JHkPIbrfpd72SG/EVd6muEfDQjcINNoR0C8j2r3qZ4Q=
+ gopkg.in/ini.v1 v1.67.0 h1:Dgnx+6+nfE+IfzjUEISNeydPJh9AXNNsWbGP9KzCsOA=
+ gopkg.in/ini.v1 v1.67.0/go.mod h1:pNLf8WUiyNEtQjuu5G5vTm06TEv9tsIgeAvK8hOrP4k=
+-gopkg.in/yaml.v2 v2.4.0 h1:D8xgwECY7CYvx+Y2n4sBz93Jn9JRvxdiyyo8CTfuKaY=
+-gopkg.in/yaml.v2 v2.4.0/go.mod h1:RDklbk79AGWmwhnvt/jBztapEOGDOx6ZbXqjP6csGnQ=
+ gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+ gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
+ gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+diff --git a/lib/cldFuncs.go b/lib/cldFuncs.go
+index 1a3646c..a0ba3ac 100644
+--- a/lib/cldFuncs.go
++++ b/lib/cldFuncs.go
+@@ -13,18 +13,13 @@ func GetCldConfig(options *CldConfigOptions) CldConfigRoot {
+ 		config CldConfigRoot
+ 	)
+ 
+-	configFilePath := InitConfig(nil)
++	configFile := InitConfig(options)
+ 
+-	byteValue, err := os.ReadFile(configFilePath)
+-	CheckFatalError(err)
+-
+-	// decodedBytes, err := b64.StdEncoding.DecodeString(string(byteValue))
+-	// CheckFatalError(err)
++	// fmt.Println("Getting config from", configFile)
++	byteValue, err := os.ReadFile(configFile)
+ 
+-	// fmt.Println(string(byteValue))
+-	// os.Exit(0)
++	CheckFatalError(err)
+ 
+-	// err = json.Unmarshal(decodedBytes, &config)
+ 	err = json.Unmarshal(byteValue, &config)
+ 	CheckFatalError(err)
+ 
+@@ -35,22 +30,26 @@ func InitConfig(options *CldConfigOptions) string {
+ 	usrHomeDir, err := os.UserHomeDir()
+ 	var (
+ 		configPath     = usrHomeDir + "/.config/cld"
+-		configFile     = configPath + "/cldConf.json"
+-		configFilePath string
++		configFilePath = configPath + "/cldConf.json"
++		configFile     string
+ 	)
+ 	CheckFatalError(err)
+ 
+-	if options != nil && options.ConfigFilePath != "" {
+-		configFilePath = options.ConfigFilePath
++	CLD_CONFIG_PATH := os.Getenv("CLD_CONFIG_PATH")
++
++	if options != nil && options.ConfigFile != "" {
++		configFile = options.ConfigFile
++	} else if CLD_CONFIG_PATH != "" {
++		configFile = CLD_CONFIG_PATH
+ 	} else {
+-		configFilePath = configFile
++		configFile = configFilePath
+ 	}
+ 
+ 	if _, err := os.Stat(configPath); err != nil {
+ 		os.MkdirAll(configPath, os.ModePerm)
+ 	}
+ 
+-	fileStat, err := os.Stat(configFilePath)
++	fileStat, err := os.Stat(configFile)
+ 
+ 	if err != nil || fileStat.Size() == 0 {
+ 		config := CldConfigRoot{}
+@@ -58,8 +57,8 @@ func InitConfig(options *CldConfigOptions) string {
+ 		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
+ 
+ 		// encodedData := b64.StdEncoding.EncodeToString(jsonBytes)
+-		os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
++		os.WriteFile(configFile, jsonBytes, os.ModePerm)
+ 	}
+ 
+-	return configFilePath
++	return configFile
+ }
+diff --git a/lib/methodsAzure.go b/lib/methodsAzure.go
+index 9623b88..cc8cbb1 100644
+--- a/lib/methodsAzure.go
++++ b/lib/methodsAzure.go
+@@ -142,7 +142,6 @@ Check:
+ 	}
+ 	return versionExists
+ }
+-
+ func (imgVersion *GalleryImageVersion) IncrementPatchVersion() string {
+ 	version := imgVersion.Name
+ 	var v string
+diff --git a/lib/typesCld.go b/lib/typesCld.go
+index e4ffaa8..0d34c34 100644
+--- a/lib/typesCld.go
++++ b/lib/typesCld.go
+@@ -3,9 +3,11 @@ package lib
+ import "fmt"
+ 
+ type CldConfigRoot struct {
+-	CldConfig   CldConfig              `json:"cldConfig"`
+-	Azure       AzureConfig            `json:"azure"`
+-	ProxyConfig map[string]ProxyConfig `json:"proxyConfig"`
++	CldConfig    CldConfig              `json:"cldConfig"`
++	Azure        AzureConfig            `json:"azure"`
++	ProxyConfig  map[string]ProxyConfig `json:"proxyConfig"`
++	SophosConfig SophosConfig           `json:"sophos"`
++	Domains      map[string]string
+ }
+ 
+ type ProxyConfig struct {
+@@ -15,6 +17,14 @@ type ProxyConfig struct {
+ 	Overrides string `json:"overrides"`
+ }
+ 
++type SophosConfig struct {
++	Servers map[string]ServerList `json:"servers"`
++	ApiKey  string                `json:"api_key"`
++	ApiUser string                `json:"api_user"`
++}
++
++type ServerList map[string]string
++
+ type CldConfig struct {
+ 	EncodeConfig bool `json:"encodeConfig"`
+ }
+@@ -39,7 +49,7 @@ func (config AzureConfig) GetDefaultTenant() CldConfigTenantAuth {
+ }
+ 
+ type CldConfigOptions struct {
+-	ConfigFilePath string
++	ConfigFile string
+ }
+ 
+ type CldConfigTenants map[string]CldConfigTenantAuth

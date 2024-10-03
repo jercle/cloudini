@@ -133,7 +133,7 @@ func getAllSubscriptionVMs(token azure.MultiAuthToken, subscriptionId string) []
 	// https://learn.microsoft.com/en-us/rest/api/compute/virtual-machines/list-all?view=rest-compute-2023-10-02&tabs=HTTP
 	// GET https://management.azure.com/subscriptions/{subscriptionId}/providers/Microsoft.Compute/virtualMachines?api-version=2023-09-01
 	// cred, err := azidentity.NewDefaultAzureCredential(nil)
-	// subscriptionId := "bae338c7-6098-4d52-b173-e2147e107dfa"
+	// subscriptionId := ""
 	// var allVirtualMachines virtualMachines
 	// ctx := context.Background()
 	// tokenRequestOptions := policy.TokenRequestOptions{
@@ -186,19 +186,26 @@ func main() {
 
 	// var allSecrets
 
-	// config.AddAzureTenant("e9f4bce2-7308-461a-91ce-3f663d079f47", "FakeTest")
-	tokens, err := azure.GetAllTenantTokens(azure.AzureRequestOptions{})
+	allVirtualMachines := make(map[string][]VirtualMachine)
+
+	// config.AddAzureTenant("e9f4bce2-7308-461a-91ce-3213f50f54f1", "FakeTest")
+	tokens, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{}, nil)
 	// fmt.Println(tokens)
 	lib.CheckFatalError(err)
 
 	for _, tenant := range tokens {
-		subs, err := listSubscriptions(tenant)
+		subs, err := azure.ListSubscriptions(tenant)
 		lib.CheckFatalError(err)
 		for _, sub := range subs {
-			lib.PrintSrcLoc("getting kvs")
-			GetAllSubscriptionKeyvaults(tenant, sub.ID, sub.DisplayName)
+			// lib.PrintSrcLoc("getting kvs")
+			// GetAllSubscriptionKeyvaults(tenant, sub.ID, sub.DisplayName)
+			subVirtualMachines := ListAllVirtualMachinesInSubscription(sub.ID, &tenant)
+			allVirtualMachines[sub.DisplayName] = subVirtualMachines
 		}
 	}
+
+	jsonStr, _ := json.MarshalIndent(allVirtualMachines, "", "  ")
+	fmt.Println(string(jsonStr))
 }
 
 type KeyVault struct {
@@ -239,7 +246,7 @@ type GetSubscriptionKeyvaultsResponse struct {
 	Value    []interface{} `json:"value"`
 }
 
-func GetAllSubscriptionKeyvaults(token azure.MultiAuthToken, subscriptionId string, subscriptionName string) {
+func GetAllSubscriptionKeyvaults(token lib.MultiAuthToken, subscriptionId string, subscriptionName string) {
 	var allKeyvaults interface{}
 	// urlString := "https://management.azure.com" + subscriptionId + "/resources?$filter=resourceType eq 'Microsoft.KeyVault/vaults'&api-version=2015-11-01" // resources query
 	urlString := "https://management.azure.com" + subscriptionId + "/providers/Microsoft.KeyVault/vaults?api-version=2022-07-01" // keyvault api
@@ -267,7 +274,7 @@ func GetAllSubscriptionKeyvaults(token azure.MultiAuthToken, subscriptionId stri
 	json.Unmarshal(responseBody, unmarshedBody)
 
 	for _, kv := range unmarshedBody.Value {
-		allKeyvaults = append(allKeyvaults, kv)
+		// allKeyvaults = append(allKeyvaults, kv)
 		fmt.Println(kv)
 	}
 

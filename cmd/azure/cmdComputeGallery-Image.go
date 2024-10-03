@@ -13,9 +13,9 @@ import (
 )
 
 var galleryImageName string
+var checkVersionExists string
 var getLatestVersionNumber bool
 var getNewVersionPatchNumber bool
-var checkVersionExists string
 
 // subsCmd represents the subs command
 var cmdComputeGalleryImage = &cobra.Command{
@@ -101,7 +101,6 @@ to quickly create a Cobra application.`,
 func init() {
 	cmdComputeGallery.AddCommand(cmdComputeGalleryImage)
 	cmdComputeGalleryImage.Flags().StringVarP(&galleryImageName, "imageName", "i", "", "Compute Gallery Image name")
-	cmdComputeGalleryImage.Flags().StringVarP(&checkVersionExists, "checkVersionExists", "c", "", "Compute Gallery Image version")
 	cmdComputeGalleryImage.MarkFlagRequired("galleryImageName")
 	cmdComputeGalleryImage.Flags().BoolVarP(&getLatestVersionNumber, "getLatestVersionNumber", "l", false, "Get latest version number")
 	cmdComputeGalleryImage.Flags().BoolVarP(&getNewVersionPatchNumber, "getNewVersionPatchNumber", "p", false, "Increment version patch number")

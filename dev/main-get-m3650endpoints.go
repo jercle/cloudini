@@ -38,7 +38,7 @@ func main() {
 	// token, err := azure.GetTenantSPToken(lib.MultiAuthTokenRequestOptions{})
 	tokenReq, err := azure.GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
 	lib.CheckFatalError(err)
-	token, err := tokenReq.SelectTenant("REDDTQ")
+	token, err := tokenReq.SelectTenant("")
 	lib.CheckFatalError(err)
 	// _ = tokens
 	_ = token
@@ -102,7 +102,7 @@ func main() {
 	// lib.CheckFatalError(err)
 
 	var fwprcAppM365Allow FirewallPolicyRuleCollectionGroup
-	fwprcAppM365Allow.ID = "fwrulecoll-group-automated-apcdtq-app-microsoft365-allow"
+	fwprcAppM365Allow.ID = "fwrulecoll-group-app-microsoft365-allow"
 	fwprcAppM365Allow.Schema = "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#"
 	fwprcAppM365Allow.ContentVersion = "1.0.0.0"
 	fwprcAppM365Allow.Parameters.Priority.Value = 32000
@@ -110,7 +110,7 @@ func main() {
 	var fwprcAppM365AllowRuleCollection RuleCollection
 	fwprcAppM365AllowRuleCollection.Action.Type = "allow"
 	fwprcAppM365AllowRuleCollection.RuleCollectionType = "FirewallPolicyFilterRuleCollection"
-	fwprcAppM365AllowRuleCollection.Name = "fwrulecoll-apcdtq-app-microsoft365-allow"
+	fwprcAppM365AllowRuleCollection.Name = "fwrulecoll-app-microsoft365-allow"
 	fwprcAppM365AllowRuleCollection.Priority = 32001
 
 	for _, ep := range appEndpoints {

@@ -20,7 +20,7 @@ import (
 
 // var usrHomeDir, err = os.UserHomeDir()
 
-func GetCachedTokens() lib.AllTenantTokens {
+func GetCachedTokens(cldConfOpts *lib.CldConfigOptions) lib.AllTenantTokens {
 	var tokens lib.AllTenantTokens
 	if _, err := os.Stat(lib.ConfigPath); err != nil {
 		os.MkdirAll(lib.ConfigPath, os.ModePerm)
@@ -35,7 +35,7 @@ func GetCachedTokens() lib.AllTenantTokens {
 	json.Unmarshal(byteData, &tokens)
 	if len(tokens) == 0 {
 		fmt.Println("Fetching new tokens")
-		tokens, err = GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{})
+		tokens, err = GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{}, cldConfOpts)
 		lib.CheckFatalError(err)
 	}
 	// fmt.Println(tokens)
@@ -48,7 +48,6 @@ func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequest
 
 	// jsonBytes, _ := json.MarshalIndent(spDetails, "", "  ")
 	// fmt.Println(string(jsonBytes))
-	// os.Exit(0)
 
 	switch spDetails.Scope {
 	case "graph":
@@ -88,7 +87,6 @@ func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequest
 
 		return &tokenData, nil
 
-		// os.Exit(0)
 	default:
 		tokenRequestOptions.Scopes = []string{"https://management.core.windows.net/.default"}
 	}
@@ -128,6 +126,8 @@ func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.MultiAuthT
 	switch spDetails.Scope {
 	case "graph":
 		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
+	// case "apc-sharepoint":
+	// 	tokenRequestOptions.Scopes = []string{"https://asiogovau.sharepoint.com/.default"}
 	case "storage":
 		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
 	default:
@@ -163,7 +163,7 @@ func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.MultiAuthT
 	return &token, nil
 }
 
-func GetAzCliToken() lib.TokenData {
+func GetAzCliToken() lib.MultiAuthToken {
 	ctx := context.Background()
 	tokenRequestOptions := policy.TokenRequestOptions{
 		Scopes: []string{
@@ -182,9 +182,15 @@ func GetAzCliToken() lib.TokenData {
 		log.Error("Unable to obtain Azure token", err, err)
 	}
 
-	token := lib.TokenData{
-		Token:     tokenResponse.Token,
-		ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
+	token := lib.MultiAuthToken{
+		// tokenre
+		TokenData: lib.TokenData{
+			Token:     tokenResponse.Token,
+			ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
+		},
+
+		// Token:     tokenResponse.Token,
+		// ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
 	}
 
 	// fmt.Println(token)
@@ -254,7 +260,6 @@ func GetToken(tenantName string) lib.MultiAuthToken {
 	sub, err := GetActiveSub()
 	lib.CheckFatalError(err)
 	// fmt.Println(sub.TenantID)
-	// os.Exit(0)
 
 	ctx := context.Background()
 	tokenRequestOptions := policy.TokenRequestOptions{
@@ -280,16 +285,18 @@ func GetToken(tenantName string) lib.MultiAuthToken {
 
 // Gets a token for each tenant configured in the cld config file
 //
-// Default path is ~/.config/cld/config.json
+// Default path for config file is ~/.config/cld/cldConfig.json
 //
 // First parameter passed into this function overwrites the config file path
-func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions) (lib.AllTenantTokens, error) {
+func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions, cldConfOpts *lib.CldConfigOptions) (lib.AllTenantTokens, error) {
 	var (
-		config       = lib.GetCldConfig(nil)
+		config       lib.CldConfigRoot
 		tenantTokens []lib.MultiAuthToken
 		wg           sync.WaitGroup
 		mut          sync.Mutex
 	)
+
+	config = lib.GetCldConfig(cldConfOpts)
 
 	for _, tenant := range config.Azure.MultiTenantAuth.Tenants {
 		wg.Add(1)
@@ -326,12 +333,14 @@ func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions) (lib.AllTena
 	return tenantTokens, nil
 }
 
-func GetTenantSPToken(options lib.MultiAuthTokenRequestOptions) (*lib.MultiAuthToken, error) {
+func GetTenantSPToken(options lib.MultiAuthTokenRequestOptions, cldConfOpts *lib.CldConfigOptions) (*lib.MultiAuthToken, error) {
 	var (
-		config      = lib.GetCldConfig(nil)
+		config      lib.CldConfigRoot
 		tenantToken lib.MultiAuthToken
 		tenant      lib.CldConfigTenantAuth
 	)
+
+	config = lib.GetCldConfig(cldConfOpts)
 
 	if options.TenantName == "" {
 		tenant = config.Azure.GetDefaultTenant()
@@ -366,12 +375,12 @@ func GetTenantSPToken(options lib.MultiAuthTokenRequestOptions) (*lib.MultiAuthT
 	return &tenantToken, nil
 }
 
-func GetTenantAzCred(tenantName string, getWriteToken bool) *azidentity.ClientSecretCredential {
+func GetTenantAzCred(tenantName string, getWriteToken bool, cldConfOpts *lib.CldConfigOptions) *azidentity.ClientSecretCredential {
 	var (
 		cred *azidentity.ClientSecretCredential
 		err  error
 	)
-	config := lib.GetCldConfig(nil)
+	config := lib.GetCldConfig(cldConfOpts)
 	tenant := config.Azure.MultiTenantAuth.Tenants[tenantName]
 
 	if getWriteToken {
@@ -383,4 +392,17 @@ func GetTenantAzCred(tenantName string, getWriteToken bool) *azidentity.ClientSe
 	}
 
 	return cred
+}
+
+// envUpp := strings.ToUpper(env)
+// tenantID := os.Getenv(envUpp + "-TENANT-ID")
+// clientID := os.Getenv(envUpp + "-CLIENT-ID-AUTOMON-READ")
+// serviceConnectionID := os.Getenv(envUpp + "-SERVICE-CONN-ID")
+// systemAccessToken := os.Getenv("SYSTEM_ACCESSTOKEN")
+
+type GetAzureDevOpsPipelineTokensOptionsTenantConfig struct {
+	TenantName          string
+	TenantID            string
+	ClientID            string
+	ServiceConnectionID string
 }
