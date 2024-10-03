@@ -12,7 +12,7 @@ require (
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.2.2
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/alecthomas/assert/v2 v2.10.0
-	github.com/brianvoe/gofakeit/v7 v7.0.3
+	github.com/brianvoe/gofakeit/v7 v7.0.4
 	github.com/charmbracelet/bubbles v0.18.0
 	github.com/charmbracelet/bubbletea v0.26.2
 	github.com/charmbracelet/lipgloss v0.13.0
