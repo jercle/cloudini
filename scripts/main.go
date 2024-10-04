@@ -7,8 +7,8 @@ import (
 	"math/rand"
 	"strings"
 
-	"dev.azure.com/APCDevOps/cloudini/lib"
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/jercle/cloudini/lib"
 )
 
 // gofakeit.Name()             // Markus Moen
