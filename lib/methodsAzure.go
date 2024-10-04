@@ -166,3 +166,21 @@ func (imgVersion *GalleryImageVersion) IncrementPatchVersion() string {
 
 	return strings.Join(vnums, ".")
 }
+
+func (config AzureConfig) GetDefaultTenant() (*CldConfigTenantAuth, *error) {
+	var (
+		tenant *CldConfigTenantAuth
+		err    error
+	)
+	for _, tConf := range config.MultiTenantAuth.Tenants {
+		if tConf.Default {
+			tenant = &tConf
+		}
+	}
+	if tenant != nil {
+		return tenant, nil
+	} else {
+		err = fmt.Errorf("No default Azure tenant configured")
+		return nil, &err
+	}
+}

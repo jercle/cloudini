@@ -1,13 +1,22 @@
 package lib
 
-import "fmt"
-
 type CldConfigRoot struct {
-	CldConfig    CldConfig              `json:"cldConfig"`
+	Cloudini     CloudiniConfig         `json:"cloudini"`
 	Azure        AzureConfig            `json:"azure"`
-	ProxyConfig  map[string]ProxyConfig `json:"proxyConfig"`
 	SophosConfig SophosConfig           `json:"sophos"`
-	Domains      map[string]string
+	CitrixCloud  CitrixCloud            `json:"citrixCloud"`
+	ProxyConfig  map[string]ProxyConfig `json:"proxyConfig" fakesize:"2"`
+	Domains      map[string]string      `json:"domains" fakesize:"2"`
+}
+
+type CitrixCloud struct {
+	Environments map[string]CitrixCloudAccountConfig `json:"environments" fake:"-"`
+}
+
+type CitrixCloudAccountConfig struct {
+	CustomerId   string `json:"customerId" fake:"{password:true,false,true,false,false,12}"`
+	ClientId     string `json:"clientId" fake:"{uuid}"`
+	ClientSecret string `json:"clientSecret" fake:"{password:true,true,true,true,false,30}"`
 }
 
 type ProxyConfig struct {
@@ -18,34 +27,25 @@ type ProxyConfig struct {
 }
 
 type SophosConfig struct {
-	Servers map[string]ServerList `json:"servers"`
-	ApiKey  string                `json:"api_key"`
-	ApiUser string                `json:"api_user"`
+	Environments map[string]SophosEnvironment `json:"environments" fake:"-"`
 }
 
-type ServerList map[string]string
+type SophosEnvironment struct {
+	Hosts   []string `json:"hosts" fake:"-"`
+	ApiUser string   `json:"api_user" fake:"{username}"`
+	ApiKey  string   `json:"api_key" fake:"{password:true,true,true,true,false,30}"`
+}
 
-type CldConfig struct {
-	EncodeConfig bool `json:"encodeConfig"`
+// type ServerList []string
+
+type CloudiniConfig struct {
+	EncryptConfig bool `json:"encryptConfig" fake:"{bool}"`
 }
 
 type AzureConfig struct {
 	MultiTenantAuth struct {
-		Tenants CldConfigTenants `json:"tenants"`
+		Tenants CldConfigTenants `json:"tenants" fake:"-"`
 	} `json:"multiTenantAuth"`
-}
-
-func (config AzureConfig) GetDefaultTenant() CldConfigTenantAuth {
-	var tenant *CldConfigTenantAuth
-	for _, tConf := range config.MultiTenantAuth.Tenants {
-		if tConf.Default {
-			tenant = &tConf
-		}
-	}
-	if tenant == nil {
-		CheckFatalError(fmt.Errorf("No default Azure tenant configured"))
-	}
-	return *tenant
 }
 
 type CldConfigOptions struct {
@@ -56,14 +56,14 @@ type CldConfigTenants map[string]CldConfigTenantAuth
 
 type CldConfigTenantAuth struct {
 	TenantName          string                     `json:"tenantName"`
-	Default             bool                       `json:"default"`
-	TenantID            string                     `json:"tenantId"`
+	Default             bool                       `json:"default" fake:"-"`
+	TenantID            string                     `json:"tenantId" fake:"{uuid}"`
 	Reader              CldConfigClientAuthDetails `json:"reader"`
 	Writer              CldConfigClientAuthDetails `json:"writer"`
 	CostExportsLocation string                     `json:"costExportsLocation"`
 }
 
 type CldConfigClientAuthDetails struct {
-	ClientID     string `json:"clientId"`
-	ClientSecret string `json:"clientSecret"`
+	ClientID     string `json:"clientId" fake:"{uuid}"`
+	ClientSecret string `json:"clientSecret" fake:"{password:true,true,true,true,false,30}"`
 }
