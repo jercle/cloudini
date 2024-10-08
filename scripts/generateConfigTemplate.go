@@ -43,7 +43,7 @@ func main() {
 	cldConfig.ProxyConfig = generateProxyConfig()
 	cldConfig.Domains = generateDomains(envs)
 
-	jsonStr, _ := json.MarshalIndent(cldConfig.Domains, "", "  ")
+	jsonStr, _ := json.MarshalIndent(cldConfig, "", "  ")
 	fmt.Println(string(jsonStr))
 
 	// cldConfig.Azure.MultiTenantAuth.Tenants["T1"].CostExportsLocation =
@@ -112,6 +112,8 @@ func generateAzureConfig(envs []string) lib.AzureConfig {
 		lib.CheckFatalError(err)
 		if i == randomEnv {
 			tenantEnv.Default = true
+		} else {
+			tenantEnv.Default = false
 		}
 		tenantEnv.CostExportsLocation = "https://" + strings.ToLower(env) + "strgacct.blob.core.windows.net/cost-exports"
 		tenantEnv.TenantName = env

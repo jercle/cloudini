@@ -343,7 +343,9 @@ func GetTenantSPToken(options lib.MultiAuthTokenRequestOptions, cldConfOpts *lib
 	config = lib.GetCldConfig(cldConfOpts)
 
 	if options.TenantName == "" {
-		tenant = config.Azure.GetDefaultTenant()
+		tn, err := config.Azure.GetDefaultTenant()
+		lib.CheckFatalError(err)
+		tenant = *tn
 	} else {
 		t, tenantExists := config.Azure.MultiTenantAuth.Tenants[options.TenantName]
 		if !tenantExists {
