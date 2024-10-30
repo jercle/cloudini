@@ -89,7 +89,8 @@ type SubsReqResBody struct {
 type AllTenantTokens []MultiAuthToken
 
 type ListGalleryImageVersionsResponse struct {
-	Value []GalleryImageVersionResponse `json:"value"`
+	Value    []GalleryImageVersionResponse `json:"value"`
+	NextLink string                        `json:"nextLink",omitempty`
 }
 type GalleryImageVersionResponse struct {
 	ID         string `json:"id"`

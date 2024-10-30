@@ -11,6 +11,7 @@ func GetGalleryImageVersions(subscriptionId string, resourceGroup string, galler
 	var (
 		listResponse  lib.ListGalleryImageVersionsResponse
 		imageVersions lib.GalleryImageVersionList
+		nextLink      string
 	)
 
 	urlString := "https://management.azure.com/subscriptions/" +
@@ -37,7 +38,24 @@ func GetGalleryImageVersions(subscriptionId string, resourceGroup string, galler
 		imageVersions.Versions = append(imageVersions.Versions, imgVer)
 	}
 
-	// fmt.Println(string(res))
+	nextLink = listResponse.NextLink
+
+	for nextLink != "" {
+		var currentSet lib.ListGalleryImageVersionsResponse
+
+		res, _ := HttpGet(nextLink, mat)
+		json.Unmarshal(res, &currentSet)
+		nextLink = currentSet.NextLink
+
+		for _, val := range currentSet.Value {
+			str, _ := json.Marshal(val)
+
+			var imgVer lib.GalleryImageVersion
+
+			json.Unmarshal(str, &imgVer)
+			imageVersions.Versions = append(imageVersions.Versions, imgVer)
+		}
+	}
 	return imageVersions
 }
 
