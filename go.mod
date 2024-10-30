@@ -33,7 +33,7 @@ require (
 	github.com/xuri/excelize/v2 v2.8.1
 	golang.design/x/clipboard v0.7.0
 	golang.org/x/exp v0.0.0-20240409090435-93d18d7e34b8
-	golang.org/x/mod v0.20.0
+	golang.org/x/mod v0.21.0
 	golang.org/x/sys v0.25.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -57,11 +57,7 @@ require (
 	github.com/hexops/gotextdiff v1.0.3 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/jackc/pgpassfile v1.0.0 // indirect
-	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
-	github.com/jackc/pgx/v5 v5.7.1 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
-	github.com/lib/pq v1.10.9 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
