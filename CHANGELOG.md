@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.13]
+* Fix bug in retrieving latest ACG image with Azure API chunking responses after first 55 versons.
+
 ## [0.1.12]
 * Add back checkVersionExists flag for checking image gallery versions after accidental removal in 0.1.11
 
