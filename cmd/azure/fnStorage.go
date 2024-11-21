@@ -1,3 +1,6 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
 package azure
 
 import (
@@ -7,7 +10,7 @@ import (
 	"github.com/jercle/cloudini/lib"
 )
 
-func StorageBlobHttpGet(urlString string, mat lib.MultiAuthToken) ([]byte, error) {
+func StorageBlobHttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
 	if err != nil {
 		return nil, err

@@ -1,3 +1,6 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
 package azure
 
 import (
@@ -10,7 +13,7 @@ import (
 	"github.com/jercle/cloudini/lib"
 )
 
-func HttpGet(urlString string, mat lib.MultiAuthToken) ([]byte, error) {
+func HttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
 	lib.CheckFatalError(err)
 	// if err != nil {
@@ -41,7 +44,7 @@ func HttpGet(urlString string, mat lib.MultiAuthToken) ([]byte, error) {
 	return responseBody, nil
 }
 
-func HttpPost(urlString string, body string, mat lib.MultiAuthToken) ([]byte, []byte, error) {
+func HttpPost(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byte, []byte, error) {
 	bodyReader := bytes.NewReader([]byte(body))
 
 	req, err := http.NewRequest(http.MethodPost, urlString, bodyReader)
@@ -53,7 +56,7 @@ func HttpPost(urlString string, body string, mat lib.MultiAuthToken) ([]byte, []
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
-	fmt.Println(body)
+	// fmt.Println(body)
 
 	res, err := http.DefaultClient.Do(req)
 	lib.CheckFatalError(err)
@@ -82,7 +85,7 @@ func HttpPost(urlString string, body string, mat lib.MultiAuthToken) ([]byte, []
 	return responseBody, resHeader, nil
 }
 
-func HttpPut(urlString string, mat lib.MultiAuthToken) ([]byte, []byte, error) {
+func HttpPut(urlString string, mat lib.AzureMultiAuthToken) ([]byte, []byte, error) {
 	req, err := http.NewRequest(http.MethodPost, urlString, nil)
 	lib.CheckFatalError(err)
 	// if err != nil {

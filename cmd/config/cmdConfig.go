@@ -4,13 +4,17 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/jercle/cloudini/cmd"
+	"github.com/jercle/cloudini/lib"
 	"github.com/spf13/cobra"
 )
 
 var SetConfigItem string
+var Outfile string
+var ExportDecryptedConfig string
+
+// Only used when initially encrypting a previously unencrypted config file
+var ImportUnencryptedConfigFile string
 
 // configCmd represents the config command
 var configCmd = &cobra.Command{
@@ -23,16 +27,34 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("config called")
+		// fmt.Println("config called")
 		// if SetConfigItem != "" {
 		// 	strings.Split()
 		// }
+		// configFile, _, _ := lib.InitConfig(nil)
+		// fmt.Println(configFile)
+
+		if ImportUnencryptedConfigFile != "" {
+			// fmt.Println(InitialEncryptionOfUnencryptedConfigFile)
+			lib.EncryptUnencryptedConfigFile(ImportUnencryptedConfigFile, false)
+		}
+
+		configFile, _, _ := lib.InitConfig(nil)
+
+		if ExportDecryptedConfig != "" {
+			lib.DecryptEncryptedConfigFile(configFile, ExportDecryptedConfig)
+		}
 	},
 }
 
 func init() {
 	cmd.RootCmd.AddCommand(configCmd)
 	configCmd.Flags().StringVarP(&SetConfigItem, "setItem", "s", "", "Set config item")
+	configCmd.Flags().StringVar(&ImportUnencryptedConfigFile, "import", "", "Import unencrypted config file")
+	configCmd.Flags().StringVar(&ExportDecryptedConfig, "export", "", "Decrypt and save config file")
+	// configCmd.Flags().StringVar(&Outfile, "out-file", "", "Output filename")
+	// configCmd.MarkFlagsRequiredTogether("export-config", "out-file")
+	configCmd.MarkFlagsMutuallyExclusive("import", "export")
 
 	// Here you will define your flags and configuration settings.
 

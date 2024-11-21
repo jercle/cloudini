@@ -1,3 +1,6 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
 package azure
 
 import (
@@ -10,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"reflect"
+	"strings"
 	"sync"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
@@ -20,31 +24,50 @@ import (
 
 // var usrHomeDir, err = os.UserHomeDir()
 
-func GetCachedTokens(cldConfOpts *lib.CldConfigOptions) lib.AllTenantTokens {
-	var tokens lib.AllTenantTokens
-	if _, err := os.Stat(lib.ConfigPath); err != nil {
-		os.MkdirAll(lib.ConfigPath, os.ModePerm)
-	}
-	if _, err := os.Stat(lib.TokenCacheFile); err != nil {
-		os.Create(lib.TokenCacheFile)
-	}
-	fileData, err := os.ReadFile(lib.TokenCacheFile)
-	lib.CheckFatalError(err)
-	byteData, err := b64.StdEncoding.DecodeString(string(fileData))
-	lib.CheckFatalError(err)
-	json.Unmarshal(byteData, &tokens)
-	if len(tokens) == 0 {
-		fmt.Println("Fetching new tokens")
-		tokens, err = GetAllTenantSPTokens(lib.MultiAuthTokenRequestOptions{}, cldConfOpts)
-		lib.CheckFatalError(err)
-	}
-	// fmt.Println(tokens)
-	return tokens
-}
+// func GetCachedTokens(cldConfOpts *lib.CldConfigOptions) lib.AllTenantTokens {
+// 	var tokens lib.AllTenantTokens
+// 	_, _, cachePath := lib.InitConfig(cldConfOpts)
+// 	cacheFile := cachePath + "/azTok"
 
-func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequestOptions) (*lib.TokenData, error) {
+// 	// if _, err := os.Stat(lib.ConfigPath); err != nil {
+// 	// 	os.MkdirAll(lib.ConfigPath, os.ModePerm)
+// 	// }
+// 	// if _, err := os.Stat(cachePath); err != nil {
+// 	// 	os.Create(cachePath)
+// 	// 	return lib.AllTenantTokens{}
+// 	// }
+// 	fileData, err := os.ReadFile(cacheFile)
+// 	lib.CheckFatalError(err)
+// 	byteData, err := b64.StdEncoding.DecodeString(string(fileData))
+// 	lib.CheckFatalError(err)
+// 	json.Unmarshal(byteData, &tokens)
+// 	if len(tokens) == 0 {
+// 		fmt.Println("Fetching new tokens")
+// 		tokens, err = GetAllTenantSPTokens(lib.AzureMultiAuthTokenRequestOptions{}, cldConfOpts)
+// 		lib.CheckFatalError(err)
+// 	}
+// 	// fmt.Println(tokens)
+// 	return tokens
+// }
+
+func GetServicePrincipalToken(tenant string, servicePrincipalDetails lib.AzureMultiAuthTokenRequestOptions, cldConfigOpts *lib.CldConfigOptions) (*lib.AzureTokenData, error) {
 	ctx := context.Background()
+	spDetails := servicePrincipalDetails
+
 	var tokenRequestOptions policy.TokenRequestOptions
+
+	if spDetails.Scope == "" {
+		spDetails.Scope = "default"
+	}
+
+	cachedToken := lib.GetCachedToken[lib.AzureTokenData]("az"+strings.ToLower(spDetails.TenantName)+spDetails.Scope, cldConfigOpts)
+
+	if cachedToken != nil {
+		isExpired := lib.CheckCachedTokenExpired(cachedToken.ExpiresOn)
+		if !isExpired {
+			return cachedToken, nil
+		}
+	}
 
 	// jsonBytes, _ := json.MarshalIndent(spDetails, "", "  ")
 	// fmt.Println(string(jsonBytes))
@@ -78,13 +101,14 @@ func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequest
 		var token lib.AcrAccessToken
 		json.Unmarshal(responseBody, &token)
 
-		jsonBytes, _ := json.MarshalIndent(token, "", "  ")
-		fmt.Println(string(jsonBytes))
+		// jsonBytes, _ := json.MarshalIndent(token, "", "  ")
+		// fmt.Println(string(jsonBytes))
 
-		tokenData := lib.TokenData{
+		tokenData := lib.AzureTokenData{
 			Token: token.AccessToken,
 		}
 
+		lib.CacheSaveToken(tokenData, "az"+strings.ToLower(spDetails.TenantName)+spDetails.Scope, cldConfigOpts)
 		return &tokenData, nil
 
 	default:
@@ -110,16 +134,17 @@ func GetServicePrincipalToken(tenant string, spDetails lib.MultiAuthTokenRequest
 		return nil, err
 	}
 
-	token := lib.TokenData{
+	token := lib.AzureTokenData{
 		Token:     tokenResponse.Token,
-		ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
+		ExpiresOn: tokenResponse.ExpiresOn,
 	}
 
 	// fmt.Println(token)
+	lib.CacheSaveToken(token, "az"+strings.ToLower(spDetails.TenantName)+spDetails.Scope, cldConfigOpts)
 	return &token, nil
 }
 
-func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.MultiAuthTokenRequestOptions) (*lib.MultiAuthToken, error) {
+func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.AzureMultiAuthTokenRequestOptions) (*lib.AzureMultiAuthToken, error) {
 	ctx := context.Background()
 	var tokenRequestOptions policy.TokenRequestOptions
 
@@ -151,11 +176,11 @@ func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.MultiAuthT
 		return nil, err
 	}
 
-	token := lib.MultiAuthToken{
+	token := lib.AzureMultiAuthToken{
 		TenantId: tenantId,
-		TokenData: lib.TokenData{
+		TokenData: lib.AzureTokenData{
 			Token:     tokenResponse.Token,
-			ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
+			ExpiresOn: tokenResponse.ExpiresOn,
 		},
 	}
 
@@ -163,7 +188,7 @@ func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.MultiAuthT
 	return &token, nil
 }
 
-func GetAzCliToken() lib.MultiAuthToken {
+func GetAzCliToken() lib.AzureMultiAuthToken {
 	ctx := context.Background()
 	tokenRequestOptions := policy.TokenRequestOptions{
 		Scopes: []string{
@@ -182,11 +207,11 @@ func GetAzCliToken() lib.MultiAuthToken {
 		log.Error("Unable to obtain Azure token", err, err)
 	}
 
-	token := lib.MultiAuthToken{
+	token := lib.AzureMultiAuthToken{
 		// tokenre
-		TokenData: lib.TokenData{
+		TokenData: lib.AzureTokenData{
 			Token:     tokenResponse.Token,
-			ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
+			ExpiresOn: tokenResponse.ExpiresOn,
 		},
 
 		// Token:     tokenResponse.Token,
@@ -253,11 +278,18 @@ func GetAzureEnvVariables(requiredEnvVars lib.AzureAuthRequirements) *lib.AzureA
 	return &envs
 }
 
-func GetToken(tenantName string) lib.MultiAuthToken {
+func GetToken(tenantName string, cldConfigOpts *lib.CldConfigOptions) lib.AzureMultiAuthToken {
+	cachedToken := lib.GetCachedToken[lib.AzureMultiAuthToken]("azMA-"+tenantName, cldConfigOpts)
+	// fmt.Println(cachedToken)
+	isExpired := lib.CheckCachedTokenExpired(cachedToken.TokenData.ExpiresOn)
+	if !isExpired {
+		return *cachedToken
+	}
+
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	lib.CheckFatalError(err)
 
-	sub, err := GetActiveSub()
+	sub, err := GetActiveCliSub()
 	lib.CheckFatalError(err)
 	// fmt.Println(sub.TenantID)
 
@@ -271,12 +303,12 @@ func GetToken(tenantName string) lib.MultiAuthToken {
 	tokenResponse, err := cred.GetToken(ctx, tokenRequestOptions)
 	lib.CheckFatalError(err)
 
-	multiAuthToken := lib.MultiAuthToken{
+	multiAuthToken := lib.AzureMultiAuthToken{
 		TenantId:   sub.TenantID,
 		TenantName: tenantName,
-		TokenData: lib.TokenData{
+		TokenData: lib.AzureTokenData{
 			Token:     tokenResponse.Token,
-			ExpiresOn: tokenResponse.ExpiresOn.Local().String(),
+			ExpiresOn: tokenResponse.ExpiresOn,
 		},
 	}
 
@@ -288,10 +320,10 @@ func GetToken(tenantName string) lib.MultiAuthToken {
 // Default path for config file is ~/.config/cld/cldConfig.json
 //
 // First parameter passed into this function overwrites the config file path
-func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions, cldConfOpts *lib.CldConfigOptions) (lib.AllTenantTokens, error) {
+func GetAllTenantSPTokens(options lib.AzureMultiAuthTokenRequestOptions, cldConfOpts *lib.CldConfigOptions) (lib.AllTenantTokens, error) {
 	var (
 		config       lib.CldConfigRoot
-		tenantTokens []lib.MultiAuthToken
+		tenantTokens []lib.AzureMultiAuthToken
 		wg           sync.WaitGroup
 		mut          sync.Mutex
 	)
@@ -304,6 +336,7 @@ func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions, cldConfOpts 
 
 			options.ClientID = tenant.Writer.ClientID
 			options.ClientSecret = tenant.Writer.ClientSecret
+			options.TenantName = tenant.TenantName
 
 			switch options.GetWriteToken {
 			case true:
@@ -314,10 +347,14 @@ func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions, cldConfOpts 
 				options.ClientSecret = tenant.Reader.ClientSecret
 			}
 
-			tokenData, err := GetServicePrincipalToken(tenant.TenantID, options)
+			// jsonStr, _ := json.MarshalIndent(cldConfOpts, "", "  ")
+			// fmt.Println(string(jsonStr))
+			// fmt.Println(tenant.TenantID)
+			// os.Exit(0)
+			tokenData, err := GetServicePrincipalToken(tenant.TenantID, options, cldConfOpts)
 			lib.CheckFatalError(err)
 
-			tenantToken := lib.MultiAuthToken{
+			tenantToken := lib.AzureMultiAuthToken{
 				TenantId:   tenant.TenantID,
 				TenantName: tenant.TenantName,
 				TokenData:  *tokenData,
@@ -333,10 +370,10 @@ func GetAllTenantSPTokens(options lib.MultiAuthTokenRequestOptions, cldConfOpts 
 	return tenantTokens, nil
 }
 
-func GetTenantSPToken(options lib.MultiAuthTokenRequestOptions, cldConfOpts *lib.CldConfigOptions) (*lib.MultiAuthToken, error) {
+func GetTenantSPToken(options lib.AzureMultiAuthTokenRequestOptions, cldConfOpts *lib.CldConfigOptions) (*lib.AzureMultiAuthToken, error) {
 	var (
 		config      lib.CldConfigRoot
-		tenantToken lib.MultiAuthToken
+		tenantToken lib.AzureMultiAuthToken
 		tenant      lib.CldConfigTenantAuth
 	)
 
@@ -363,10 +400,10 @@ func GetTenantSPToken(options lib.MultiAuthTokenRequestOptions, cldConfOpts *lib
 		options.ClientSecret = tenant.Reader.ClientSecret
 	}
 
-	tokenData, err := GetServicePrincipalToken(tenant.TenantID, options)
+	tokenData, err := GetServicePrincipalToken(tenant.TenantID, options, cldConfOpts)
 	lib.CheckFatalError(err)
 
-	mat := lib.MultiAuthToken{
+	mat := lib.AzureMultiAuthToken{
 		TenantId:   tenant.TenantID,
 		TenantName: tenant.TenantName,
 		TokenData:  *tokenData,

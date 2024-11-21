@@ -4,15 +4,14 @@ Copyright © 2024 Evan Colwell ercolwell@gmail.com
 package utils
 
 import (
-	"github.com/jercle/cloudini/cmd"
 	"github.com/spf13/cobra"
 )
 
 // utilsCmd represents the util command
-var cmdUtils = &cobra.Command{
-	Use:     "utils",
-	Short:   "Collection of utility commands",
-	Aliases: []string{"u"},
+var cmdGenerate = &cobra.Command{
+	Use:     "generate",
+	Short:   "Tools to generate random values",
+	Aliases: []string{"gen"},
 	// 	Long: `A longer description that spans multiple lines and likely contains examples
 	// and usage of using your command. For example:
 
@@ -20,14 +19,13 @@ var cmdUtils = &cobra.Command{
 	// This application is a tool to generate the needed files
 	// to quickly create a Cobra application.`,
 	//
-	// Run: func(cmd *cobra.Command, args []string) {
-	// 	// configFile, _, _ := lib.InitConfig(nil)
-	// 	// fmt.Println(configFile)
-	// },
+	//	Run: func(cmd *cobra.Command, args []string) {
+	//		fmt.Println("util called")
+	//	},
 }
 
 func init() {
-	cmd.RootCmd.AddCommand(cmdUtils)
+	cmdUtils.AddCommand(cmdGenerate)
 	// utilsCmd.Flags().IntVarP("pwdgen", )
 	// StringVarP("pwdgen", "p", 0)
 	// Here you will define your flags and configuration settings.

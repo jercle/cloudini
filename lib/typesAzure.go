@@ -1,8 +1,11 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
 package lib
 
 import "time"
 
-type MultiAuthTokenRequestOptions struct {
+type AzureMultiAuthTokenRequestOptions struct {
 	// unicorn
 	TenantID                     string `json:"tenantID"`
 	TenantName                   string `json:"tenantName"`
@@ -14,10 +17,10 @@ type MultiAuthTokenRequestOptions struct {
 	AzureContainerRepositoryName string `json:"azureContainerRepositoryName"`
 }
 
-type MultiAuthToken struct {
+type AzureMultiAuthToken struct {
 	TenantId   string `json:"tenantId"`
 	TenantName string `json:"tenantName"`
-	TokenData  TokenData
+	TokenData  AzureTokenData
 }
 
 type Request struct {
@@ -25,13 +28,13 @@ type Request struct {
 	Outfile string
 }
 
-type TokenData struct {
-	Token     string
-	ExpiresOn string
+type AzureTokenData struct {
+	Token     string    `json:"token"`
+	ExpiresOn time.Time `json:"expiresOn"`
 }
 
 type AcrAccessToken struct {
-	AccessToken string
+	AccessToken string `json:"accessToken"`
 }
 
 type TokenRequestResponse struct {
@@ -86,7 +89,7 @@ type SubsReqResBody struct {
 	Value []FetchedSubscription `json:"value"`
 }
 
-type AllTenantTokens []MultiAuthToken
+type AllTenantTokens []AzureMultiAuthToken
 
 type ListGalleryImageVersionsResponse struct {
 	Value    []GalleryImageVersionResponse `json:"value"`

@@ -29,6 +29,9 @@ var (
 	// outJSON flag
 	OutJSON   bool
 	DebugMode bool
+
+	// // Only used when initially encrypting a previously unencrypted config file
+	// InitialEncryptionOfUnencryptedConfigFile bool
 )
 
 // rootCmd represents the base command when called without any subcommands

@@ -33,7 +33,7 @@ Current functionality includes:
 // TODO - Make subcommands into input/output flags instead
 
 func init() {
-	utilsCmd.AddCommand(datatransformCmd)
+	cmdUtils.AddCommand(datatransformCmd)
 
 	datatransformCmd.PersistentFlags().StringVar(&jsonString, "jsonString", "", "Json string to transform")
 	datatransformCmd.PersistentFlags().StringVarP(&fileName, "fileName", "f", "", "Json string to transform")

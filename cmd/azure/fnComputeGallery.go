@@ -1,3 +1,6 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
 package azure
 
 import (
@@ -6,7 +9,7 @@ import (
 	"github.com/jercle/cloudini/lib"
 )
 
-func GetGalleryImageVersions(subscriptionId string, resourceGroup string, galleryName string, galleryImageName string, mat lib.MultiAuthToken) lib.GalleryImageVersionList {
+func GetGalleryImageVersions(subscriptionId string, resourceGroup string, galleryName string, galleryImageName string, mat lib.AzureMultiAuthToken) lib.GalleryImageVersionList {
 
 	var (
 		listResponse  lib.ListGalleryImageVersionsResponse
@@ -59,7 +62,7 @@ func GetGalleryImageVersions(subscriptionId string, resourceGroup string, galler
 	return imageVersions
 }
 
-func GetGalleryImage(subscriptionId string, resourceGroup string, galleryName string, galleryImageName string, mat lib.MultiAuthToken) lib.GalleryImageResponse {
+func GetGalleryImage(subscriptionId string, resourceGroup string, galleryName string, galleryImageName string, mat lib.AzureMultiAuthToken) lib.GalleryImageResponse {
 
 	var (
 		imageDefinition lib.GalleryImageResponse

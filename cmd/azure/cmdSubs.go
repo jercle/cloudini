@@ -4,8 +4,8 @@ Copyright © 2024 Evan Colwell ercolwell@gmail.com
 package azure
 
 import (
+	"encoding/json"
 	"fmt"
-	"os"
 
 	"github.com/jercle/cloudini/lib"
 	"github.com/spf13/cobra"
@@ -27,32 +27,24 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// fmt.Println("subs called")
-		azProfile, _ := getSubs()
+		// azProfile, _ := GetCliSubs()
 		// fmt.Println("print")
 
 		// azProfile.PrintSubs()
 		// azProfile.Sort()
 
 		if ShowActive {
-			activeSub, err := GetActiveSub()
+			activeSub, err := GetActiveCliSub()
 			lib.CheckFatalError(err)
-			fmt.Println(activeSub)
+			jsonStr, _ := json.MarshalIndent(activeSub, "", "  ")
+			fmt.Println(string(jsonStr))
 		}
 
 		if SetActive {
-			// activeSub := azure.ChangeActiveSub(azProfile.Subscriptions)
-			changeActiveSub(azProfile.Subscriptions)
-			// fmt.Println(activeSub)
-			os.Exit(0)
+			_, subs := PromptSelectTenant()
+			ChangeActiveSubscription(subs)
 		} else {
-			// fmt.Println(string(jsonBytes))
-			// azProfile.PrintSubs()
 		}
-
-		// if Fetch {
-
-		// }
-
 	},
 }
 

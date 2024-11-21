@@ -1,4 +1,9 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
 package lib
+
+import "time"
 
 type CldConfigRoot struct {
 	Cloudini     CloudiniConfig         `json:"cloudini"`
@@ -15,6 +20,7 @@ type CitrixCloud struct {
 
 type CitrixCloudAccountConfig struct {
 	CustomerId   string `json:"customerId" fake:"{password:true,false,true,false,false,12}"`
+	SiteId       string `json:"siteId" fake:"{uuid}"`
 	ClientId     string `json:"clientId" fake:"{uuid}"`
 	ClientSecret string `json:"clientSecret" fake:"{password:true,true,true,true,false,30}"`
 }
@@ -39,17 +45,20 @@ type SophosEnvironment struct {
 // type ServerList []string
 
 type CloudiniConfig struct {
-	EncryptConfig bool `json:"encryptConfig" fake:"{bool}"`
+	// EncryptConfig bool `json:"encryptConfig" fake:"{bool}"`
 }
 
 type AzureConfig struct {
 	MultiTenantAuth struct {
 		Tenants CldConfigTenants `json:"tenants" fake:"-"`
 	} `json:"multiTenantAuth"`
+	TenantMap                  map[string]string   `json:"tenantMap,omitempty"`
+	CustomSubIdToTenantNameMap map[string][]string `json:"customSubIdToTenantNameMap,omitempty"`
 }
 
 type CldConfigOptions struct {
-	ConfigFile string
+	ConfigFile             string
+	EncryptUnencryptedFile bool
 }
 
 type CldConfigTenants map[string]CldConfigTenantAuth
@@ -67,3 +76,15 @@ type CldConfigClientAuthDetails struct {
 	ClientID     string `json:"clientId" fake:"{uuid}"`
 	ClientSecret string `json:"clientSecret" fake:"{password:true,true,true,true,false,30}"`
 }
+
+type EncryptedTokenData struct {
+	TokenData string
+	TokenType string
+	Expiry    time.Time
+}
+
+type TokenCache map[string]string
+
+// type TokenCacheTypes interface {
+// 	AzureMultiAuthToken | AzureTokenData | CitrixTokenData
+// }

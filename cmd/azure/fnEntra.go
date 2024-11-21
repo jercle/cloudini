@@ -1,3 +1,6 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
 package azure
 
 import (
@@ -23,7 +26,7 @@ type ListEntraRoleDefinitionsResponse struct {
 	Value         []EntraRoleDefinition `json:"value"`
 }
 
-func ListEntraRoleDefinitions(mat lib.MultiAuthToken) ([]EntraRoleDefinition, error) {
+func ListEntraRoleDefinitions(mat lib.AzureMultiAuthToken) ([]EntraRoleDefinition, error) {
 	var (
 		unmarshResponse ListEntraRoleDefinitionsResponse
 		roleDefs        []EntraRoleDefinition

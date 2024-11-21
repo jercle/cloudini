@@ -1,3 +1,6 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
 package azure
 
 import (
@@ -103,7 +106,7 @@ type Vnet struct {
 	Location               string                 `json:"location"`
 	Name                   string                 `json:"name"`
 	ResourceGroup          string                 `json:"resourceGroup"`
-	SubscriptionID         string                 `json:"subscriptionId`
+	SubscriptionID         string                 `json:"subscriptionId"`
 	AddressSpace           []string               `json:"addressSpace"`
 	Subnets                []SubnetResponse       `json:"subnets"`
 	ProvisioningState      string                 `json:"provisioningState"`
@@ -378,7 +381,7 @@ type IPAddressList struct {
 
 type AllTenantIPs map[string]IPAddressList
 
-func ListAllTenantIpAddresses(token lib.MultiAuthToken) IPAddressList {
+func ListAllTenantIpAddresses(token lib.AzureMultiAuthToken) IPAddressList {
 
 	var (
 		allIpAddresses IPAddressList
@@ -426,7 +429,7 @@ func ListAllTenantIpAddresses(token lib.MultiAuthToken) IPAddressList {
 	return allIpAddresses
 }
 
-func ListAllSubscriptionVnetsWithChan(subscriptionId string, mat lib.MultiAuthToken, out chan<- Vnet, wg *lib.WaitGroupCount) {
+func ListAllSubscriptionVnetsWithChan(subscriptionId string, mat lib.AzureMultiAuthToken, out chan<- Vnet, wg *lib.WaitGroupCount) {
 	var (
 		allVnets  []Vnet
 		listVnets VnetListResponse
@@ -492,7 +495,7 @@ func ListAllSubscriptionVnetsWithChan(subscriptionId string, mat lib.MultiAuthTo
 	wg.Done()
 }
 
-func ListAllVnetIPAddressesWithChan(mat lib.MultiAuthToken, vnet Vnet, publicIps chan<- IPAddressItem, privateIps chan<- IPAddressItem, wg *lib.WaitGroupCount) {
+func ListAllVnetIPAddressesWithChan(mat lib.AzureMultiAuthToken, vnet Vnet, publicIps chan<- IPAddressItem, privateIps chan<- IPAddressItem, wg *lib.WaitGroupCount) {
 	urlString := "https://management.azure.com/subscriptions/" +
 		vnet.SubscriptionID +
 		"/resourceGroups/" +
@@ -566,7 +569,7 @@ func ListAllVnetIPAddressesWithChan(mat lib.MultiAuthToken, vnet Vnet, publicIps
 	wg.Done()
 }
 
-func ListAllVnetIPAddresses(mat lib.MultiAuthToken, vnet Vnet) IPAddressList {
+func ListAllVnetIPAddresses(mat lib.AzureMultiAuthToken, vnet Vnet) IPAddressList {
 
 	var allVnetIps IPAddressList
 
@@ -643,7 +646,7 @@ func ListAllVnetIPAddresses(mat lib.MultiAuthToken, vnet Vnet) IPAddressList {
 	return allVnetIps
 }
 
-func ListAllSubscriptionVnets(subscriptionId string, mat lib.MultiAuthToken) []Vnet {
+func ListAllSubscriptionVnets(subscriptionId string, mat lib.AzureMultiAuthToken) []Vnet {
 	var (
 		allVnets  []Vnet
 		listVnets VnetListResponse
@@ -708,7 +711,7 @@ func ListAllSubscriptionVnets(subscriptionId string, mat lib.MultiAuthToken) []V
 	return allVnets
 }
 
-func ListVnetSubnets(subscriptionId string, resourceGroupName string, virtualNetworkName string, mat lib.MultiAuthToken) []SubnetResponse {
+func ListVnetSubnets(subscriptionId string, resourceGroupName string, virtualNetworkName string, mat lib.AzureMultiAuthToken) []SubnetResponse {
 	var listSubnetResponse ListSubnetsResponse
 
 	urlString := "https://management.azure.com/subscriptions/" +

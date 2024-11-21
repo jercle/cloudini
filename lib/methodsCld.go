@@ -1,3 +1,6 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
 package lib
 
 import (
@@ -7,30 +10,19 @@ import (
 )
 
 func (config *CldConfigRoot) Save(options *CldConfigOptions) {
-	configPath := InitConfig(options)
-
+	configFile, _, _ := InitConfig(options)
 	jsonBytes, _ := json.MarshalIndent(config, "", "  ")
-
-	os.WriteFile(configPath, jsonBytes, os.ModePerm)
-	// fmt.Println(string(jsonBytes))
-	// configPath := InitConfig(CldConfigOptions{})
-
-	// byteData, err := json.Marshal(config)
-	// lib.CheckFatalError(err)
-	// if _, err := os.Stat(tCacheFile); err != nil {
-	// 	os.Create(tCacheFile)
-	// }
-	// fmt.Println(jsonBytes)
-	// encodedData := b64.StdEncoding.EncodeToString(jsonBytes)
-	// os.WriteFile(tCacheFile, []byte(encodedData), os.ModePerm)
-	// fmt.Println(encodedData)
-	// jsonBytes, _ := json.MarshalIndent(config, "", "  ")
-	// os.WriteFile(configPath, jsonBytes, os.ModePerm)
+	os.WriteFile(configFile, jsonBytes, os.ModePerm)
 }
 
 func (config *CldConfigRoot) Show() {
 	jsonBytes, _ := json.MarshalIndent(config, "", "  ")
 	fmt.Println(string(jsonBytes))
+}
+
+func (config *CldConfigRoot) Path(options *CldConfigOptions) string {
+	_, configPath, _ := InitConfig(options)
+	return configPath
 }
 
 func (tenants *CldConfigTenants) AddOrUpdateTenant(tenant CldConfigTenantAuth) {

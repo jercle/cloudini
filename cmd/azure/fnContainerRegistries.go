@@ -1,3 +1,6 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
 package azure
 
 import (
@@ -103,24 +106,25 @@ type ContainerRegistriesPerSub struct {
 	ContainerRegistries []ContainerRegistry
 }
 
-func listAllTenantACRs(tenantName string, tenantId string, token *lib.TokenData) []ContainerRegistry {
+func listAllTenantACRs(tenantName string, tenantId string, token *lib.AzureTokenData) []ContainerRegistry {
 	var (
 		allTenantACRs []ContainerRegistry
 		wg            sync.WaitGroup
 		mutex         sync.Mutex
 	)
-	subsToken := lib.MultiAuthToken{
+	subsToken := lib.AzureMultiAuthToken{
 		TenantName: tenantName,
 		TenantId:   tenantId,
 		TokenData:  *token,
 	}
 
-	subsList, err := listSubscriptions(lib.MultiAuthToken(subsToken))
+	subsList, err := listSubscriptions(lib.AzureMultiAuthToken(subsToken))
 	lib.CheckFatalError(err)
 
 	for _, sub := range subsList {
 		wg.Add(1)
 		go func() {
+			defer wg.Done()
 			subACRs := listSubscriptionACRs(tenantId, sub.SubscriptionID, token)
 			mutex.Lock()
 			allTenantACRs = append(allTenantACRs, subACRs...)
@@ -133,19 +137,19 @@ func listAllTenantACRs(tenantName string, tenantId string, token *lib.TokenData)
 	return allTenantACRs
 }
 
-func listAllTenantACRsBySub(tenantName string, tenantId string, token *lib.TokenData) []ContainerRegistriesPerSub {
+func listAllTenantACRsBySub(tenantName string, tenantId string, token *lib.AzureTokenData) []ContainerRegistriesPerSub {
 	var (
 		allTenantACRs []ContainerRegistriesPerSub
 		wg            sync.WaitGroup
 		mutex         sync.Mutex
 	)
-	subsToken := lib.MultiAuthToken{
+	subsToken := lib.AzureMultiAuthToken{
 		TenantName: tenantName,
 		TenantId:   tenantId,
 		TokenData:  *token,
 	}
 
-	subsList, err := listSubscriptions(lib.MultiAuthToken(subsToken))
+	subsList, err := listSubscriptions(lib.AzureMultiAuthToken(subsToken))
 	lib.CheckFatalError(err)
 
 	for _, sub := range subsList {
@@ -176,7 +180,7 @@ func listAllTenantACRsBySub(tenantName string, tenantId string, token *lib.Token
 }
 
 // Get all Azure Container Registries for subscription
-func listSubscriptionACRs(tenantId string, subscriptionId string, token *lib.TokenData) []ContainerRegistry {
+func listSubscriptionACRs(tenantId string, subscriptionId string, token *lib.AzureTokenData) []ContainerRegistry {
 	urlString := "https://management.com/subscriptions/" +
 		subscriptionId +
 		"/providers/Microsoft.ContainerRegistry/registries?api-version=2023-01-01-preview"
@@ -208,7 +212,7 @@ func listSubscriptionACRs(tenantId string, subscriptionId string, token *lib.Tok
 	return allSubscriptionContainerRegistries
 }
 
-func listSubscriptions(token lib.MultiAuthToken) ([]lib.FetchedSubscription, error) {
+func listSubscriptions(token lib.AzureMultiAuthToken) ([]lib.FetchedSubscription, error) {
 	urlString := "https://management.azure.com/subscriptions?api-version=2022-12-01"
 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
 	if err != nil {
