@@ -42,7 +42,7 @@ require (
 	golang.org/x/crypto v0.28.0
 	golang.org/x/exp v0.0.0-20240409090435-93d18d7e34b8
 	golang.org/x/mod v0.22.0
-	golang.org/x/sys v0.28.0
+	golang.org/x/sys v0.29.0
 	golang.org/x/text v0.19.0
 	gopkg.in/yaml.v3 v3.0.1
 )
