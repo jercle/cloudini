@@ -10,7 +10,7 @@ import (
 	"github.com/jercle/cloudini/lib"
 )
 
-func UploadFileToSharepoint(dataDirectory string, siteId string, driveId string, folderPath string, fileName string, token string) {
+func UploadFileToSharepoint(dataDirectory string, siteId string, driveId string, folderPath string, fileName string, costExportMonth string, token string) {
 
 	urlString := "https://graph.microsoft.com/v1.0/sites/" +
 		siteId +
@@ -22,7 +22,7 @@ func UploadFileToSharepoint(dataDirectory string, siteId string, driveId string,
 		fileName +
 		":/content"
 
-	file, err := os.ReadFile(dataDirectory + fileName)
+	file, err := os.ReadFile(dataDirectory + "/" + costExportMonth + "/" + fileName)
 	lib.CheckFatalError(err)
 
 	reader := bytes.NewReader(file)

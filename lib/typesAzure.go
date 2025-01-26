@@ -1,23 +1,25 @@
 package lib
 
-import "time"
+import (
+	"time"
+)
 
-type MultiAuthTokenRequestOptions struct {
+type AzureMultiAuthTokenRequestOptions struct {
 	// unicorn
-	TenantID                     string `json:"tenantID"`
-	TenantName                   string `json:"tenantName"`
-	GetWriteToken                bool   `json:"getWriteToken"`
-	ConfigFilePath               string `json:"configFilePath"`
-	ClientID                     string `json:"clientId"`
-	ClientSecret                 string `json:"clientSecret"`
-	Scope                        string `json:"scope"`
-	AzureContainerRepositoryName string `json:"azureContainerRepositoryName"`
+	TenantID                     string `json:"tenantID,omitempty" bson:"tenantID,omitempty"`
+	TenantName                   string `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
+	GetWriteToken                bool   `json:"getWriteToken,omitempty" bson:"getWriteToken,omitempty"`
+	ConfigFilePath               string `json:"configFilePath,omitempty" bson:"configFilePath,omitempty"`
+	ClientID                     string `json:"clientId,omitempty" bson:"clientId,omitempty"`
+	ClientSecret                 string `json:"clientSecret,omitempty" bson:"clientSecret,omitempty"`
+	Scope                        string `json:"scope,omitempty" bson:"scope,omitempty"`
+	AzureContainerRepositoryName string `json:"azureContainerRepositoryName,omitempty" bson:"azureContainerRepositoryName,omitempty"`
 }
 
-type MultiAuthToken struct {
-	TenantId   string `json:"tenantId"`
-	TenantName string `json:"tenantName"`
-	TokenData  TokenData
+type AzureMultiAuthToken struct {
+	TenantId   string `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
+	TenantName string `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
+	TokenData  AzureTokenData
 }
 
 type Request struct {
@@ -25,23 +27,23 @@ type Request struct {
 	Outfile string
 }
 
-type TokenData struct {
-	Token     string
-	ExpiresOn string
+type AzureTokenData struct {
+	Token     string    `json:"token,omitempty" bson:"token,omitempty"`
+	ExpiresOn time.Time `json:"expiresOn,omitempty" bson:"expiresOn,omitempty"`
 }
 
 type AcrAccessToken struct {
-	AccessToken string
+	AccessToken string `json:"accessToken,omitempty" bson:"accessToken,omitempty"`
 }
 
 type TokenRequestResponse struct {
-	AccessToken  string `json:"access_token"`
-	ExpiresIn    string `json:"expires_in"`
-	ExpiresOn    string `json:"expires_on"`
-	ExtExpiresIn string `json:"ext_expires_in"`
-	NotBefore    string `json:"not_before"`
-	Resource     string `json:"resource"`
-	TokenType    string `json:"token_type"`
+	AccessToken  string `json:"access_token,omitempty" bson:"access_token,omitempty"`
+	ExpiresIn    string `json:"expires_in,omitempty" bson:"expires_in,omitempty"`
+	ExpiresOn    string `json:"expires_on,omitempty" bson:"expires_on,omitempty"`
+	ExtExpiresIn string `json:"ext_expires_in,omitempty" bson:"ext_expires_in,omitempty"`
+	NotBefore    string `json:"not_before,omitempty" bson:"not_before,omitempty"`
+	Resource     string `json:"resource,omitempty" bson:"resource,omitempty"`
+	TokenType    string `json:"token_type,omitempty" bson:"token_type,omitempty"`
 }
 
 type AzureAuthDetails struct {
@@ -63,87 +65,102 @@ type AzureAuthRequirements struct {
 }
 
 type FetchedSubscription struct {
-	AuthorizationSource  string   `json:"authorizationSource"`
-	DisplayName          string   `json:"displayName"`
-	ID                   string   `json:"id"`
-	ManagedByTenants     []string `json:"managedByTenants"`
-	State                string   `json:"state"`
-	SubscriptionID       string   `json:"subscriptionId"`
+	AuthorizationSource  string   `json:"authorizationSource,omitempty" bson:"authorizationSource,omitempty"`
+	DisplayName          string   `json:"displayName,omitempty" bson:"displayName,omitempty"`
+	ID                   string   `json:"id,omitempty" bson:"id,omitempty"`
+	ManagedByTenants     []string `json:"managedByTenants,omitempty" bson:"managedByTenants,omitempty"`
+	State                string   `json:"state,omitempty" bson:"state,omitempty"`
+	SubscriptionID       string   `json:"subscriptionId,omitempty" bson:"subscriptionId,omitempty"`
 	SubscriptionPolicies struct {
-		LocationPlacementID string `json:"locationPlacementId"`
-		QuotaID             string `json:"quotaId"`
-		SpendingLimit       string `json:"spendingLimit"`
-	} `json:"subscriptionPolicies"`
-	TenantID   string `json:"tenantId"`
-	TenantName string `json:"tenantName"`
+		LocationPlacementID string `json:"locationPlacementId,omitempty" bson:"locationPlacementId,omitempty"`
+		QuotaID             string `json:"quotaId,omitempty" bson:"quotaId,omitempty"`
+		SpendingLimit       string `json:"spendingLimit,omitempty" bson:"spendingLimit,omitempty"`
+	} `json:"subscriptionPolicies,omitempty" bson:"subscriptionPolicies,omitempty"`
+	TenantID   string `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
+	TenantName string `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
 }
 
 type SubsReqResBody struct {
 	Count struct {
-		Type  string  `json:"type"`
-		Value float64 `json:"value"`
-	} `json:"count"`
-	Value []FetchedSubscription `json:"value"`
+		Type  string  `json:"type,omitempty" bson:"type,omitempty"`
+		Value float64 `json:"value,omitempty" bson:"value,omitempty"`
+	} `json:"count,omitempty" bson:"count,omitempty"`
+	Value []FetchedSubscription `json:"value,omitempty" bson:"value,omitempty"`
 }
 
-type AllTenantTokens []MultiAuthToken
+type AllTenantTokens []AzureMultiAuthToken
 
 type ListGalleryImageVersionsResponse struct {
-	Value    []GalleryImageVersionResponse `json:"value"`
-	NextLink string                        `json:"nextLink",omitempty`
+	Value    []GalleryImageVersionDetailed `json:"value,omitempty" bson:"value,omitempty"`
+	NextLink string                        `json:"nextLink",omitempt" bson:"nextLink",omitempt"`
 }
-type GalleryImageVersionResponse struct {
-	ID         string `json:"id"`
-	Location   string `json:"location"`
-	Name       string `json:"name"`
+type GalleryImageVersionDetailed struct {
+	ID         string `json:"id,omitempty" bson:"id,omitempty"`
+	Location   string `json:"location,omitempty" bson:"location,omitempty"`
+	Name       string `json:"name,omitempty" bson:"name,omitempty"`
 	Properties struct {
-		ProvisioningState string `json:"provisioningState"`
+		ProvisioningState string `json:"provisioningState,omitempty" bson:"provisioningState,omitempty"`
 		PublishingProfile struct {
-			ExcludeFromLatest  bool      `json:"excludeFromLatest"`
-			PublishedDate      time.Time `json:"publishedDate"`
-			ReplicaCount       float64   `json:"replicaCount"`
-			ReplicationMode    string    `json:"replicationMode"`
-			StorageAccountType string    `json:"storageAccountType"`
+			ExcludeFromLatest  bool      `json:"excludeFromLatest,omitempty" bson:"excludeFromLatest,omitempty"`
+			PublishedDate      time.Time `json:"publishedDate,omitempty" bson:"publishedDate,omitempty"`
+			ReplicaCount       float64   `json:"replicaCount,omitempty" bson:"replicaCount,omitempty"`
+			ReplicationMode    string    `json:"replicationMode,omitempty" bson:"replicationMode,omitempty"`
+			StorageAccountType string    `json:"storageAccountType,omitempty" bson:"storageAccountType,omitempty"`
 			TargetRegions      []struct {
-				Name                 string  `json:"name"`
-				RegionalReplicaCount float64 `json:"regionalReplicaCount"`
-				StorageAccountType   string  `json:"storageAccountType"`
-			} `json:"targetRegions"`
-		} `json:"publishingProfile"`
+				Name                 string  `json:"name,omitempty" bson:"name,omitempty"`
+				RegionalReplicaCount float64 `json:"regionalReplicaCount,omitempty" bson:"regionalReplicaCount,omitempty"`
+				StorageAccountType   string  `json:"storageAccountType,omitempty" bson:"storageAccountType,omitempty"`
+			} `json:"targetRegions,omitempty" bson:"targetRegions,omitempty"`
+		} `json:"publishingProfile,omitempty" bson:"publishingProfile,omitempty"`
 		SafetyProfile struct {
-			AllowDeletionOfReplicatedLocations bool `json:"allowDeletionOfReplicatedLocations"`
-			ReportedForPolicyViolation         bool `json:"reportedForPolicyViolation"`
-		} `json:"safetyProfile"`
+			AllowDeletionOfReplicatedLocations bool `json:"allowDeletionOfReplicatedLocations,omitempty" bson:"allowDeletionOfReplicatedLocations,omitempty"`
+			ReportedForPolicyViolation         bool `json:"reportedForPolicyViolation,omitempty" bson:"reportedForPolicyViolation,omitempty"`
+		} `json:"safetyProfile,omitempty" bson:"safetyProfile,omitempty"`
 		StorageProfile struct {
 			OSDiskImage struct {
-				HostCaching string   `json:"hostCaching"`
-				SizeInGb    float64  `json:"sizeInGB"`
-				Source      struct{} `json:"source"`
-			} `json:"osDiskImage"`
+				HostCaching string   `json:"hostCaching,omitempty" bson:"hostCaching,omitempty"`
+				SizeInGb    float64  `json:"sizeInGB,omitempty" bson:"sizeInGB,omitempty"`
+				Source      struct{} `json:"source,omitempty" bson:"source,omitempty"`
+			} `json:"osDiskImage,omitempty" bson:"osDiskImage,omitempty"`
 			Source struct {
-				VirtualMachineID string `json:"virtualMachineId"`
-			} `json:"source"`
-		} `json:"storageProfile"`
-	} `json:"properties"`
-	Tags struct {
-		CostGroup string `json:"cost_group"`
-		Env       string `json:"env"`
-		ManagedBy string `json:"managed_by"`
-	} `json:"tags"`
-	Type string `json:"type"`
+				VirtualMachineID string `json:"virtualMachineId,omitempty" bson:"virtualMachineId,omitempty"`
+			} `json:"source,omitempty" bson:"source,omitempty"`
+		} `json:"storageProfile,omitempty" bson:"storageProfile,omitempty"`
+	} `json:"properties,omitempty" bson:"properties,omitempty"`
+	Tags                      map[string]string `json:"tags,omitempty" bson:"tags,omitempty"`
+	Type                      string            `json:"type,omitempty" bson:"type,omitempty"`
+	UsedByCitrix              bool              `json:"usedByCitrix,omitempty" bson:"usedByCitrix,omitempty"`
+	MachineCatalogsUsingImage []string          `json:"machineCatalogsUsingImage,omitempty" bson:"machineCatalogsUsingImage,omitempty"`
+	// UsedByInCitrix []string `json:"usedByInCitrix,omitempty" bson:"usedByInCitrix,omitempty"`
+	LastCitrixSync time.Time          `json:"lastCitrixSync,omitempty" bson:"lastCitrixSync,omitempty"`
+	LastDBSync     time.Time          `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
+	AzDoBuildData  PackerLogBuildData `json:"azDoBuildData,omitempty" bson:"azDoBuildData,omitempty"`
+}
+
+//
+//
+
+type GalleryImageVersionFlat struct {
+	ID                  string    `json:"id,omitempty" bson:"id,omitempty"`
+	Location            string    `json:"location,omitempty" bson:"location,omitempty"`
+	ImageDefinition     string    `json:"imageDefinition,omitempty" bson:"imageDefinition,omitempty"`
+	ImageDefinitionName string    `json:"imageDefinitionName,omitempty" bson:"imageDefinitionName,omitempty"`
+	Name                string    `json:"name,omitempty" bson:"name,omitempty"`
+	PublishedDate       time.Time `json:"publishedDate,omitempty" bson:"publishedDate,omitempty"`
+	Tags                string    `json:"tags,omitempty" bson:"tags,omitempty"`
 }
 
 type GalleryImageVersion struct {
-	ID string `json:"id"`
-
-	Name       string `json:"name"`
+	ID         string `json:"id,omitempty" bson:"id,omitempty"`
+	Name       string `json:"name,omitempty" bson:"name,omitempty"`
 	Properties struct {
-		ProvisioningState string `json:"provisioningState"`
+		ProvisioningState string `json:"provisioningState,omitempty" bson:"provisioningState,omitempty"`
 		PublishingProfile struct {
-			ExcludeFromLatest bool `json:"excludeFromLatest"`
-		} `json:"publishingProfile"`
-	} `json:"properties"`
-	SuffixAdded bool `json:"suffixAdded,omitempty"`
+			ExcludeFromLatest bool `json:"excludeFromLatest,omitempty" bson:"excludeFromLatest,omitempty"`
+		} `json:"publishingProfile,omitempty" bson:"publishingProfile,omitempty"`
+	} `json:"properties,omitempty" bson:"properties,omitempty"`
+	SuffixAdded  bool `json:"suffixAdded,omitempty" bson:"suffixAdded,omitempty"`
+	UsedNyCitrix bool `json:"usedByCitrix,omitempty" bson:"usedByCitrix,omitempty"`
 }
 
 type GalleryImageVersionList struct {
@@ -151,35 +168,100 @@ type GalleryImageVersionList struct {
 	Sorted   bool
 }
 
-type GalleryImageResponse struct {
-	ID         string `json:"id"`
-	Location   string `json:"location"`
-	Name       string `json:"name"`
-	Properties struct {
-		Architecture string `json:"architecture"`
-		Description  string `json:"description"`
-		Disallowed   struct {
-			DiskTypes []any `json:"diskTypes"`
-		} `json:"disallowed"`
-		HyperVGeneration string `json:"hyperVGeneration"`
-		Identifier       struct {
-			Offer     string `json:"offer"`
-			Publisher string `json:"publisher"`
-			Sku       string `json:"sku"`
-		} `json:"identifier"`
-		OSState           string `json:"osState"`
-		OSType            string `json:"osType"`
-		ProvisioningState string `json:"provisioningState"`
-		Recommended       struct {
-			Memory struct{} `json:"memory"`
-			VCpUs  struct{} `json:"vCPUs"`
-		} `json:"recommended"`
-	} `json:"properties"`
-	Tags struct {
-		CostGroup         string `json:"cost_group"`
-		Env               string `json:"env"`
-		ManagedBy         string `json:"managed_by"`
-		VersionsManagedBy string `json:"versions_managed_by"`
-	} `json:"tags"`
-	Type string `json:"type"`
+type GetAllGalleryImagesResponse struct {
+	Value []GalleryImage `json:"value,omitempty" bson:"value,omitempty"`
+}
+
+type GalleryImage struct {
+	ID             string `json:"id,omitempty" bson:"_id,omitempty"`
+	Location       string `json:"location,omitempty" bson:"location,omitempty"`
+	Name           string `json:"name,omitempty" bson:"name,omitempty"`
+	SubscriptionId string `json:"subscriptionId,omitempty" bson:"subscriptionId,omitempty"`
+	ResourceGroup  string `json:"resourceGroup,omitempty" bson:"resourceGroup,omitempty"`
+	TenantName     string `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
+	GalleryName    string `json:"galleryName,omitempty" bson:"galleryName,omitempty"`
+	Properties     *struct {
+		Architecture string `json:"architecture,omitempty" bson:"architecture,omitempty"`
+		Description  string `json:"description,omitempty" bson:"description,omitempty"`
+		Disallowed   *struct {
+			DiskTypes *[]string `json:"diskTypes,omitempty" bson:"diskTypes,omitempty"`
+		} `json:"disallowed,omitempty" bson:"disallowed,omitempty"`
+		HyperVGeneration string `json:"hyperVGeneration,omitempty" bson:"hyperVGeneration,omitempty"`
+		Identifier       *struct {
+			Offer     string `json:"offer,omitempty" bson:"offer,omitempty"`
+			Publisher string `json:"publisher,omitempty" bson:"publisher,omitempty"`
+			Sku       string `json:"sku,omitempty" bson:"sku,omitempty"`
+		} `json:"identifier,omitempty" bson:"identifier,omitempty"`
+		OSState           string `json:"osState,omitempty" bson:"osState,omitempty"`
+		OSType            string `json:"osType,omitempty" bson:"osType,omitempty"`
+		ProvisioningState string `json:"provisioningState,omitempty" bson:"provisioningState,omitempty"`
+		Recommended       *struct {
+			Memory string `json:"memory,omitempty" bson:"memory,omitempty"`
+			VCpUs  string `json:"vCPUs,omitempty" bson:"vCPUs,omitempty"`
+		} `json:"recommended,omitempty" bson:"recommended,omitempty"`
+	} `json:"properties,omitempty" bson:"properties,omitempty"`
+	Tags                      *map[string]string                     `json:"tags,omitempty" bson:"tags,omitempty"`
+	Type                      string                                 `json:"type,omitempty" bson:"type,omitempty"`
+	ImageVersions             map[string]GalleryImageVersionDetailed `json:"imageVersions,omitempty" bson:"imageVersions,omitempty"`
+	UsedByCitrix              bool                                   `json:"usedByCitrix,omitempty" bson:"usedByCitrix,omitempty"`
+	MachineCatalogsUsingImage []string                               `json:"machineCatalogsUsingImage,omitempty" bson:"machineCatalogsUsingImage,omitempty"`
+	LastAzureSync             time.Time                              `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty"`
+	LastDBSync                time.Time                              `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
+}
+
+//
+//
+
+type GalleryImageFlat struct {
+	ID             string `json:"id,omitempty" bson:"_id,omitempty"`
+	Location       string `json:"location,omitempty" bson:"location,omitempty"`
+	Name           string `json:"name,omitempty" bson:"name,omitempty"`
+	SubscriptionId string `json:"subscriptionId,omitempty" bson:"subscriptionId,omitempty"`
+	ResourceGroup  string `json:"resourceGroup,omitempty" bson:"resourceGroup,omitempty"`
+	TenantName     string `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
+	GalleryName    string `json:"galleryName,omitempty" bson:"galleryName,omitempty"`
+	Description    string `json:"description,omitempty" bson:"description,omitempty"`
+	Offer          string `json:"offer,omitempty" bson:"offer,omitempty"`
+	Publisher      string `json:"publisher,omitempty" bson:"publisher,omitempty"`
+	Sku            string `json:"sku,omitempty" bson:"sku,omitempty"`
+	OSType         string `json:"osType,omitempty" bson:"osType,omitempty"`
+	Tags           string `json:"tags,omitempty" bson:"tags,omitempty"`
+}
+
+//
+//
+
+//
+//
+
+type GetAllResourcesForAllConfiguredTenantsOptions struct {
+	SubscriptionId string
+	TenantName     string
+	AzureAuth      CldConfigTenantAuth
+	Location       string
+	OutputFilePath string
+	SuppressSteps  bool
+}
+
+type VCpuCountByTenant map[string]struct {
+	VmResources               []string  `json:"vmResources,omitempty" bson:"vmResources,omitempty"`
+	VmResourcesDeallocated    []string  `json:"vmResourcesDeallocated,omitempty" bson:"vmResourcesDeallocated,omitempty"`
+	VmCoreCount               int       `json:"vmCoreCount,omitempty" bson:"vmCoreCount,omitempty"`
+	VmCoreCountDeallocated    int       `json:"VmCoreCountDeallocated,omitempty" bson:"vmCoreCountDeallocated,omitempty"`
+	VmResourcesSql            []string  `json:"vmResourcesSql,omitempty" bson:"vmResourcesSql,omitempty"`
+	VmCoreCountSql            int       `json:"vmCoreCountSql,omitempty" bson:"vmCoreCountSql,omitempty"`
+	VmResourcesSqlDeallocated []string  `json:"vmResourcesSqlDeallocated,omitempty" bson:"vmResourcesSqlDeallocated,omitempty"`
+	VmCoreCountSqlDeallocated int       `json:"vmCoreCountSqlDeallocated,omitempty" bson:"vmCoreCountSqlDeallocated,omitempty"`
+	LastDBSync                time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
+}
+
+type VCpuCountByTenantVmResource struct {
+	Id               string                   `json:"id,omitempty" bson:"id,omitempty"`
+	Name             string                   `json:"name,omitempty" bson:"name,omitempty"`
+	Size             string                   `json:"size,omitempty" bson:"size,omitempty"`
+	VCPUs            int                      `json:"vCPUs,omitempty" bson:"vCPUs,omitempty"`
+	ResourceGroup    string                   `json:"resourceGroup,omitempty" bson:"resourceGroup,omitempty"`
+	SubscriptionName string                   `json:"subscriptionName,omitempty" bson:"subscriptionName,omitempty"`
+	Properties       *AzureResourceProperties `json:"properties,omitempty" bson:"properties,omitempty"`
+	PowerState       string                   `json:"powerState,omitempty" bson:"powerState,omitempty"`
 }

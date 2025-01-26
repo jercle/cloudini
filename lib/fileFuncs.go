@@ -1,6 +1,10 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
 package lib
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"os"
@@ -48,4 +52,9 @@ func DeleteFilesInDirMatchingString(dir string, strMatch string) {
 		err := os.Remove(f)
 		CheckFatalError(err)
 	}
+}
+
+func RemoveJsonByteOrderMark(str []byte) []byte {
+	processed := bytes.TrimPrefix(str, []byte("\xef\xbb\xbf"))
+	return processed
 }

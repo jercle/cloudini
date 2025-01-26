@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package azure
 
 import (
@@ -30,8 +27,8 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var (
-			authOpts lib.MultiAuthTokenRequestOptions
-			token    *lib.MultiAuthToken
+			authOpts lib.AzureMultiAuthTokenRequestOptions
+			token    *lib.AzureMultiAuthToken
 			err      error
 		)
 
@@ -43,19 +40,19 @@ to quickly create a Cobra application.`,
 			token, err = GetServicePrincipalMultiAuthToken(tenantId, authOpts)
 			lib.CheckFatalError(err)
 
-			imageDefinition := GetGalleryImage(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
+			imageDefinition := GetGalleryImage(subscriptionId, resourceGroup, galleryName, galleryImageName, token)
 			_ = imageDefinition
 
 			if getLatestVersionNumber {
 
-				versions := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
+				versions, _ := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
 				_, latest := versions.Latest()
 
 				fmt.Println(latest)
 			}
 
 			if getNewVersionPatchNumber {
-				versions := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
+				versions, _ := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
 				if len(versions.Versions) == 0 {
 					fmt.Println("")
 				} else {
@@ -65,7 +62,7 @@ to quickly create a Cobra application.`,
 			}
 
 			if checkVersionExists != "" {
-				versions := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
+				versions, _ := GetGalleryImageVersions(subscriptionId, resourceGroup, galleryName, galleryImageName, *token)
 				versionExists := versions.CheckVersionExists(checkVersionExists)
 
 				if versionExists {

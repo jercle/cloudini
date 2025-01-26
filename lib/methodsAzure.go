@@ -1,36 +1,41 @@
 package lib
 
 import (
-	b64 "encoding/base64"
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
+	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 
 	"golang.org/x/mod/semver"
 )
 
-func (tokens *AllTenantTokens) SaveToFile() {
+// func (tokens *AllTenantTokens) SaveToFile() {
 
-	byteData, err := json.Marshal(tokens)
-	CheckFatalError(err)
-	if _, err := os.Stat(TokenCacheFile); err != nil {
-		os.Create(TokenCacheFile)
-	}
-	encodedData := b64.StdEncoding.EncodeToString(byteData)
-	os.WriteFile(TokenCacheFile, []byte(encodedData), os.ModePerm)
-	fmt.Println(encodedData)
-}
+// 	byteData, err := json.Marshal(tokens)
+// 	CheckFatalError(err)
+// 	if _, err := os.Stat(TokenCacheFile); err != nil {
+// 		os.Create(TokenCacheFile)
+// 	}
+// 	encodedData := b64.StdEncoding.EncodeToString(byteData)
+// 	os.WriteFile(TokenCacheFile, []byte(encodedData), os.ModePerm)
+// 	fmt.Println(encodedData)
+// }
 
-func (tokens *AllTenantTokens) CheckExpiry() {
-	fmt.Println(tokens)
-}
+// func (tokens *AllTenantTokens) CheckExpiry() {
+// 	fmt.Println(tokens)
+// }
 
-func (tokens AllTenantTokens) SelectTenant(tenantName string) (*MultiAuthToken, error) {
-	// var tenantToken MultiAuthToken
+func (tokens AllTenantTokens) SelectTenant(tenantName string) (*AzureMultiAuthToken, error) {
+	// var tenantToken AzureMultiAuthToken
 	// fmt.Println(tenantName)
-	var tenantToken *MultiAuthToken
+	var tenantToken *AzureMultiAuthToken
 
 	for _, token := range tokens {
 		if token.TenantName == tenantName {
@@ -183,4 +188,195 @@ func (config AzureConfig) GetDefaultTenant() (*CldConfigTenantAuth, error) {
 		err = fmt.Errorf("No default Azure tenant configured")
 		return nil, err
 	}
+}
+
+// func (tenants *TransformedCostItemsByTenantMap) AddPreTaxCost(tci TransformedCostItem) {
+// 	t := *tenants
+
+// 	thing := t[tci.Datafile]
+// 	thing.PreTaxCost += tci.PreTaxCost
+
+//		fmt.Println(t)
+//	}
+func (tenants *TransformedCostItemsByTenant) AddPreTaxCost(tci TransformedCostItem) {
+	cfg := GetCldConfig(nil)
+	t := *tenants
+
+	tenantName := ""
+	custTntName := MapAzureSubscriptionToCustomTenantName(tci.SubscriptionId, *cfg.Azure)
+	if custTntName != "" {
+		tenantName = custTntName
+	} else {
+		tenantName = tci.Datafile
+	}
+
+	tenant := t[tenantName]
+	tenant.PreTaxCost += tci.PreTaxCost
+	t[tenantName] = tenant
+	*tenants = t
+	// switch tci.Datafile {
+	// case "Blue":
+	// 	tenants.Blue.PreTaxCost += tci.PreTaxCost
+	// case "BlueDTQ":
+	// 	tenants.BlueDTQ.PreTaxCost += tci.PreTaxCost
+	// case "Red":
+	// 	tenants.Red.PreTaxCost += tci.PreTaxCost
+	// case "RedDTQ":
+	// 	tenants.RedDTQ.PreTaxCost += tci.PreTaxCost
+	// case "Yellow":
+	// 	tenants.Yellow.PreTaxCost += tci.PreTaxCost
+	// case "PUD":
+	// 	tenants.PUD.PreTaxCost += tci.PreTaxCost
+	// case "PUDDTQ":
+	// 	tenants.PUDDTQ.PreTaxCost += tci.PreTaxCost
+	// case "Purple":
+	// 	tenants.Purple.PreTaxCost += tci.PreTaxCost
+	// case "PurpleDTQ":
+	// 	tenants.PurpleDTQ.PreTaxCost += tci.PreTaxCost
+	// }
+
+}
+
+func (t *TransformedCostItemsByTenant) AppendTenantData(tci TransformedCostItem) {
+	tenants := *t
+	// jsonStr, _ := json.MarshalIndent(tenants, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// os.Exit(0)
+	entry, exists := tenants[tci.Tenant]
+	if !exists {
+		tenant := TransformedTenantData{}
+		tenant.PreTaxCost += tci.PreTaxCost
+		tenant.ResGroups = append(tenant.ResGroups, tci)
+		tenants[tci.Tenant] = tenant
+	} else {
+		tenant := entry
+		tenant.PreTaxCost += tci.PreTaxCost
+		tenant.ResGroups = append(tenant.ResGroups, tci)
+		tenants[tci.Tenant] = tenant
+	}
+	*t = tenants
+}
+
+// func (tenants *TransformedCostItemsByTenant) AppendTenantData(tci TransformedCostItem) {
+// 	t := *tenants
+// 	tenant := t[tci.Datafile]
+// 	tenant.PreTaxCost += tci.PreTaxCost
+// 	t[tci.Datafile] = tenant
+// 	*tenants = t
+
+// 	switch tci.Tenant {
+// 	case "BLUE":
+// 		tenants.Blue.ResGroups = append(tenants.Blue.ResGroups, tci)
+// 		tenants.Blue.PreTaxCost += tci.PreTaxCost
+// 	case "BLUEDTQ":
+// 		tenants.BlueDTQ.ResGroups = append(tenants.BlueDTQ.ResGroups, tci)
+// 		tenants.BlueDTQ.PreTaxCost += tci.PreTaxCost
+// 	case "RED":
+// 		tenants.Red.ResGroups = append(tenants.Red.ResGroups, tci)
+// 		tenants.Red.PreTaxCost += tci.PreTaxCost
+// 	case "REDDTQ":
+// 		tenants.RedDTQ.ResGroups = append(tenants.RedDTQ.ResGroups, tci)
+// 		tenants.RedDTQ.PreTaxCost += tci.PreTaxCost
+// 	case "YELLOW":
+// 		tenants.Yellow.ResGroups = append(tenants.Yellow.ResGroups, tci)
+// 		tenants.Yellow.PreTaxCost += tci.PreTaxCost
+// 	case "PUD":
+// 		tenants.PUD.ResGroups = append(tenants.PUD.ResGroups, tci)
+// 		tenants.PUD.PreTaxCost += tci.PreTaxCost
+// 	case "PUDDTQ":
+// 		tenants.PUDDTQ.ResGroups = append(tenants.PUDDTQ.ResGroups, tci)
+// 		tenants.PUDDTQ.PreTaxCost += tci.PreTaxCost
+// 	case "PURPLE":
+// 		tenants.Purple.ResGroups = append(tenants.Purple.ResGroups, tci)
+// 		tenants.Purple.PreTaxCost += tci.PreTaxCost
+// 	case "PURPLEDTQ":
+// 		tenants.PurpleDTQ.ResGroups = append(tenants.PurpleDTQ.ResGroups, tci)
+// 		tenants.PurpleDTQ.PreTaxCost += tci.PreTaxCost
+// 	}
+// }
+
+func (e *FieldMismatch) Error() string {
+	return "CSV line fields mismatch. Expected " + strconv.Itoa(e.Expected) + " found " + strconv.Itoa(e.Found)
+}
+
+func (e *UnsupportedType) Error() string {
+	return "Unsupported type: " + e.Type
+}
+
+func (t *TransformedCostItemsByTenant) SumCosts() {
+	tenants := *t
+
+	for key, val := range tenants {
+		_ = key
+		_ = val
+		// fmt.Println(val)
+
+		for _, res := range val.ResGroups {
+			jsonStr, _ := json.MarshalIndent(res, "", "  ")
+			fmt.Println(string(jsonStr))
+			os.Exit(0)
+		}
+	}
+}
+
+func (blob *BlobItem) Download(cred *azidentity.ClientSecretCredential, fileName string) {
+	var (
+		ctx = context.Background()
+	)
+	serviceURL := "https://" + blob.StorageAccountName + ".blob.core.windows.net"
+	client, err := azblob.NewClient(serviceURL, cred, nil)
+	CheckFatalError(err)
+
+	path := filepath.Dir(fileName)
+	if _, err := os.Stat(path); err != nil {
+		os.MkdirAll(path, os.ModePerm)
+	}
+
+	file, err := os.Create(fileName)
+	CheckFatalError(err)
+	defer file.Close()
+	_, err = client.DownloadFile(ctx, blob.ContainerName, blob.Name, file, nil)
+}
+
+// TODO: Method to get data without saving file
+// func (blob *BlobItem) FetchData(cred *azidentity.ClientSecretCredential, fileName string) {
+// 	var (
+// 		ctx = context.Background()
+// 	)
+// 	serviceURL := "https://" + blob.StorageAccountName + ".blob.core.windows.net"
+// 	client, err := azblob.NewClient(serviceURL, cred, nil)
+// 	CheckFatalError(err)
+// 	// file, err := os.Create(fileName)
+// 	// CheckFatalError(err)
+// 	// defer file.Close()
+// 	data := []byte{}
+// 	client.DownloadBuffer(ctx, blob.ContainerName, blob.Name, data)
+// 	_, err = client.DownloadFile(ctx, blob.ContainerName, blob.Name, file, nil)
+// }
+
+func (bl *BlobList) Filter(opts BlobListFilterOptions) {
+	var filteredBlobs []BlobItem
+	for _, blob := range *bl {
+		if strings.HasPrefix(blob.Name, opts.FilterPrefix) {
+			filteredBlobs = append(filteredBlobs, blob)
+		}
+	}
+	*bl = filteredBlobs
+}
+
+func (blobList *BlobList) SortByCreateDate(sortOrder string) {
+	bl := *blobList
+	if sortOrder == "ascending" {
+		sort.Slice(bl, func(i, j int) bool {
+			return bl[i].Properties.CreationTime.Before(bl[j].Properties.CreationTime)
+		})
+	} else if sortOrder == "descending" {
+		sort.Slice(bl, func(i, j int) bool {
+			return bl[j].Properties.CreationTime.Before(bl[i].Properties.CreationTime)
+		})
+	} else {
+		fmt.Println("Sort order must be 'ascending' or 'descending'")
+	}
+
+	*blobList = bl
 }

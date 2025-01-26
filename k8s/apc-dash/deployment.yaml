@@ -1,0 +1,158 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: admin-dash
+  name: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:8.0.4
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value:
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: ""
+      volumes:
+        - name: mongo-data
+          emptyDir: {}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  admin-dash
+  namespace: admin-dash
+  labels:
+    app:  admin-dash
+spec:
+  selector:
+    matchLabels:
+      app: admin-dash
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  admin-dash
+    spec:
+      # initContainers:
+        # Init containers are exactly like regular containers, except:
+          # - Init containers always run to completion.
+          # - Each init container must complete successfully before the next one starts.
+      containers:
+      - name:  admin-dash
+        image:  .azurecr.io/admin-dash:0.0.3
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        livenessProbe:
+          tcpSocket:
+            port: 3000
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/probe
+            port: 3000
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        env:
+        - name: MONGODB_CONN_STRING
+          value: "mongodb://:@mongo:27017/"
+        - name: CLOUD_INSTANCE
+          value: https://login.microsoftonline.com/
+        - name: TENANT_ID
+          value:
+        - name: CLIENT_ID
+          value:
+        - name: CLIENT_SECRET
+          value:
+        - name: REDIRECT_URI
+          value: http://localhost:5173/callback
+        ports:
+        - containerPort:  3000
+          name:  admin-dash
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: admin-dash
+  name: mongo
+spec:
+  selector:
+    app: mongo
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  type: LoadBalancer
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: admin-dash
+  name: admin-dash
+spec:
+  selector:
+    app: admin-dash
+  ports:
+    - protocol: TCP
+      port: 5173
+      targetPort: 3000
+  type: LoadBalancer
+
+---
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  namespace: admin-dash
+  name: admin-dash-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: admin-dash
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50

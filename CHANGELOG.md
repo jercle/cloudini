@@ -1,5 +1,21 @@
 # Change Log
 
+## [0.1.14]
+* Add commands for Azure B2C
+* Add commands for Azure Entra
+* Add commands for Azure Resources
+* Update token caching
+* Update functions for Azure Compute Gallery
+* Add functions for Azure Storage Blobs
+* Add functions for retrieving Azure Subscriptions
+* Added HttpPatch functions for Azure
+* Added Citrix command and functions for Machine Catalogs, Delivery Groups, User Info, http utils, and Auth
+* Updated Cloudini Config map
+* Added Mongodb commands and functions
+* Added initial commands for Certificate management
+* Updated password generation
+* Added command to clear cached tokens
+
 ## [0.1.13]
 * Fix bug in retrieving latest ACG image with Azure API chunking responses after first 55 versons.
 

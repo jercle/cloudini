@@ -1,3 +1,6 @@
+/*
+Copyright © 2024 Evan Colwell ercolwell@gmail.com
+*/
 package lib
 
 func UniqueNonEmptyElementsOf(s []string) []string {

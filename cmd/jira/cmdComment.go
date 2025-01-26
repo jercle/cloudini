@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package jira
 
 import (

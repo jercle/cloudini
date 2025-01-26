@@ -1,8 +1,5 @@
 //go:build windows
 
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package utils
 
 import (

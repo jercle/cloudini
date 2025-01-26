@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package cmd
 
 import (
@@ -29,12 +26,15 @@ var (
 	// outJSON flag
 	OutJSON   bool
 	DebugMode bool
+
+	// // Only used when initially encrypting a previously unencrypted config file
+	// InitialEncryptionOfUnencryptedConfigFile bool
 )
 
 // rootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:     "cld",
-	Version: "0.1.13",
+	Version: "0.1.14",
 	Short:   "A brief description of your application",
 	Long: `This CLI has been created to add additional functionality
 to https://docs.microsoft.com/en-us/cli/azure/ such as data

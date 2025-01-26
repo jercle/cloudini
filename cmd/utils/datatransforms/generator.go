@@ -1,3 +1,4 @@
+// From https://github.com/twpayne/go-jsonstruct
 package datatransforms
 
 // FIXME move substructs to top level
