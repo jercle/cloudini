@@ -59,10 +59,11 @@ var proxyCmd = &cobra.Command{
 
 		if setProxyConfig {
 			cldConf := lib.GetCldConfig(nil)
+			proxyConfigs := *cldConf.ProxyConfig
 			if selectProxyConfig == "" {
-				SetProxySettings(cldConf.ProxyConfig["default"], false)
+				SetProxySettings(proxyConfigs["default"], false)
 			} else {
-				SetProxySettings(cldConf.ProxyConfig[selectProxyConfig], false)
+				SetProxySettings(proxyConfigs[selectProxyConfig], false)
 			}
 			proxyConfig := GetProxySettings()
 			jsonBytes, _ := json.MarshalIndent(proxyConfig, "", "  ")
