@@ -44,6 +44,7 @@
  * Refactoring
 
 ## [0.1.2]
+ * https://github.com/jercle/cloudini/pull/1
  * Added submodules for generated Azure fake data
  * Added dev/ directory for testing feature dev
 
