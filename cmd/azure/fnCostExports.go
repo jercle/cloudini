@@ -1,25 +1,21 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package azure
 
 import (
-	"context"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"reflect"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 	"unicode/utf8"
 
-	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
-	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob/container"
+	"github.com/briandowns/spinner"
 	"github.com/jercle/cloudini/lib"
 	"github.com/xuri/excelize/v2"
 )
@@ -245,11 +241,12 @@ func CombineCostExportJSONData(dataPath string) lib.CostExportData {
 	return costExportData
 }
 
-func TransformCostDataNew(data lib.CostExportData) lib.AggregatedCostData {
+func TransformCostDataNew(data lib.CostExportData, progBarNum int, progBarTotal int) lib.AggregatedCostData {
 	cfg := lib.GetCldConfig(nil)
 
 	allDataNEW := make(lib.AggregatedCostData)
-	counter := 1
+
+	bar := lib.ProgressBar(len(data), "resource", progBarNum, progBarTotal, "Transforming cost data...")
 
 	for _, costData := range data {
 		var (
@@ -261,7 +258,7 @@ func TransformCostDataNew(data lib.CostExportData) lib.AggregatedCostData {
 		instanceId := strings.ToLower(costData.InstanceId)
 
 		tenantName := ""
-		custTntName := lib.MapAzureSubscriptionToCustomTenantName(costData.SubscriptionGuid, cfg.Azure)
+		custTntName := lib.MapAzureSubscriptionToCustomTenantName(costData.SubscriptionGuid, *cfg.Azure)
 		if custTntName != "" {
 			tenantName = custTntName
 		} else {
@@ -336,16 +333,16 @@ func TransformCostDataNew(data lib.CostExportData) lib.AggregatedCostData {
 		// os.Exit(0)
 
 		allDataNEW = AggregateCostData(allDataNEW, tci)
-		counter++
-
+		bar.Add(1)
 	}
+	fmt.Println("")
 	return allDataNEW
 }
 
-func FlattenAggregatedCostData(data lib.AggregatedCostData, resources []lib.ResourceDetails) []lib.ResourceDetails {
+func FlattenAggregatedCostData(data lib.AggregatedCostData, resources []lib.AzureResourceDetails) []lib.AzureResourceDetails {
 
 	byInstanceId := make(map[string][]lib.AggregatedCostItem)
-	var processedResources []lib.ResourceDetails
+	var processedResources []lib.AzureResourceDetails
 
 	for _, tenantData := range data {
 		for _, subData := range tenantData.Subscriptions {
@@ -360,7 +357,7 @@ func FlattenAggregatedCostData(data lib.AggregatedCostData, resources []lib.Reso
 		}
 	}
 	for _, res := range resources {
-		var currRes lib.ResourceDetails
+		var currRes lib.AzureResourceDetails
 
 		jsonStr, _ := json.MarshalIndent(res, "", "  ")
 		err := json.Unmarshal(jsonStr, &currRes)
@@ -401,20 +398,23 @@ func CombineAllCostMeters(costDataPath string) (allCostMetersByMeterIdentifier m
 	paths := lib.GetFullFilePaths(costDataPath)
 
 	for _, path := range paths {
-		if !strings.Contains(path, "costDataByMeterIdentifer-") {
+		// fmt.Println(path)
+		// continue
+		if !strings.Contains(path, "MonthlyCostReport-") {
 			continue
 		}
 		file, err := os.ReadFile(path)
+		fileBomRemoved := lib.RemoveJsonByteOrderMark(file)
 		lib.CheckFatalError(err)
 		var fileData map[string]lib.AggregatedCostItem
-		err = json.Unmarshal(file, &fileData)
+		err = json.Unmarshal(fileBomRemoved, &fileData)
 		lib.CheckFatalError(err)
 
 		for id, meterData := range fileData {
 			jsonStr, _ := json.Marshal(meterData)
 			var currData lib.MongoDbCostItem
-			fmt.Println(string(jsonStr))
-			os.Exit(0)
+			// fmt.Println(string(jsonStr))
+			// os.Exit(0)
 			err := json.Unmarshal(jsonStr, &currData)
 			lib.CheckFatalError(err)
 			// currData := meterData
@@ -434,7 +434,10 @@ func CombineAllCostMeters(costDataPath string) (allCostMetersByMeterIdentifier m
 func ProcessCostData(data lib.AggregatedCostData) (costDataByMeterIdentifer map[string]lib.AggregatedCostItem, costDataSlice []lib.AggregatedCostItem) {
 	initialCheck := make(map[string][]lib.AggregatedCostItem)
 	costDataByMeterIdentifer = make(map[string]lib.AggregatedCostItem)
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 
+	fmt.Println("Processing cost data...")
+	s.Start()
 	for tenantName, tenantData := range data {
 		for subName, subData := range tenantData.Subscriptions {
 			for _, resGrpData := range subData.ResourceGroups {
@@ -462,6 +465,8 @@ func ProcessCostData(data lib.AggregatedCostData) (costDataByMeterIdentifer map[
 					for id, meterData := range resData.MeterData {
 						if len(initialCheck[id]) > 1 {
 							err := fmt.Errorf("Incorrect length of meterdata, check data of " + meterData.ResourceMeterIdentifier)
+							jsonStr, _ := json.MarshalIndent(initialCheck[id], "", "  ")
+							fmt.Println(string(jsonStr))
 							lib.CheckFatalError(err)
 							os.Exit(1)
 						}
@@ -471,10 +476,14 @@ func ProcessCostData(data lib.AggregatedCostData) (costDataByMeterIdentifer map[
 			}
 		}
 	}
+	s.Stop()
 
+	fmt.Println("Creating array from processed data...")
+	s.Start()
 	for _, meterData := range costDataByMeterIdentifer {
 		costDataSlice = append(costDataSlice, meterData)
 	}
+	s.Stop()
 
 	return costDataByMeterIdentifer, costDataSlice
 }
@@ -485,23 +494,19 @@ type AzureTenantCostData map[string]AzureCostDataMeter
 
 type AzureCostDataMeter map[string]lib.AggregatedCostItem
 
-func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, resources []lib.ResourceDetails) map[string][]lib.ResourceDetails {
-	// costDataByMeterIdentifer, _ := ProcessCostData(costData)
+func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, resources []lib.AzureResourceDetails, progBarNum int, progBarTotal int) (map[string][]lib.AzureResourceDetails, []lib.AzureResourceDetails) {
 
-	// var instanceIds []string
+	bar := lib.ProgressBar(len(resources), "resource", progBarNum, progBarTotal, "Processing all resources and cost meters to create relations...")
 
-	// i := 0
-	// for _, item := range costData {
-	// 	instanceIds[i] = item.ResourceMeterIdentifier
-	// 	i++
-	// }
+	processedResources := make(map[string][]lib.AzureResourceDetails)
 
-	processedResources := make(map[string][]lib.ResourceDetails)
-
-	for i, res := range resources {
+	for _, res := range resources {
+		bar.Add(1)
+		// bar.Describe("Processing resource " + strconv.Itoa(i) + " of " + strconv.Itoa(len(resources)))
 		resName := strings.ToLower(res.Name)
-		fmt.Println("Processing " + strconv.Itoa(i) + " of " + strconv.Itoa(len(resources)) + " resources")
-		var currRes lib.ResourceDetails
+		// fmt.Println("Processing " + strconv.Itoa(i) + " of " + strconv.Itoa(len(resources)) + " resources")
+		var currRes lib.AzureResourceDetails
+		currRes.LastAzureSync = time.Now()
 		jsonStr, _ := json.Marshal(res)
 		err := json.Unmarshal(jsonStr, &currRes)
 		lib.CheckFatalError(err)
@@ -513,7 +518,9 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 			if strings.Contains(meterId, res.SubscriptionID) &&
 				strings.Contains(meterId, resName) &&
 				strings.Contains(meterId, strings.ToLower(res.ResourceGroup)) {
-				currRes.RelatedCostMeters = append(currRes.RelatedCostMeters, meterId)
+				if !slices.Contains(currRes.RelatedCostMeters, meterId) {
+					currRes.RelatedCostMeters = append(currRes.RelatedCostMeters, meterId)
+				}
 			}
 		}
 		for _, comparisonResource := range resources {
@@ -522,13 +529,18 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 			}
 			if strings.ToLower(res.Type) == "microsoft.compute/virtualmachines/extensions" {
 				if strings.Contains(strings.ToLower(res.ID), strings.ToLower(comparisonResource.ID)) {
+					if !slices.Contains(currRes.RelatedResources, comparisonResource.ID) {
+						currRes.RelatedCostMeters = append(currRes.RelatedCostMeters, comparisonResource.ID)
+					}
 					currRes.RelatedResources = append(currRes.RelatedResources, comparisonResource.ID)
 				}
 			} else if strings.ToLower(res.Type) == "microsoft.network/networkinterfaces" {
 				check := comparisonResource.Properties.VirtualMachine
 				if check != nil {
 					if strings.EqualFold(res.ID, comparisonResource.Properties.VirtualMachine.ID) {
-						currRes.RelatedResources = append(currRes.RelatedResources, comparisonResource.ID)
+						if !slices.Contains(currRes.RelatedResources, comparisonResource.ID) {
+							currRes.RelatedCostMeters = append(currRes.RelatedCostMeters, comparisonResource.ID)
+						}
 					}
 				}
 			} else if strings.ToLower(res.Type) == "microsoft.compute/restorepointcollections" {
@@ -542,7 +554,9 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 				if strings.Contains(strings.ToLower(comparisonResource.SubscriptionID), strings.ToLower(res.SubscriptionID)) &&
 					strings.Contains(strings.ToLower(comparisonResource.Name), resName) &&
 					strings.Contains(strings.ToLower(comparisonResource.ResourceGroup), strings.ToLower(res.ResourceGroup)) {
-					currRes.RelatedResources = append(currRes.RelatedResources, comparisonResource.ID)
+					if !slices.Contains(currRes.RelatedResources, comparisonResource.ID) {
+						currRes.RelatedCostMeters = append(currRes.RelatedCostMeters, comparisonResource.ID)
+					}
 				}
 			}
 		}
@@ -552,8 +566,12 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 
 	// jsonStr, _ := json.MarshalIndent(processedResources, "", "  ")
 	// os.WriteFile("cost-exports/testRelated-ResourceMeterIdentifier.json", jsonStr, 0644)
+	var processedResourcesSlice []lib.AzureResourceDetails
+	for _, resSlice := range processedResources {
+		processedResourcesSlice = append(processedResourcesSlice, resSlice...)
+	}
 
-	return processedResources
+	return processedResources, processedResourcesSlice
 }
 
 func AggregateCostData(data lib.AggregatedCostData, tci lib.TransformedCostItem) lib.AggregatedCostData {
@@ -728,22 +746,32 @@ func AggregateCostData(data lib.AggregatedCostData, tci lib.TransformedCostItem)
 }
 
 func TransformCostData(data lib.CostExportData) lib.TransformedCostItemsByTenant {
+
 	cfg := lib.GetCldConfig(nil)
-	var allData lib.TransformedCostItemsByTenant
+	allData := make(lib.TransformedCostItemsByTenant)
 
 	for _, costData := range data {
+
+		// jsonStr, _ := json.MarshalIndent(costData, "", "  ")
+		// fmt.Println(string(jsonStr))
+
+		// os.Exit(0)
+
 		var (
 			tagData            map[string]string
 			additionalInfoData interface{}
 		)
 
 		tenantName := ""
-		custTntName := lib.MapAzureSubscriptionToCustomTenantName(costData.SubscriptionGuid, cfg.Azure)
+		custTntName := lib.MapAzureSubscriptionToCustomTenantName(costData.SubscriptionGuid, *cfg.Azure)
 		if custTntName != "" {
 			tenantName = custTntName
 		} else {
 			tenantName = strings.ToUpper(costData.Datafile)
 		}
+
+		// fmt.Println(tenantName)
+		// os.Exit(0)
 
 		resourceNameSplit := strings.Split(costData.InstanceId, "/")
 		resourceName := resourceNameSplit[len(resourceNameSplit)-1]
@@ -795,6 +823,10 @@ func TransformCostData(data lib.CostExportData) lib.TransformedCostItemsByTenant
 			Datafile:                costData.Datafile,
 		}
 
+		// jsonStr, _ := json.MarshalIndent(tci, "", "  ")
+		// fmt.Println(string(jsonStr))
+		// os.Exit(0)
+
 		// _, ok := additionalInfoData["VCPUs"]
 		// // If the key exists
 		// if ok {
@@ -811,6 +843,7 @@ func TransformCostData(data lib.CostExportData) lib.TransformedCostItemsByTenant
 		// transformedTenantData.PreTaxCost += costData.PreTaxCost
 		// allData.addPreTaxCost(tci)
 		allData.AppendTenantData(tci)
+
 		// allData
 		// transformedTenantData.ResGroups = append(transformedTenantData.ResGroups, tci)
 		// fmt.Println(tci)
@@ -1033,7 +1066,8 @@ func DownloadAllConfiguredTenantCostExportsForMonth(opts lib.DownloadAllConfigur
 			blobList.Filter(lib.BlobListFilterOptions{FilterPrefix: opts.BlobPrefix})
 			blobList.SortByCreateDate("descending")
 
-			cred := GetTenantAzCred(tenant.TenantName, false, cldConfOpts)
+			cred, err := GetTenantAzCred(tenant.TenantName, false, cldConfOpts)
+			lib.CheckFatalError(err)
 			fileName := opts.OutfilePath + "/" + opts.OutfileNamePrefix + "__" + tenant.TenantName + ".csv"
 
 			if !opts.SuppressSteps {
@@ -1055,51 +1089,6 @@ func DownloadAllConfiguredTenantCostExportsForMonth(opts lib.DownloadAllConfigur
 	wg.Wait()
 }
 
-func ListStorageContainerBlobs(options lib.StorageAccountRequestOptions, cldConfigOpts *lib.CldConfigOptions) lib.BlobList {
-	var (
-		cred     *azidentity.ClientSecretCredential
-		err      error
-		ctx      = context.Background()
-		BlobList lib.BlobList
-	)
-
-	config := lib.GetCldConfig(cldConfigOpts)
-	tenant := config.Azure.MultiTenantAuth.Tenants[options.ConfiguredTenantName]
-	// lib.PrintSrcLoc(tenant.TenantName)
-
-	if options.GetWriteToken {
-		cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Writer.ClientID, tenant.Writer.ClientSecret, nil)
-		lib.CheckFatalError(err)
-	} else {
-		cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Reader.ClientID, tenant.Reader.ClientSecret, nil)
-		lib.CheckFatalError(err)
-	}
-
-	serviceURL := "https://" + options.StorageAccountName + ".blob.core.windows.net"
-	client, err := azblob.NewClient(serviceURL, cred, nil)
-
-	pager := client.NewListBlobsFlatPager(options.ContainerName, &azblob.ListBlobsFlatOptions{
-		Include: container.ListBlobsInclude{Deleted: false, Versions: false},
-	})
-
-	for pager.More() {
-		resp, err := pager.NextPage(ctx)
-		lib.CheckFatalError(err)
-		for _, blob := range resp.Segment.BlobItems {
-			var blobItem lib.BlobItem
-			jsonBytes, _ := json.MarshalIndent(blob, "", "  ")
-			blobItem.TenantName = tenant.TenantName
-			blobItem.StorageAccountName = options.StorageAccountName
-			blobItem.ContainerName = options.ContainerName
-			json.Unmarshal(jsonBytes, &blobItem)
-			// fmt.Println(blobItem)
-			BlobList = append(BlobList, blobItem)
-		}
-	}
-
-	return BlobList
-}
-
 // Generates monthly cost report from Cost Data stored in Azure Blob Storages, exported from Azure
 //
 // outputDirectory = Base directory to store downloaded data and generated Excel workbook.
@@ -1119,12 +1108,19 @@ func GenerateMonthlyCostReport(outputDirectory string, outputFileName string, bl
 	// }
 
 	DownloadAllConfiguredTenantCostExportsForMonth(lib.DownloadAllConfiguredTenantCostExportsForMonthOptions{
-		BlobPrefix:  blobPrefix + "/" + costExportMonth,
-		OutfilePath: outputDirectory + "cost-export",
+		BlobPrefix:        blobPrefix + "/" + costExportMonth,
+		OutfilePath:       outputDirectory + "/" + costExportMonth,
+		OutfileNamePrefix: "cost-export",
+		CostExportMonth:   costExportMonth,
+		SuppressSteps:     false,
 	}, nil)
 
-	combinedCostData := CombineCostExportCSVData(outputDirectory)
+	combinedCostData := CombineCostExportCSVData(outputDirectory + "/" + costExportMonth)
+
+	// fmt.Println(combinedCostData)
 	transformedData := TransformCostData(combinedCostData)
+	// fmt.Println(transformedData)
+	// os.Exit(0)
 
 	CostDataToExcel(transformedData, outputFileName)
 }
@@ -1146,3 +1142,47 @@ func SortCostPerDay(costPerDay lib.CostPerDay) lib.CostPerDay {
 
 	return sorted
 }
+
+//
+//
+
+func CombineCostDataSlices(basePath string, saveOutput bool) (combinedSlice []lib.MongoDbCostItem) {
+	byResourceMeterIdentifier := make(map[string]lib.MongoDbCostItem)
+
+	paths := lib.GetFullFilePaths(basePath)
+
+	for _, path := range paths {
+		if strings.Contains(path, "costData-CombinedSlice") {
+			continue
+		}
+		var currentFileData []lib.MongoDbCostItem
+		file, err := os.ReadFile(path)
+		lib.CheckFatalError(err)
+		err = json.Unmarshal(file, &currentFileData)
+		lib.CheckFatalError(err)
+		for _, cdi := range currentFileData {
+			byResourceMeterIdentifier[cdi.ResourceMeterIdentifier] = cdi
+		}
+	}
+
+	for _, cdi := range byResourceMeterIdentifier {
+		combinedSlice = append(combinedSlice, cdi)
+	}
+
+	if saveOutput {
+		jsonStr, err := json.MarshalIndent(combinedSlice, "", "  ")
+		lib.CheckFatalError(err)
+
+		err = os.WriteFile(basePath+"costData-CombinedSlice.json", jsonStr, 0644)
+		lib.CheckFatalError(err)
+		fmt.Println("Combined data saved to: " + basePath + "costData-CombinedSlice.json")
+	}
+
+	// fmt.Println("len(combinedSlice)")
+	// fmt.Println(len(combinedSlice))
+
+	return
+}
+
+//
+//

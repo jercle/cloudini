@@ -1,25 +1,5 @@
 # Change Log
 
-## [0.1.13]
-* Fix bug in retrieving latest ACG image with Azure API chunking responses after first 55 versons.
-
-## [0.1.12]
-* Add back checkVersionExists flag for checking image gallery versions after accidental removal in 0.1.11
-
-## [0.1.11]
-* Updates to azure compute gallery, azure auth, and entra funcs
-* Add m365 funcs
-* Bug fix for config file location checking
-
-## [0.1.10]
-* Add functions to check if image version exists
-* Add vm image version list functionality
-* Removal of stale code
-
-## [0.1.9]
-* Update latest acp image getter
-* Bump deps
-
 ## [0.1.8]
 *  azure compute gallery: Remove error when no attempting to increment versions where non exist
 
@@ -44,7 +24,6 @@
  * Refactoring
 
 ## [0.1.2]
- * https://github.com/jercle/cloudini/pull/1
  * Added submodules for generated Azure fake data
  * Added dev/ directory for testing feature dev
 

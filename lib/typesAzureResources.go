@@ -1,33 +1,32 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package lib
 
-type ResourceUserAssignedIdentity struct {
+import "time"
+
+type AzureResourceUserAssignedIdentity struct {
 	ClientID    string `json:"clientId,omitempty" bson:"clientId,omitempty"`
 	PrincipalID string `json:"principalId,omitempty" bson:"principalId,omitempty"`
 }
 
-type ResourceIdentity struct {
-	PrincipalID            string                                  `json:"principalId,omitempty" bson:"principalId,omitempty"`
-	TenantID               string                                  `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
-	Type                   string                                  `json:"type,omitempty" bson:"type,omitempty"`
-	UserAssignedIdentities map[string]ResourceUserAssignedIdentity `json:"userAssignedIdentities,omitempty" bson:"userAssignedIdentities,omitempty"`
+type AzureResourceIdentity struct {
+	PrincipalID            string                                       `json:"principalId,omitempty" bson:"principalId,omitempty"`
+	TenantID               string                                       `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
+	Type                   string                                       `json:"type,omitempty" bson:"type,omitempty"`
+	UserAssignedIdentities map[string]AzureResourceUserAssignedIdentity `json:"userAssignedIdentities,omitempty" bson:"userAssignedIdentities,omitempty"`
 }
 
-type ResourcePlan struct {
+type AzureResourcePlan struct {
 	Name          string `json:"name,omitempty" bson:"name,omitempty"`
 	Product       string `json:"product,omitempty" bson:"product,omitempty"`
 	PromotionCode string `json:"promotionCode,omitempty" bson:"promotionCode,omitempty"`
 	Publisher     string `json:"publisher,omitempty" bson:"publisher,omitempty"`
 }
 
-type ResourcePrivateLinkScopedResource struct {
+type AzureResourcePrivateLinkScopedResource struct {
 	ResourceID string `json:"ResourceId,omitempty" bson:"ResourceId,omitempty"`
 	ScopeID    string `json:"ScopeId,omitempty" bson:"ScopeId,omitempty"`
 }
 
-type ResourceRuntimeConfiguration struct {
+type AzureResourceRuntimeConfiguration struct {
 	Powershell struct {
 		BuiltinModules struct {
 			Az string `json:"Az,omitempty" bson:"Az,omitempty"`
@@ -45,13 +44,13 @@ type ResourceRuntimeConfiguration struct {
 	} `json:"powershell72,omitempty" bson:"powershell72,omitempty"`
 }
 
-type ResourceAadAuthenticationParameters struct {
+type AzureResourceAadAuthenticationParameters struct {
 	AadAudience string `json:"aadAudience,omitempty" bson:"aadAudience,omitempty"`
 	AadIssuer   string `json:"aadIssuer,omitempty" bson:"aadIssuer,omitempty"`
 	AadTenant   string `json:"aadTenant,omitempty" bson:"aadTenant,omitempty"`
 }
 
-type ResourceAadProfile struct {
+type AzureResourceAadProfile struct {
 	AdminGroupObjectIDs any    `json:"adminGroupObjectIDs,omitempty" bson:"adminGroupObjectIDs,omitempty"`
 	AdminUsers          any    `json:"adminUsers,omitempty" bson:"adminUsers,omitempty"`
 	EnableAzureRbac     bool   `json:"enableAzureRBAC,omitempty" bson:"enableAzureRBAC,omitempty"`
@@ -59,13 +58,13 @@ type ResourceAadProfile struct {
 	TenantID            string `json:"tenantID,omitempty" bson:"tenantID,omitempty"`
 }
 
-type ResourceAccessModeSettings struct {
+type AzureResourceAccessModeSettings struct {
 	Exclusions          []any  `json:"exclusions,omitempty" bson:"exclusions,omitempty"`
 	IngestionAccessMode string `json:"ingestionAccessMode,omitempty" bson:"ingestionAccessMode,omitempty"`
 	QueryAccessMode     string `json:"queryAccessMode,omitempty" bson:"queryAccessMode,omitempty"`
 }
 
-type ResourceActiveDirectory struct {
+type AzureResourceActiveDirectory struct {
 	ActiveDirectoryID          string      `json:"activeDirectoryId,omitempty" bson:"activeDirectoryId,omitempty"`
 	AesEncryption              bool        `json:"aesEncryption,omitempty" bson:"aesEncryption,omitempty"`
 	AllowLocalNfsUsersWithLdap bool        `json:"allowLocalNfsUsersWithLdap,omitempty" bson:"allowLocalNfsUsersWithLdap,omitempty"`
@@ -82,7 +81,7 @@ type ResourceActiveDirectory struct {
 	Username                   string      `json:"username,omitempty" bson:"username,omitempty"`
 }
 
-type ResourceAddonProfiles struct {
+type AzureResourceAddonProfiles struct {
 	AciConnectorLinux struct {
 		Config  struct{} `json:"config,omitempty" bson:"config,omitempty"`
 		Enabled bool     `json:"enabled,omitempty" bson:"enabled,omitempty"`
@@ -121,7 +120,7 @@ type ResourceAddonProfiles struct {
 	} `json:"omsagent,omitempty" bson:"omsagent,omitempty"`
 }
 
-type ResourceAdministrators struct {
+type AzureResourceAdministrators struct {
 	AdministratorType         string `json:"administratorType,omitempty" bson:"administratorType,omitempty"`
 	AzureAdOnlyAuthentication bool   `json:"azureADOnlyAuthentication,omitempty" bson:"azureADOnlyAuthentication,omitempty"`
 	Login                     string `json:"login,omitempty" bson:"login,omitempty"`
@@ -130,7 +129,7 @@ type ResourceAdministrators struct {
 	TenantID                  string `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
 }
 
-type ResourceAutoScalerProfile struct {
+type AzureResourceAutoScalerProfile struct {
 	BalanceSimilarNodeGroups      string `json:"balance-similar-node-groups,omitempty" bson:"balance-similar-node-groups,omitempty"`
 	Expander                      string `json:"expander,omitempty" bson:"expander,omitempty"`
 	MaxEmptyBulkDelete            string `json:"max-empty-bulk-delete,omitempty" bson:"max-empty-bulk-delete,omitempty"`
@@ -150,7 +149,7 @@ type ResourceAutoScalerProfile struct {
 	SkipNodesWithSystemPods       string `json:"skip-nodes-with-system-pods,omitempty" bson:"skip-nodes-with-system-pods,omitempty"`
 }
 
-type ResourceAgentPoolProfile struct {
+type AzureResourceAgentPoolProfile struct {
 	AvailabilityZones          []string `json:"availabilityZones,omitempty" bson:"availabilityZones,omitempty"`
 	Count                      float64  `json:"count,omitempty" bson:"count,omitempty"`
 	CurrentOrchestratorVersion string   `json:"currentOrchestratorVersion,omitempty" bson:"currentOrchestratorVersion,omitempty"`
@@ -183,7 +182,7 @@ type ResourceAgentPoolProfile struct {
 	WorkloadRuntime   string    `json:"workloadRuntime,omitempty" bson:"workloadRuntime,omitempty"`
 }
 
-type ResourceAPI struct {
+type AzureResourceAPI struct {
 	BrandColor  string `json:"brandColor,omitempty" bson:"brandColor,omitempty"`
 	Category    string `json:"category,omitempty" bson:"category,omitempty"`
 	Description string `json:"description,omitempty" bson:"description,omitempty"`
@@ -194,13 +193,13 @@ type ResourceAPI struct {
 	Type        string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceAPIServerAccessProfile struct {
+type AzureResourceAPIServerAccessProfile struct {
 	EnablePrivateCluster           bool   `json:"enablePrivateCluster,omitempty" bson:"enablePrivateCluster,omitempty"`
 	EnablePrivateClusterPublicFqdn bool   `json:"enablePrivateClusterPublicFQDN,omitempty" bson:"enablePrivateClusterPublicFQDN,omitempty"`
 	PrivateDnsZone                 string `json:"privateDNSZone,omitempty" bson:"privateDNSZone,omitempty"`
 }
 
-type ResourceAppLogsConfiguration struct {
+type AzureResourceAppLogsConfiguration struct {
 	Destination               *string `json:"destination,omitempty" bson:"destination,omitempty"`
 	LogAnalyticsConfiguration *struct {
 		CustomerID         string `json:"customerId,omitempty" bson:"customerId,omitempty"`
@@ -209,7 +208,7 @@ type ResourceAppLogsConfiguration struct {
 	} `json:"logAnalyticsConfiguration,omitempty" bson:"logAnalyticsConfiguration,omitempty"`
 }
 
-type ResourceAuthorization struct {
+type AzureResourceAuthorization struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -222,13 +221,13 @@ type ResourceAuthorization struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceAutoScaleConfiguration struct {
+type AzureResourceAutoScaleConfiguration struct {
 	Bounds struct {
 		Min float64 `json:"min,omitempty" bson:"min,omitempty"`
 	} `json:"bounds,omitempty" bson:"bounds,omitempty"`
 }
 
-type ResourceBackendAddressPool struct {
+type AzureResourceBackendAddressPool struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -266,13 +265,13 @@ type ResourceBackendAddressPool struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceBackup struct {
+type AzureResourceBackup struct {
 	BackupRetentionDays float64 `json:"backupRetentionDays,omitempty" bson:"backupRetentionDays,omitempty"`
 	EarliestRestoreDate string  `json:"earliestRestoreDate,omitempty" bson:"earliestRestoreDate,omitempty"`
 	GeoRedundantBackup  string  `json:"geoRedundantBackup,omitempty" bson:"geoRedundantBackup,omitempty"`
 }
 
-type ResourceBackupPolicy struct {
+type AzureResourceBackupPolicy struct {
 	PeriodicModeProperties struct {
 		BackupIntervalInMinutes        float64 `json:"backupIntervalInMinutes,omitempty" bson:"backupIntervalInMinutes,omitempty"`
 		BackupRetentionIntervalInHours float64 `json:"backupRetentionIntervalInHours,omitempty" bson:"backupRetentionIntervalInHours,omitempty"`
@@ -281,11 +280,11 @@ type ResourceBackupPolicy struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceCallRateLimit struct {
-	Rules []ResourceCallRateLimitRule `json:"rules,omitempty" bson:"rules,omitempty"`
+type AzureResourceCallRateLimit struct {
+	Rules []AzureResourceCallRateLimitRule `json:"rules,omitempty" bson:"rules,omitempty"`
 }
 
-type ResourceCallRateLimitRule struct {
+type AzureResourceCallRateLimitRule struct {
 	Count                    float64 `json:"count,omitempty" bson:"count,omitempty"`
 	DynamicThrottlingEnabled bool    `json:"dynamicThrottlingEnabled,omitempty" bson:"dynamicThrottlingEnabled,omitempty"`
 	Key                      string  `json:"key,omitempty" bson:"key,omitempty"`
@@ -296,7 +295,7 @@ type ResourceCallRateLimitRule struct {
 	RenewalPeriod float64 `json:"renewalPeriod,omitempty" bson:"renewalPeriod,omitempty"`
 }
 
-type ResourceConfiguration struct {
+type AzureResourceConfiguration struct {
 	Dapr               any `json:"dapr,omitempty" bson:"dapr,omitempty"`
 	EventTriggerConfig *struct {
 		Parallelism            float64 `json:"parallelism,omitempty" bson:"parallelism,omitempty"`
@@ -339,7 +338,7 @@ type ResourceConfiguration struct {
 	TriggerType string `json:"triggerType,omitempty" bson:"triggerType,omitempty"`
 }
 
-type ResourceCreationData struct {
+type AzureResourceCreationData struct {
 	CreateOption          string `json:"createOption,omitempty" bson:"createOption,omitempty"`
 	GalleryImageReference *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
@@ -356,7 +355,7 @@ type ResourceCreationData struct {
 	UploadSizeBytes  float64 `json:"uploadSizeBytes,omitempty" bson:"uploadSizeBytes,omitempty"`
 }
 
-type ResourceCriteria struct {
+type AzureResourceCriteria struct {
 	AllOf []struct {
 		CriterionType string `json:"criterionType,omitempty" bson:"criterionType,omitempty"`
 		Dimensions    []struct {
@@ -381,7 +380,7 @@ type ResourceCriteria struct {
 	Odata_Type string `json:"odata.type,omitempty" bson:"odata.type,omitempty"`
 }
 
-type ResourceCustomDomainConfiguration struct {
+type AzureResourceCustomDomainConfiguration struct {
 	CertificateKeyVaultProperties any    `json:"certificateKeyVaultProperties,omitempty" bson:"certificateKeyVaultProperties,omitempty"`
 	CertificatePassword           any    `json:"certificatePassword,omitempty" bson:"certificatePassword,omitempty"`
 	CertificateValue              any    `json:"certificateValue,omitempty" bson:"certificateValue,omitempty"`
@@ -392,7 +391,7 @@ type ResourceCustomDomainConfiguration struct {
 	Thumbprint                    any    `json:"thumbprint,omitempty" bson:"thumbprint,omitempty"`
 }
 
-type ResourceDataProtection struct {
+type AzureResourceDataProtection struct {
 	Backup struct {
 		BackupEnabled  bool   `json:"backupEnabled,omitempty" bson:"backupEnabled,omitempty"`
 		BackupPolicyID string `json:"backupPolicyId,omitempty" bson:"backupPolicyId,omitempty"`
@@ -404,7 +403,7 @@ type ResourceDataProtection struct {
 	} `json:"snapshot,omitempty" bson:"snapshot,omitempty"`
 }
 
-type ResourceDataSources struct {
+type AzureResourceDataSources struct {
 	Extensions []struct {
 		ExtensionName     string `json:"extensionName,omitempty" bson:"extensionName,omitempty"`
 		ExtensionSettings struct {
@@ -448,7 +447,7 @@ type ResourceDataSources struct {
 	} `json:"windowsFirewallLogs,omitempty" bson:"windowsFirewallLogs,omitempty"`
 }
 
-type ResourceDefaultSecurityRules struct {
+type AzureResourceDefaultSecurityRules struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -471,7 +470,7 @@ type ResourceDefaultSecurityRules struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceDefinition struct {
+type AzureResourceDefinition struct {
 	Schema  string `json:"$schema,omitempty" bson:"$schema,omitempty"`
 	Actions struct {
 		ComposeEmailResponse *struct {
@@ -597,7 +596,7 @@ type ResourceDefinition struct {
 	} `json:"triggers,omitempty" bson:"triggers,omitempty"`
 }
 
-type ResourceDestinations struct {
+type AzureResourceDestinations struct {
 	LogAnalytics []struct {
 		Name                string `json:"name,omitempty" bson:"name,omitempty"`
 		WorkspaceID         string `json:"workspaceId,omitempty" bson:"workspaceId,omitempty"`
@@ -605,14 +604,14 @@ type ResourceDestinations struct {
 	} `json:"logAnalytics,omitempty" bson:"logAnalytics,omitempty"`
 }
 
-type ResourceDiagnosticsProfile *struct {
+type AzureResourceDiagnosticsProfile *struct {
 	BootDiagnostics struct {
 		Enabled    bool   `json:"enabled,omitempty" bson:"enabled,omitempty"`
 		StorageURI string `json:"storageUri,omitempty" bson:"storageUri,omitempty"`
 	} `json:"bootDiagnostics,omitempty" bson:"bootDiagnostics,omitempty"`
 }
 
-type ResourceDistribute struct {
+type AzureResourceDistribute struct {
 	ArtifactTags struct {
 		Baseosimg string `json:"baseosimg,omitempty" bson:"baseosimg,omitempty"`
 		Source    string `json:"source,omitempty" bson:"source,omitempty"`
@@ -624,7 +623,7 @@ type ResourceDistribute struct {
 	Type               string   `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceDnsSettings struct {
+type AzureResourceDnsSettings struct {
 	AppliedDnsServers        []string `json:"appliedDnsServers,omitempty" bson:"appliedDnsServers,omitempty"`
 	DnsServers               []string `json:"dnsServers,omitempty" bson:"dnsServers,omitempty"`
 	DomainNameLabel          string   `json:"domainNameLabel,omitempty" bson:"domainNameLabel,omitempty"`
@@ -634,14 +633,14 @@ type ResourceDnsSettings struct {
 	Servers                  []string `json:"servers,omitempty" bson:"servers,omitempty"`
 }
 
-type ResourceEmailReceivers struct {
+type AzureResourceEmailReceivers struct {
 	EmailAddress         string `json:"emailAddress,omitempty" bson:"emailAddress,omitempty"`
 	Name                 string `json:"name,omitempty" bson:"name,omitempty"`
 	Status               string `json:"status,omitempty" bson:"status,omitempty"`
 	UseCommonAlertSchema bool   `json:"useCommonAlertSchema,omitempty" bson:"useCommonAlertSchema,omitempty"`
 }
 
-type ResourceEncryption struct {
+type AzureResourceEncryption struct {
 	Identity *struct {
 		UserAssignedIdentity any `json:"userAssignedIdentity,omitempty" bson:"userAssignedIdentity,omitempty"`
 	} `json:"identity,omitempty" bson:"identity,omitempty"`
@@ -663,7 +662,7 @@ type ResourceEncryption struct {
 	Type   string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceEncryptionSettingsCollection struct {
+type AzureResourceEncryptionSettingsCollection struct {
 	Enabled            bool `json:"enabled,omitempty" bson:"enabled,omitempty"`
 	EncryptionSettings []struct {
 		DiskEncryptionKey struct {
@@ -682,7 +681,7 @@ type ResourceEncryptionSettingsCollection struct {
 	EncryptionSettingsVersion string `json:"encryptionSettingsVersion,omitempty" bson:"encryptionSettingsVersion,omitempty"`
 }
 
-type ResourceEndpointsConfiguration struct {
+type AzureResourceEndpointsConfiguration struct {
 	Connector struct {
 		OutgoingIpAddresses []struct {
 			Address string `json:"address,omitempty" bson:"address,omitempty"`
@@ -698,7 +697,7 @@ type ResourceEndpointsConfiguration struct {
 	} `json:"workflow,omitempty" bson:"workflow,omitempty"`
 }
 
-type ResourceExpressRouteConnections struct {
+type AzureResourceExpressRouteConnections struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -726,8 +725,8 @@ type ResourceExpressRouteConnections struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceExtended struct {
-	InstanceView struct {
+type AzureResourceExtended struct {
+	InstanceView *struct {
 		ComputerName     string `json:"computerName,omitempty" bson:"computerName,omitempty"`
 		HyperVGeneration string `json:"hyperVGeneration,omitempty" bson:"hyperVGeneration,omitempty"`
 		OSName           string `json:"osName,omitempty" bson:"osName,omitempty"`
@@ -740,7 +739,7 @@ type ResourceExtended struct {
 	} `json:"instanceView,omitempty" bson:"instanceView,omitempty"`
 }
 
-type ResourceFlowAnalyticsConfiguration struct {
+type AzureResourceFlowAnalyticsConfiguration struct {
 	NetworkWatcherFlowAnalyticsConfiguration *struct {
 		Enabled                  bool    `json:"enabled,omitempty" bson:"enabled,omitempty"`
 		TrafficAnalyticsInterval float64 `json:"trafficAnalyticsInterval,omitempty" bson:"trafficAnalyticsInterval,omitempty"`
@@ -750,7 +749,7 @@ type ResourceFlowAnalyticsConfiguration struct {
 	} `json:"networkWatcherFlowAnalyticsConfiguration,omitempty" bson:"networkWatcherFlowAnalyticsConfiguration,omitempty"`
 }
 
-type ResourceFrontendIpConfiguration struct {
+type AzureResourceFrontendIpConfiguration struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -779,7 +778,7 @@ type ResourceFrontendIpConfiguration struct {
 	Zones []string `json:"zones,omitempty" bson:"zones,omitempty"`
 }
 
-type ResourceGeoDataReplication struct {
+type AzureResourceGeoDataReplication struct {
 	Locations []struct {
 		LocationName string `json:"locationName,omitempty" bson:"locationName,omitempty"`
 		ReplicaState string `json:"replicaState,omitempty" bson:"replicaState,omitempty"`
@@ -788,7 +787,7 @@ type ResourceGeoDataReplication struct {
 	MaxReplicationLagDurationInSeconds float64 `json:"maxReplicationLagDurationInSeconds,omitempty" bson:"maxReplicationLagDurationInSeconds,omitempty"`
 }
 
-type ResourceHostNameSslStates struct {
+type AzureResourceHostNameSslStates struct {
 	CertificateResourceID any    `json:"certificateResourceId,omitempty" bson:"certificateResourceId,omitempty"`
 	HostType              string `json:"hostType,omitempty" bson:"hostType,omitempty"`
 	IpBasedSslResult      any    `json:"ipBasedSslResult,omitempty" bson:"ipBasedSslResult,omitempty"`
@@ -802,7 +801,7 @@ type ResourceHostNameSslStates struct {
 	VirtualIPv6           any    `json:"virtualIPv6,omitempty" bson:"virtualIPv6,omitempty"`
 }
 
-type ResourceHubIpAddresses struct {
+type AzureResourceHubIpAddresses struct {
 	PrivateIpAddress string `json:"privateIPAddress,omitempty" bson:"privateIPAddress,omitempty"`
 	PublicIPs        struct {
 		Addresses []struct {
@@ -812,14 +811,14 @@ type ResourceHubIpAddresses struct {
 	} `json:"publicIPs,omitempty" bson:"publicIPs,omitempty"`
 }
 
-type ResourceIdentifier struct {
+type AzureResourceIdentifier struct {
 	Offer      string `json:"offer,omitempty" bson:"offer,omitempty"`
 	Publisher  string `json:"publisher,omitempty" bson:"publisher,omitempty"`
 	Sku        string `json:"sku,omitempty" bson:"sku,omitempty"`
 	UniqueName string `json:"uniqueName,omitempty" bson:"uniqueName,omitempty"`
 }
 
-type ResourceIdentityProfile struct {
+type AzureResourceIdentityProfile struct {
 	Kubeletidentity struct {
 		ClientID   string `json:"clientId,omitempty" bson:"clientId,omitempty"`
 		ObjectID   string `json:"objectId,omitempty" bson:"objectId,omitempty"`
@@ -827,7 +826,7 @@ type ResourceIdentityProfile struct {
 	} `json:"kubeletidentity,omitempty" bson:"kubeletidentity,omitempty"`
 }
 
-type ResourceInboundNatRule struct {
+type AzureResourceInboundNatRule struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -848,7 +847,7 @@ type ResourceInboundNatRule struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceInstallPatches struct {
+type AzureResourceInstallPatches struct {
 	LinuxParameters *struct {
 		ClassificationsToInclude  []string `json:"classificationsToInclude,omitempty" bson:"classificationsToInclude,omitempty"`
 		PackageNameMasksToExclude []string `json:"packageNameMasksToExclude,omitempty" bson:"packageNameMasksToExclude,omitempty"`
@@ -860,7 +859,7 @@ type ResourceInstallPatches struct {
 	} `json:"windowsParameters,omitempty" bson:"windowsParameters,omitempty"`
 }
 
-type ResourceIntrusionDetection struct {
+type AzureResourceIntrusionDetection struct {
 	Configuration struct {
 		BypassTrafficSettings []struct {
 			Description          string   `json:"description,omitempty" bson:"description,omitempty"`
@@ -880,7 +879,7 @@ type ResourceIntrusionDetection struct {
 	Mode string `json:"mode,omitempty" bson:"mode,omitempty"`
 }
 
-type ResourceIpConfiguration struct {
+type AzureResourceIpConfiguration struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -911,7 +910,7 @@ type ResourceIpConfiguration struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceKeysMetadata struct {
+type AzureResourceKeysMetadata struct {
 	PrimaryMasterKey struct {
 		GenerationTime string `json:"generationTime,omitempty" bson:"generationTime,omitempty"`
 	} `json:"primaryMasterKey,omitempty" bson:"primaryMasterKey,omitempty"`
@@ -926,7 +925,7 @@ type ResourceKeysMetadata struct {
 	} `json:"secondaryReadonlyMasterKey,omitempty" bson:"secondaryReadonlyMasterKey,omitempty"`
 }
 
-type ResourceLense struct {
+type AzureResourceLense struct {
 	Order float64 `json:"order,omitempty" bson:"order,omitempty"`
 	Parts []struct {
 		Metadata struct {
@@ -1024,7 +1023,7 @@ type ResourceLense struct {
 	} `json:"parts,omitempty" bson:"parts,omitempty"`
 }
 
-type ResourceLink struct {
+type AzureResourceLink struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -1046,7 +1045,7 @@ type ResourceLink struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceLinuxProfile struct {
+type AzureResourceLinuxProfile struct {
 	AdminUsername string `json:"adminUsername,omitempty" bson:"adminUsername,omitempty"`
 	SSH           struct {
 		PublicKeys []struct {
@@ -1055,7 +1054,7 @@ type ResourceLinuxProfile struct {
 	} `json:"ssh,omitempty" bson:"ssh,omitempty"`
 }
 
-type ResourceLoadBalancingRule struct {
+type AzureResourceLoadBalancingRule struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -1087,7 +1086,7 @@ type ResourceLoadBalancingRule struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceLocation struct {
+type AzureResourceLocation struct {
 	DocumentEndpoint  string  `json:"documentEndpoint,omitempty" bson:"documentEndpoint,omitempty"`
 	FailoverPriority  float64 `json:"failoverPriority,omitempty" bson:"failoverPriority,omitempty"`
 	ID                string  `json:"id,omitempty" bson:"id,omitempty"`
@@ -1096,7 +1095,7 @@ type ResourceLocation struct {
 	ProvisioningState string  `json:"provisioningState,omitempty" bson:"provisioningState,omitempty"`
 }
 
-type ResourceMaintenanceWindow struct {
+type AzureResourceMaintenanceWindow struct {
 	CustomWindow  string  `json:"customWindow,omitempty" bson:"customWindow,omitempty"`
 	DayOfWeek     float64 `json:"dayOfWeek,omitempty" bson:"dayOfWeek,omitempty"`
 	Duration      string  `json:"duration,omitempty" bson:"duration,omitempty"`
@@ -1107,7 +1106,7 @@ type ResourceMaintenanceWindow struct {
 	TimeZone      string  `json:"timeZone,omitempty" bson:"timeZone,omitempty"`
 }
 
-type ResourceMetadata struct {
+type AzureResourceMetadata struct {
 	CreatedBy              string `json:"createdBy,omitempty" bson:"createdBy,omitempty"`
 	CreatedDateTimeUtc     string `json:"createdDateTimeUtc,omitempty" bson:"createdDateTimeUtc,omitempty"`
 	LastUpdatedBy          string `json:"lastUpdatedBy,omitempty" bson:"lastUpdatedBy,omitempty"`
@@ -1144,13 +1143,13 @@ type ResourceMetadata struct {
 	} `json:"model,omitempty" bson:"model,omitempty"`
 }
 
-type ResourceNetwork struct {
+type AzureResourceNetwork struct {
 	DelegatedSubnetResourceID   string `json:"delegatedSubnetResourceId,omitempty" bson:"delegatedSubnetResourceId,omitempty"`
 	PrivateDnsZoneArmResourceID string `json:"privateDnsZoneArmResourceId,omitempty" bson:"privateDnsZoneArmResourceId,omitempty"`
 	PublicNetworkAccess         string `json:"publicNetworkAccess,omitempty" bson:"publicNetworkAccess,omitempty"`
 }
 
-type ResourceNetworkAcls struct {
+type AzureResourceNetworkAcls struct {
 	Bypass        string `json:"bypass,omitempty" bson:"bypass,omitempty"`
 	DefaultAction string `json:"defaultAction,omitempty" bson:"defaultAction,omitempty"`
 	IpRules       []struct {
@@ -1171,7 +1170,7 @@ type ResourceNetworkAcls struct {
 	} `json:"virtualNetworkRules,omitempty" bson:"virtualNetworkRules,omitempty"`
 }
 
-type ResourceNetworkProfile struct {
+type AzureResourceNetworkProfile struct {
 	AccountAccess *struct {
 		DefaultAction string `json:"defaultAction,omitempty" bson:"defaultAction,omitempty"`
 	} `json:"accountAccess,omitempty" bson:"accountAccess,omitempty"`
@@ -1202,7 +1201,7 @@ type ResourceNetworkProfile struct {
 	ServiceCidrs  []string `json:"serviceCidrs,omitempty" bson:"serviceCidrs,omitempty"`
 }
 
-type ResourceNetworkRuleSet struct {
+type AzureResourceNetworkRuleSet struct {
 	DefaultAction string `json:"defaultAction,omitempty" bson:"defaultAction,omitempty"`
 	IpRules       []struct {
 		Action string `json:"action,omitempty" bson:"action,omitempty"`
@@ -1210,7 +1209,7 @@ type ResourceNetworkRuleSet struct {
 	} `json:"ipRules,omitempty" bson:"ipRules,omitempty"`
 }
 
-type ResourceNotificationSettings struct {
+type AzureResourceNotificationSettings struct {
 	EmailRecipient     string  `json:"emailRecipient,omitempty" bson:"emailRecipient,omitempty"`
 	NotificationLocale string  `json:"notificationLocale,omitempty" bson:"notificationLocale,omitempty"`
 	Status             string  `json:"status,omitempty" bson:"status,omitempty"`
@@ -1218,7 +1217,7 @@ type ResourceNotificationSettings struct {
 	WebhookURL         string  `json:"webhookUrl,omitempty" bson:"webhookUrl,omitempty"`
 }
 
-type ResourceOSProfile struct {
+type AzureResourceOSProfile struct {
 	AdminUsername            string `json:"adminUsername,omitempty" bson:"adminUsername,omitempty"`
 	AllowExtensionOperations bool   `json:"allowExtensionOperations,omitempty" bson:"allowExtensionOperations,omitempty"`
 	ComputerName             string `json:"computerName,omitempty" bson:"computerName,omitempty"`
@@ -1268,7 +1267,7 @@ type ResourceOSProfile struct {
 	} `json:"windowsConfiguration,omitempty" bson:"windowsConfiguration,omitempty"`
 }
 
-type ResourceOutboundRules struct {
+type AzureResourceOutboundRules struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -1292,7 +1291,7 @@ type ResourceOutboundRules struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceP2SConnectionConfiguration struct {
+type AzureResourceP2SConnectionConfiguration struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -1317,7 +1316,7 @@ type ResourceP2SConnectionConfiguration struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceParameterConnection struct {
+type AzureResourceParameterConnection struct {
 	ConnectionID         string `json:"connectionId,omitempty" bson:"connectionId,omitempty"`
 	ConnectionName       string `json:"connectionName,omitempty" bson:"connectionName,omitempty"`
 	ConnectionProperties struct {
@@ -1328,63 +1327,63 @@ type ResourceParameterConnection struct {
 	ID string `json:"id,omitempty" bson:"id,omitempty"`
 }
 
-type ResourceParameter struct {
+type AzureResourceParameter struct {
 	DefaultValue any     `json:"defaultValue,omitempty" bson:"defaultValue,omitempty"`
 	IsMandatory  bool    `json:"isMandatory,omitempty" bson:"isMandatory,omitempty"`
 	Position     float64 `json:"position,omitempty" bson:"position,omitempty"`
 	Type         string  `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceParameters struct {
-	Action                   *ResourceParameter `json:"Action,omitempty" bson:"Action,omitempty"`
-	Alert                    *ResourceParameter `json:"Alert,omitempty" bson:"Alert,omitempty"`
-	AlertsVariable           *ResourceParameter `json:"alertsVariable,omitempty" bson:"alertsVariable,omitempty"`
-	AutomationAccountName    *ResourceParameter `json:"AutomationAccountName,omitempty" bson:"AutomationAccountName,omitempty"`
-	AzureConnectionAssetName *ResourceParameter `json:"AzureConnectionAssetName,omitempty" bson:"AzureConnectionAssetName,omitempty"`
-	ComplianceTableName      *ResourceParameter `json:"ComplianceTableName,omitempty" bson:"ComplianceTableName,omitempty"`
+type AzureResourceParameters struct {
+	Action                   *AzureResourceParameter `json:"Action,omitempty" bson:"Action,omitempty"`
+	Alert                    *AzureResourceParameter `json:"Alert,omitempty" bson:"Alert,omitempty"`
+	AlertsVariable           *AzureResourceParameter `json:"alertsVariable,omitempty" bson:"alertsVariable,omitempty"`
+	AutomationAccountName    *AzureResourceParameter `json:"AutomationAccountName,omitempty" bson:"AutomationAccountName,omitempty"`
+	AzureConnectionAssetName *AzureResourceParameter `json:"AzureConnectionAssetName,omitempty" bson:"AzureConnectionAssetName,omitempty"`
+	ComplianceTableName      *AzureResourceParameter `json:"ComplianceTableName,omitempty" bson:"ComplianceTableName,omitempty"`
 	Connections              *struct {
-		Value map[string]ResourceParameterConnection `json:"value,omitempty" bson:"value,omitempty"`
+		Value map[string]AzureResourceParameterConnection `json:"value,omitempty" bson:"value,omitempty"`
 	} `json:"$connections,omitempty" bson:"$connections,omitempty"`
-	Days                       *ResourceParameter `json:"days,omitempty" bson:"days,omitempty"`
-	Details                    *ResourceParameter `json:"Details,omitempty" bson:"Details,omitempty"`
-	DomainCredentialName       *ResourceParameter `json:"DomainCredentialName,omitempty" bson:"DomainCredentialName,omitempty"`
-	DomainJoinCred             *ResourceParameter `json:"domainJoinCred,omitempty" bson:"domainJoinCred,omitempty"`
-	DomainJoinUser             *ResourceParameter `json:"domainJoinUser,omitempty" bson:"domainJoinUser,omitempty"`
-	DomainName                 *ResourceParameter `json:"DomainName,omitempty" bson:"DomainName,omitempty"`
-	EmergencySendTo            *ResourceParameter `json:"EmergencySendTo,omitempty" bson:"EmergencySendTo,omitempty"`
-	GetIgnoreAlertsOnSpoke     *ResourceParameter `json:"getIgnoreAlertsOnSpoke,omitempty" bson:"getIgnoreAlertsOnSpoke,omitempty"`
-	GetSpokeAlertConfiguration *ResourceParameter `json:"getSpokeAlertConfiguration,omitempty" bson:"getSpokeAlertConfiguration,omitempty"`
-	Hostname                   *ResourceParameter `json:"hostname,omitempty" bson:"hostname,omitempty"`
-	HostName                   *ResourceParameter `json:"hostName,omitempty" bson:"hostName,omitempty"`
-	LdapAccountCred            *ResourceParameter `json:"ldapAccountCred,omitempty" bson:"ldapAccountCred,omitempty"`
-	LdapAccountUser            *ResourceParameter `json:"ldapAccountUser,omitempty" bson:"ldapAccountUser,omitempty"`
-	NetBiosName                *ResourceParameter `json:"NetBiosName,omitempty" bson:"NetBiosName,omitempty"`
-	OrgName                    *ResourceParameter `json:"OrgName,omitempty" bson:"OrgName,omitempty"`
-	Password                   *ResourceParameter `json:"password,omitempty" bson:"password,omitempty"`
-	PasswordOther              *ResourceParameter `json:"Password,omitempty" bson:"Password,omitempty"`
-	Portagw                    *ResourceParameter `json:"portagw,omitempty" bson:"portagw,omitempty"`
-	Portaip                    *ResourceParameter `json:"portaip,omitempty" bson:"portaip,omitempty"`
-	Regions                    *ResourceParameter `json:"Regions,omitempty" bson:"Regions,omitempty"`
-	ResourceGroup              *ResourceParameter `json:"ResourceGroup,omitempty" bson:"ResourceGroup,omitempty"`
-	ResourceGroupName          *ResourceParameter `json:"ResourceGroupName,omitempty" bson:"ResourceGroupName,omitempty"`
-	RestartCount               *ResourceParameter `json:"RestartCount,omitempty" bson:"RestartCount,omitempty"`
-	RetryCount                 *ResourceParameter `json:"RetryCount,omitempty" bson:"RetryCount,omitempty"`
-	RetryIntervalSec           *ResourceParameter `json:"RetryIntervalSec,omitempty" bson:"RetryIntervalSec,omitempty"`
-	SafeModeCredentialName     *ResourceParameter `json:"SafeModeCredentialName,omitempty" bson:"SafeModeCredentialName,omitempty"`
-	SendTo                     *ResourceParameter `json:"sendTo,omitempty" bson:"sendTo,omitempty"`
-	SendToOther                *ResourceParameter `json:"SendTo,omitempty" bson:"SendTo,omitempty"`
-	Sshport                    *ResourceParameter `json:"sshport,omitempty" bson:"sshport,omitempty"`
-	Subject                    *ResourceParameter `json:"subject,omitempty" bson:"subject,omitempty"`
-	SubjectOther               *ResourceParameter `json:"Subject,omitempty" bson:"Subject,omitempty"`
-	SubscriptionID             *ResourceParameter `json:"SubscriptionId,omitempty" bson:"SubscriptionId,omitempty"`
-	TriggerRunbook             *ResourceParameter `json:"TriggerRunbook,omitempty" bson:"TriggerRunbook,omitempty"`
-	VerbosePreference          *ResourceParameter `json:"VerbosePreference,omitempty" bson:"VerbosePreference,omitempty"`
-	WaitTimeout                *ResourceParameter `json:"WaitTimeout,omitempty" bson:"WaitTimeout,omitempty"`
-	WebhookData                *ResourceParameter `json:"WebhookData,omitempty" bson:"WebhookData,omitempty"`
-	WeeklyReport               *ResourceParameter `json:"WeeklyReport,omitempty" bson:"WeeklyReport,omitempty"`
+	Days                       *AzureResourceParameter `json:"days,omitempty" bson:"days,omitempty"`
+	Details                    *AzureResourceParameter `json:"Details,omitempty" bson:"Details,omitempty"`
+	DomainCredentialName       *AzureResourceParameter `json:"DomainCredentialName,omitempty" bson:"DomainCredentialName,omitempty"`
+	DomainJoinCred             *AzureResourceParameter `json:"domainJoinCred,omitempty" bson:"domainJoinCred,omitempty"`
+	DomainJoinUser             *AzureResourceParameter `json:"domainJoinUser,omitempty" bson:"domainJoinUser,omitempty"`
+	DomainName                 *AzureResourceParameter `json:"DomainName,omitempty" bson:"DomainName,omitempty"`
+	EmergencySendTo            *AzureResourceParameter `json:"EmergencySendTo,omitempty" bson:"EmergencySendTo,omitempty"`
+	GetIgnoreAlertsOnSpoke     *AzureResourceParameter `json:"getIgnoreAlertsOnSpoke,omitempty" bson:"getIgnoreAlertsOnSpoke,omitempty"`
+	GetSpokeAlertConfiguration *AzureResourceParameter `json:"getSpokeAlertConfiguration,omitempty" bson:"getSpokeAlertConfiguration,omitempty"`
+	Hostname                   *AzureResourceParameter `json:"hostname,omitempty" bson:"hostname,omitempty"`
+	HostName                   *AzureResourceParameter `json:"hostName,omitempty" bson:"hostName,omitempty"`
+	LdapAccountCred            *AzureResourceParameter `json:"ldapAccountCred,omitempty" bson:"ldapAccountCred,omitempty"`
+	LdapAccountUser            *AzureResourceParameter `json:"ldapAccountUser,omitempty" bson:"ldapAccountUser,omitempty"`
+	NetBiosName                *AzureResourceParameter `json:"NetBiosName,omitempty" bson:"NetBiosName,omitempty"`
+	OrgName                    *AzureResourceParameter `json:"OrgName,omitempty" bson:"OrgName,omitempty"`
+	Password                   *AzureResourceParameter `json:"password,omitempty" bson:"password,omitempty"`
+	PasswordOther              *AzureResourceParameter `json:"Password,omitempty" bson:"Password,omitempty"`
+	Portagw                    *AzureResourceParameter `json:"portagw,omitempty" bson:"portagw,omitempty"`
+	Portaip                    *AzureResourceParameter `json:"portaip,omitempty" bson:"portaip,omitempty"`
+	Regions                    *AzureResourceParameter `json:"Regions,omitempty" bson:"Regions,omitempty"`
+	ResourceGroup              *AzureResourceParameter `json:"ResourceGroup,omitempty" bson:"ResourceGroup,omitempty"`
+	ResourceGroupName          *AzureResourceParameter `json:"ResourceGroupName,omitempty" bson:"ResourceGroupName,omitempty"`
+	RestartCount               *AzureResourceParameter `json:"RestartCount,omitempty" bson:"RestartCount,omitempty"`
+	RetryCount                 *AzureResourceParameter `json:"RetryCount,omitempty" bson:"RetryCount,omitempty"`
+	RetryIntervalSec           *AzureResourceParameter `json:"RetryIntervalSec,omitempty" bson:"RetryIntervalSec,omitempty"`
+	SafeModeCredentialName     *AzureResourceParameter `json:"SafeModeCredentialName,omitempty" bson:"SafeModeCredentialName,omitempty"`
+	SendTo                     *AzureResourceParameter `json:"sendTo,omitempty" bson:"sendTo,omitempty"`
+	SendToOther                *AzureResourceParameter `json:"SendTo,omitempty" bson:"SendTo,omitempty"`
+	Sshport                    *AzureResourceParameter `json:"sshport,omitempty" bson:"sshport,omitempty"`
+	Subject                    *AzureResourceParameter `json:"subject,omitempty" bson:"subject,omitempty"`
+	SubjectOther               *AzureResourceParameter `json:"Subject,omitempty" bson:"Subject,omitempty"`
+	SubscriptionID             *AzureResourceParameter `json:"SubscriptionId,omitempty" bson:"SubscriptionId,omitempty"`
+	TriggerRunbook             *AzureResourceParameter `json:"TriggerRunbook,omitempty" bson:"TriggerRunbook,omitempty"`
+	VerbosePreference          *AzureResourceParameter `json:"VerbosePreference,omitempty" bson:"VerbosePreference,omitempty"`
+	WaitTimeout                *AzureResourceParameter `json:"WaitTimeout,omitempty" bson:"WaitTimeout,omitempty"`
+	WebhookData                *AzureResourceParameter `json:"WebhookData,omitempty" bson:"WebhookData,omitempty"`
+	WeeklyReport               *AzureResourceParameter `json:"WeeklyReport,omitempty" bson:"WeeklyReport,omitempty"`
 }
 
-type ResourcePolicies struct {
+type AzureResourcePolicies struct {
 	AzureAdAuthenticationAsArmPolicy struct {
 		Status string `json:"status,omitempty" bson:"status,omitempty"`
 	} `json:"azureADAuthenticationAsArmPolicy,omitempty" bson:"azureADAuthenticationAsArmPolicy,omitempty"`
@@ -1410,7 +1409,7 @@ type ResourcePolicies struct {
 	} `json:"trustPolicy,omitempty" bson:"trustPolicy,omitempty"`
 }
 
-type ResourcePeerings struct {
+type AzureResourcePeerings struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -1441,7 +1440,7 @@ type ResourcePeerings struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourcePrimaryEndpoints struct {
+type AzureResourcePrimaryEndpoints struct {
 	Blob              string `json:"blob,omitempty" bson:"blob,omitempty"`
 	Dfs               string `json:"dfs,omitempty" bson:"dfs,omitempty"`
 	File              string `json:"file,omitempty" bson:"file,omitempty"`
@@ -1464,7 +1463,7 @@ type ResourcePrimaryEndpoints struct {
 	Web   string `json:"web,omitempty" bson:"web,omitempty"`
 }
 
-type ResourcePrivateEndpointConnections struct {
+type AzureResourcePrivateEndpointConnections struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Location   string `json:"location,omitempty" bson:"location,omitempty"`
@@ -1486,7 +1485,7 @@ type ResourcePrivateEndpointConnections struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourcePrivateLinkResources struct {
+type AzureResourcePrivateLinkResources struct {
 	GroupID         string   `json:"groupId,omitempty" bson:"groupId,omitempty"`
 	ID              string   `json:"id,omitempty" bson:"id,omitempty"`
 	Name            string   `json:"name,omitempty" bson:"name,omitempty"`
@@ -1494,7 +1493,7 @@ type ResourcePrivateLinkResources struct {
 	Type            string   `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourcePrivateLinkServiceConnection struct {
+type AzureResourcePrivateLinkServiceConnection struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -1513,7 +1512,7 @@ type ResourcePrivateLinkServiceConnection struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceProbe struct {
+type AzureResourceProbe struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -1532,7 +1531,7 @@ type ResourceProbe struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourcePublishingProfile struct {
+type AzureResourcePublishingProfile struct {
 	ExcludeFromLatest bool    `json:"excludeFromLatest,omitempty" bson:"excludeFromLatest,omitempty"`
 	PublishedDate     string  `json:"publishedDate,omitempty" bson:"publishedDate,omitempty"`
 	ReplicaCount      float64 `json:"replicaCount,omitempty" bson:"replicaCount,omitempty"`
@@ -1549,13 +1548,13 @@ type ResourcePublishingProfile struct {
 	} `json:"targetRegions,omitempty" bson:"targetRegions,omitempty"`
 }
 
-type ResourcePurchasePlan struct {
+type AzureResourcePurchasePlan struct {
 	Name      string `json:"name,omitempty" bson:"name,omitempty"`
 	Product   string `json:"product,omitempty" bson:"product,omitempty"`
 	Publisher string `json:"publisher,omitempty" bson:"publisher,omitempty"`
 }
 
-type ResourceReadLocation struct {
+type AzureResourceReadLocation struct {
 	DocumentEndpoint  string  `json:"documentEndpoint,omitempty" bson:"documentEndpoint,omitempty"`
 	FailoverPriority  float64 `json:"failoverPriority,omitempty" bson:"failoverPriority,omitempty"`
 	ID                string  `json:"id,omitempty" bson:"id,omitempty"`
@@ -1564,7 +1563,7 @@ type ResourceReadLocation struct {
 	ProvisioningState string  `json:"provisioningState,omitempty" bson:"provisioningState,omitempty"`
 }
 
-type ResourceRecommended struct {
+type AzureResourceRecommended struct {
 	Memory struct {
 		Max float64 `json:"max,omitempty" bson:"max,omitempty"`
 		Min float64 `json:"min,omitempty" bson:"min,omitempty"`
@@ -1575,7 +1574,7 @@ type ResourceRecommended struct {
 	} `json:"vCPUs,omitempty" bson:"vCPUs,omitempty"`
 }
 
-type ResourceRoute struct {
+type AzureResourceRoute struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -1589,13 +1588,13 @@ type ResourceRoute struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceRoutingPreference struct {
+type AzureResourceRoutingPreference struct {
 	PublishInternetEndpoints  bool   `json:"publishInternetEndpoints,omitempty" bson:"publishInternetEndpoints,omitempty"`
 	PublishMicrosoftEndpoints bool   `json:"publishMicrosoftEndpoints,omitempty" bson:"publishMicrosoftEndpoints,omitempty"`
 	RoutingChoice             string `json:"routingChoice,omitempty" bson:"routingChoice,omitempty"`
 }
 
-type ResourceSecurityProfile struct {
+type AzureResourceSecurityProfile struct {
 	Defender *struct {
 		LogAnalyticsWorkspaceResourceID string `json:"logAnalyticsWorkspaceResourceId,omitempty" bson:"logAnalyticsWorkspaceResourceId,omitempty"`
 		SecurityMonitoring              struct {
@@ -1609,7 +1608,7 @@ type ResourceSecurityProfile struct {
 	} `json:"uefiSettings,omitempty" bson:"uefiSettings,omitempty"`
 }
 
-type ResourceSecurityRule struct {
+type AzureResourceSecurityRule struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -1632,7 +1631,7 @@ type ResourceSecurityRule struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceSecuritySettings struct {
+type AzureResourceSecuritySettings struct {
 	ImmutabilitySettings   any    `json:"immutabilitySettings,omitempty" bson:"immutabilitySettings,omitempty"`
 	MultiUserAuthorization string `json:"multiUserAuthorization,omitempty" bson:"multiUserAuthorization,omitempty"`
 	SoftDeleteSettings     struct {
@@ -1644,7 +1643,7 @@ type ResourceSecuritySettings struct {
 	} `json:"softDeleteSettings,omitempty" bson:"softDeleteSettings,omitempty"`
 }
 
-type ResourceSettingsAttestationConfig struct {
+type AzureResourceSettingsAttestationConfig struct {
 	AscSettings struct {
 		AscReportingEndpoint  string `json:"ascReportingEndpoint,omitempty" bson:"ascReportingEndpoint,omitempty"`
 		AscReportingFrequency string `json:"ascReportingFrequency,omitempty" bson:"ascReportingFrequency,omitempty"`
@@ -1657,7 +1656,7 @@ type ResourceSettingsAttestationConfig struct {
 	UseCustomToken string `json:"useCustomToken,omitempty" bson:"useCustomToken,omitempty"`
 }
 
-type ResourceSettingsAutoPatching struct {
+type AzureResourceSettingsAutoPatching struct {
 	AdditionalVmPatch             string `json:"AdditionalVmPatch,omitempty" bson:"AdditionalVmPatch,omitempty"`
 	DayOfWeek                     string `json:"DayOfWeek,omitempty" bson:"DayOfWeek,omitempty"`
 	Enable                        bool   `json:"Enable,omitempty" bson:"Enable,omitempty"`
@@ -1666,7 +1665,7 @@ type ResourceSettingsAutoPatching struct {
 	PatchCategory                 string `json:"PatchCategory,omitempty" bson:"PatchCategory,omitempty"`
 }
 
-type ResourceSettingsServerConfigurationsManagement struct {
+type AzureResourceSettingsServerConfigurationsManagement struct {
 	AdditionalFeaturesServerConfigurations struct {
 		BackupPermissionsForAzureBackupSvc bool `json:"BackupPermissionsForAzureBackupSvc,omitempty" bson:"BackupPermissionsForAzureBackupSvc,omitempty"`
 		IsRServicesEnabled                 bool `json:"IsRServicesEnabled,omitempty" bson:"IsRServicesEnabled,omitempty"`
@@ -1709,7 +1708,7 @@ type ResourceSettingsServerConfigurationsManagement struct {
 	} `json:"SQLWorkloadTypeUpdateSettings,omitempty" bson:"SQLWorkloadTypeUpdateSettings,omitempty"`
 }
 
-type ResourceSettingsWadCfg struct {
+type AzureResourceSettingsWadCfg struct {
 	DiagnosticMonitorConfiguration struct {
 		DiagnosticInfrastructureLogs struct {
 			ScheduledTransferLogLevelFilter string `json:"scheduledTransferLogLevelFilter,omitempty" bson:"scheduledTransferLogLevelFilter,omitempty"`
@@ -1742,7 +1741,7 @@ type ResourceSettingsWadCfg struct {
 	} `json:"DiagnosticMonitorConfiguration,omitempty" bson:"DiagnosticMonitorConfiguration,omitempty"`
 }
 
-type ResourceSettingsConfigurationArguments struct {
+type AzureResourceSettingsConfigurationArguments struct {
 	ActionAfterReboot              string  `json:"ActionAfterReboot,omitempty" bson:"ActionAfterReboot,omitempty"`
 	AllowModuleOverwrite           bool    `json:"AllowModuleOverwrite,omitempty" bson:"AllowModuleOverwrite,omitempty"`
 	ConfigurationMode              string  `json:"ConfigurationMode,omitempty" bson:"ConfigurationMode,omitempty"`
@@ -1753,12 +1752,12 @@ type ResourceSettingsConfigurationArguments struct {
 	RegistrationURL                string  `json:"RegistrationUrl,omitempty" bson:"RegistrationUrl,omitempty"`
 }
 
-type ResourceSettings struct {
-	AadClientCertThumbprint string                             `json:"AADClientCertThumbprint,omitempty" bson:"AADClientCertThumbprint,omitempty"`
-	AadClientID             string                             `json:"AADClientID,omitempty" bson:"AADClientID,omitempty"`
-	AntimalwareEnabled      any                                `json:"AntimalwareEnabled,omitempty" bson:"AntimalwareEnabled,omitempty"`
-	AttestationConfig       *ResourceSettingsAttestationConfig `json:"AttestationConfig,omitempty" bson:"AttestationConfig,omitempty"`
-	AutoPatchingSettings    *ResourceSettingsAutoPatching      `json:"AutoPatchingSettings,omitempty" bson:"AutoPatchingSettings,omitempty"`
+type AzureResourceSettings struct {
+	AadClientCertThumbprint string                                  `json:"AADClientCertThumbprint,omitempty" bson:"AADClientCertThumbprint,omitempty"`
+	AadClientID             string                                  `json:"AADClientID,omitempty" bson:"AADClientID,omitempty"`
+	AntimalwareEnabled      any                                     `json:"AntimalwareEnabled,omitempty" bson:"AntimalwareEnabled,omitempty"`
+	AttestationConfig       *AzureResourceSettingsAttestationConfig `json:"AttestationConfig,omitempty" bson:"AttestationConfig,omitempty"`
+	AutoPatchingSettings    *AzureResourceSettingsAutoPatching      `json:"AutoPatchingSettings,omitempty" bson:"AutoPatchingSettings,omitempty"`
 	DeploymentTokenSettings *struct {
 		DeploymentToken any `json:"DeploymentToken,omitempty" bson:"DeploymentToken,omitempty"`
 	} `json:"DeploymentTokenSettings,omitempty" bson:"DeploymentTokenSettings,omitempty"`
@@ -1797,46 +1796,46 @@ type ResourceSettings struct {
 		ScanType  string `json:"scanType,omitempty" bson:"scanType,omitempty"`
 		Time      string `json:"time,omitempty" bson:"time,omitempty"`
 	} `json:"ScheduledScanSettings,omitempty" bson:"ScheduledScanSettings,omitempty"`
-	SequenceVersion                        string                                          `json:"SequenceVersion,omitempty" bson:"SequenceVersion,omitempty"`
-	ServerConfigurationsManagementSettings *ResourceSettingsServerConfigurationsManagement `json:"ServerConfigurationsManagementSettings,omitempty" bson:"ServerConfigurationsManagementSettings,omitempty"`
+	SequenceVersion                        string                                               `json:"SequenceVersion,omitempty" bson:"SequenceVersion,omitempty"`
+	ServerConfigurationsManagementSettings *AzureResourceSettingsServerConfigurationsManagement `json:"ServerConfigurationsManagementSettings,omitempty" bson:"ServerConfigurationsManagementSettings,omitempty"`
 	SQLManagement                          *struct {
 		IsEnabled bool `json:"IsEnabled,omitempty" bson:"IsEnabled,omitempty"`
 	} `json:"SqlManagement,omitempty" bson:"SqlManagement,omitempty"`
-	AutoUpdate                    bool                                    `json:"autoUpdate,omitempty" bson:"autoUpdate,omitempty"`
-	AzureResourceID               *string                                 `json:"azureResourceId,omitempty" bson:"azureResourceId,omitempty"`
-	CommandStartTimeUtcTicks      string                                  `json:"commandStartTimeUTCTicks,omitempty" bson:"commandStartTimeUTCTicks,omitempty"`
-	CommandToExecute              string                                  `json:"commandToExecute,omitempty" bson:"commandToExecute,omitempty"`
-	ConfigurationArguments        *ResourceSettingsConfigurationArguments `json:"configurationArguments,omitempty" bson:"configurationArguments,omitempty"`
-	DefenderForServersWorkspaceID string                                  `json:"defenderForServersWorkspaceId,omitempty" bson:"defenderForServersWorkspaceId,omitempty"`
-	EnableAma                     string                                  `json:"enableAMA,omitempty" bson:"enableAMA,omitempty"`
-	FileUris                      []string                                `json:"fileUris,omitempty" bson:"fileUris,omitempty"`
-	ForceReOnboarding             bool                                    `json:"forceReOnboarding,omitempty" bson:"forceReOnboarding,omitempty"`
-	Locale                        string                                  `json:"locale,omitempty" bson:"locale,omitempty"`
-	ObjectStr                     string                                  `json:"objectStr,omitempty" bson:"objectStr,omitempty"`
-	Port                          any                                     `json:"port,omitempty" bson:"port,omitempty"`
-	Protocol                      string                                  `json:"protocol,omitempty" bson:"protocol,omitempty"`
-	RequestPath                   string                                  `json:"requestPath,omitempty" bson:"requestPath,omitempty"`
-	Salt                          string                                  `json:"salt,omitempty" bson:"salt,omitempty"`
-	SkipDos2Unix                  bool                                    `json:"skipDos2Unix,omitempty" bson:"skipDos2Unix,omitempty"`
-	StopOnMultipleConnections     any                                     `json:"stopOnMultipleConnections,omitempty" bson:"stopOnMultipleConnections,omitempty"`
-	StorageAccount                string                                  `json:"storageAccount,omitempty" bson:"storageAccount,omitempty"`
-	StorageAccountOther           string                                  `json:"StorageAccount,omitempty" bson:"StorageAccount,omitempty"`
-	TaskID                        string                                  `json:"taskId,omitempty" bson:"taskId,omitempty"`
-	Timestamp                     float64                                 `json:"timestamp,omitempty" bson:"timestamp,omitempty"`
-	TimeStamp                     string                                  `json:"timeStamp,omitempty" bson:"timeStamp,omitempty"`
-	TriggerForceUpgrade           bool                                    `json:"triggerForceUpgrade,omitempty" bson:"triggerForceUpgrade,omitempty"`
-	User                          string                                  `json:"User,omitempty" bson:"User,omitempty"`
-	UserName                      string                                  `json:"userName,omitempty" bson:"userName,omitempty"`
-	UserNameOther                 string                                  `json:"UserName,omitempty" bson:"UserName,omitempty"`
-	VmType                        string                                  `json:"vmType,omitempty" bson:"vmType,omitempty"`
-	VNextEnabled                  bool                                    `json:"vNextEnabled,omitempty" bson:"vNextEnabled,omitempty"`
-	VolumeType                    string                                  `json:"VolumeType,omitempty" bson:"VolumeType,omitempty"`
-	WadCfg                        *ResourceSettingsWadCfg                 `json:"WadCfg,omitempty" bson:"WadCfg,omitempty"`
-	WorkspaceID                   string                                  `json:"workspaceId,omitempty" bson:"workspaceId,omitempty"`
-	XMLCfg                        string                                  `json:"xmlCfg,omitempty" bson:"xmlCfg,omitempty"`
+	AutoUpdate                    bool                                         `json:"autoUpdate,omitempty" bson:"autoUpdate,omitempty"`
+	AzureResourceID               *string                                      `json:"azureResourceId,omitempty" bson:"azureResourceId,omitempty"`
+	CommandStartTimeUtcTicks      string                                       `json:"commandStartTimeUTCTicks,omitempty" bson:"commandStartTimeUTCTicks,omitempty"`
+	CommandToExecute              string                                       `json:"commandToExecute,omitempty" bson:"commandToExecute,omitempty"`
+	ConfigurationArguments        *AzureResourceSettingsConfigurationArguments `json:"configurationArguments,omitempty" bson:"configurationArguments,omitempty"`
+	DefenderForServersWorkspaceID string                                       `json:"defenderForServersWorkspaceId,omitempty" bson:"defenderForServersWorkspaceId,omitempty"`
+	EnableAma                     string                                       `json:"enableAMA,omitempty" bson:"enableAMA,omitempty"`
+	FileUris                      []string                                     `json:"fileUris,omitempty" bson:"fileUris,omitempty"`
+	ForceReOnboarding             bool                                         `json:"forceReOnboarding,omitempty" bson:"forceReOnboarding,omitempty"`
+	Locale                        string                                       `json:"locale,omitempty" bson:"locale,omitempty"`
+	ObjectStr                     string                                       `json:"objectStr,omitempty" bson:"objectStr,omitempty"`
+	Port                          any                                          `json:"port,omitempty" bson:"port,omitempty"`
+	Protocol                      string                                       `json:"protocol,omitempty" bson:"protocol,omitempty"`
+	RequestPath                   string                                       `json:"requestPath,omitempty" bson:"requestPath,omitempty"`
+	Salt                          string                                       `json:"salt,omitempty" bson:"salt,omitempty"`
+	SkipDos2Unix                  bool                                         `json:"skipDos2Unix,omitempty" bson:"skipDos2Unix,omitempty"`
+	StopOnMultipleConnections     any                                          `json:"stopOnMultipleConnections,omitempty" bson:"stopOnMultipleConnections,omitempty"`
+	StorageAccount                string                                       `json:"storageAccount,omitempty" bson:"storageAccount,omitempty"`
+	StorageAccountOther           string                                       `json:"StorageAccount,omitempty" bson:"StorageAccount,omitempty"`
+	TaskID                        string                                       `json:"taskId,omitempty" bson:"taskId,omitempty"`
+	Timestamp                     float64                                      `json:"timestamp,omitempty" bson:"timestamp,omitempty"`
+	TimeStamp                     string                                       `json:"timeStamp,omitempty" bson:"timeStamp,omitempty"`
+	TriggerForceUpgrade           bool                                         `json:"triggerForceUpgrade,omitempty" bson:"triggerForceUpgrade,omitempty"`
+	User                          string                                       `json:"User,omitempty" bson:"User,omitempty"`
+	UserName                      string                                       `json:"userName,omitempty" bson:"userName,omitempty"`
+	UserNameOther                 string                                       `json:"UserName,omitempty" bson:"UserName,omitempty"`
+	VmType                        string                                       `json:"vmType,omitempty" bson:"vmType,omitempty"`
+	VNextEnabled                  bool                                         `json:"vNextEnabled,omitempty" bson:"vNextEnabled,omitempty"`
+	VolumeType                    string                                       `json:"VolumeType,omitempty" bson:"VolumeType,omitempty"`
+	WadCfg                        *AzureResourceSettingsWadCfg                 `json:"WadCfg,omitempty" bson:"WadCfg,omitempty"`
+	WorkspaceID                   string                                       `json:"workspaceId,omitempty" bson:"workspaceId,omitempty"`
+	XMLCfg                        string                                       `json:"xmlCfg,omitempty" bson:"xmlCfg,omitempty"`
 }
 
-type ResourceSiteConfig struct {
+type AzureResourceSiteConfig struct {
 	AcrUseManagedIdentityCreds             bool    `json:"acrUseManagedIdentityCreds,omitempty" bson:"acrUseManagedIdentityCreds,omitempty"`
 	AcrUserManagedIdentityID               any     `json:"acrUserManagedIdentityID,omitempty" bson:"acrUserManagedIdentityID,omitempty"`
 	AlwaysOn                               bool    `json:"alwaysOn,omitempty" bson:"alwaysOn,omitempty"`
@@ -1930,7 +1929,7 @@ type ResourceSiteConfig struct {
 	XManagedServiceIdentityID              any     `json:"xManagedServiceIdentityId,omitempty" bson:"xManagedServiceIdentityId,omitempty"`
 }
 
-type ResourceSiteProperties struct {
+type AzureResourceSiteProperties struct {
 	AppSettings any `json:"appSettings,omitempty" bson:"appSettings,omitempty"`
 	Metadata    any `json:"metadata,omitempty" bson:"metadata,omitempty"`
 	Properties  []struct {
@@ -1939,7 +1938,7 @@ type ResourceSiteProperties struct {
 	} `json:"properties,omitempty" bson:"properties,omitempty"`
 }
 
-type ResourceSources struct {
+type AzureResourceSources struct {
 	EventSource string `json:"eventSource,omitempty" bson:"eventSource,omitempty"`
 	RuleSets    []struct {
 		Rules []struct {
@@ -1951,7 +1950,7 @@ type ResourceSources struct {
 	} `json:"ruleSets,omitempty" bson:"ruleSets,omitempty"`
 }
 
-type ResourceStatus struct {
+type AzureResourceStatus struct {
 	Error *struct {
 		Code    string `json:"code,omitempty" bson:"code,omitempty"`
 		Message string `json:"message,omitempty" bson:"message,omitempty"`
@@ -1960,7 +1959,7 @@ type ResourceStatus struct {
 	Target string `json:"target,omitempty" bson:"target,omitempty"`
 }
 
-type ResourceStorage struct {
+type AzureResourceStorage struct {
 	AutoGrow      string  `json:"autoGrow,omitempty" bson:"autoGrow,omitempty"`
 	Iops          float64 `json:"iops,omitempty" bson:"iops,omitempty"`
 	StorageSizeGb float64 `json:"storageSizeGB,omitempty" bson:"storageSizeGB,omitempty"`
@@ -1968,7 +1967,7 @@ type ResourceStorage struct {
 	Type          string  `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceStorageProfileDataDisk struct {
+type AzureResourceStorageProfileDataDisk struct {
 	Caching      string  `json:"caching,omitempty" bson:"caching,omitempty"`
 	CreateOption string  `json:"createOption,omitempty" bson:"createOption,omitempty"`
 	DeleteOption string  `json:"deleteOption,omitempty" bson:"deleteOption,omitempty"`
@@ -1983,7 +1982,7 @@ type ResourceStorageProfileDataDisk struct {
 	WriteAcceleratorEnabled bool   `json:"writeAcceleratorEnabled,omitempty" bson:"writeAcceleratorEnabled,omitempty"`
 }
 
-type ResourceStorageProfileImageReference struct {
+type AzureResourceStorageProfileImageReference struct {
 	ExactVersion string `json:"exactVersion,omitempty" bson:"exactVersion,omitempty"`
 	ID           string `json:"id,omitempty" bson:"id,omitempty"`
 	Offer        string `json:"offer,omitempty" bson:"offer,omitempty"`
@@ -1992,7 +1991,7 @@ type ResourceStorageProfileImageReference struct {
 	Version      string `json:"version,omitempty" bson:"version,omitempty"`
 }
 
-type ResourceStorageProfileOSDisk struct {
+type AzureResourceStorageProfileOSDisk struct {
 	BlobURI          string `json:"blobUri,omitempty" bson:"blobUri,omitempty"`
 	Caching          string `json:"caching,omitempty" bson:"caching,omitempty"`
 	CreateOption     string `json:"createOption,omitempty" bson:"createOption,omitempty"`
@@ -2016,8 +2015,8 @@ type ResourceStorageProfileOSDisk struct {
 	WriteAcceleratorEnabled bool `json:"writeAcceleratorEnabled,omitempty" bson:"writeAcceleratorEnabled,omitempty"`
 }
 
-type ResourceStorageProfile struct {
-	DataDisks     []ResourceStorageProfileDataDisk `json:"dataDisks,omitempty" bson:"dataDisks,omitempty"`
+type AzureResourceStorageProfile struct {
+	DataDisks     []AzureResourceStorageProfileDataDisk `json:"dataDisks,omitempty" bson:"dataDisks,omitempty"`
 	DiskCsiDriver *struct {
 		Enabled bool `json:"enabled,omitempty" bson:"enabled,omitempty"`
 	} `json:"diskCSIDriver,omitempty" bson:"diskCSIDriver,omitempty"`
@@ -2025,8 +2024,8 @@ type ResourceStorageProfile struct {
 	FileCsiDriver      *struct {
 		Enabled bool `json:"enabled,omitempty" bson:"enabled,omitempty"`
 	} `json:"fileCSIDriver,omitempty" bson:"fileCSIDriver,omitempty"`
-	ImageReference *ResourceStorageProfileImageReference `json:"imageReference,omitempty" bson:"imageReference,omitempty"`
-	OSDisk         *ResourceStorageProfileOSDisk         `json:"osDisk,omitempty" bson:"osDisk,omitempty"`
+	ImageReference *AzureResourceStorageProfileImageReference `json:"imageReference,omitempty" bson:"imageReference,omitempty"`
+	OSDisk         *AzureResourceStorageProfileOSDisk         `json:"osDisk,omitempty" bson:"osDisk,omitempty"`
 	OSDiskImage    *struct {
 		HostCaching string  `json:"hostCaching,omitempty" bson:"hostCaching,omitempty"`
 		SizeInGb    float64 `json:"sizeInGB,omitempty" bson:"sizeInGB,omitempty"`
@@ -2037,7 +2036,7 @@ type ResourceStorageProfile struct {
 	ZoneResilient bool `json:"zoneResilient,omitempty" bson:"zoneResilient,omitempty"`
 }
 
-type ResourceStreamDeclarations struct {
+type AzureResourceStreamDeclarations struct {
 	CustomTextLoki_CL *struct {
 		Columns []struct {
 			Name string `json:"name,omitempty" bson:"name,omitempty"`
@@ -2046,7 +2045,7 @@ type ResourceStreamDeclarations struct {
 	} `json:"Custom-Text-Loki_CL,omitempty" bson:"Custom-Text-Loki_CL,omitempty"`
 }
 
-type ResourceSubnets struct {
+type AzureResourceSubnets struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -2104,7 +2103,7 @@ type ResourceSubnets struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceSystemData struct {
+type AzureResourceSystemData struct {
 	CreatedAt          string `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
 	CreatedBy          string `json:"createdBy,omitempty" bson:"createdBy,omitempty"`
 	CreatedByType      string `json:"createdByType,omitempty" bson:"createdByType,omitempty"`
@@ -2113,7 +2112,7 @@ type ResourceSystemData struct {
 	LastModifiedByType string `json:"lastModifiedByType,omitempty" bson:"lastModifiedByType,omitempty"`
 }
 
-type ResourceTemplate struct {
+type AzureResourceTemplate struct {
 	Schema     string `json:"$schema,omitempty" bson:"$schema,omitempty"`
 	Containers []struct {
 		Env []struct {
@@ -2244,7 +2243,7 @@ type ResourceTemplate struct {
 	Volumes any `json:"volumes,omitempty" bson:"volumes,omitempty"`
 }
 
-type ResourceTestConfigurations struct {
+type AzureResourceTestConfigurations struct {
 	Name             string `json:"name,omitempty" bson:"name,omitempty"`
 	Protocol         string `json:"protocol,omitempty" bson:"protocol,omitempty"`
 	TcpConfiguration struct {
@@ -2254,7 +2253,7 @@ type ResourceTestConfigurations struct {
 	TestFrequencySec float64 `json:"testFrequencySec,omitempty" bson:"testFrequencySec,omitempty"`
 }
 
-type ResourceTestGroups struct {
+type AzureResourceTestGroups struct {
 	Destinations       []string `json:"destinations,omitempty" bson:"destinations,omitempty"`
 	Disable            bool     `json:"disable,omitempty" bson:"disable,omitempty"`
 	Name               string   `json:"name,omitempty" bson:"name,omitempty"`
@@ -2262,7 +2261,7 @@ type ResourceTestGroups struct {
 	TestConfigurations []string `json:"testConfigurations,omitempty" bson:"testConfigurations,omitempty"`
 }
 
-type ResourceTestRequests struct {
+type AzureResourceTestRequests struct {
 	Body struct {
 		Request struct {
 			Method string `json:"method,omitempty" bson:"method,omitempty"`
@@ -2273,14 +2272,14 @@ type ResourceTestRequests struct {
 	RequestURI string `json:"requestUri,omitempty" bson:"requestUri,omitempty"`
 }
 
-type ResourceTransportSecurity struct {
+type AzureResourceTransportSecurity struct {
 	CertificateAuthority struct {
 		KeyVaultSecretID string `json:"keyVaultSecretId,omitempty" bson:"keyVaultSecretId,omitempty"`
 		Name             string `json:"name,omitempty" bson:"name,omitempty"`
 	} `json:"certificateAuthority,omitempty" bson:"certificateAuthority,omitempty"`
 }
 
-type ResourceVerificationRecords struct {
+type AzureResourceVerificationRecords struct {
 	Dkim *struct {
 		Name  string  `json:"name,omitempty" bson:"name,omitempty"`
 		Ttl   float64 `json:"ttl,omitempty" bson:"ttl,omitempty"`
@@ -2307,7 +2306,7 @@ type ResourceVerificationRecords struct {
 	} `json:"SPF,omitempty" bson:"SPF,omitempty"`
 }
 
-type ResourceVerificationStates struct {
+type AzureResourceVerificationStates struct {
 	Dkim struct {
 		ErrorCode string `json:"errorCode,omitempty" bson:"errorCode,omitempty"`
 		Status    string `json:"status,omitempty" bson:"status,omitempty"`
@@ -2329,14 +2328,14 @@ type ResourceVerificationStates struct {
 	} `json:"SPF,omitempty" bson:"SPF,omitempty"`
 }
 
-type ResourceVirtualMachineProfile struct {
-	ExtensionProfile struct {
-		Extensions []struct {
+type AzureResourceVirtualMachineProfile struct {
+	ExtensionProfile *struct {
+		Extensions *[]struct {
 			Name       string `json:"name,omitempty" bson:"name,omitempty"`
-			Properties struct {
+			Properties *struct {
 				AutoUpgradeMinorVersion bool   `json:"autoUpgradeMinorVersion,omitempty" bson:"autoUpgradeMinorVersion,omitempty"`
 				Publisher               string `json:"publisher,omitempty" bson:"publisher,omitempty"`
-				Settings                struct {
+				Settings                *struct {
 					DisableUu       string `json:"disable-uu,omitempty" bson:"disable-uu,omitempty"`
 					EnableUu        string `json:"enable-uu,omitempty" bson:"enable-uu,omitempty"`
 					NodeExporterTls string `json:"node-exporter-tls,omitempty" bson:"node-exporter-tls,omitempty"`
@@ -2348,46 +2347,46 @@ type ResourceVirtualMachineProfile struct {
 		} `json:"extensions,omitempty" bson:"extensions,omitempty"`
 		ExtensionsTimeBudget string `json:"extensionsTimeBudget,omitempty" bson:"extensionsTimeBudget,omitempty"`
 	} `json:"extensionProfile,omitempty" bson:"extensionProfile,omitempty"`
-	NetworkProfile struct {
-		NetworkInterfaceConfigurations []struct {
+	NetworkProfile *struct {
+		NetworkInterfaceConfigurations *[]struct {
 			Name       string `json:"name,omitempty" bson:"name,omitempty"`
-			Properties struct {
+			Properties *struct {
 				DisableTcpStateTracking bool `json:"disableTcpStateTracking,omitempty" bson:"disableTcpStateTracking,omitempty"`
 				DnsSettings             struct {
 					DnsServers []any `json:"dnsServers,omitempty" bson:"dnsServers,omitempty"`
 				} `json:"dnsSettings,omitempty" bson:"dnsSettings,omitempty"`
 				EnableAcceleratedNetworking bool `json:"enableAcceleratedNetworking,omitempty" bson:"enableAcceleratedNetworking,omitempty"`
 				EnableIpForwarding          bool `json:"enableIPForwarding,omitempty" bson:"enableIPForwarding,omitempty"`
-				IpConfigurations            []struct {
+				IpConfigurations            *[]struct {
 					Name       string `json:"name,omitempty" bson:"name,omitempty"`
-					Properties struct {
-						LoadBalancerBackendAddressPools []struct {
+					Properties *struct {
+						LoadBalancerBackendAddressPools *[]struct {
 							ID string `json:"id,omitempty" bson:"id,omitempty"`
 						} `json:"loadBalancerBackendAddressPools,omitempty" bson:"loadBalancerBackendAddressPools,omitempty"`
 						Primary                 bool   `json:"primary,omitempty" bson:"primary,omitempty"`
 						PrivateIpAddressVersion string `json:"privateIPAddressVersion,omitempty" bson:"privateIPAddressVersion,omitempty"`
-						Subnet                  struct {
+						Subnet                  *struct {
 							ID string `json:"id,omitempty" bson:"id,omitempty"`
 						} `json:"subnet,omitempty" bson:"subnet,omitempty"`
 					} `json:"properties,omitempty" bson:"properties,omitempty"`
 				} `json:"ipConfigurations,omitempty" bson:"ipConfigurations,omitempty"`
-				NetworkSecurityGroup struct {
+				NetworkSecurityGroup *struct {
 					ID string `json:"id,omitempty" bson:"id,omitempty"`
 				} `json:"networkSecurityGroup,omitempty" bson:"networkSecurityGroup,omitempty"`
 				Primary bool `json:"primary,omitempty" bson:"primary,omitempty"`
 			} `json:"properties,omitempty" bson:"properties,omitempty"`
 		} `json:"networkInterfaceConfigurations,omitempty" bson:"networkInterfaceConfigurations,omitempty"`
 	} `json:"networkProfile,omitempty" bson:"networkProfile,omitempty"`
-	OSProfile struct {
+	OSProfile *struct {
 		AdminUsername            string `json:"adminUsername,omitempty" bson:"adminUsername,omitempty"`
 		AllowExtensionOperations bool   `json:"allowExtensionOperations,omitempty" bson:"allowExtensionOperations,omitempty"`
 		ComputerNamePrefix       string `json:"computerNamePrefix,omitempty" bson:"computerNamePrefix,omitempty"`
-		LinuxConfiguration       struct {
+		LinuxConfiguration       *struct {
 			DisablePasswordAuthentication bool `json:"disablePasswordAuthentication,omitempty" bson:"disablePasswordAuthentication,omitempty"`
 			EnableVmAgentPlatformUpdates  bool `json:"enableVMAgentPlatformUpdates,omitempty" bson:"enableVMAgentPlatformUpdates,omitempty"`
 			ProvisionVmAgent              bool `json:"provisionVMAgent,omitempty" bson:"provisionVMAgent,omitempty"`
-			SSH                           struct {
-				PublicKeys []struct {
+			SSH                           *struct {
+				PublicKeys *[]struct {
 					KeyData string `json:"keyData,omitempty" bson:"keyData,omitempty"`
 					Path    string `json:"path,omitempty" bson:"path,omitempty"`
 				} `json:"publicKeys,omitempty" bson:"publicKeys,omitempty"`
@@ -2396,16 +2395,16 @@ type ResourceVirtualMachineProfile struct {
 		RequireGuestProvisionSignal bool  `json:"requireGuestProvisionSignal,omitempty" bson:"requireGuestProvisionSignal,omitempty"`
 		Secrets                     []any `json:"secrets,omitempty" bson:"secrets,omitempty"`
 	} `json:"osProfile,omitempty" bson:"osProfile,omitempty"`
-	StorageProfile struct {
+	StorageProfile *struct {
 		DiskControllerType string `json:"diskControllerType,omitempty" bson:"diskControllerType,omitempty"`
-		ImageReference     struct {
+		ImageReference     *struct {
 			ID string `json:"id,omitempty" bson:"id,omitempty"`
 		} `json:"imageReference,omitempty" bson:"imageReference,omitempty"`
-		OSDisk struct {
+		OSDisk *struct {
 			Caching      string  `json:"caching,omitempty" bson:"caching,omitempty"`
 			CreateOption string  `json:"createOption,omitempty" bson:"createOption,omitempty"`
 			DiskSizeGb   float64 `json:"diskSizeGB,omitempty" bson:"diskSizeGB,omitempty"`
-			ManagedDisk  struct {
+			ManagedDisk  *struct {
 				StorageAccountType string `json:"storageAccountType,omitempty" bson:"storageAccountType,omitempty"`
 			} `json:"managedDisk,omitempty" bson:"managedDisk,omitempty"`
 			OSType string `json:"osType,omitempty" bson:"osType,omitempty"`
@@ -2414,7 +2413,7 @@ type ResourceVirtualMachineProfile struct {
 	TimeCreated string `json:"timeCreated,omitempty" bson:"timeCreated,omitempty"`
 }
 
-type ResourceVirtualNetworkPeering struct {
+type AzureResourceVirtualNetworkPeering struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -2451,7 +2450,7 @@ type ResourceVirtualNetworkPeering struct {
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
 
-type ResourceVnetConfiguration struct {
+type AzureResourceVnetConfiguration struct {
 	DockerBridgeCidr       any    `json:"dockerBridgeCidr,omitempty" bson:"dockerBridgeCidr,omitempty"`
 	InfrastructureSubnetID string `json:"infrastructureSubnetId,omitempty" bson:"infrastructureSubnetId,omitempty"`
 	Internal               bool   `json:"internal,omitempty" bson:"internal,omitempty"`
@@ -2459,7 +2458,7 @@ type ResourceVnetConfiguration struct {
 	PlatformReservedDnsIp  any    `json:"platformReservedDnsIP,omitempty" bson:"platformReservedDnsIP,omitempty"`
 }
 
-type ResourceVpnClientIpsecPolicy struct {
+type AzureResourceVpnClientIpsecPolicy struct {
 	DhGroup             string  `json:"dhGroup,omitempty" bson:"dhGroup,omitempty"`
 	IkeEncryption       string  `json:"ikeEncryption,omitempty" bson:"ikeEncryption,omitempty"`
 	IkeIntegrity        string  `json:"ikeIntegrity,omitempty" bson:"ikeIntegrity,omitempty"`
@@ -2470,7 +2469,7 @@ type ResourceVpnClientIpsecPolicy struct {
 	SaLifeTimeSeconds   float64 `json:"saLifeTimeSeconds,omitempty" bson:"saLifeTimeSeconds,omitempty"`
 }
 
-type ResourceWebhookReceivers struct {
+type AzureResourceWebhookReceivers struct {
 	IdentifierURI        any    `json:"identifierUri,omitempty" bson:"identifierUri,omitempty"`
 	Name                 string `json:"name,omitempty" bson:"name,omitempty"`
 	ObjectID             any    `json:"objectId,omitempty" bson:"objectId,omitempty"`
@@ -2480,7 +2479,7 @@ type ResourceWebhookReceivers struct {
 	UseCommonAlertSchema bool   `json:"useCommonAlertSchema,omitempty" bson:"useCommonAlertSchema,omitempty"`
 }
 
-type ResourceWriteLocations struct {
+type AzureResourceWriteLocations struct {
 	DocumentEndpoint  string  `json:"documentEndpoint,omitempty" bson:"documentEndpoint,omitempty"`
 	FailoverPriority  float64 `json:"failoverPriority,omitempty" bson:"failoverPriority,omitempty"`
 	ID                string  `json:"id,omitempty" bson:"id,omitempty"`
@@ -2489,7 +2488,7 @@ type ResourceWriteLocations struct {
 	ProvisioningState string  `json:"provisioningState,omitempty" bson:"provisioningState,omitempty"`
 }
 
-type ResourceAzureMonitorProfile struct {
+type AzureResourceAzureMonitorProfile struct {
 	Metrics *struct {
 		Enabled          bool `json:"enabled,omitempty" bson:"enabled,omitempty"`
 		KubeStateMetrics struct {
@@ -2499,7 +2498,7 @@ type ResourceAzureMonitorProfile struct {
 	} `json:"metrics,omitempty" bson:"metrics,omitempty"`
 }
 
-type ResourceAccessPolicy struct {
+type AzureResourceAccessPolicy struct {
 	ObjectID    string `json:"objectId,omitempty" bson:"objectId,omitempty"`
 	Permissions struct {
 		Certificates []string `json:"certificates,omitempty" bson:"certificates,omitempty"`
@@ -2510,7 +2509,7 @@ type ResourceAccessPolicy struct {
 	TenantID string `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
 }
 
-type ResourceCondition struct {
+type AzureResourceCondition struct {
 	AllOf []struct {
 		AnyOf []struct {
 			Equals string `json:"equals,omitempty" bson:"equals,omitempty"`
@@ -2522,7 +2521,7 @@ type ResourceCondition struct {
 	} `json:"allOf,omitempty" bson:"allOf,omitempty"`
 }
 
-type ResourceCustomize struct {
+type AzureResourceCustomize struct {
 	Filters             []string `json:"filters,omitempty" bson:"filters,omitempty"`
 	Name                string   `json:"name,omitempty" bson:"name,omitempty"`
 	RestartCheckCommand string   `json:"restartCheckCommand,omitempty" bson:"restartCheckCommand,omitempty"`
@@ -2537,33 +2536,33 @@ type ResourceCustomize struct {
 	UpdateLimit         float64  `json:"updateLimit,omitempty" bson:"updateLimit,omitempty"`
 }
 
-type ResourceDataFlows struct {
+type AzureResourceDataFlows struct {
 	Destinations []string `json:"destinations,omitempty" bson:"destinations,omitempty"`
 	OutputStream string   `json:"outputStream,omitempty" bson:"outputStream,omitempty"`
 	Streams      []string `json:"streams,omitempty" bson:"streams,omitempty"`
 	TransformKql string   `json:"transformKql,omitempty" bson:"transformKql,omitempty"`
 }
 
-type ResourceFactoryStatistics struct {
+type AzureResourceFactoryStatistics struct {
 	FactorySizeInGbUnits           float64 `json:"factorySizeInGbUnits,omitempty" bson:"factorySizeInGbUnits,omitempty"`
 	MaxAllowedFactorySizeInGbUnits float64 `json:"maxAllowedFactorySizeInGbUnits,omitempty" bson:"maxAllowedFactorySizeInGbUnits,omitempty"`
 	MaxAllowedResourceCount        float64 `json:"maxAllowedResourceCount,omitempty" bson:"maxAllowedResourceCount,omitempty"`
 	TotalResourceCount             float64 `json:"totalResourceCount,omitempty" bson:"totalResourceCount,omitempty"`
 }
 
-type ResourceFailoverPolicy struct {
+type AzureResourceFailoverPolicy struct {
 	FailoverPriority float64 `json:"failoverPriority,omitempty" bson:"failoverPriority,omitempty"`
 	ID               string  `json:"id,omitempty" bson:"id,omitempty"`
 	LocationName     string  `json:"locationName,omitempty" bson:"locationName,omitempty"`
 }
 
-type ResourceFeatureSettings struct {
+type AzureResourceFeatureSettings struct {
 	CrossSubscriptionRestoreSettings struct {
 		State string `json:"state,omitempty" bson:"state,omitempty"`
 	} `json:"crossSubscriptionRestoreSettings,omitempty" bson:"crossSubscriptionRestoreSettings,omitempty"`
 }
 
-type ResourceLastRunStatus struct {
+type AzureResourceLastRunStatus struct {
 	EndTime     string `json:"endTime,omitempty" bson:"endTime,omitempty"`
 	Message     string `json:"message,omitempty" bson:"message,omitempty"`
 	RunState    string `json:"runState,omitempty" bson:"runState,omitempty"`
@@ -2571,14 +2570,14 @@ type ResourceLastRunStatus struct {
 	StartTime   string `json:"startTime,omitempty" bson:"startTime,omitempty"`
 }
 
-type ResourceMountTargets struct {
+type AzureResourceMountTargets struct {
 	FileSystemID  string `json:"fileSystemId,omitempty" bson:"fileSystemId,omitempty"`
 	IpAddress     string `json:"ipAddress,omitempty" bson:"ipAddress,omitempty"`
 	MountTargetID string `json:"mountTargetId,omitempty" bson:"mountTargetId,omitempty"`
 	SmbServerFqdn string `json:"smbServerFqdn,omitempty" bson:"smbServerFqdn,omitempty"`
 }
 
-type ResourceSecondaryEndpoints struct {
+type AzureResourceSecondaryEndpoints struct {
 	Blob  string `json:"blob,omitempty" bson:"blob,omitempty"`
 	Dfs   string `json:"dfs,omitempty" bson:"dfs,omitempty"`
 	Queue string `json:"queue,omitempty" bson:"queue,omitempty"`
@@ -2586,40 +2585,40 @@ type ResourceSecondaryEndpoints struct {
 	Web   string `json:"web,omitempty" bson:"web,omitempty"`
 }
 
-type ResourceServiceProviderProperties struct {
+type AzureResourceServiceProviderProperties struct {
 	BandwidthInMbps     float64 `json:"bandwidthInMbps,omitempty" bson:"bandwidthInMbps,omitempty"`
 	PeeringLocation     string  `json:"peeringLocation,omitempty" bson:"peeringLocation,omitempty"`
 	ServiceProviderName string  `json:"serviceProviderName,omitempty" bson:"serviceProviderName,omitempty"`
 }
 
-type ResourceVolumeBackups struct {
+type AzureResourceVolumeBackups struct {
 	BackupsCount     float64 `json:"backupsCount,omitempty" bson:"backupsCount,omitempty"`
 	PolicyEnabled    bool    `json:"policyEnabled,omitempty" bson:"policyEnabled,omitempty"`
 	VolumeName       string  `json:"volumeName,omitempty" bson:"volumeName,omitempty"`
 	VolumeResourceID string  `json:"volumeResourceId,omitempty" bson:"volumeResourceId,omitempty"`
 }
 
-type ResourceWeeklySchedule struct {
+type AzureResourceWeeklySchedule struct {
 	Day             string  `json:"day,omitempty" bson:"day,omitempty"`
 	Hour            float64 `json:"hour,omitempty" bson:"hour,omitempty"`
 	Minute          float64 `json:"minute,omitempty" bson:"minute,omitempty"`
 	SnapshotsToKeep float64 `json:"snapshotsToKeep,omitempty" bson:"snapshotsToKeep,omitempty"`
 }
 
-type ResourceWorkbookTemplate struct {
+type AzureResourceWorkbookTemplate struct {
 	ID struct {
 		Public string `json:"public,omitempty" bson:"public,omitempty"`
 	} `json:"id,omitempty" bson:"id,omitempty"`
 	Source string `json:"source,omitempty" bson:"source,omitempty"`
 }
 
-type ResourceWorkspaceCapping struct {
+type AzureResourceWorkspaceCapping struct {
 	DailyQuotaGb        float64 `json:"dailyQuotaGb,omitempty" bson:"dailyQuotaGb,omitempty"`
 	DataIngestionStatus string  `json:"dataIngestionStatus,omitempty" bson:"dataIngestionStatus,omitempty"`
 	QuotaNextResetTime  string  `json:"quotaNextResetTime,omitempty" bson:"quotaNextResetTime,omitempty"`
 }
 
-type ResourceProperties struct {
+type AzureResourceProperties struct {
 	AccountURL                      string `json:"AccountURL,omitempty" bson:"AccountURL,omitempty"`
 	AppID                           string `json:"AppId,omitempty" bson:"AppId,omitempty"`
 	ApplicationID                   string `json:"ApplicationId,omitempty" bson:"ApplicationId,omitempty"`
@@ -2637,68 +2636,68 @@ type ResourceProperties struct {
 	LinkedStorages                  *struct {
 		ServiceProfilerLinkedStorage string `json:"ServiceProfilerLinkedStorage,omitempty" bson:"ServiceProfilerLinkedStorage,omitempty"`
 	} `json:"LinkedStorages,omitempty" bson:"LinkedStorages,omitempty"`
-	NameOther                       string                               `json:"Name,omitempty" bson:"Name,omitempty"`
-	PrivateLinkScopedResourcesOther []*ResourcePrivateLinkScopedResource `json:"PrivateLinkScopedResources,omitempty" bson:"PrivateLinkScopedResources,omitempty"`
-	RegistrationURL                 string                               `json:"RegistrationUrl,omitempty" bson:"RegistrationUrl,omitempty"`
-	RequestSource                   string                               `json:"Request_Source,omitempty" bson:"Request_Source,omitempty"`
-	Retention                       string                               `json:"Retention,omitempty" bson:"Retention,omitempty"`
-	RetentionInDaysOther            float64                              `json:"RetentionInDays,omitempty" bson:"RetentionInDays,omitempty"`
-	RuntimeConfiguration            *ResourceRuntimeConfiguration        `json:"RuntimeConfiguration,omitempty" bson:"RuntimeConfiguration,omitempty"`
-	SamplingPercentage              *float64                             `json:"SamplingPercentage,omitempty" bson:"SamplingPercentage,omitempty"`
-	TenantID                        string                               `json:"TenantId,omitempty" bson:"TenantId,omitempty"`
-	Ver                             string                               `json:"Ver,omitempty" bson:"Ver,omitempty"`
-	WorkspaceResourceID             string                               `json:"WorkspaceResourceId,omitempty" bson:"WorkspaceResourceId,omitempty"`
-	AadAuthenticationParameters     *ResourceAadAuthenticationParameters `json:"aadAuthenticationParameters,omitempty" bson:"aadAuthenticationParameters,omitempty"`
-	AadProfile                      *ResourceAadProfile                  `json:"aadProfile,omitempty" bson:"aadProfile,omitempty"`
-	AccessEndpoint                  string                               `json:"accessEndpoint,omitempty" bson:"accessEndpoint,omitempty"`
-	AccessModeSettings              *ResourceAccessModeSettings          `json:"accessModeSettings,omitempty" bson:"accessModeSettings,omitempty"`
-	AccessPolicies                  []*ResourceAccessPolicy              `json:"accessPolicies,omitempty" bson:"accessPolicies,omitempty"`
-	AccessTier                      string                               `json:"accessTier,omitempty" bson:"accessTier,omitempty"`
-	AccountEndpoint                 string                               `json:"accountEndpoint,omitempty" bson:"accountEndpoint,omitempty"`
-	Actions                         any                                  `json:"actions,omitempty" bson:"actions,omitempty"`
-	ActiveActive                    bool                                 `json:"activeActive,omitempty" bson:"activeActive,omitempty"`
-	ActiveDirectories               []*ResourceActiveDirectory           `json:"activeDirectories,omitempty" bson:"activeDirectories,omitempty"`
-	ActiveJobAndJobScheduleQuota    float64                              `json:"activeJobAndJobScheduleQuota,omitempty" bson:"activeJobAndJobScheduleQuota,omitempty"`
-	AdditionalCapabilities          map[string]bool                      `json:"additionalCapabilities,omitempty" bson:"additionalCapabilities,omitempty"`
-	AdditionalProperties            map[string]string                    `json:"additionalProperties,omitempty" bson:"additionalProperties,omitempty"`
-	AddonProfiles                   *ResourceAddonProfiles               `json:"addonProfiles,omitempty" bson:"addonProfiles,omitempty"`
-	AddressPrefix                   string                               `json:"addressPrefix,omitempty" bson:"addressPrefix,omitempty"`
+	NameOther                       string                                    `json:"Name,omitempty" bson:"Name,omitempty"`
+	PrivateLinkScopedResourcesOther []*AzureResourcePrivateLinkScopedResource `json:"PrivateLinkScopedResources,omitempty" bson:"PrivateLinkScopedResources,omitempty"`
+	RegistrationURL                 string                                    `json:"RegistrationUrl,omitempty" bson:"RegistrationUrl,omitempty"`
+	RequestSource                   string                                    `json:"Request_Source,omitempty" bson:"Request_Source,omitempty"`
+	Retention                       string                                    `json:"Retention,omitempty" bson:"Retention,omitempty"`
+	RetentionInDaysOther            float64                                   `json:"RetentionInDays,omitempty" bson:"RetentionInDays,omitempty"`
+	RuntimeConfiguration            *AzureResourceRuntimeConfiguration        `json:"RuntimeConfiguration,omitempty" bson:"RuntimeConfiguration,omitempty"`
+	SamplingPercentage              *float64                                  `json:"SamplingPercentage,omitempty" bson:"SamplingPercentage,omitempty"`
+	TenantID                        string                                    `json:"TenantId,omitempty" bson:"TenantId,omitempty"`
+	Ver                             string                                    `json:"Ver,omitempty" bson:"Ver,omitempty"`
+	WorkspaceResourceID             string                                    `json:"WorkspaceResourceId,omitempty" bson:"WorkspaceResourceId,omitempty"`
+	AadAuthenticationParameters     *AzureResourceAadAuthenticationParameters `json:"aadAuthenticationParameters,omitempty" bson:"aadAuthenticationParameters,omitempty"`
+	AadProfile                      *AzureResourceAadProfile                  `json:"aadProfile,omitempty" bson:"aadProfile,omitempty"`
+	AccessEndpoint                  string                                    `json:"accessEndpoint,omitempty" bson:"accessEndpoint,omitempty"`
+	AccessModeSettings              *AzureResourceAccessModeSettings          `json:"accessModeSettings,omitempty" bson:"accessModeSettings,omitempty"`
+	AccessPolicies                  []*AzureResourceAccessPolicy              `json:"accessPolicies,omitempty" bson:"accessPolicies,omitempty"`
+	AccessTier                      string                                    `json:"accessTier,omitempty" bson:"accessTier,omitempty"`
+	AccountEndpoint                 string                                    `json:"accountEndpoint,omitempty" bson:"accountEndpoint,omitempty"`
+	Actions                         any                                       `json:"actions,omitempty" bson:"actions,omitempty"`
+	ActiveActive                    bool                                      `json:"activeActive,omitempty" bson:"activeActive,omitempty"`
+	ActiveDirectories               []*AzureResourceActiveDirectory           `json:"activeDirectories,omitempty" bson:"activeDirectories,omitempty"`
+	ActiveJobAndJobScheduleQuota    float64                                   `json:"activeJobAndJobScheduleQuota,omitempty" bson:"activeJobAndJobScheduleQuota,omitempty"`
+	AdditionalCapabilities          map[string]bool                           `json:"additionalCapabilities,omitempty" bson:"additionalCapabilities,omitempty"`
+	AdditionalProperties            map[string]string                         `json:"additionalProperties,omitempty" bson:"additionalProperties,omitempty"`
+	AddonProfiles                   *AzureResourceAddonProfiles               `json:"addonProfiles,omitempty" bson:"addonProfiles,omitempty"`
+	AddressPrefix                   string                                    `json:"addressPrefix,omitempty" bson:"addressPrefix,omitempty"`
 	AddressSpace                    *struct {
 		AddressPrefixes []string `json:"addressPrefixes,omitempty" bson:"addressPrefixes,omitempty"`
 	} `json:"addressSpace,omitempty" bson:"addressSpace,omitempty"`
-	AdminEnabled                   bool                        `json:"adminEnabled,omitempty" bson:"adminEnabled,omitempty"`
-	AdminRuntimeSiteName           any                         `json:"adminRuntimeSiteName,omitempty" bson:"adminRuntimeSiteName,omitempty"`
-	AdminSiteName                  any                         `json:"adminSiteName,omitempty" bson:"adminSiteName,omitempty"`
-	AdminUserEnabled               bool                        `json:"adminUserEnabled,omitempty" bson:"adminUserEnabled,omitempty"`
-	AdministratorLogin             string                      `json:"administratorLogin,omitempty" bson:"administratorLogin,omitempty"`
-	Administrators                 *ResourceAdministrators     `json:"administrators,omitempty" bson:"administrators,omitempty"`
-	AfdEnabled                     bool                        `json:"afdEnabled,omitempty" bson:"afdEnabled,omitempty"`
-	AgentPoolProfiles              []*ResourceAgentPoolProfile `json:"agentPoolProfiles,omitempty" bson:"agentPoolProfiles,omitempty"`
-	AllocationDate                 string                      `json:"allocationDate,omitempty" bson:"allocationDate,omitempty"`
-	AllowBlobPublicAccess          bool                        `json:"allowBlobPublicAccess,omitempty" bson:"allowBlobPublicAccess,omitempty"`
-	AllowBranchToBranchTraffic     bool                        `json:"allowBranchToBranchTraffic,omitempty" bson:"allowBranchToBranchTraffic,omitempty"`
-	AllowClassicOperations         bool                        `json:"allowClassicOperations,omitempty" bson:"allowClassicOperations,omitempty"`
-	AllowCrossTenantReplication    bool                        `json:"allowCrossTenantReplication,omitempty" bson:"allowCrossTenantReplication,omitempty"`
-	AllowGlobalReach               bool                        `json:"allowGlobalReach,omitempty" bson:"allowGlobalReach,omitempty"`
-	AllowNonVirtualWanTraffic      bool                        `json:"allowNonVirtualWanTraffic,omitempty" bson:"allowNonVirtualWanTraffic,omitempty"`
-	AllowPort25Out                 bool                        `json:"allowPort25Out,omitempty" bson:"allowPort25Out,omitempty"`
-	AllowRemoteVnetTraffic         bool                        `json:"allowRemoteVnetTraffic,omitempty" bson:"allowRemoteVnetTraffic,omitempty"`
-	AllowSharedKeyAccess           bool                        `json:"allowSharedKeyAccess,omitempty" bson:"allowSharedKeyAccess,omitempty"`
-	AllowVirtualWanTraffic         bool                        `json:"allowVirtualWanTraffic,omitempty" bson:"allowVirtualWanTraffic,omitempty"`
-	AllowVnetToVnetTraffic         bool                        `json:"allowVnetToVnetTraffic,omitempty" bson:"allowVnetToVnetTraffic,omitempty"`
-	AllowedAuthenticationModes     []string                    `json:"allowedAuthenticationModes,omitempty" bson:"allowedAuthenticationModes,omitempty"`
-	AllowedCopyScope               string                      `json:"allowedCopyScope,omitempty" bson:"allowedCopyScope,omitempty"`
-	AlternativeParameterValues     *map[string]string          `json:"alternativeParameterValues,omitempty" bson:"alternativeParameterValues,omitempty"`
+	AdminEnabled                   bool                             `json:"adminEnabled,omitempty" bson:"adminEnabled,omitempty"`
+	AdminRuntimeSiteName           any                              `json:"adminRuntimeSiteName,omitempty" bson:"adminRuntimeSiteName,omitempty"`
+	AdminSiteName                  any                              `json:"adminSiteName,omitempty" bson:"adminSiteName,omitempty"`
+	AdminUserEnabled               bool                             `json:"adminUserEnabled,omitempty" bson:"adminUserEnabled,omitempty"`
+	AdministratorLogin             string                           `json:"administratorLogin,omitempty" bson:"administratorLogin,omitempty"`
+	Administrators                 *AzureResourceAdministrators     `json:"administrators,omitempty" bson:"administrators,omitempty"`
+	AfdEnabled                     bool                             `json:"afdEnabled,omitempty" bson:"afdEnabled,omitempty"`
+	AgentPoolProfiles              []*AzureResourceAgentPoolProfile `json:"agentPoolProfiles,omitempty" bson:"agentPoolProfiles,omitempty"`
+	AllocationDate                 string                           `json:"allocationDate,omitempty" bson:"allocationDate,omitempty"`
+	AllowBlobPublicAccess          bool                             `json:"allowBlobPublicAccess,omitempty" bson:"allowBlobPublicAccess,omitempty"`
+	AllowBranchToBranchTraffic     bool                             `json:"allowBranchToBranchTraffic,omitempty" bson:"allowBranchToBranchTraffic,omitempty"`
+	AllowClassicOperations         bool                             `json:"allowClassicOperations,omitempty" bson:"allowClassicOperations,omitempty"`
+	AllowCrossTenantReplication    bool                             `json:"allowCrossTenantReplication,omitempty" bson:"allowCrossTenantReplication,omitempty"`
+	AllowGlobalReach               bool                             `json:"allowGlobalReach,omitempty" bson:"allowGlobalReach,omitempty"`
+	AllowNonVirtualWanTraffic      bool                             `json:"allowNonVirtualWanTraffic,omitempty" bson:"allowNonVirtualWanTraffic,omitempty"`
+	AllowPort25Out                 bool                             `json:"allowPort25Out,omitempty" bson:"allowPort25Out,omitempty"`
+	AllowRemoteVnetTraffic         bool                             `json:"allowRemoteVnetTraffic,omitempty" bson:"allowRemoteVnetTraffic,omitempty"`
+	AllowSharedKeyAccess           bool                             `json:"allowSharedKeyAccess,omitempty" bson:"allowSharedKeyAccess,omitempty"`
+	AllowVirtualWanTraffic         bool                             `json:"allowVirtualWanTraffic,omitempty" bson:"allowVirtualWanTraffic,omitempty"`
+	AllowVnetToVnetTraffic         bool                             `json:"allowVnetToVnetTraffic,omitempty" bson:"allowVnetToVnetTraffic,omitempty"`
+	AllowedAuthenticationModes     []string                         `json:"allowedAuthenticationModes,omitempty" bson:"allowedAuthenticationModes,omitempty"`
+	AllowedCopyScope               string                           `json:"allowedCopyScope,omitempty" bson:"allowedCopyScope,omitempty"`
+	AlternativeParameterValues     *map[string]string               `json:"alternativeParameterValues,omitempty" bson:"alternativeParameterValues,omitempty"`
 	AnalyticalStorageConfiguration *struct {
 		SchemaType string `json:"schemaType,omitempty" bson:"schemaType,omitempty"`
 	} `json:"analyticalStorageConfiguration,omitempty" bson:"analyticalStorageConfiguration,omitempty"`
-	AnonymousPullEnabled       bool                            `json:"anonymousPullEnabled,omitempty" bson:"anonymousPullEnabled,omitempty"`
-	API                        *ResourceAPI                    `json:"api,omitempty" bson:"api,omitempty"`
-	APIServerAccessProfile     *ResourceAPIServerAccessProfile `json:"apiServerAccessProfile,omitempty" bson:"apiServerAccessProfile,omitempty"`
-	AppInsightsConfiguration   any                             `json:"appInsightsConfiguration,omitempty" bson:"appInsightsConfiguration,omitempty"`
-	AppLogsConfiguration       *ResourceAppLogsConfiguration   `json:"appLogsConfiguration,omitempty" bson:"appLogsConfiguration,omitempty"`
-	ApplicationRuleCollections []any                           `json:"applicationRuleCollections,omitempty" bson:"applicationRuleCollections,omitempty"`
-	Architecture               string                          `json:"architecture,omitempty" bson:"architecture,omitempty"`
+	AnonymousPullEnabled       bool                                 `json:"anonymousPullEnabled,omitempty" bson:"anonymousPullEnabled,omitempty"`
+	API                        *AzureResourceAPI                    `json:"api,omitempty" bson:"api,omitempty"`
+	APIServerAccessProfile     *AzureResourceAPIServerAccessProfile `json:"apiServerAccessProfile,omitempty" bson:"apiServerAccessProfile,omitempty"`
+	AppInsightsConfiguration   any                                  `json:"appInsightsConfiguration,omitempty" bson:"appInsightsConfiguration,omitempty"`
+	AppLogsConfiguration       *AzureResourceAppLogsConfiguration   `json:"appLogsConfiguration,omitempty" bson:"appLogsConfiguration,omitempty"`
+	ApplicationRuleCollections []any                                `json:"applicationRuleCollections,omitempty" bson:"applicationRuleCollections,omitempty"`
+	Architecture               string                               `json:"architecture,omitempty" bson:"architecture,omitempty"`
 	ArmRoleReceivers           []struct {
 		Name                 string `json:"name,omitempty" bson:"name,omitempty"`
 		RoleID               string `json:"roleId,omitempty" bson:"roleId,omitempty"`
@@ -2711,16 +2710,16 @@ type ResourceProperties struct {
 	AuthenticatedUser *struct {
 		Name string `json:"name,omitempty" bson:"name,omitempty"`
 	} `json:"authenticatedUser,omitempty" bson:"authenticatedUser,omitempty"`
-	AuthenticationType                   string                          `json:"authenticationType,omitempty" bson:"authenticationType,omitempty"`
-	Authorizations                       []*ResourceAuthorization        `json:"authorizations,omitempty" bson:"authorizations,omitempty"`
-	AutoCreateTopicWithFirstSubscription bool                            `json:"autoCreateTopicWithFirstSubscription,omitempty" bson:"autoCreateTopicWithFirstSubscription,omitempty"`
-	AutoDeleteTopicWithLastSubscription  bool                            `json:"autoDeleteTopicWithLastSubscription,omitempty" bson:"autoDeleteTopicWithLastSubscription,omitempty"`
-	AutoGeneratedDomainNameLabelScope    any                             `json:"autoGeneratedDomainNameLabelScope,omitempty" bson:"autoGeneratedDomainNameLabelScope,omitempty"`
-	AutoMitigate                         bool                            `json:"autoMitigate,omitempty" bson:"autoMitigate,omitempty"`
-	AutoPauseDelay                       float64                         `json:"autoPauseDelay,omitempty" bson:"autoPauseDelay,omitempty"`
-	AutoScaleConfiguration               *ResourceAutoScaleConfiguration `json:"autoScaleConfiguration,omitempty" bson:"autoScaleConfiguration,omitempty"`
-	AutoScalerProfile                    *ResourceAutoScalerProfile      `json:"autoScalerProfile,omitempty" bson:"autoScalerProfile,omitempty"`
-	AutoUpgradeMinorVersion              bool                            `json:"autoUpgradeMinorVersion,omitempty" bson:"autoUpgradeMinorVersion,omitempty"`
+	AuthenticationType                   string                               `json:"authenticationType,omitempty" bson:"authenticationType,omitempty"`
+	Authorizations                       []*AzureResourceAuthorization        `json:"authorizations,omitempty" bson:"authorizations,omitempty"`
+	AutoCreateTopicWithFirstSubscription bool                                 `json:"autoCreateTopicWithFirstSubscription,omitempty" bson:"autoCreateTopicWithFirstSubscription,omitempty"`
+	AutoDeleteTopicWithLastSubscription  bool                                 `json:"autoDeleteTopicWithLastSubscription,omitempty" bson:"autoDeleteTopicWithLastSubscription,omitempty"`
+	AutoGeneratedDomainNameLabelScope    any                                  `json:"autoGeneratedDomainNameLabelScope,omitempty" bson:"autoGeneratedDomainNameLabelScope,omitempty"`
+	AutoMitigate                         bool                                 `json:"autoMitigate,omitempty" bson:"autoMitigate,omitempty"`
+	AutoPauseDelay                       float64                              `json:"autoPauseDelay,omitempty" bson:"autoPauseDelay,omitempty"`
+	AutoScaleConfiguration               *AzureResourceAutoScaleConfiguration `json:"autoScaleConfiguration,omitempty" bson:"autoScaleConfiguration,omitempty"`
+	AutoScalerProfile                    *AzureResourceAutoScalerProfile      `json:"autoScalerProfile,omitempty" bson:"autoScalerProfile,omitempty"`
+	AutoUpgradeMinorVersion              bool                                 `json:"autoUpgradeMinorVersion,omitempty" bson:"autoUpgradeMinorVersion,omitempty"`
 	AutoUpgradeProfile                   *struct {
 		UpgradeChannel string `json:"upgradeChannel,omitempty" bson:"upgradeChannel,omitempty"`
 	} `json:"autoUpgradeProfile,omitempty" bson:"autoUpgradeProfile,omitempty"`
@@ -2741,15 +2740,15 @@ type ResourceProperties struct {
 	AzureFirewall *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"azureFirewall,omitempty" bson:"azureFirewall,omitempty"`
-	AzureFunctionReceivers []any                         `json:"azureFunctionReceivers,omitempty" bson:"azureFunctionReceivers,omitempty"`
-	AzureMonitorProfile    *ResourceAzureMonitorProfile  `json:"azureMonitorProfile,omitempty" bson:"azureMonitorProfile,omitempty"`
-	AzurePortalFqdn        string                        `json:"azurePortalFQDN,omitempty" bson:"azurePortalFQDN,omitempty"`
-	BackendAddressPools    []*ResourceBackendAddressPool `json:"backendAddressPools,omitempty" bson:"backendAddressPools,omitempty"`
-	Backup                 *ResourceBackup               `json:"backup,omitempty" bson:"backup,omitempty"`
-	BackupPolicy           *ResourceBackupPolicy         `json:"backupPolicy,omitempty" bson:"backupPolicy,omitempty"`
-	BackupPolicyID         string                        `json:"backupPolicyId,omitempty" bson:"backupPolicyId,omitempty"`
-	BackupStorageVersion   string                        `json:"backupStorageVersion,omitempty" bson:"backupStorageVersion,omitempty"`
-	BandwidthInGbps        float64                       `json:"bandwidthInGbps,omitempty" bson:"bandwidthInGbps,omitempty"`
+	AzureFunctionReceivers []any                              `json:"azureFunctionReceivers,omitempty" bson:"azureFunctionReceivers,omitempty"`
+	AzureMonitorProfile    *AzureResourceAzureMonitorProfile  `json:"azureMonitorProfile,omitempty" bson:"azureMonitorProfile,omitempty"`
+	AzurePortalFqdn        string                             `json:"azurePortalFQDN,omitempty" bson:"azurePortalFQDN,omitempty"`
+	BackendAddressPools    []*AzureResourceBackendAddressPool `json:"backendAddressPools,omitempty" bson:"backendAddressPools,omitempty"`
+	Backup                 *AzureResourceBackup               `json:"backup,omitempty" bson:"backup,omitempty"`
+	BackupPolicy           *AzureResourceBackupPolicy         `json:"backupPolicy,omitempty" bson:"backupPolicy,omitempty"`
+	BackupPolicyID         string                             `json:"backupPolicyId,omitempty" bson:"backupPolicyId,omitempty"`
+	BackupStorageVersion   string                             `json:"backupStorageVersion,omitempty" bson:"backupStorageVersion,omitempty"`
+	BandwidthInGbps        float64                            `json:"bandwidthInGbps,omitempty" bson:"bandwidthInGbps,omitempty"`
 	BareMetalServer        *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"bareMetalServer,omitempty" bson:"bareMetalServer,omitempty"`
@@ -2763,10 +2762,10 @@ type ResourceProperties struct {
 	BillingProfile *struct {
 		MaxPrice float64 `json:"maxPrice,omitempty" bson:"maxPrice,omitempty"`
 	} `json:"billingProfile,omitempty" bson:"billingProfile,omitempty"`
-	BlockPathTraversal    bool                   `json:"blockPathTraversal,omitempty" bson:"blockPathTraversal,omitempty"`
-	BuildTimeoutInMinutes float64                `json:"buildTimeoutInMinutes,omitempty" bson:"buildTimeoutInMinutes,omitempty"`
-	BuildVersion          any                    `json:"buildVersion,omitempty" bson:"buildVersion,omitempty"`
-	CallRateLimit         *ResourceCallRateLimit `json:"callRateLimit,omitempty" bson:"callRateLimit,omitempty"`
+	BlockPathTraversal    bool                        `json:"blockPathTraversal,omitempty" bson:"blockPathTraversal,omitempty"`
+	BuildTimeoutInMinutes float64                     `json:"buildTimeoutInMinutes,omitempty" bson:"buildTimeoutInMinutes,omitempty"`
+	BuildVersion          any                         `json:"buildVersion,omitempty" bson:"buildVersion,omitempty"`
+	CallRateLimit         *AzureResourceCallRateLimit `json:"callRateLimit,omitempty" bson:"callRateLimit,omitempty"`
 	Capabilities          []struct {
 		Name  string `json:"name,omitempty" bson:"name,omitempty"`
 		Value string `json:"value,omitempty" bson:"value,omitempty"`
@@ -2794,10 +2793,10 @@ type ResourceProperties struct {
 	CloudServices []struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"cloudServices,omitempty" bson:"cloudServices,omitempty"`
-	Collation           string                 `json:"collation,omitempty" bson:"collation,omitempty"`
-	ComputeMode         *string                `json:"computeMode,omitempty" bson:"computeMode,omitempty"`
-	Condition           *ResourceCondition     `json:"condition,omitempty" bson:"condition,omitempty"`
-	Configuration       *ResourceConfiguration `json:"configuration,omitempty" bson:"configuration,omitempty"`
+	Collation           string                      `json:"collation,omitempty" bson:"collation,omitempty"`
+	ComputeMode         *string                     `json:"computeMode,omitempty" bson:"computeMode,omitempty"`
+	Condition           *AzureResourceCondition     `json:"condition,omitempty" bson:"condition,omitempty"`
+	Configuration       *AzureResourceConfiguration `json:"configuration,omitempty" bson:"configuration,omitempty"`
 	ConfigurationAccess *struct {
 		Endpoint string `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
 	} `json:"configurationAccess,omitempty" bson:"configurationAccess,omitempty"`
@@ -2827,23 +2826,23 @@ type ResourceProperties struct {
 		CountryCode string `json:"countryCode,omitempty" bson:"countryCode,omitempty"`
 		DisplayName string `json:"displayName,omitempty" bson:"displayName,omitempty"`
 	} `json:"createTenantProperties,omitempty" bson:"createTenantProperties,omitempty"`
-	CreateTime                     string                `json:"createTime,omitempty" bson:"createTime,omitempty"`
-	CreatedAt                      string                `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
-	CreatedBy                      string                `json:"createdBy,omitempty" bson:"createdBy,omitempty"`
-	CreatedByObjectID              string                `json:"createdByObjectId,omitempty" bson:"createdByObjectId,omitempty"`
-	CreatedDate                    string                `json:"createdDate,omitempty" bson:"createdDate,omitempty"`
-	CreatedTime                    string                `json:"createdTime,omitempty" bson:"createdTime,omitempty"`
-	CreatedWithAPIVersion          string                `json:"createdWithApiVersion,omitempty" bson:"createdWithApiVersion,omitempty"`
-	CreationData                   *ResourceCreationData `json:"creationData,omitempty" bson:"creationData,omitempty"`
-	CreationDate                   string                `json:"creationDate,omitempty" bson:"creationDate,omitempty"`
-	CreationTime                   string                `json:"creationTime,omitempty" bson:"creationTime,omitempty"`
-	CreationToken                  string                `json:"creationToken,omitempty" bson:"creationToken,omitempty"`
-	Criteria                       *ResourceCriteria     `json:"criteria,omitempty" bson:"criteria,omitempty"`
-	Csrs                           []any                 `json:"csrs,omitempty" bson:"csrs,omitempty"`
-	CurrentBackupStorageRedundancy string                `json:"currentBackupStorageRedundancy,omitempty" bson:"currentBackupStorageRedundancy,omitempty"`
-	CurrentKubernetesVersion       string                `json:"currentKubernetesVersion,omitempty" bson:"currentKubernetesVersion,omitempty"`
-	CurrentNumberOfWorkers         float64               `json:"currentNumberOfWorkers,omitempty" bson:"currentNumberOfWorkers,omitempty"`
-	CurrentServiceObjectiveName    string                `json:"currentServiceObjectiveName,omitempty" bson:"currentServiceObjectiveName,omitempty"`
+	CreateTime                     string                     `json:"createTime,omitempty" bson:"createTime,omitempty"`
+	CreatedAt                      string                     `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	CreatedBy                      string                     `json:"createdBy,omitempty" bson:"createdBy,omitempty"`
+	CreatedByObjectID              string                     `json:"createdByObjectId,omitempty" bson:"createdByObjectId,omitempty"`
+	CreatedDate                    string                     `json:"createdDate,omitempty" bson:"createdDate,omitempty"`
+	CreatedTime                    string                     `json:"createdTime,omitempty" bson:"createdTime,omitempty"`
+	CreatedWithAPIVersion          string                     `json:"createdWithApiVersion,omitempty" bson:"createdWithApiVersion,omitempty"`
+	CreationData                   *AzureResourceCreationData `json:"creationData,omitempty" bson:"creationData,omitempty"`
+	CreationDate                   string                     `json:"creationDate,omitempty" bson:"creationDate,omitempty"`
+	CreationTime                   string                     `json:"creationTime,omitempty" bson:"creationTime,omitempty"`
+	CreationToken                  string                     `json:"creationToken,omitempty" bson:"creationToken,omitempty"`
+	Criteria                       *AzureResourceCriteria     `json:"criteria,omitempty" bson:"criteria,omitempty"`
+	Csrs                           []any                      `json:"csrs,omitempty" bson:"csrs,omitempty"`
+	CurrentBackupStorageRedundancy string                     `json:"currentBackupStorageRedundancy,omitempty" bson:"currentBackupStorageRedundancy,omitempty"`
+	CurrentKubernetesVersion       string                     `json:"currentKubernetesVersion,omitempty" bson:"currentKubernetesVersion,omitempty"`
+	CurrentNumberOfWorkers         float64                    `json:"currentNumberOfWorkers,omitempty" bson:"currentNumberOfWorkers,omitempty"`
+	CurrentServiceObjectiveName    string                     `json:"currentServiceObjectiveName,omitempty" bson:"currentServiceObjectiveName,omitempty"`
 	CurrentSku                     *struct {
 		Capacity float64 `json:"capacity,omitempty" bson:"capacity,omitempty"`
 		Family   string  `json:"family,omitempty" bson:"family,omitempty"`
@@ -2856,16 +2855,16 @@ type ResourceProperties struct {
 		Fqdn        string   `json:"fqdn,omitempty" bson:"fqdn,omitempty"`
 		IpAddresses []string `json:"ipAddresses,omitempty" bson:"ipAddresses,omitempty"`
 	} `json:"customDnsConfigs,omitempty" bson:"customDnsConfigs,omitempty"`
-	CustomDnsServers           []string                           `json:"customDnsServers,omitempty" bson:"customDnsServers,omitempty"`
-	CustomDomainConfiguration  *ResourceCustomDomainConfiguration `json:"customDomainConfiguration,omitempty" bson:"customDomainConfiguration,omitempty"`
-	CustomDomainVerificationID string                             `json:"customDomainVerificationId,omitempty" bson:"customDomainVerificationId,omitempty"`
-	CustomNetworkInterfaceName string                             `json:"customNetworkInterfaceName,omitempty" bson:"customNetworkInterfaceName,omitempty"`
-	CustomParameterValues      *struct{}                          `json:"customParameterValues,omitempty" bson:"customParameterValues,omitempty"`
-	CustomSubDomainName        string                             `json:"customSubDomainName,omitempty" bson:"customSubDomainName,omitempty"`
-	CustomerID                 string                             `json:"customerId,omitempty" bson:"customerId,omitempty"`
-	Customize                  []*ResourceCustomize               `json:"customize,omitempty" bson:"customize,omitempty"`
-	DailyBackupsToKeep         float64                            `json:"dailyBackupsToKeep,omitempty" bson:"dailyBackupsToKeep,omitempty"`
-	DailyMemoryTimeQuota       float64                            `json:"dailyMemoryTimeQuota,omitempty" bson:"dailyMemoryTimeQuota,omitempty"`
+	CustomDnsServers           []string                                `json:"customDnsServers,omitempty" bson:"customDnsServers,omitempty"`
+	CustomDomainConfiguration  *AzureResourceCustomDomainConfiguration `json:"customDomainConfiguration,omitempty" bson:"customDomainConfiguration,omitempty"`
+	CustomDomainVerificationID string                                  `json:"customDomainVerificationId,omitempty" bson:"customDomainVerificationId,omitempty"`
+	CustomNetworkInterfaceName string                                  `json:"customNetworkInterfaceName,omitempty" bson:"customNetworkInterfaceName,omitempty"`
+	CustomParameterValues      *struct{}                               `json:"customParameterValues,omitempty" bson:"customParameterValues,omitempty"`
+	CustomSubDomainName        string                                  `json:"customSubDomainName,omitempty" bson:"customSubDomainName,omitempty"`
+	CustomerID                 string                                  `json:"customerId,omitempty" bson:"customerId,omitempty"`
+	Customize                  []*AzureResourceCustomize               `json:"customize,omitempty" bson:"customize,omitempty"`
+	DailyBackupsToKeep         float64                                 `json:"dailyBackupsToKeep,omitempty" bson:"dailyBackupsToKeep,omitempty"`
+	DailyMemoryTimeQuota       float64                                 `json:"dailyMemoryTimeQuota,omitempty" bson:"dailyMemoryTimeQuota,omitempty"`
 	DailyRecurrence            *struct {
 		Time string `json:"time,omitempty" bson:"time,omitempty"`
 	} `json:"dailyRecurrence,omitempty" bson:"dailyRecurrence,omitempty"`
@@ -2885,16 +2884,16 @@ type ResourceProperties struct {
 	DataEncryption           *struct {
 		Type string `json:"type,omitempty" bson:"type,omitempty"`
 	} `json:"dataEncryption,omitempty" bson:"dataEncryption,omitempty"`
-	DataEndpointEnabled      bool                    `json:"dataEndpointEnabled,omitempty" bson:"dataEndpointEnabled,omitempty"`
-	DataEndpointHostNames    []string                `json:"dataEndpointHostNames,omitempty" bson:"dataEndpointHostNames,omitempty"`
-	DataFlows                []ResourceDataFlows     `json:"dataFlows,omitempty" bson:"dataFlows,omitempty"`
-	DataLocation             string                  `json:"dataLocation,omitempty" bson:"dataLocation,omitempty"`
-	DataProtection           *ResourceDataProtection `json:"dataProtection,omitempty" bson:"dataProtection,omitempty"`
-	DataResidencyBoundary    string                  `json:"dataResidencyBoundary,omitempty" bson:"dataResidencyBoundary,omitempty"`
-	DataSources              *ResourceDataSources    `json:"dataSources,omitempty" bson:"dataSources,omitempty"`
-	DatabaseAccountOfferType string                  `json:"databaseAccountOfferType,omitempty" bson:"databaseAccountOfferType,omitempty"`
-	DatabaseID               string                  `json:"databaseId,omitempty" bson:"databaseId,omitempty"`
-	DateCreated              string                  `json:"dateCreated,omitempty" bson:"dateCreated,omitempty"`
+	DataEndpointEnabled      bool                         `json:"dataEndpointEnabled,omitempty" bson:"dataEndpointEnabled,omitempty"`
+	DataEndpointHostNames    []string                     `json:"dataEndpointHostNames,omitempty" bson:"dataEndpointHostNames,omitempty"`
+	DataFlows                []AzureResourceDataFlows     `json:"dataFlows,omitempty" bson:"dataFlows,omitempty"`
+	DataLocation             string                       `json:"dataLocation,omitempty" bson:"dataLocation,omitempty"`
+	DataProtection           *AzureResourceDataProtection `json:"dataProtection,omitempty" bson:"dataProtection,omitempty"`
+	DataResidencyBoundary    string                       `json:"dataResidencyBoundary,omitempty" bson:"dataResidencyBoundary,omitempty"`
+	DataSources              *AzureResourceDataSources    `json:"dataSources,omitempty" bson:"dataSources,omitempty"`
+	DatabaseAccountOfferType string                       `json:"databaseAccountOfferType,omitempty" bson:"databaseAccountOfferType,omitempty"`
+	DatabaseID               string                       `json:"databaseId,omitempty" bson:"databaseId,omitempty"`
+	DateCreated              string                       `json:"dateCreated,omitempty" bson:"dateCreated,omitempty"`
 	DdosSettings             *struct {
 		ProtectionMode string `json:"protectionMode,omitempty" bson:"protectionMode,omitempty"`
 	} `json:"ddosSettings,omitempty" bson:"ddosSettings,omitempty"`
@@ -2903,112 +2902,112 @@ type ResourceProperties struct {
 		CoreQuota float64 `json:"coreQuota,omitempty" bson:"coreQuota,omitempty"`
 		Name      string  `json:"name,omitempty" bson:"name,omitempty"`
 	} `json:"dedicatedCoreQuotaPerVMFamily,omitempty" bson:"dedicatedCoreQuotaPerVMFamily,omitempty"`
-	DedicatedCoreQuotaPerVmFamilyEnforced bool                            `json:"dedicatedCoreQuotaPerVMFamilyEnforced,omitempty" bson:"dedicatedCoreQuotaPerVMFamilyEnforced,omitempty"`
-	DefaultDomain                         string                          `json:"defaultDomain,omitempty" bson:"defaultDomain,omitempty"`
-	DefaultGroupQuotaInKiBs               float64                         `json:"defaultGroupQuotaInKiBs,omitempty" bson:"defaultGroupQuotaInKiBs,omitempty"`
-	DefaultHostName                       string                          `json:"defaultHostName,omitempty" bson:"defaultHostName,omitempty"`
-	DefaultHostNameScope                  string                          `json:"defaultHostNameScope,omitempty" bson:"defaultHostNameScope,omitempty"`
-	DefaultIdentity                       string                          `json:"defaultIdentity,omitempty" bson:"defaultIdentity,omitempty"`
-	DefaultSecondaryLocation              string                          `json:"defaultSecondaryLocation,omitempty" bson:"defaultSecondaryLocation,omitempty"`
-	DefaultSecurityRules                  []*ResourceDefaultSecurityRules `json:"defaultSecurityRules,omitempty" bson:"defaultSecurityRules,omitempty"`
-	DefaultToOAuthAuthentication          bool                            `json:"defaultToOAuthAuthentication,omitempty" bson:"defaultToOAuthAuthentication,omitempty"`
-	DefaultUserQuotaInKiBs                float64                         `json:"defaultUserQuotaInKiBs,omitempty" bson:"defaultUserQuotaInKiBs,omitempty"`
-	Definition                            *ResourceDefinition             `json:"definition,omitempty" bson:"definition,omitempty"`
-	DeploymentID                          string                          `json:"deploymentId,omitempty" bson:"deploymentId,omitempty"`
-	Description                           *string                         `json:"description,omitempty" bson:"description,omitempty"`
-	Destinations                          *ResourceDestinations           `json:"destinations,omitempty" bson:"destinations,omitempty"`
+	DedicatedCoreQuotaPerVmFamilyEnforced bool                                 `json:"dedicatedCoreQuotaPerVMFamilyEnforced,omitempty" bson:"dedicatedCoreQuotaPerVMFamilyEnforced,omitempty"`
+	DefaultDomain                         string                               `json:"defaultDomain,omitempty" bson:"defaultDomain,omitempty"`
+	DefaultGroupQuotaInKiBs               float64                              `json:"defaultGroupQuotaInKiBs,omitempty" bson:"defaultGroupQuotaInKiBs,omitempty"`
+	DefaultHostName                       string                               `json:"defaultHostName,omitempty" bson:"defaultHostName,omitempty"`
+	DefaultHostNameScope                  string                               `json:"defaultHostNameScope,omitempty" bson:"defaultHostNameScope,omitempty"`
+	DefaultIdentity                       string                               `json:"defaultIdentity,omitempty" bson:"defaultIdentity,omitempty"`
+	DefaultSecondaryLocation              string                               `json:"defaultSecondaryLocation,omitempty" bson:"defaultSecondaryLocation,omitempty"`
+	DefaultSecurityRules                  []*AzureResourceDefaultSecurityRules `json:"defaultSecurityRules,omitempty" bson:"defaultSecurityRules,omitempty"`
+	DefaultToOAuthAuthentication          bool                                 `json:"defaultToOAuthAuthentication,omitempty" bson:"defaultToOAuthAuthentication,omitempty"`
+	DefaultUserQuotaInKiBs                float64                              `json:"defaultUserQuotaInKiBs,omitempty" bson:"defaultUserQuotaInKiBs,omitempty"`
+	Definition                            *AzureResourceDefinition             `json:"definition,omitempty" bson:"definition,omitempty"`
+	DeploymentID                          string                               `json:"deploymentId,omitempty" bson:"deploymentId,omitempty"`
+	Description                           *string                              `json:"description,omitempty" bson:"description,omitempty"`
+	Destinations                          *AzureResourceDestinations           `json:"destinations,omitempty" bson:"destinations,omitempty"`
 	DhcpOptions                           *struct {
 		DnsServers []string `json:"dnsServers,omitempty" bson:"dnsServers,omitempty"`
 	} `json:"dhcpOptions,omitempty" bson:"dhcpOptions,omitempty"`
-	DiagnosticsProfile                 *ResourceDiagnosticsProfile `json:"diagnosticsProfile,omitempty" bson:"diagnosticsProfile,omitempty"`
-	DisableBgpRoutePropagation         bool                        `json:"disableBgpRoutePropagation,omitempty" bson:"disableBgpRoutePropagation,omitempty"`
-	DisableCopyPaste                   bool                        `json:"disableCopyPaste,omitempty" bson:"disableCopyPaste,omitempty"`
-	DisableIpSecReplayProtection       bool                        `json:"disableIPSecReplayProtection,omitempty" bson:"disableIPSecReplayProtection,omitempty"`
-	DisableKeyBasedMetadataWriteAccess bool                        `json:"disableKeyBasedMetadataWriteAccess,omitempty" bson:"disableKeyBasedMetadataWriteAccess,omitempty"`
-	DisableLocalAuth                   bool                        `json:"disableLocalAuth,omitempty" bson:"disableLocalAuth,omitempty"`
-	DisableTcpStateTracking            bool                        `json:"disableTcpStateTracking,omitempty" bson:"disableTcpStateTracking,omitempty"`
-	DisableVpnEncryption               bool                        `json:"disableVpnEncryption,omitempty" bson:"disableVpnEncryption,omitempty"`
+	DiagnosticsProfile                 *AzureResourceDiagnosticsProfile `json:"diagnosticsProfile,omitempty" bson:"diagnosticsProfile,omitempty"`
+	DisableBgpRoutePropagation         bool                             `json:"disableBgpRoutePropagation,omitempty" bson:"disableBgpRoutePropagation,omitempty"`
+	DisableCopyPaste                   bool                             `json:"disableCopyPaste,omitempty" bson:"disableCopyPaste,omitempty"`
+	DisableIpSecReplayProtection       bool                             `json:"disableIPSecReplayProtection,omitempty" bson:"disableIPSecReplayProtection,omitempty"`
+	DisableKeyBasedMetadataWriteAccess bool                             `json:"disableKeyBasedMetadataWriteAccess,omitempty" bson:"disableKeyBasedMetadataWriteAccess,omitempty"`
+	DisableLocalAuth                   bool                             `json:"disableLocalAuth,omitempty" bson:"disableLocalAuth,omitempty"`
+	DisableTcpStateTracking            bool                             `json:"disableTcpStateTracking,omitempty" bson:"disableTcpStateTracking,omitempty"`
+	DisableVpnEncryption               bool                             `json:"disableVpnEncryption,omitempty" bson:"disableVpnEncryption,omitempty"`
 	Disallowed                         *struct {
 		DiskTypes []any `json:"diskTypes,omitempty" bson:"diskTypes,omitempty"`
 	} `json:"disallowed,omitempty" bson:"disallowed,omitempty"`
-	DiskIopsReadWrite float64               `json:"diskIOPSReadWrite,omitempty" bson:"diskIOPSReadWrite,omitempty"`
-	DiskMBpsReadWrite float64               `json:"diskMBpsReadWrite,omitempty" bson:"diskMBpsReadWrite,omitempty"`
-	DiskSizeBytes     float64               `json:"diskSizeBytes,omitempty" bson:"diskSizeBytes,omitempty"`
-	DiskSizeGb        float64               `json:"diskSizeGB,omitempty" bson:"diskSizeGB,omitempty"`
-	DiskState         string                `json:"diskState,omitempty" bson:"diskState,omitempty"`
-	DisplayName       string                `json:"displayName,omitempty" bson:"displayName,omitempty"`
-	Distribute        []*ResourceDistribute `json:"distribute,omitempty" bson:"distribute,omitempty"`
+	DiskIopsReadWrite float64                    `json:"diskIOPSReadWrite,omitempty" bson:"diskIOPSReadWrite,omitempty"`
+	DiskMBpsReadWrite float64                    `json:"diskMBpsReadWrite,omitempty" bson:"diskMBpsReadWrite,omitempty"`
+	DiskSizeBytes     float64                    `json:"diskSizeBytes,omitempty" bson:"diskSizeBytes,omitempty"`
+	DiskSizeGb        float64                    `json:"diskSizeGB,omitempty" bson:"diskSizeGB,omitempty"`
+	DiskState         string                     `json:"diskState,omitempty" bson:"diskState,omitempty"`
+	DisplayName       string                     `json:"displayName,omitempty" bson:"displayName,omitempty"`
+	Distribute        []*AzureResourceDistribute `json:"distribute,omitempty" bson:"distribute,omitempty"`
 	DnsConfiguration  *struct {
 		DnsLegacySortOrder bool `json:"dnsLegacySortOrder,omitempty" bson:"dnsLegacySortOrder,omitempty"`
 	} `json:"dnsConfiguration,omitempty" bson:"dnsConfiguration,omitempty"`
-	DnsEndpointType                        string                                `json:"dnsEndpointType,omitempty" bson:"dnsEndpointType,omitempty"`
-	DnsName                                string                                `json:"dnsName,omitempty" bson:"dnsName,omitempty"`
-	DnsPrefix                              string                                `json:"dnsPrefix,omitempty" bson:"dnsPrefix,omitempty"`
-	DnsSettings                            *ResourceDnsSettings                  `json:"dnsSettings,omitempty" bson:"dnsSettings,omitempty"`
-	DoNotRunExtensionsOnOverprovisionedVMs bool                                  `json:"doNotRunExtensionsOnOverprovisionedVMs,omitempty" bson:"doNotRunExtensionsOnOverprovisionedVMs,omitempty"`
-	DocumentEndpoint                       string                                `json:"documentEndpoint,omitempty" bson:"documentEndpoint,omitempty"`
-	DomainManagement                       string                                `json:"domainManagement,omitempty" bson:"domainManagement,omitempty"`
-	DomainName                             string                                `json:"domainName,omitempty" bson:"domainName,omitempty"`
-	DomainVerificationIdentifiers          any                                   `json:"domainVerificationIdentifiers,omitempty" bson:"domainVerificationIdentifiers,omitempty"`
-	DpdTimeoutSeconds                      float64                               `json:"dpdTimeoutSeconds,omitempty" bson:"dpdTimeoutSeconds,omitempty"`
-	EarliestRestoreDate                    string                                `json:"earliestRestoreDate,omitempty" bson:"earliestRestoreDate,omitempty"`
-	EgressBytesTransferred                 float64                               `json:"egressBytesTransferred,omitempty" bson:"egressBytesTransferred,omitempty"`
-	ElasticScaleEnabled                    bool                                  `json:"elasticScaleEnabled,omitempty" bson:"elasticScaleEnabled,omitempty"`
-	EligibleLogCategories                  string                                `json:"eligibleLogCategories,omitempty" bson:"eligibleLogCategories,omitempty"`
-	EmailReceivers                         []*ResourceEmailReceivers             `json:"emailReceivers,omitempty" bson:"emailReceivers,omitempty"`
-	EnableAcceleratedNetworking            bool                                  `json:"enableAcceleratedNetworking,omitempty" bson:"enableAcceleratedNetworking,omitempty"`
-	EnableAnalyticalStorage                bool                                  `json:"enableAnalyticalStorage,omitempty" bson:"enableAnalyticalStorage,omitempty"`
-	EnableAutomaticFailover                bool                                  `json:"enableAutomaticFailover,omitempty" bson:"enableAutomaticFailover,omitempty"`
-	EnableAutomaticUpgrade                 bool                                  `json:"enableAutomaticUpgrade,omitempty" bson:"enableAutomaticUpgrade,omitempty"`
-	EnableBgp                              bool                                  `json:"enableBgp,omitempty" bson:"enableBgp,omitempty"`
-	EnableBgpRouteTranslationForNat        bool                                  `json:"enableBgpRouteTranslationForNat,omitempty" bson:"enableBgpRouteTranslationForNat,omitempty"`
-	EnableBurstCapacity                    bool                                  `json:"enableBurstCapacity,omitempty" bson:"enableBurstCapacity,omitempty"`
-	EnableClientTelemetry                  bool                                  `json:"enableClientTelemetry,omitempty" bson:"enableClientTelemetry,omitempty"`
-	EnableDdosProtection                   bool                                  `json:"enableDdosProtection,omitempty" bson:"enableDdosProtection,omitempty"`
-	EnableDirectPortRateLimit              bool                                  `json:"enableDirectPortRateLimit,omitempty" bson:"enableDirectPortRateLimit,omitempty"`
-	EnableFileCopy                         bool                                  `json:"enableFileCopy,omitempty" bson:"enableFileCopy,omitempty"`
-	EnableFreeTier                         bool                                  `json:"enableFreeTier,omitempty" bson:"enableFreeTier,omitempty"`
-	EnableIpForwarding                     bool                                  `json:"enableIPForwarding,omitempty" bson:"enableIPForwarding,omitempty"`
-	EnableIpConnect                        bool                                  `json:"enableIpConnect,omitempty" bson:"enableIpConnect,omitempty"`
-	EnableKerberos                         bool                                  `json:"enableKerberos,omitempty" bson:"enableKerberos,omitempty"`
-	EnableMultipleWriteLocations           bool                                  `json:"enableMultipleWriteLocations,omitempty" bson:"enableMultipleWriteLocations,omitempty"`
-	EnablePartitionKeyMonitor              bool                                  `json:"enablePartitionKeyMonitor,omitempty" bson:"enablePartitionKeyMonitor,omitempty"`
-	EnablePartitionMerge                   bool                                  `json:"enablePartitionMerge,omitempty" bson:"enablePartitionMerge,omitempty"`
-	EnablePrivateIpAddress                 bool                                  `json:"enablePrivateIpAddress,omitempty" bson:"enablePrivateIpAddress,omitempty"`
-	EnablePrivateLinkFastPath              bool                                  `json:"enablePrivateLinkFastPath,omitempty" bson:"enablePrivateLinkFastPath,omitempty"`
-	EnablePurgeProtection                  bool                                  `json:"enablePurgeProtection,omitempty" bson:"enablePurgeProtection,omitempty"`
-	EnableRbac                             bool                                  `json:"enableRBAC,omitempty" bson:"enableRBAC,omitempty"`
-	EnableRbacAuthorization                bool                                  `json:"enableRbacAuthorization,omitempty" bson:"enableRbacAuthorization,omitempty"`
-	EnableShareableLink                    bool                                  `json:"enableShareableLink,omitempty" bson:"enableShareableLink,omitempty"`
-	EnableSoftDelete                       bool                                  `json:"enableSoftDelete,omitempty" bson:"enableSoftDelete,omitempty"`
-	EnableSubvolumes                       string                                `json:"enableSubvolumes,omitempty" bson:"enableSubvolumes,omitempty"`
-	EnableTunneling                        bool                                  `json:"enableTunneling,omitempty" bson:"enableTunneling,omitempty"`
-	Enabled                                bool                                  `json:"enabled,omitempty" bson:"enabled,omitempty"`
-	EnabledForDeployment                   bool                                  `json:"enabledForDeployment,omitempty" bson:"enabledForDeployment,omitempty"`
-	EnabledForDiskEncryption               bool                                  `json:"enabledForDiskEncryption,omitempty" bson:"enabledForDiskEncryption,omitempty"`
-	EnabledForTemplateDeployment           bool                                  `json:"enabledForTemplateDeployment,omitempty" bson:"enabledForTemplateDeployment,omitempty"`
-	EnabledHostNames                       []string                              `json:"enabledHostNames,omitempty" bson:"enabledHostNames,omitempty"`
-	Encapsulation                          string                                `json:"encapsulation,omitempty" bson:"encapsulation,omitempty"`
-	ResourceEncryption                     *ResourceEncryption                   `json:"encryption,omitempty" bson:"encryption,omitempty"`
-	EncryptionKeySource                    string                                `json:"encryptionKeySource,omitempty" bson:"encryptionKeySource,omitempty"`
-	EncryptionSettingsCollection           *ResourceEncryptionSettingsCollection `json:"encryptionSettingsCollection,omitempty" bson:"encryptionSettingsCollection,omitempty"`
-	EncryptionType                         string                                `json:"encryptionType,omitempty" bson:"encryptionType,omitempty"`
-	EndToEndEncryptionEnabled              bool                                  `json:"endToEndEncryptionEnabled,omitempty" bson:"endToEndEncryptionEnabled,omitempty"`
-	Endpoint                               string                                `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
-	Endpoints                              any                                   `json:"endpoints,omitempty" bson:"endpoints,omitempty"`
-	EndpointsConfiguration                 *ResourceEndpointsConfiguration       `json:"endpointsConfiguration,omitempty" bson:"endpointsConfiguration,omitempty"`
-	EnvironmentID                          string                                `json:"environmentId,omitempty" bson:"environmentId,omitempty"`
-	EtherType                              string                                `json:"etherType,omitempty" bson:"etherType,omitempty"`
-	EvaluationFrequency                    string                                `json:"evaluationFrequency,omitempty" bson:"evaluationFrequency,omitempty"`
-	EventHubReceivers                      []any                                 `json:"eventHubReceivers,omitempty" bson:"eventHubReceivers,omitempty"`
-	EventStreamEndpoint                    string                                `json:"eventStreamEndpoint,omitempty" bson:"eventStreamEndpoint,omitempty"`
-	EvictionPolicy                         string                                `json:"evictionPolicy,omitempty" bson:"evictionPolicy,omitempty"`
-	ExactStagingResourceGroup              string                                `json:"exactStagingResourceGroup,omitempty" bson:"exactStagingResourceGroup,omitempty"`
-	ExistingServerFarmIds                  any                                   `json:"existingServerFarmIds,omitempty" bson:"existingServerFarmIds,omitempty"`
+	DnsEndpointType                        string                                     `json:"dnsEndpointType,omitempty" bson:"dnsEndpointType,omitempty"`
+	DnsName                                string                                     `json:"dnsName,omitempty" bson:"dnsName,omitempty"`
+	DnsPrefix                              string                                     `json:"dnsPrefix,omitempty" bson:"dnsPrefix,omitempty"`
+	DnsSettings                            *AzureResourceDnsSettings                  `json:"dnsSettings,omitempty" bson:"dnsSettings,omitempty"`
+	DoNotRunExtensionsOnOverprovisionedVMs bool                                       `json:"doNotRunExtensionsOnOverprovisionedVMs,omitempty" bson:"doNotRunExtensionsOnOverprovisionedVMs,omitempty"`
+	DocumentEndpoint                       string                                     `json:"documentEndpoint,omitempty" bson:"documentEndpoint,omitempty"`
+	DomainManagement                       string                                     `json:"domainManagement,omitempty" bson:"domainManagement,omitempty"`
+	DomainName                             string                                     `json:"domainName,omitempty" bson:"domainName,omitempty"`
+	DomainVerificationIdentifiers          any                                        `json:"domainVerificationIdentifiers,omitempty" bson:"domainVerificationIdentifiers,omitempty"`
+	DpdTimeoutSeconds                      float64                                    `json:"dpdTimeoutSeconds,omitempty" bson:"dpdTimeoutSeconds,omitempty"`
+	EarliestRestoreDate                    string                                     `json:"earliestRestoreDate,omitempty" bson:"earliestRestoreDate,omitempty"`
+	EgressBytesTransferred                 float64                                    `json:"egressBytesTransferred,omitempty" bson:"egressBytesTransferred,omitempty"`
+	ElasticScaleEnabled                    bool                                       `json:"elasticScaleEnabled,omitempty" bson:"elasticScaleEnabled,omitempty"`
+	EligibleLogCategories                  string                                     `json:"eligibleLogCategories,omitempty" bson:"eligibleLogCategories,omitempty"`
+	EmailReceivers                         []*AzureResourceEmailReceivers             `json:"emailReceivers,omitempty" bson:"emailReceivers,omitempty"`
+	EnableAcceleratedNetworking            bool                                       `json:"enableAcceleratedNetworking,omitempty" bson:"enableAcceleratedNetworking,omitempty"`
+	EnableAnalyticalStorage                bool                                       `json:"enableAnalyticalStorage,omitempty" bson:"enableAnalyticalStorage,omitempty"`
+	EnableAutomaticFailover                bool                                       `json:"enableAutomaticFailover,omitempty" bson:"enableAutomaticFailover,omitempty"`
+	EnableAutomaticUpgrade                 bool                                       `json:"enableAutomaticUpgrade,omitempty" bson:"enableAutomaticUpgrade,omitempty"`
+	EnableBgp                              bool                                       `json:"enableBgp,omitempty" bson:"enableBgp,omitempty"`
+	EnableBgpRouteTranslationForNat        bool                                       `json:"enableBgpRouteTranslationForNat,omitempty" bson:"enableBgpRouteTranslationForNat,omitempty"`
+	EnableBurstCapacity                    bool                                       `json:"enableBurstCapacity,omitempty" bson:"enableBurstCapacity,omitempty"`
+	EnableClientTelemetry                  bool                                       `json:"enableClientTelemetry,omitempty" bson:"enableClientTelemetry,omitempty"`
+	EnableDdosProtection                   bool                                       `json:"enableDdosProtection,omitempty" bson:"enableDdosProtection,omitempty"`
+	EnableDirectPortRateLimit              bool                                       `json:"enableDirectPortRateLimit,omitempty" bson:"enableDirectPortRateLimit,omitempty"`
+	EnableFileCopy                         bool                                       `json:"enableFileCopy,omitempty" bson:"enableFileCopy,omitempty"`
+	EnableFreeTier                         bool                                       `json:"enableFreeTier,omitempty" bson:"enableFreeTier,omitempty"`
+	EnableIpForwarding                     bool                                       `json:"enableIPForwarding,omitempty" bson:"enableIPForwarding,omitempty"`
+	EnableIpConnect                        bool                                       `json:"enableIpConnect,omitempty" bson:"enableIpConnect,omitempty"`
+	EnableKerberos                         bool                                       `json:"enableKerberos,omitempty" bson:"enableKerberos,omitempty"`
+	EnableMultipleWriteLocations           bool                                       `json:"enableMultipleWriteLocations,omitempty" bson:"enableMultipleWriteLocations,omitempty"`
+	EnablePartitionKeyMonitor              bool                                       `json:"enablePartitionKeyMonitor,omitempty" bson:"enablePartitionKeyMonitor,omitempty"`
+	EnablePartitionMerge                   bool                                       `json:"enablePartitionMerge,omitempty" bson:"enablePartitionMerge,omitempty"`
+	EnablePrivateIpAddress                 bool                                       `json:"enablePrivateIpAddress,omitempty" bson:"enablePrivateIpAddress,omitempty"`
+	EnablePrivateLinkFastPath              bool                                       `json:"enablePrivateLinkFastPath,omitempty" bson:"enablePrivateLinkFastPath,omitempty"`
+	EnablePurgeProtection                  bool                                       `json:"enablePurgeProtection,omitempty" bson:"enablePurgeProtection,omitempty"`
+	EnableRbac                             bool                                       `json:"enableRBAC,omitempty" bson:"enableRBAC,omitempty"`
+	EnableRbacAuthorization                bool                                       `json:"enableRbacAuthorization,omitempty" bson:"enableRbacAuthorization,omitempty"`
+	EnableShareableLink                    bool                                       `json:"enableShareableLink,omitempty" bson:"enableShareableLink,omitempty"`
+	EnableSoftDelete                       bool                                       `json:"enableSoftDelete,omitempty" bson:"enableSoftDelete,omitempty"`
+	EnableSubvolumes                       string                                     `json:"enableSubvolumes,omitempty" bson:"enableSubvolumes,omitempty"`
+	EnableTunneling                        bool                                       `json:"enableTunneling,omitempty" bson:"enableTunneling,omitempty"`
+	Enabled                                bool                                       `json:"enabled,omitempty" bson:"enabled,omitempty"`
+	EnabledForDeployment                   bool                                       `json:"enabledForDeployment,omitempty" bson:"enabledForDeployment,omitempty"`
+	EnabledForDiskEncryption               bool                                       `json:"enabledForDiskEncryption,omitempty" bson:"enabledForDiskEncryption,omitempty"`
+	EnabledForTemplateDeployment           bool                                       `json:"enabledForTemplateDeployment,omitempty" bson:"enabledForTemplateDeployment,omitempty"`
+	EnabledHostNames                       []string                                   `json:"enabledHostNames,omitempty" bson:"enabledHostNames,omitempty"`
+	Encapsulation                          string                                     `json:"encapsulation,omitempty" bson:"encapsulation,omitempty"`
+	ResourceEncryption                     *AzureResourceEncryption                   `json:"encryption,omitempty" bson:"encryption,omitempty"`
+	EncryptionKeySource                    string                                     `json:"encryptionKeySource,omitempty" bson:"encryptionKeySource,omitempty"`
+	EncryptionSettingsCollection           *AzureResourceEncryptionSettingsCollection `json:"encryptionSettingsCollection,omitempty" bson:"encryptionSettingsCollection,omitempty"`
+	EncryptionType                         string                                     `json:"encryptionType,omitempty" bson:"encryptionType,omitempty"`
+	EndToEndEncryptionEnabled              bool                                       `json:"endToEndEncryptionEnabled,omitempty" bson:"endToEndEncryptionEnabled,omitempty"`
+	Endpoint                               string                                     `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
+	Endpoints                              any                                        `json:"endpoints,omitempty" bson:"endpoints,omitempty"`
+	EndpointsConfiguration                 *AzureResourceEndpointsConfiguration       `json:"endpointsConfiguration,omitempty" bson:"endpointsConfiguration,omitempty"`
+	EnvironmentID                          string                                     `json:"environmentId,omitempty" bson:"environmentId,omitempty"`
+	EtherType                              string                                     `json:"etherType,omitempty" bson:"etherType,omitempty"`
+	EvaluationFrequency                    string                                     `json:"evaluationFrequency,omitempty" bson:"evaluationFrequency,omitempty"`
+	EventHubReceivers                      []any                                      `json:"eventHubReceivers,omitempty" bson:"eventHubReceivers,omitempty"`
+	EventStreamEndpoint                    string                                     `json:"eventStreamEndpoint,omitempty" bson:"eventStreamEndpoint,omitempty"`
+	EvictionPolicy                         string                                     `json:"evictionPolicy,omitempty" bson:"evictionPolicy,omitempty"`
+	ExactStagingResourceGroup              string                                     `json:"exactStagingResourceGroup,omitempty" bson:"exactStagingResourceGroup,omitempty"`
+	ExistingServerFarmIds                  any                                        `json:"existingServerFarmIds,omitempty" bson:"existingServerFarmIds,omitempty"`
 	ExportPolicy                           *struct {
 		Rules []any `json:"rules,omitempty" bson:"rules,omitempty"`
 	} `json:"exportPolicy,omitempty" bson:"exportPolicy,omitempty"`
-	ExpressRouteConnections []*ResourceExpressRouteConnections `json:"expressRouteConnections,omitempty" bson:"expressRouteConnections,omitempty"`
+	ExpressRouteConnections []*AzureResourceExpressRouteConnections `json:"expressRouteConnections,omitempty" bson:"expressRouteConnections,omitempty"`
 	ExpressRouteGateway     *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"expressRouteGateway,omitempty" bson:"expressRouteGateway,omitempty"`
@@ -3016,17 +3015,17 @@ type ResourceProperties struct {
 	ExpressRoutePort          *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"expressRoutePort,omitempty" bson:"expressRoutePort,omitempty"`
-	Extended            *ResourceExtended `json:"extended,omitempty" bson:"extended,omitempty"`
+	Extended            *AzureResourceExtended `json:"extended,omitempty" bson:"extended,omitempty"`
 	ExtensionProperties *struct {
 		InGuestPatchMode string `json:"InGuestPatchMode,omitempty" bson:"InGuestPatchMode,omitempty"`
 	} `json:"extensionProperties,omitempty" bson:"extensionProperties,omitempty"`
-	ExtensionsTimeBudget     string                     `json:"extensionsTimeBudget,omitempty" bson:"extensionsTimeBudget,omitempty"`
-	ExternalGovernanceStatus string                     `json:"externalGovernanceStatus,omitempty" bson:"externalGovernanceStatus,omitempty"`
-	FactoryStatistics        *ResourceFactoryStatistics `json:"factoryStatistics,omitempty" bson:"factoryStatistics,omitempty"`
-	FailoverPolicies         []*ResourceFailoverPolicy  `json:"failoverPolicies,omitempty" bson:"failoverPolicies,omitempty"`
-	FeatureSettings          *ResourceFeatureSettings   `json:"featureSettings,omitempty" bson:"featureSettings,omitempty"`
-	Features                 any                        `json:"features,omitempty" bson:"features,omitempty"`
-	FileSystemID             string                     `json:"fileSystemId,omitempty" bson:"fileSystemId,omitempty"`
+	ExtensionsTimeBudget     string                          `json:"extensionsTimeBudget,omitempty" bson:"extensionsTimeBudget,omitempty"`
+	ExternalGovernanceStatus string                          `json:"externalGovernanceStatus,omitempty" bson:"externalGovernanceStatus,omitempty"`
+	FactoryStatistics        *AzureResourceFactoryStatistics `json:"factoryStatistics,omitempty" bson:"factoryStatistics,omitempty"`
+	FailoverPolicies         []*AzureResourceFailoverPolicy  `json:"failoverPolicies,omitempty" bson:"failoverPolicies,omitempty"`
+	FeatureSettings          *AzureResourceFeatureSettings   `json:"featureSettings,omitempty" bson:"featureSettings,omitempty"`
+	Features                 any                             `json:"features,omitempty" bson:"features,omitempty"`
+	FileSystemID             string                          `json:"fileSystemId,omitempty" bson:"fileSystemId,omitempty"`
 	FirewallPolicies         []struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"firewallPolicies,omitempty" bson:"firewallPolicies,omitempty"`
@@ -3036,7 +3035,7 @@ type ResourceProperties struct {
 	Firewalls []struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"firewalls,omitempty" bson:"firewalls,omitempty"`
-	FlowAnalyticsConfiguration *ResourceFlowAnalyticsConfiguration `json:"flowAnalyticsConfiguration,omitempty" bson:"flowAnalyticsConfiguration,omitempty"`
+	FlowAnalyticsConfiguration *AzureResourceFlowAnalyticsConfiguration `json:"flowAnalyticsConfiguration,omitempty" bson:"flowAnalyticsConfiguration,omitempty"`
 	FlowLogs                   []struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"flowLogs,omitempty" bson:"flowLogs,omitempty"`
@@ -3046,23 +3045,23 @@ type ResourceProperties struct {
 		Type    string  `json:"type,omitempty" bson:"type,omitempty"`
 		Version float64 `json:"version,omitempty" bson:"version,omitempty"`
 	} `json:"format,omitempty" bson:"format,omitempty"`
-	Fqdn                                  string                             `json:"fqdn,omitempty" bson:"fqdn,omitempty"`
-	FreeOfferExpirationTime               any                                `json:"freeOfferExpirationTime,omitempty" bson:"freeOfferExpirationTime,omitempty"`
-	FriendlyName                          string                             `json:"friendlyName,omitempty" bson:"friendlyName,omitempty"`
-	FromSenderDomain                      string                             `json:"fromSenderDomain,omitempty" bson:"fromSenderDomain,omitempty"`
-	FrontendIpConfigurations              []*ResourceFrontendIpConfiguration `json:"frontendIPConfigurations,omitempty" bson:"frontendIPConfigurations,omitempty"`
-	FtpUsername                           string                             `json:"ftpUsername,omitempty" bson:"ftpUsername,omitempty"`
-	FtpsHostName                          string                             `json:"ftpsHostName,omitempty" bson:"ftpsHostName,omitempty"`
-	FullyQualifiedDomainName              string                             `json:"fullyQualifiedDomainName,omitempty" bson:"fullyQualifiedDomainName,omitempty"`
-	FunctionAppConfig                     any                                `json:"functionAppConfig,omitempty" bson:"functionAppConfig,omitempty"`
-	FunctionExecutionUnitsCache           any                                `json:"functionExecutionUnitsCache,omitempty" bson:"functionExecutionUnitsCache,omitempty"`
-	FunctionsRuntimeAdminIsolationEnabled bool                               `json:"functionsRuntimeAdminIsolationEnabled,omitempty" bson:"functionsRuntimeAdminIsolationEnabled,omitempty"`
-	GatewayCustomBgpIpAddresses           []any                              `json:"gatewayCustomBgpIpAddresses,omitempty" bson:"gatewayCustomBgpIpAddresses,omitempty"`
-	GatewayManagerEtag                    string                             `json:"gatewayManagerEtag,omitempty" bson:"gatewayManagerEtag,omitempty"`
-	GatewayType                           string                             `json:"gatewayType,omitempty" bson:"gatewayType,omitempty"`
-	GeoDataReplication                    *ResourceGeoDataReplication        `json:"geoDataReplication,omitempty" bson:"geoDataReplication,omitempty"`
-	GeoDistributions                      any                                `json:"geoDistributions,omitempty" bson:"geoDistributions,omitempty"`
-	GeoRegion                             string                             `json:"geoRegion,omitempty" bson:"geoRegion,omitempty"`
+	Fqdn                                  string                                  `json:"fqdn,omitempty" bson:"fqdn,omitempty"`
+	FreeOfferExpirationTime               any                                     `json:"freeOfferExpirationTime,omitempty" bson:"freeOfferExpirationTime,omitempty"`
+	FriendlyName                          string                                  `json:"friendlyName,omitempty" bson:"friendlyName,omitempty"`
+	FromSenderDomain                      string                                  `json:"fromSenderDomain,omitempty" bson:"fromSenderDomain,omitempty"`
+	FrontendIpConfigurations              []*AzureResourceFrontendIpConfiguration `json:"frontendIPConfigurations,omitempty" bson:"frontendIPConfigurations,omitempty"`
+	FtpUsername                           string                                  `json:"ftpUsername,omitempty" bson:"ftpUsername,omitempty"`
+	FtpsHostName                          string                                  `json:"ftpsHostName,omitempty" bson:"ftpsHostName,omitempty"`
+	FullyQualifiedDomainName              string                                  `json:"fullyQualifiedDomainName,omitempty" bson:"fullyQualifiedDomainName,omitempty"`
+	FunctionAppConfig                     any                                     `json:"functionAppConfig,omitempty" bson:"functionAppConfig,omitempty"`
+	FunctionExecutionUnitsCache           any                                     `json:"functionExecutionUnitsCache,omitempty" bson:"functionExecutionUnitsCache,omitempty"`
+	FunctionsRuntimeAdminIsolationEnabled bool                                    `json:"functionsRuntimeAdminIsolationEnabled,omitempty" bson:"functionsRuntimeAdminIsolationEnabled,omitempty"`
+	GatewayCustomBgpIpAddresses           []any                                   `json:"gatewayCustomBgpIpAddresses,omitempty" bson:"gatewayCustomBgpIpAddresses,omitempty"`
+	GatewayManagerEtag                    string                                  `json:"gatewayManagerEtag,omitempty" bson:"gatewayManagerEtag,omitempty"`
+	GatewayType                           string                                  `json:"gatewayType,omitempty" bson:"gatewayType,omitempty"`
+	GeoDataReplication                    *AzureResourceGeoDataReplication        `json:"geoDataReplication,omitempty" bson:"geoDataReplication,omitempty"`
+	GeoDistributions                      any                                     `json:"geoDistributions,omitempty" bson:"geoDistributions,omitempty"`
+	GeoRegion                             string                                  `json:"geoRegion,omitempty" bson:"geoRegion,omitempty"`
 	GlobalParameters                      *struct {
 		Owner struct {
 			Type  string `json:"type,omitempty" bson:"type,omitempty"`
@@ -3072,58 +3071,55 @@ type ResourceProperties struct {
 	GlobalReachEnabled bool   `json:"globalReachEnabled,omitempty" bson:"globalReachEnabled,omitempty"`
 	GroupShortName     string `json:"groupShortName,omitempty" bson:"groupShortName,omitempty"`
 	HardwareProfile    *struct {
-		VmSize           string `json:"vmSize,omitempty" bson:"vmSize,omitempty"`
-		VmSizeProperties struct {
-			VCPUsAvailable int8 `json:"vCPUsAvailable,omitempty" bson:"vCPUsAvailable,omitempty"`
-			VCPUsPerCore   int8 `json:"vCPUsPerCore,omitempty" bson:"vCPUsPerCore,omitempty"`
-		} `json:"vmSizeProperties,omitempty" bson:"vmSizeProperties,omitempty"`
+		VmSize    string                  `json:"vmSize,omitempty" bson:"vmSize,omitempty"`
+		VmSizeSku *AzureVirtualMachineSku `json:"vmSizeSku,omitempty" bson:"vmSizeSku,omitempty"`
 	} `json:"hardwareProfile,omitempty" bson:"hardwareProfile,omitempty"`
 	HighAvailability *struct {
 		Mode  string `json:"mode,omitempty" bson:"mode,omitempty"`
 		State string `json:"state,omitempty" bson:"state,omitempty"`
 	} `json:"highAvailability,omitempty" bson:"highAvailability,omitempty"`
-	HnsOnMigrationInProgress    bool                         `json:"hnsOnMigrationInProgress,omitempty" bson:"hnsOnMigrationInProgress,omitempty"`
-	HomeStamp                   string                       `json:"homeStamp,omitempty" bson:"homeStamp,omitempty"`
-	HostName                    string                       `json:"hostName,omitempty" bson:"hostName,omitempty"`
-	HostNameSslStates           []*ResourceHostNameSslStates `json:"hostNameSslStates,omitempty" bson:"hostNameSslStates,omitempty"`
-	HostNames                   []string                     `json:"hostNames,omitempty" bson:"hostNames,omitempty"`
-	HostNamesDisabled           bool                         `json:"hostNamesDisabled,omitempty" bson:"hostNamesDisabled,omitempty"`
-	HostedWorkloads             []string                     `json:"hostedWorkloads,omitempty" bson:"hostedWorkloads,omitempty"`
-	HostingEnvironment          any                          `json:"hostingEnvironment,omitempty" bson:"hostingEnvironment,omitempty"`
-	HostingEnvironmentID        any                          `json:"hostingEnvironmentId,omitempty" bson:"hostingEnvironmentId,omitempty"`
-	HostingEnvironmentProfile   any                          `json:"hostingEnvironmentProfile,omitempty" bson:"hostingEnvironmentProfile,omitempty"`
-	HourlySchedule              *struct{}                    `json:"hourlySchedule,omitempty" bson:"hourlySchedule,omitempty"`
-	HTTPSOnly                   bool                         `json:"httpsOnly,omitempty" bson:"httpsOnly,omitempty"`
-	HubIpAddresses              *ResourceHubIpAddresses      `json:"hubIPAddresses,omitempty" bson:"hubIPAddresses,omitempty"`
-	HubRoutingPreference        string                       `json:"hubRoutingPreference,omitempty" bson:"hubRoutingPreference,omitempty"`
-	HyperV                      bool                         `json:"hyperV,omitempty" bson:"hyperV,omitempty"`
-	HyperVGeneration            string                       `json:"hyperVGeneration,omitempty" bson:"hyperVGeneration,omitempty"`
-	Identifier                  *ResourceIdentifier          `json:"identifier,omitempty" bson:"identifier,omitempty"`
-	IdentityProfile             *ResourceIdentityProfile     `json:"identityProfile,omitempty" bson:"identityProfile,omitempty"`
-	IdleTimeoutInMinutes        float64                      `json:"idleTimeoutInMinutes,omitempty" bson:"idleTimeoutInMinutes,omitempty"`
-	ImmutableID                 string                       `json:"immutableId,omitempty" bson:"immutableId,omitempty"`
-	ImmutableResourceID         string                       `json:"immutableResourceId,omitempty" bson:"immutableResourceId,omitempty"`
-	InFlightFeatures            []string                     `json:"inFlightFeatures,omitempty" bson:"inFlightFeatures,omitempty"`
-	InProgressOperationID       any                          `json:"inProgressOperationId,omitempty" bson:"inProgressOperationId,omitempty"`
-	InboundIpAddress            string                       `json:"inboundIpAddress,omitempty" bson:"inboundIpAddress,omitempty"`
-	InboundNatPools             []any                        `json:"inboundNatPools,omitempty" bson:"inboundNatPools,omitempty"`
-	InboundNatRules             []*ResourceInboundNatRule    `json:"inboundNatRules,omitempty" bson:"inboundNatRules,omitempty"`
-	Incremental                 bool                         `json:"incremental,omitempty" bson:"incremental,omitempty"`
-	IncrementalSnapshotFamilyID string                       `json:"incrementalSnapshotFamilyId,omitempty" bson:"incrementalSnapshotFamilyId,omitempty"`
-	InfrastructureResourceGroup *string                      `json:"infrastructureResourceGroup,omitempty" bson:"infrastructureResourceGroup,omitempty"`
-	IngressBytesTransferred     float64                      `json:"ingressBytesTransferred,omitempty" bson:"ingressBytesTransferred,omitempty"`
-	InputSchema                 string                       `json:"inputSchema,omitempty" bson:"inputSchema,omitempty"`
-	InstallPatches              *ResourceInstallPatches      `json:"installPatches,omitempty" bson:"installPatches,omitempty"`
-	InstanceID                  string                       `json:"instanceId,omitempty" bson:"instanceId,omitempty"`
-	InternalID                  string                       `json:"internalId,omitempty" bson:"internalId,omitempty"`
-	IntrusionDetection          *ResourceIntrusionDetection  `json:"intrusionDetection,omitempty" bson:"intrusionDetection,omitempty"`
-	IpAddress                   string                       `json:"ipAddress,omitempty" bson:"ipAddress,omitempty"`
-	IpAddresses                 []string                     `json:"ipAddresses,omitempty" bson:"ipAddresses,omitempty"`
+	HnsOnMigrationInProgress    bool                              `json:"hnsOnMigrationInProgress,omitempty" bson:"hnsOnMigrationInProgress,omitempty"`
+	HomeStamp                   string                            `json:"homeStamp,omitempty" bson:"homeStamp,omitempty"`
+	HostName                    string                            `json:"hostName,omitempty" bson:"hostName,omitempty"`
+	HostNameSslStates           []*AzureResourceHostNameSslStates `json:"hostNameSslStates,omitempty" bson:"hostNameSslStates,omitempty"`
+	HostNames                   []string                          `json:"hostNames,omitempty" bson:"hostNames,omitempty"`
+	HostNamesDisabled           bool                              `json:"hostNamesDisabled,omitempty" bson:"hostNamesDisabled,omitempty"`
+	HostedWorkloads             []string                          `json:"hostedWorkloads,omitempty" bson:"hostedWorkloads,omitempty"`
+	HostingEnvironment          any                               `json:"hostingEnvironment,omitempty" bson:"hostingEnvironment,omitempty"`
+	HostingEnvironmentID        any                               `json:"hostingEnvironmentId,omitempty" bson:"hostingEnvironmentId,omitempty"`
+	HostingEnvironmentProfile   any                               `json:"hostingEnvironmentProfile,omitempty" bson:"hostingEnvironmentProfile,omitempty"`
+	HourlySchedule              *struct{}                         `json:"hourlySchedule,omitempty" bson:"hourlySchedule,omitempty"`
+	HTTPSOnly                   bool                              `json:"httpsOnly,omitempty" bson:"httpsOnly,omitempty"`
+	HubIpAddresses              *AzureResourceHubIpAddresses      `json:"hubIPAddresses,omitempty" bson:"hubIPAddresses,omitempty"`
+	HubRoutingPreference        string                            `json:"hubRoutingPreference,omitempty" bson:"hubRoutingPreference,omitempty"`
+	HyperV                      bool                              `json:"hyperV,omitempty" bson:"hyperV,omitempty"`
+	HyperVGeneration            string                            `json:"hyperVGeneration,omitempty" bson:"hyperVGeneration,omitempty"`
+	Identifier                  *AzureResourceIdentifier          `json:"identifier,omitempty" bson:"identifier,omitempty"`
+	IdentityProfile             *AzureResourceIdentityProfile     `json:"identityProfile,omitempty" bson:"identityProfile,omitempty"`
+	IdleTimeoutInMinutes        float64                           `json:"idleTimeoutInMinutes,omitempty" bson:"idleTimeoutInMinutes,omitempty"`
+	ImmutableID                 string                            `json:"immutableId,omitempty" bson:"immutableId,omitempty"`
+	ImmutableResourceID         string                            `json:"immutableResourceId,omitempty" bson:"immutableResourceId,omitempty"`
+	InFlightFeatures            []string                          `json:"inFlightFeatures,omitempty" bson:"inFlightFeatures,omitempty"`
+	InProgressOperationID       any                               `json:"inProgressOperationId,omitempty" bson:"inProgressOperationId,omitempty"`
+	InboundIpAddress            string                            `json:"inboundIpAddress,omitempty" bson:"inboundIpAddress,omitempty"`
+	InboundNatPools             []any                             `json:"inboundNatPools,omitempty" bson:"inboundNatPools,omitempty"`
+	InboundNatRules             []*AzureResourceInboundNatRule    `json:"inboundNatRules,omitempty" bson:"inboundNatRules,omitempty"`
+	Incremental                 bool                              `json:"incremental,omitempty" bson:"incremental,omitempty"`
+	IncrementalSnapshotFamilyID string                            `json:"incrementalSnapshotFamilyId,omitempty" bson:"incrementalSnapshotFamilyId,omitempty"`
+	InfrastructureResourceGroup *string                           `json:"infrastructureResourceGroup,omitempty" bson:"infrastructureResourceGroup,omitempty"`
+	IngressBytesTransferred     float64                           `json:"ingressBytesTransferred,omitempty" bson:"ingressBytesTransferred,omitempty"`
+	InputSchema                 string                            `json:"inputSchema,omitempty" bson:"inputSchema,omitempty"`
+	InstallPatches              *AzureResourceInstallPatches      `json:"installPatches,omitempty" bson:"installPatches,omitempty"`
+	InstanceID                  string                            `json:"instanceId,omitempty" bson:"instanceId,omitempty"`
+	InternalID                  string                            `json:"internalId,omitempty" bson:"internalId,omitempty"`
+	IntrusionDetection          *AzureResourceIntrusionDetection  `json:"intrusionDetection,omitempty" bson:"intrusionDetection,omitempty"`
+	IpAddress                   string                            `json:"ipAddress,omitempty" bson:"ipAddress,omitempty"`
+	IpAddresses                 []string                          `json:"ipAddresses,omitempty" bson:"ipAddresses,omitempty"`
 	IpConfiguration             *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"ipConfiguration,omitempty" bson:"ipConfiguration,omitempty"`
-	IpConfigurations []*ResourceIpConfiguration `json:"ipConfigurations,omitempty" bson:"ipConfigurations,omitempty"`
-	IpMode           string                     `json:"ipMode,omitempty" bson:"ipMode,omitempty"`
+	IpConfigurations []*AzureResourceIpConfiguration `json:"ipConfigurations,omitempty" bson:"ipConfigurations,omitempty"`
+	IpMode           string                          `json:"ipMode,omitempty" bson:"ipMode,omitempty"`
 	IpRules          []struct {
 		IpAddressOrRange string `json:"ipAddressOrRange,omitempty" bson:"ipAddressOrRange,omitempty"`
 	} `json:"ipRules,omitempty" bson:"ipRules,omitempty"`
@@ -3157,65 +3153,65 @@ type ResourceProperties struct {
 		Key1 *string `json:"key1,omitempty" bson:"key1,omitempty"`
 		Key2 *string `json:"key2,omitempty" bson:"key2,omitempty"`
 	} `json:"keyCreationTime,omitempty" bson:"keyCreationTime,omitempty"`
-	KeyVaultReferenceIdentity string                       `json:"keyVaultReferenceIdentity,omitempty" bson:"keyVaultReferenceIdentity,omitempty"`
-	KeysMetadata              *ResourceKeysMetadata        `json:"keysMetadata,omitempty" bson:"keysMetadata,omitempty"`
-	Kind                      string                       `json:"kind,omitempty" bson:"kind,omitempty"`
-	KubeEnvironmentProfile    any                          `json:"kubeEnvironmentProfile,omitempty" bson:"kubeEnvironmentProfile,omitempty"`
-	KubernetesVersion         string                       `json:"kubernetesVersion,omitempty" bson:"kubernetesVersion,omitempty"`
-	LargeFileSharesState      string                       `json:"largeFileSharesState,omitempty" bson:"largeFileSharesState,omitempty"`
-	LastModifiedBy            any                          `json:"lastModifiedBy,omitempty" bson:"lastModifiedBy,omitempty"`
-	LastModifiedTime          string                       `json:"lastModifiedTime,omitempty" bson:"lastModifiedTime,omitempty"`
-	LastModifiedTimeUtc       string                       `json:"lastModifiedTimeUtc,omitempty" bson:"lastModifiedTimeUtc,omitempty"`
-	LastRunStatus             *ResourceLastRunStatus       `json:"lastRunStatus,omitempty" bson:"lastRunStatus,omitempty"`
-	LdapEnabled               bool                         `json:"ldapEnabled,omitempty" bson:"ldapEnabled,omitempty"`
-	LeastPrivilegeMode        string                       `json:"leastPrivilegeMode,omitempty" bson:"leastPrivilegeMode,omitempty"`
-	Lenses                    []*ResourceLense             `json:"lenses,omitempty" bson:"lenses,omitempty"`
-	LicenseType               string                       `json:"licenseType,omitempty" bson:"licenseType,omitempty"`
-	LinkedDomains             []string                     `json:"linkedDomains,omitempty" bson:"linkedDomains,omitempty"`
-	LinkedResourceType        string                       `json:"linkedResourceType,omitempty" bson:"linkedResourceType,omitempty"`
-	Links                     []*ResourceLink              `json:"links,omitempty" bson:"links,omitempty"`
-	LinuxProfile              *ResourceLinuxProfile        `json:"linuxProfile,omitempty" bson:"linuxProfile,omitempty"`
-	LoadBalancingRules        []*ResourceLoadBalancingRule `json:"loadBalancingRules,omitempty" bson:"loadBalancingRules,omitempty"`
-	Locations                 []*ResourceLocation          `json:"locations,omitempty" bson:"locations,omitempty"`
-	LogActivityTrace          float64                      `json:"logActivityTrace,omitempty" bson:"logActivityTrace,omitempty"`
-	LogProgress               bool                         `json:"logProgress,omitempty" bson:"logProgress,omitempty"`
-	LogVerbose                bool                         `json:"logVerbose,omitempty" bson:"logVerbose,omitempty"`
-	LogicAppReceivers         []any                        `json:"logicAppReceivers,omitempty" bson:"logicAppReceivers,omitempty"`
-	LoginServer               string                       `json:"loginServer,omitempty" bson:"loginServer,omitempty"`
+	KeyVaultReferenceIdentity string                            `json:"keyVaultReferenceIdentity,omitempty" bson:"keyVaultReferenceIdentity,omitempty"`
+	KeysMetadata              *AzureResourceKeysMetadata        `json:"keysMetadata,omitempty" bson:"keysMetadata,omitempty"`
+	Kind                      string                            `json:"kind,omitempty" bson:"kind,omitempty"`
+	KubeEnvironmentProfile    any                               `json:"kubeEnvironmentProfile,omitempty" bson:"kubeEnvironmentProfile,omitempty"`
+	KubernetesVersion         string                            `json:"kubernetesVersion,omitempty" bson:"kubernetesVersion,omitempty"`
+	LargeFileSharesState      string                            `json:"largeFileSharesState,omitempty" bson:"largeFileSharesState,omitempty"`
+	LastModifiedBy            any                               `json:"lastModifiedBy,omitempty" bson:"lastModifiedBy,omitempty"`
+	LastModifiedTime          string                            `json:"lastModifiedTime,omitempty" bson:"lastModifiedTime,omitempty"`
+	LastModifiedTimeUtc       string                            `json:"lastModifiedTimeUtc,omitempty" bson:"lastModifiedTimeUtc,omitempty"`
+	LastRunStatus             *AzureResourceLastRunStatus       `json:"lastRunStatus,omitempty" bson:"lastRunStatus,omitempty"`
+	LdapEnabled               bool                              `json:"ldapEnabled,omitempty" bson:"ldapEnabled,omitempty"`
+	LeastPrivilegeMode        string                            `json:"leastPrivilegeMode,omitempty" bson:"leastPrivilegeMode,omitempty"`
+	Lenses                    []*AzureResourceLense             `json:"lenses,omitempty" bson:"lenses,omitempty"`
+	LicenseType               string                            `json:"licenseType,omitempty" bson:"licenseType,omitempty"`
+	LinkedDomains             []string                          `json:"linkedDomains,omitempty" bson:"linkedDomains,omitempty"`
+	LinkedResourceType        string                            `json:"linkedResourceType,omitempty" bson:"linkedResourceType,omitempty"`
+	Links                     []*AzureResourceLink              `json:"links,omitempty" bson:"links,omitempty"`
+	LinuxProfile              *AzureResourceLinuxProfile        `json:"linuxProfile,omitempty" bson:"linuxProfile,omitempty"`
+	LoadBalancingRules        []*AzureResourceLoadBalancingRule `json:"loadBalancingRules,omitempty" bson:"loadBalancingRules,omitempty"`
+	Locations                 []*AzureResourceLocation          `json:"locations,omitempty" bson:"locations,omitempty"`
+	LogActivityTrace          float64                           `json:"logActivityTrace,omitempty" bson:"logActivityTrace,omitempty"`
+	LogProgress               bool                              `json:"logProgress,omitempty" bson:"logProgress,omitempty"`
+	LogVerbose                bool                              `json:"logVerbose,omitempty" bson:"logVerbose,omitempty"`
+	LogicAppReceivers         []any                             `json:"logicAppReceivers,omitempty" bson:"logicAppReceivers,omitempty"`
+	LoginServer               string                            `json:"loginServer,omitempty" bson:"loginServer,omitempty"`
 	LogsIngestion             *struct {
 		Endpoint string `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
 	} `json:"logsIngestion,omitempty" bson:"logsIngestion,omitempty"`
-	LowPriorityCoreQuota       float64                    `json:"lowPriorityCoreQuota,omitempty" bson:"lowPriorityCoreQuota,omitempty"`
-	MacAddress                 string                     `json:"macAddress,omitempty" bson:"macAddress,omitempty"`
-	MailFromSenderDomain       string                     `json:"mailFromSenderDomain,omitempty" bson:"mailFromSenderDomain,omitempty"`
-	MaintenanceConfigurationID string                     `json:"maintenanceConfigurationId,omitempty" bson:"maintenanceConfigurationId,omitempty"`
-	MaintenanceScope           string                     `json:"maintenanceScope,omitempty" bson:"maintenanceScope,omitempty"`
-	MaintenanceWindow          *ResourceMaintenanceWindow `json:"maintenanceWindow,omitempty" bson:"maintenanceWindow,omitempty"`
-	ManagedEnvironmentID       any                        `json:"managedEnvironmentId,omitempty" bson:"managedEnvironmentId,omitempty"`
-	ManagedResourceGroupName   string                     `json:"managedResourceGroupName,omitempty" bson:"managedResourceGroupName,omitempty"`
+	LowPriorityCoreQuota       float64                         `json:"lowPriorityCoreQuota,omitempty" bson:"lowPriorityCoreQuota,omitempty"`
+	MacAddress                 string                          `json:"macAddress,omitempty" bson:"macAddress,omitempty"`
+	MailFromSenderDomain       string                          `json:"mailFromSenderDomain,omitempty" bson:"mailFromSenderDomain,omitempty"`
+	MaintenanceConfigurationID string                          `json:"maintenanceConfigurationId,omitempty" bson:"maintenanceConfigurationId,omitempty"`
+	MaintenanceScope           string                          `json:"maintenanceScope,omitempty" bson:"maintenanceScope,omitempty"`
+	MaintenanceWindow          *AzureResourceMaintenanceWindow `json:"maintenanceWindow,omitempty" bson:"maintenanceWindow,omitempty"`
+	ManagedEnvironmentID       any                             `json:"managedEnvironmentId,omitempty" bson:"managedEnvironmentId,omitempty"`
+	ManagedResourceGroupName   string                          `json:"managedResourceGroupName,omitempty" bson:"managedResourceGroupName,omitempty"`
 	ManagedResources           *struct {
 		ResourceGroup  string `json:"resourceGroup,omitempty" bson:"resourceGroup,omitempty"`
 		StorageAccount string `json:"storageAccount,omitempty" bson:"storageAccount,omitempty"`
 	} `json:"managedResources,omitempty" bson:"managedResources,omitempty"`
-	ManualPrivateLinkServiceConnections            []any             `json:"manualPrivateLinkServiceConnections,omitempty" bson:"manualPrivateLinkServiceConnections,omitempty"`
-	MaxAgentPools                                  float64           `json:"maxAgentPools,omitempty" bson:"maxAgentPools,omitempty"`
-	MaxLogSizeBytes                                float64           `json:"maxLogSizeBytes,omitempty" bson:"maxLogSizeBytes,omitempty"`
-	MaxNumberOfRecordSets                          float64           `json:"maxNumberOfRecordSets,omitempty" bson:"maxNumberOfRecordSets,omitempty"`
-	MaxNumberOfRecordsPerRecordSet                 any               `json:"maxNumberOfRecordsPerRecordSet,omitempty" bson:"maxNumberOfRecordsPerRecordSet,omitempty"`
-	MaxNumberOfVirtualNetworkLinks                 float64           `json:"maxNumberOfVirtualNetworkLinks,omitempty" bson:"maxNumberOfVirtualNetworkLinks,omitempty"`
-	MaxNumberOfVirtualNetworkLinksWithRegistration float64           `json:"maxNumberOfVirtualNetworkLinksWithRegistration,omitempty" bson:"maxNumberOfVirtualNetworkLinksWithRegistration,omitempty"`
-	MaxNumberOfWorkers                             any               `json:"maxNumberOfWorkers,omitempty" bson:"maxNumberOfWorkers,omitempty"`
-	MaxShares                                      float64           `json:"maxShares,omitempty" bson:"maxShares,omitempty"`
-	MaxSizeBytes                                   float64           `json:"maxSizeBytes,omitempty" bson:"maxSizeBytes,omitempty"`
-	MaximumElasticWorkerCount                      float64           `json:"maximumElasticWorkerCount,omitempty" bson:"maximumElasticWorkerCount,omitempty"`
-	MaximumNumberOfFiles                           float64           `json:"maximumNumberOfFiles,omitempty" bson:"maximumNumberOfFiles,omitempty"`
-	MaximumNumberOfWorkers                         float64           `json:"maximumNumberOfWorkers,omitempty" bson:"maximumNumberOfWorkers,omitempty"`
-	MaximumThroughputUnits                         float64           `json:"maximumThroughputUnits,omitempty" bson:"maximumThroughputUnits,omitempty"`
-	MdmID                                          string            `json:"mdmId,omitempty" bson:"mdmId,omitempty"`
-	Metadata                                       *ResourceMetadata `json:"metadata,omitempty" bson:"metadata,omitempty"`
-	MetadataSearch                                 string            `json:"metadataSearch,omitempty" bson:"metadataSearch,omitempty"`
-	MetricID                                       string            `json:"metricId,omitempty" bson:"metricId,omitempty"`
-	MetricResourceID                               string            `json:"metricResourceId,omitempty" bson:"metricResourceId,omitempty"`
+	ManualPrivateLinkServiceConnections            []any                  `json:"manualPrivateLinkServiceConnections,omitempty" bson:"manualPrivateLinkServiceConnections,omitempty"`
+	MaxAgentPools                                  float64                `json:"maxAgentPools,omitempty" bson:"maxAgentPools,omitempty"`
+	MaxLogSizeBytes                                float64                `json:"maxLogSizeBytes,omitempty" bson:"maxLogSizeBytes,omitempty"`
+	MaxNumberOfRecordSets                          float64                `json:"maxNumberOfRecordSets,omitempty" bson:"maxNumberOfRecordSets,omitempty"`
+	MaxNumberOfRecordsPerRecordSet                 any                    `json:"maxNumberOfRecordsPerRecordSet,omitempty" bson:"maxNumberOfRecordsPerRecordSet,omitempty"`
+	MaxNumberOfVirtualNetworkLinks                 float64                `json:"maxNumberOfVirtualNetworkLinks,omitempty" bson:"maxNumberOfVirtualNetworkLinks,omitempty"`
+	MaxNumberOfVirtualNetworkLinksWithRegistration float64                `json:"maxNumberOfVirtualNetworkLinksWithRegistration,omitempty" bson:"maxNumberOfVirtualNetworkLinksWithRegistration,omitempty"`
+	MaxNumberOfWorkers                             any                    `json:"maxNumberOfWorkers,omitempty" bson:"maxNumberOfWorkers,omitempty"`
+	MaxShares                                      float64                `json:"maxShares,omitempty" bson:"maxShares,omitempty"`
+	MaxSizeBytes                                   float64                `json:"maxSizeBytes,omitempty" bson:"maxSizeBytes,omitempty"`
+	MaximumElasticWorkerCount                      float64                `json:"maximumElasticWorkerCount,omitempty" bson:"maximumElasticWorkerCount,omitempty"`
+	MaximumNumberOfFiles                           float64                `json:"maximumNumberOfFiles,omitempty" bson:"maximumNumberOfFiles,omitempty"`
+	MaximumNumberOfWorkers                         float64                `json:"maximumNumberOfWorkers,omitempty" bson:"maximumNumberOfWorkers,omitempty"`
+	MaximumThroughputUnits                         float64                `json:"maximumThroughputUnits,omitempty" bson:"maximumThroughputUnits,omitempty"`
+	MdmID                                          string                 `json:"mdmId,omitempty" bson:"mdmId,omitempty"`
+	Metadata                                       *AzureResourceMetadata `json:"metadata,omitempty" bson:"metadata,omitempty"`
+	MetadataSearch                                 string                 `json:"metadataSearch,omitempty" bson:"metadataSearch,omitempty"`
+	MetricID                                       string                 `json:"metricId,omitempty" bson:"metricId,omitempty"`
+	MetricResourceID                               string                 `json:"metricResourceId,omitempty" bson:"metricResourceId,omitempty"`
 	MetricsIngestion                               *struct {
 		Endpoint string `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
 	} `json:"metricsIngestion,omitempty" bson:"metricsIngestion,omitempty"`
@@ -3232,61 +3228,61 @@ type ResourceProperties struct {
 	MonthlySchedule      *struct {
 		DaysOfMonth string `json:"daysOfMonth,omitempty" bson:"daysOfMonth,omitempty"`
 	} `json:"monthlySchedule,omitempty" bson:"monthlySchedule,omitempty"`
-	MountTargets                []*ResourceMountTargets `json:"mountTargets,omitempty" bson:"mountTargets,omitempty"`
-	Mtu                         string                  `json:"mtu,omitempty" bson:"mtu,omitempty"`
-	MuteActionsDuration         string                  `json:"muteActionsDuration,omitempty" bson:"muteActionsDuration,omitempty"`
-	Name                        string                  `json:"name,omitempty" bson:"name,omitempty"`
-	NameServers                 []string                `json:"nameServers,omitempty" bson:"nameServers,omitempty"`
-	NatRuleCollections          []any                   `json:"natRuleCollections,omitempty" bson:"natRuleCollections,omitempty"`
-	NatRules                    []any                   `json:"natRules,omitempty" bson:"natRules,omitempty"`
-	Network                     *ResourceNetwork        `json:"network,omitempty" bson:"network,omitempty"`
-	NetworkAccessPolicy         string                  `json:"networkAccessPolicy,omitempty" bson:"networkAccessPolicy,omitempty"`
-	NetworkACLBypass            string                  `json:"networkAclBypass,omitempty" bson:"networkAclBypass,omitempty"`
-	NetworkACLBypassResourceIds []any                   `json:"networkAclBypassResourceIds,omitempty" bson:"networkAclBypassResourceIds,omitempty"`
-	NetworkAcls                 *ResourceNetworkAcls    `json:"networkAcls,omitempty" bson:"networkAcls,omitempty"`
-	NetworkFeatures             string                  `json:"networkFeatures,omitempty" bson:"networkFeatures,omitempty"`
+	MountTargets                []*AzureResourceMountTargets `json:"mountTargets,omitempty" bson:"mountTargets,omitempty"`
+	Mtu                         string                       `json:"mtu,omitempty" bson:"mtu,omitempty"`
+	MuteActionsDuration         string                       `json:"muteActionsDuration,omitempty" bson:"muteActionsDuration,omitempty"`
+	Name                        string                       `json:"name,omitempty" bson:"name,omitempty"`
+	NameServers                 []string                     `json:"nameServers,omitempty" bson:"nameServers,omitempty"`
+	NatRuleCollections          []any                        `json:"natRuleCollections,omitempty" bson:"natRuleCollections,omitempty"`
+	NatRules                    []any                        `json:"natRules,omitempty" bson:"natRules,omitempty"`
+	Network                     *AzureResourceNetwork        `json:"network,omitempty" bson:"network,omitempty"`
+	NetworkAccessPolicy         string                       `json:"networkAccessPolicy,omitempty" bson:"networkAccessPolicy,omitempty"`
+	NetworkACLBypass            string                       `json:"networkAclBypass,omitempty" bson:"networkAclBypass,omitempty"`
+	NetworkACLBypassResourceIds []any                        `json:"networkAclBypassResourceIds,omitempty" bson:"networkAclBypassResourceIds,omitempty"`
+	NetworkAcls                 *AzureResourceNetworkAcls    `json:"networkAcls,omitempty" bson:"networkAcls,omitempty"`
+	NetworkFeatures             string                       `json:"networkFeatures,omitempty" bson:"networkFeatures,omitempty"`
 	NetworkInterfaces           []struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"networkInterfaces,omitempty" bson:"networkInterfaces,omitempty"`
-	NetworkProfile           *ResourceNetworkProfile `json:"networkProfile,omitempty" bson:"networkProfile,omitempty"`
-	NetworkRuleBypassOptions string                  `json:"networkRuleBypassOptions,omitempty" bson:"networkRuleBypassOptions,omitempty"`
-	NetworkRuleCollections   []any                   `json:"networkRuleCollections,omitempty" bson:"networkRuleCollections,omitempty"`
-	NetworkRuleSet           *ResourceNetworkRuleSet `json:"networkRuleSet,omitempty" bson:"networkRuleSet,omitempty"`
+	NetworkProfile           *AzureResourceNetworkProfile `json:"networkProfile,omitempty" bson:"networkProfile,omitempty"`
+	NetworkRuleBypassOptions string                       `json:"networkRuleBypassOptions,omitempty" bson:"networkRuleBypassOptions,omitempty"`
+	NetworkRuleCollections   []any                        `json:"networkRuleCollections,omitempty" bson:"networkRuleCollections,omitempty"`
+	NetworkRuleSet           *AzureResourceNetworkRuleSet `json:"networkRuleSet,omitempty" bson:"networkRuleSet,omitempty"`
 	NetworkSecurityGroup     *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"networkSecurityGroup,omitempty" bson:"networkSecurityGroup,omitempty"`
-	NetworkSiblingSetID                         string                        `json:"networkSiblingSetId,omitempty" bson:"networkSiblingSetId,omitempty"`
-	NetworkVirtualAppliances                    []any                         `json:"networkVirtualAppliances,omitempty" bson:"networkVirtualAppliances,omitempty"`
-	NicType                                     string                        `json:"nicType,omitempty" bson:"nicType,omitempty"`
-	NodeConfigurationCount                      float64                       `json:"nodeConfigurationCount,omitempty" bson:"nodeConfigurationCount,omitempty"`
-	NodeManagementEndpoint                      string                        `json:"nodeManagementEndpoint,omitempty" bson:"nodeManagementEndpoint,omitempty"`
-	NodeResourceGroup                           string                        `json:"nodeResourceGroup,omitempty" bson:"nodeResourceGroup,omitempty"`
-	NotificationSettings                        *ResourceNotificationSettings `json:"notificationSettings,omitempty" bson:"notificationSettings,omitempty"`
-	NumberOfRecordSets                          float64                       `json:"numberOfRecordSets,omitempty" bson:"numberOfRecordSets,omitempty"`
-	NumberOfSites                               float64                       `json:"numberOfSites,omitempty" bson:"numberOfSites,omitempty"`
-	NumberOfVirtualNetworkLinks                 float64                       `json:"numberOfVirtualNetworkLinks,omitempty" bson:"numberOfVirtualNetworkLinks,omitempty"`
-	NumberOfVirtualNetworkLinksWithRegistration float64                       `json:"numberOfVirtualNetworkLinksWithRegistration,omitempty" bson:"numberOfVirtualNetworkLinksWithRegistration,omitempty"`
-	NumberOfWorkers                             float64                       `json:"numberOfWorkers,omitempty" bson:"numberOfWorkers,omitempty"`
-	Office365LocalBreakoutCategory              string                        `json:"office365LocalBreakoutCategory,omitempty" bson:"office365LocalBreakoutCategory,omitempty"`
+	NetworkSiblingSetID                         string                             `json:"networkSiblingSetId,omitempty" bson:"networkSiblingSetId,omitempty"`
+	NetworkVirtualAppliances                    []any                              `json:"networkVirtualAppliances,omitempty" bson:"networkVirtualAppliances,omitempty"`
+	NicType                                     string                             `json:"nicType,omitempty" bson:"nicType,omitempty"`
+	NodeConfigurationCount                      float64                            `json:"nodeConfigurationCount,omitempty" bson:"nodeConfigurationCount,omitempty"`
+	NodeManagementEndpoint                      string                             `json:"nodeManagementEndpoint,omitempty" bson:"nodeManagementEndpoint,omitempty"`
+	NodeResourceGroup                           string                             `json:"nodeResourceGroup,omitempty" bson:"nodeResourceGroup,omitempty"`
+	NotificationSettings                        *AzureResourceNotificationSettings `json:"notificationSettings,omitempty" bson:"notificationSettings,omitempty"`
+	NumberOfRecordSets                          float64                            `json:"numberOfRecordSets,omitempty" bson:"numberOfRecordSets,omitempty"`
+	NumberOfSites                               float64                            `json:"numberOfSites,omitempty" bson:"numberOfSites,omitempty"`
+	NumberOfVirtualNetworkLinks                 float64                            `json:"numberOfVirtualNetworkLinks,omitempty" bson:"numberOfVirtualNetworkLinks,omitempty"`
+	NumberOfVirtualNetworkLinksWithRegistration float64                            `json:"numberOfVirtualNetworkLinksWithRegistration,omitempty" bson:"numberOfVirtualNetworkLinksWithRegistration,omitempty"`
+	NumberOfWorkers                             float64                            `json:"numberOfWorkers,omitempty" bson:"numberOfWorkers,omitempty"`
+	Office365LocalBreakoutCategory              string                             `json:"office365LocalBreakoutCategory,omitempty" bson:"office365LocalBreakoutCategory,omitempty"`
 	OidcIssuerProfile                           *struct {
 		Enabled   bool   `json:"enabled,omitempty" bson:"enabled,omitempty"`
 		IssuerURL string `json:"issuerURL,omitempty" bson:"issuerURL,omitempty"`
 	} `json:"oidcIssuerProfile,omitempty" bson:"oidcIssuerProfile,omitempty"`
-	OpenTelemetryConfiguration  any                                   `json:"openTelemetryConfiguration,omitempty" bson:"openTelemetryConfiguration,omitempty"`
-	OrchestrationMode           string                                `json:"orchestrationMode,omitempty" bson:"orchestrationMode,omitempty"`
-	OSProfile                   *ResourceOSProfile                    `json:"osProfile,omitempty" bson:"osProfile,omitempty"`
-	OSState                     string                                `json:"osState,omitempty" bson:"osState,omitempty"`
-	OSType                      string                                `json:"osType,omitempty" bson:"osType,omitempty"`
-	OutboundIpAddresses         string                                `json:"outboundIpAddresses,omitempty" bson:"outboundIpAddresses,omitempty"`
-	OutboundRules               []*ResourceOutboundRules              `json:"outboundRules,omitempty" bson:"outboundRules,omitempty"`
-	OutboundVnetRouting         any                                   `json:"outboundVnetRouting,omitempty" bson:"outboundVnetRouting,omitempty"`
-	OutputTypes                 []any                                 `json:"outputTypes,omitempty" bson:"outputTypes,omitempty"`
-	Outputs                     []any                                 `json:"outputs,omitempty" bson:"outputs,omitempty"`
-	OverallStatus               string                                `json:"overallStatus,omitempty" bson:"overallStatus,omitempty"`
-	Overprovision               bool                                  `json:"overprovision,omitempty" bson:"overprovision,omitempty"`
-	OverrideQueryTimeRange      string                                `json:"overrideQueryTimeRange,omitempty" bson:"overrideQueryTimeRange,omitempty"`
-	Owner                       any                                   `json:"owner,omitempty" bson:"owner,omitempty"`
-	P2SConnectionConfigurations []*ResourceP2SConnectionConfiguration `json:"p2SConnectionConfigurations,omitempty" bson:"p2SConnectionConfigurations,omitempty"`
+	OpenTelemetryConfiguration  any                                        `json:"openTelemetryConfiguration,omitempty" bson:"openTelemetryConfiguration,omitempty"`
+	OrchestrationMode           string                                     `json:"orchestrationMode,omitempty" bson:"orchestrationMode,omitempty"`
+	OSProfile                   *AzureResourceOSProfile                    `json:"osProfile,omitempty" bson:"osProfile,omitempty"`
+	OSState                     string                                     `json:"osState,omitempty" bson:"osState,omitempty"`
+	OSType                      string                                     `json:"osType,omitempty" bson:"osType,omitempty"`
+	OutboundIpAddresses         string                                     `json:"outboundIpAddresses,omitempty" bson:"outboundIpAddresses,omitempty"`
+	OutboundRules               []*AzureResourceOutboundRules              `json:"outboundRules,omitempty" bson:"outboundRules,omitempty"`
+	OutboundVnetRouting         any                                        `json:"outboundVnetRouting,omitempty" bson:"outboundVnetRouting,omitempty"`
+	OutputTypes                 []any                                      `json:"outputTypes,omitempty" bson:"outputTypes,omitempty"`
+	Outputs                     []any                                      `json:"outputs,omitempty" bson:"outputs,omitempty"`
+	OverallStatus               string                                     `json:"overallStatus,omitempty" bson:"overallStatus,omitempty"`
+	Overprovision               bool                                       `json:"overprovision,omitempty" bson:"overprovision,omitempty"`
+	OverrideQueryTimeRange      string                                     `json:"overrideQueryTimeRange,omitempty" bson:"overrideQueryTimeRange,omitempty"`
+	Owner                       any                                        `json:"owner,omitempty" bson:"owner,omitempty"`
+	P2SConnectionConfigurations []*AzureResourceP2SConnectionConfiguration `json:"p2SConnectionConfigurations,omitempty" bson:"p2SConnectionConfigurations,omitempty"`
 	P2SVpnGateway               *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"p2SVpnGateway,omitempty" bson:"p2SVpnGateway,omitempty"`
@@ -3299,8 +3295,8 @@ type ResourceProperties struct {
 		Token_TenantID  string `json:"token:TenantId,omitempty" bson:"token:TenantId,omitempty"`
 		Token_GrantType string `json:"token:grantType,omitempty" bson:"token:grantType,omitempty"`
 	} `json:"parameterValues,omitempty" bson:"parameterValues,omitempty"`
-	Parameters *ResourceParameters `json:"parameters,omitempty" bson:"parameters,omitempty"`
-	PausedDate string              `json:"pausedDate,omitempty" bson:"pausedDate,omitempty"`
+	Parameters *AzureResourceParameters `json:"parameters,omitempty" bson:"parameters,omitempty"`
+	PausedDate string                   `json:"pausedDate,omitempty" bson:"pausedDate,omitempty"`
 	Peer       *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"peer,omitempty" bson:"peer,omitempty"`
@@ -3314,64 +3310,64 @@ type ResourceProperties struct {
 			Enabled bool `json:"enabled,omitempty" bson:"enabled,omitempty"`
 		} `json:"encryption,omitempty" bson:"encryption,omitempty"`
 	} `json:"peerTrafficConfiguration,omitempty" bson:"peerTrafficConfiguration,omitempty"`
-	PeeringLocation             string              `json:"peeringLocation,omitempty" bson:"peeringLocation,omitempty"`
-	Peerings                    []*ResourcePeerings `json:"peerings,omitempty" bson:"peerings,omitempty"`
-	PerSiteScaling              bool                `json:"perSiteScaling,omitempty" bson:"perSiteScaling,omitempty"`
-	PlanName                    string              `json:"planName,omitempty" bson:"planName,omitempty"`
-	PlatformFaultDomainCount    float64             `json:"platformFaultDomainCount,omitempty" bson:"platformFaultDomainCount,omitempty"`
-	PlatformUpdateDomainCount   float64             `json:"platformUpdateDomainCount,omitempty" bson:"platformUpdateDomainCount,omitempty"`
-	Policies                    *ResourcePolicies   `json:"policies,omitempty" bson:"policies,omitempty"`
-	PoolAllocationMode          string              `json:"poolAllocationMode,omitempty" bson:"poolAllocationMode,omitempty"`
-	PoolID                      string              `json:"poolId,omitempty" bson:"poolId,omitempty"`
-	PoolQuota                   float64             `json:"poolQuota,omitempty" bson:"poolQuota,omitempty"`
-	PossibleInboundIpAddresses  string              `json:"possibleInboundIpAddresses,omitempty" bson:"possibleInboundIpAddresses,omitempty"`
-	PossibleOutboundIpAddresses string              `json:"possibleOutboundIpAddresses,omitempty" bson:"possibleOutboundIpAddresses,omitempty"`
+	PeeringLocation             string                   `json:"peeringLocation,omitempty" bson:"peeringLocation,omitempty"`
+	Peerings                    []*AzureResourcePeerings `json:"peerings,omitempty" bson:"peerings,omitempty"`
+	PerSiteScaling              bool                     `json:"perSiteScaling,omitempty" bson:"perSiteScaling,omitempty"`
+	PlanName                    string                   `json:"planName,omitempty" bson:"planName,omitempty"`
+	PlatformFaultDomainCount    float64                  `json:"platformFaultDomainCount,omitempty" bson:"platformFaultDomainCount,omitempty"`
+	PlatformUpdateDomainCount   float64                  `json:"platformUpdateDomainCount,omitempty" bson:"platformUpdateDomainCount,omitempty"`
+	Policies                    *AzureResourcePolicies   `json:"policies,omitempty" bson:"policies,omitempty"`
+	PoolAllocationMode          string                   `json:"poolAllocationMode,omitempty" bson:"poolAllocationMode,omitempty"`
+	PoolID                      string                   `json:"poolId,omitempty" bson:"poolId,omitempty"`
+	PoolQuota                   float64                  `json:"poolQuota,omitempty" bson:"poolQuota,omitempty"`
+	PossibleInboundIpAddresses  string                   `json:"possibleInboundIpAddresses,omitempty" bson:"possibleInboundIpAddresses,omitempty"`
+	PossibleOutboundIpAddresses string                   `json:"possibleOutboundIpAddresses,omitempty" bson:"possibleOutboundIpAddresses,omitempty"`
 	PowerState                  *struct {
 		Code string `json:"code,omitempty" bson:"code,omitempty"`
 	} `json:"powerState,omitempty" bson:"powerState,omitempty"`
-	Primary          bool                      `json:"primary,omitempty" bson:"primary,omitempty"`
-	PrimaryEndpoints *ResourcePrimaryEndpoints `json:"primaryEndpoints,omitempty" bson:"primaryEndpoints,omitempty"`
-	PrimaryLocation  string                    `json:"primaryLocation,omitempty" bson:"primaryLocation,omitempty"`
-	PrincipalID      string                    `json:"principalId,omitempty" bson:"principalId,omitempty"`
-	Priority         string                    `json:"priority,omitempty" bson:"priority,omitempty"`
+	Primary          bool                           `json:"primary,omitempty" bson:"primary,omitempty"`
+	PrimaryEndpoints *AzureResourcePrimaryEndpoints `json:"primaryEndpoints,omitempty" bson:"primaryEndpoints,omitempty"`
+	PrimaryLocation  string                         `json:"primaryLocation,omitempty" bson:"primaryLocation,omitempty"`
+	PrincipalID      string                         `json:"principalId,omitempty" bson:"principalId,omitempty"`
+	Priority         string                         `json:"priority,omitempty" bson:"priority,omitempty"`
 	PrivateEndpoint  *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"privateEndpoint,omitempty" bson:"privateEndpoint,omitempty"`
-	PrivateEndpointConnections          []*ResourcePrivateEndpointConnections   `json:"privateEndpointConnections,omitempty" bson:"privateEndpointConnections,omitempty"`
-	PrivateEndpointStateForBackup       string                                  `json:"privateEndpointStateForBackup,omitempty" bson:"privateEndpointStateForBackup,omitempty"`
-	PrivateEndpointStateForSiteRecovery string                                  `json:"privateEndpointStateForSiteRecovery,omitempty" bson:"privateEndpointStateForSiteRecovery,omitempty"`
-	PrivateEndpointVNetPolicies         string                                  `json:"privateEndpointVNetPolicies,omitempty" bson:"privateEndpointVNetPolicies,omitempty"`
-	PrivateFqdn                         string                                  `json:"privateFQDN,omitempty" bson:"privateFQDN,omitempty"`
-	PrivateLinkIdentifiers              *string                                 `json:"privateLinkIdentifiers,omitempty" bson:"privateLinkIdentifiers,omitempty"`
-	PrivateLinkResources                []*ResourcePrivateLinkResources         `json:"privateLinkResources,omitempty" bson:"privateLinkResources,omitempty"`
-	PrivateLinkScopedResources          []*ResourcePrivateLinkScopedResource    `json:"privateLinkScopedResources,omitempty" bson:"privateLinkScopedResources,omitempty"`
-	PrivateLinkServiceConnections       []*ResourcePrivateLinkServiceConnection `json:"privateLinkServiceConnections,omitempty" bson:"privateLinkServiceConnections,omitempty"`
-	Probes                              []*ResourceProbe                        `json:"probes,omitempty" bson:"probes,omitempty"`
-	ProtocolTypes                       []string                                `json:"protocolTypes,omitempty" bson:"protocolTypes,omitempty"`
-	ProvisionedBandwidthInGbps          float64                                 `json:"provisionedBandwidthInGbps,omitempty" bson:"provisionedBandwidthInGbps,omitempty"`
-	ProvisioningState                   string                                  `json:"provisioningState,omitempty" bson:"provisioningState,omitempty"`
-	PublicIpAddressVersion              string                                  `json:"publicIPAddressVersion,omitempty" bson:"publicIPAddressVersion,omitempty"`
-	PublicIpAllocationMethod            string                                  `json:"publicIPAllocationMethod,omitempty" bson:"publicIPAllocationMethod,omitempty"`
-	PublicKey                           string                                  `json:"publicKey,omitempty" bson:"publicKey,omitempty"`
-	PublicNetworkAccess                 any                                     `json:"publicNetworkAccess,omitempty" bson:"publicNetworkAccess,omitempty"`
-	PublicNetworkAccessForIngestion     string                                  `json:"publicNetworkAccessForIngestion,omitempty" bson:"publicNetworkAccessForIngestion,omitempty"`
-	PublicNetworkAccessForQuery         string                                  `json:"publicNetworkAccessForQuery,omitempty" bson:"publicNetworkAccessForQuery,omitempty"`
-	Publisher                           string                                  `json:"publisher,omitempty" bson:"publisher,omitempty"`
-	PublishingProfile                   *ResourcePublishingProfile              `json:"publishingProfile,omitempty" bson:"publishingProfile,omitempty"`
-	PurchasePlan                        *ResourcePurchasePlan                   `json:"purchasePlan,omitempty" bson:"purchasePlan,omitempty"`
-	QosType                             string                                  `json:"qosType,omitempty" bson:"qosType,omitempty"`
-	QueryPackID                         string                                  `json:"queryPackId,omitempty" bson:"queryPackId,omitempty"`
-	RadiusClientRootCertificates        []any                                   `json:"radiusClientRootCertificates,omitempty" bson:"radiusClientRootCertificates,omitempty"`
-	RadiusProxyIPs                      []any                                   `json:"radiusProxyIPs,omitempty" bson:"radiusProxyIPs,omitempty"`
-	RadiusServerAddress                 string                                  `json:"radiusServerAddress,omitempty" bson:"radiusServerAddress,omitempty"`
-	RadiusServerRootCertificates        []any                                   `json:"radiusServerRootCertificates,omitempty" bson:"radiusServerRootCertificates,omitempty"`
-	RadiusServerSecret                  string                                  `json:"radiusServerSecret,omitempty" bson:"radiusServerSecret,omitempty"`
-	RadiusServers                       []any                                   `json:"radiusServers,omitempty" bson:"radiusServers,omitempty"`
-	RawTags                             any                                     `json:"rawTags,omitempty" bson:"rawTags,omitempty"`
-	ReadLocations                       []*ResourceReadLocation                 `json:"readLocations,omitempty" bson:"readLocations,omitempty"`
-	ReadScale                           string                                  `json:"readScale,omitempty" bson:"readScale,omitempty"`
-	Recommended                         *ResourceRecommended                    `json:"recommended,omitempty" bson:"recommended,omitempty"`
-	RedundancyMode                      string                                  `json:"redundancyMode,omitempty" bson:"redundancyMode,omitempty"`
+	PrivateEndpointConnections          []*AzureResourcePrivateEndpointConnections   `json:"privateEndpointConnections,omitempty" bson:"privateEndpointConnections,omitempty"`
+	PrivateEndpointStateForBackup       string                                       `json:"privateEndpointStateForBackup,omitempty" bson:"privateEndpointStateForBackup,omitempty"`
+	PrivateEndpointStateForSiteRecovery string                                       `json:"privateEndpointStateForSiteRecovery,omitempty" bson:"privateEndpointStateForSiteRecovery,omitempty"`
+	PrivateEndpointVNetPolicies         string                                       `json:"privateEndpointVNetPolicies,omitempty" bson:"privateEndpointVNetPolicies,omitempty"`
+	PrivateFqdn                         string                                       `json:"privateFQDN,omitempty" bson:"privateFQDN,omitempty"`
+	PrivateLinkIdentifiers              *string                                      `json:"privateLinkIdentifiers,omitempty" bson:"privateLinkIdentifiers,omitempty"`
+	PrivateLinkResources                []*AzureResourcePrivateLinkResources         `json:"privateLinkResources,omitempty" bson:"privateLinkResources,omitempty"`
+	PrivateLinkScopedResources          []*AzureResourcePrivateLinkScopedResource    `json:"privateLinkScopedResources,omitempty" bson:"privateLinkScopedResources,omitempty"`
+	PrivateLinkServiceConnections       []*AzureResourcePrivateLinkServiceConnection `json:"privateLinkServiceConnections,omitempty" bson:"privateLinkServiceConnections,omitempty"`
+	Probes                              []*AzureResourceProbe                        `json:"probes,omitempty" bson:"probes,omitempty"`
+	ProtocolTypes                       []string                                     `json:"protocolTypes,omitempty" bson:"protocolTypes,omitempty"`
+	ProvisionedBandwidthInGbps          float64                                      `json:"provisionedBandwidthInGbps,omitempty" bson:"provisionedBandwidthInGbps,omitempty"`
+	ProvisioningState                   string                                       `json:"provisioningState,omitempty" bson:"provisioningState,omitempty"`
+	PublicIpAddressVersion              string                                       `json:"publicIPAddressVersion,omitempty" bson:"publicIPAddressVersion,omitempty"`
+	PublicIpAllocationMethod            string                                       `json:"publicIPAllocationMethod,omitempty" bson:"publicIPAllocationMethod,omitempty"`
+	PublicKey                           string                                       `json:"publicKey,omitempty" bson:"publicKey,omitempty"`
+	PublicNetworkAccess                 any                                          `json:"publicNetworkAccess,omitempty" bson:"publicNetworkAccess,omitempty"`
+	PublicNetworkAccessForIngestion     string                                       `json:"publicNetworkAccessForIngestion,omitempty" bson:"publicNetworkAccessForIngestion,omitempty"`
+	PublicNetworkAccessForQuery         string                                       `json:"publicNetworkAccessForQuery,omitempty" bson:"publicNetworkAccessForQuery,omitempty"`
+	Publisher                           string                                       `json:"publisher,omitempty" bson:"publisher,omitempty"`
+	PublishingProfile                   *AzureResourcePublishingProfile              `json:"publishingProfile,omitempty" bson:"publishingProfile,omitempty"`
+	PurchasePlan                        *AzureResourcePurchasePlan                   `json:"purchasePlan,omitempty" bson:"purchasePlan,omitempty"`
+	QosType                             string                                       `json:"qosType,omitempty" bson:"qosType,omitempty"`
+	QueryPackID                         string                                       `json:"queryPackId,omitempty" bson:"queryPackId,omitempty"`
+	RadiusClientRootCertificates        []any                                        `json:"radiusClientRootCertificates,omitempty" bson:"radiusClientRootCertificates,omitempty"`
+	RadiusProxyIPs                      []any                                        `json:"radiusProxyIPs,omitempty" bson:"radiusProxyIPs,omitempty"`
+	RadiusServerAddress                 string                                       `json:"radiusServerAddress,omitempty" bson:"radiusServerAddress,omitempty"`
+	RadiusServerRootCertificates        []any                                        `json:"radiusServerRootCertificates,omitempty" bson:"radiusServerRootCertificates,omitempty"`
+	RadiusServerSecret                  string                                       `json:"radiusServerSecret,omitempty" bson:"radiusServerSecret,omitempty"`
+	RadiusServers                       []any                                        `json:"radiusServers,omitempty" bson:"radiusServers,omitempty"`
+	RawTags                             any                                          `json:"rawTags,omitempty" bson:"rawTags,omitempty"`
+	ReadLocations                       []*AzureResourceReadLocation                 `json:"readLocations,omitempty" bson:"readLocations,omitempty"`
+	ReadScale                           string                                       `json:"readScale,omitempty" bson:"readScale,omitempty"`
+	Recommended                         *AzureResourceRecommended                    `json:"recommended,omitempty" bson:"recommended,omitempty"`
+	RedundancyMode                      string                                       `json:"redundancyMode,omitempty" bson:"redundancyMode,omitempty"`
 	RedundancySettings                  *struct {
 		CrossRegionRestore            string `json:"crossRegionRestore,omitempty" bson:"crossRegionRestore,omitempty"`
 		StandardTierStorageRedundancy string `json:"standardTierStorageRedundancy,omitempty" bson:"standardTierStorageRedundancy,omitempty"`
@@ -3409,58 +3405,58 @@ type ResourceProperties struct {
 	RouteTable *struct {
 		Routes []any `json:"routes,omitempty" bson:"routes,omitempty"`
 	} `json:"routeTable,omitempty" bson:"routeTable,omitempty"`
-	Routes               []*ResourceRoute           `json:"routes,omitempty" bson:"routes,omitempty"`
-	RoutingPreference    *ResourceRoutingPreference `json:"routingPreference,omitempty" bson:"routingPreference,omitempty"`
-	RoutingState         string                     `json:"routingState,omitempty" bson:"routingState,omitempty"`
-	RoutingWeight        float64                    `json:"routingWeight,omitempty" bson:"routingWeight,omitempty"`
+	Routes               []*AzureResourceRoute           `json:"routes,omitempty" bson:"routes,omitempty"`
+	RoutingPreference    *AzureResourceRoutingPreference `json:"routingPreference,omitempty" bson:"routingPreference,omitempty"`
+	RoutingState         string                          `json:"routingState,omitempty" bson:"routingState,omitempty"`
+	RoutingWeight        float64                         `json:"routingWeight,omitempty" bson:"routingWeight,omitempty"`
 	RuleCollectionGroups []struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"ruleCollectionGroups,omitempty" bson:"ruleCollectionGroups,omitempty"`
-	RunbookType              string                      `json:"runbookType,omitempty" bson:"runbookType,omitempty"`
-	RunningOperationIds      []any                       `json:"runningOperationIds,omitempty" bson:"runningOperationIds,omitempty"`
-	RuntimeAvailabilityState string                      `json:"runtimeAvailabilityState,omitempty" bson:"runtimeAvailabilityState,omitempty"`
-	ScaleUnits               float64                     `json:"scaleUnits,omitempty" bson:"scaleUnits,omitempty"`
-	ScmSiteAlsoStopped       bool                        `json:"scmSiteAlsoStopped,omitempty" bson:"scmSiteAlsoStopped,omitempty"`
-	ScopeID                  string                      `json:"scopeId,omitempty" bson:"scopeId,omitempty"`
-	Scopes                   []any                       `json:"scopes,omitempty" bson:"scopes,omitempty"`
-	SecondaryEndpoints       *ResourceSecondaryEndpoints `json:"secondaryEndpoints,omitempty" bson:"secondaryEndpoints,omitempty"`
-	SecondaryLocation        string                      `json:"secondaryLocation,omitempty" bson:"secondaryLocation,omitempty"`
-	SecureScore              string                      `json:"secureScore,omitempty" bson:"secureScore,omitempty"`
-	SecurityProfile          *ResourceSecurityProfile    `json:"securityProfile,omitempty" bson:"securityProfile,omitempty"`
-	SecurityRules            []*ResourceSecurityRule     `json:"securityRules,omitempty" bson:"securityRules,omitempty"`
-	SecuritySettings         *ResourceSecuritySettings   `json:"securitySettings,omitempty" bson:"securitySettings,omitempty"`
-	SecurityStyle            string                      `json:"securityStyle,omitempty" bson:"securityStyle,omitempty"`
-	SelfLink                 string                      `json:"selfLink,omitempty" bson:"selfLink,omitempty"`
-	SerializedData           any                         `json:"serializedData,omitempty" bson:"serializedData,omitempty"`
-	ServerFarm               any                         `json:"serverFarm,omitempty" bson:"serverFarm,omitempty"`
-	ServerFarmID             any                         `json:"serverFarmId,omitempty" bson:"serverFarmId,omitempty"`
-	ServiceBusEndpoint       string                      `json:"serviceBusEndpoint,omitempty" bson:"serviceBusEndpoint,omitempty"`
-	ServiceKey               string                      `json:"serviceKey,omitempty" bson:"serviceKey,omitempty"`
-	ServiceLevel             string                      `json:"serviceLevel,omitempty" bson:"serviceLevel,omitempty"`
-	ServiceManagementTags    any                         `json:"serviceManagementTags,omitempty" bson:"serviceManagementTags,omitempty"`
+	RunbookType              string                           `json:"runbookType,omitempty" bson:"runbookType,omitempty"`
+	RunningOperationIds      []any                            `json:"runningOperationIds,omitempty" bson:"runningOperationIds,omitempty"`
+	RuntimeAvailabilityState string                           `json:"runtimeAvailabilityState,omitempty" bson:"runtimeAvailabilityState,omitempty"`
+	ScaleUnits               float64                          `json:"scaleUnits,omitempty" bson:"scaleUnits,omitempty"`
+	ScmSiteAlsoStopped       bool                             `json:"scmSiteAlsoStopped,omitempty" bson:"scmSiteAlsoStopped,omitempty"`
+	ScopeID                  string                           `json:"scopeId,omitempty" bson:"scopeId,omitempty"`
+	Scopes                   []any                            `json:"scopes,omitempty" bson:"scopes,omitempty"`
+	SecondaryEndpoints       *AzureResourceSecondaryEndpoints `json:"secondaryEndpoints,omitempty" bson:"secondaryEndpoints,omitempty"`
+	SecondaryLocation        string                           `json:"secondaryLocation,omitempty" bson:"secondaryLocation,omitempty"`
+	SecureScore              string                           `json:"secureScore,omitempty" bson:"secureScore,omitempty"`
+	SecurityProfile          *AzureResourceSecurityProfile    `json:"securityProfile,omitempty" bson:"securityProfile,omitempty"`
+	SecurityRules            []*AzureResourceSecurityRule     `json:"securityRules,omitempty" bson:"securityRules,omitempty"`
+	SecuritySettings         *AzureResourceSecuritySettings   `json:"securitySettings,omitempty" bson:"securitySettings,omitempty"`
+	SecurityStyle            string                           `json:"securityStyle,omitempty" bson:"securityStyle,omitempty"`
+	SelfLink                 string                           `json:"selfLink,omitempty" bson:"selfLink,omitempty"`
+	SerializedData           any                              `json:"serializedData,omitempty" bson:"serializedData,omitempty"`
+	ServerFarm               any                              `json:"serverFarm,omitempty" bson:"serverFarm,omitempty"`
+	ServerFarmID             any                              `json:"serverFarmId,omitempty" bson:"serverFarmId,omitempty"`
+	ServiceBusEndpoint       string                           `json:"serviceBusEndpoint,omitempty" bson:"serviceBusEndpoint,omitempty"`
+	ServiceKey               string                           `json:"serviceKey,omitempty" bson:"serviceKey,omitempty"`
+	ServiceLevel             string                           `json:"serviceLevel,omitempty" bson:"serviceLevel,omitempty"`
+	ServiceManagementTags    any                              `json:"serviceManagementTags,omitempty" bson:"serviceManagementTags,omitempty"`
 	ServicePrincipalProfile  *struct {
 		ClientID string `json:"clientId,omitempty" bson:"clientId,omitempty"`
 	} `json:"servicePrincipalProfile,omitempty" bson:"servicePrincipalProfile,omitempty"`
-	ServiceProviderProperties        *ResourceServiceProviderProperties `json:"serviceProviderProperties,omitempty" bson:"serviceProviderProperties,omitempty"`
-	ServiceProviderProvisioningState string                             `json:"serviceProviderProvisioningState,omitempty" bson:"serviceProviderProvisioningState,omitempty"`
-	Settings                         *ResourceSettings                  `json:"settings,omitempty" bson:"settings,omitempty"`
-	Severity                         float64                            `json:"severity,omitempty" bson:"severity,omitempty"`
-	SinglePlacementGroup             bool                               `json:"singlePlacementGroup,omitempty" bson:"singlePlacementGroup,omitempty"`
-	SiteConfig                       *ResourceSiteConfig                `json:"siteConfig,omitempty" bson:"siteConfig,omitempty"`
-	SiteDisabledReason               float64                            `json:"siteDisabledReason,omitempty" bson:"siteDisabledReason,omitempty"`
-	SiteMode                         any                                `json:"siteMode,omitempty" bson:"siteMode,omitempty"`
-	SiteProperties                   *ResourceSiteProperties            `json:"siteProperties,omitempty" bson:"siteProperties,omitempty"`
-	SiteScopedCertificatesEnabled    bool                               `json:"siteScopedCertificatesEnabled,omitempty" bson:"siteScopedCertificatesEnabled,omitempty"`
-	Size                             any                                `json:"size,omitempty" bson:"size,omitempty"`
-	Sku                              any                                `json:"sku,omitempty" bson:"sku,omitempty"`
-	SlotName                         any                                `json:"slotName,omitempty" bson:"slotName,omitempty"`
-	SlotSwapStatus                   any                                `json:"slotSwapStatus,omitempty" bson:"slotSwapStatus,omitempty"`
-	SmbAccessBasedEnumeration        string                             `json:"smbAccessBasedEnumeration,omitempty" bson:"smbAccessBasedEnumeration,omitempty"`
-	SmbContinuouslyAvailable         bool                               `json:"smbContinuouslyAvailable,omitempty" bson:"smbContinuouslyAvailable,omitempty"`
-	SmbEncryption                    bool                               `json:"smbEncryption,omitempty" bson:"smbEncryption,omitempty"`
-	SmbNonBrowsable                  string                             `json:"smbNonBrowsable,omitempty" bson:"smbNonBrowsable,omitempty"`
-	SmsReceivers                     []any                              `json:"smsReceivers,omitempty" bson:"smsReceivers,omitempty"`
-	SnapshotDirectoryVisible         bool                               `json:"snapshotDirectoryVisible,omitempty" bson:"snapshotDirectoryVisible,omitempty"`
+	ServiceProviderProperties        *AzureResourceServiceProviderProperties `json:"serviceProviderProperties,omitempty" bson:"serviceProviderProperties,omitempty"`
+	ServiceProviderProvisioningState string                                  `json:"serviceProviderProvisioningState,omitempty" bson:"serviceProviderProvisioningState,omitempty"`
+	Settings                         *AzureResourceSettings                  `json:"settings,omitempty" bson:"settings,omitempty"`
+	Severity                         float64                                 `json:"severity,omitempty" bson:"severity,omitempty"`
+	SinglePlacementGroup             bool                                    `json:"singlePlacementGroup,omitempty" bson:"singlePlacementGroup,omitempty"`
+	SiteConfig                       *AzureResourceSiteConfig                `json:"siteConfig,omitempty" bson:"siteConfig,omitempty"`
+	SiteDisabledReason               float64                                 `json:"siteDisabledReason,omitempty" bson:"siteDisabledReason,omitempty"`
+	SiteMode                         any                                     `json:"siteMode,omitempty" bson:"siteMode,omitempty"`
+	SiteProperties                   *AzureResourceSiteProperties            `json:"siteProperties,omitempty" bson:"siteProperties,omitempty"`
+	SiteScopedCertificatesEnabled    bool                                    `json:"siteScopedCertificatesEnabled,omitempty" bson:"siteScopedCertificatesEnabled,omitempty"`
+	Size                             any                                     `json:"size,omitempty" bson:"size,omitempty"`
+	Sku                              any                                     `json:"sku,omitempty" bson:"sku,omitempty"`
+	SlotName                         any                                     `json:"slotName,omitempty" bson:"slotName,omitempty"`
+	SlotSwapStatus                   any                                     `json:"slotSwapStatus,omitempty" bson:"slotSwapStatus,omitempty"`
+	SmbAccessBasedEnumeration        string                                  `json:"smbAccessBasedEnumeration,omitempty" bson:"smbAccessBasedEnumeration,omitempty"`
+	SmbContinuouslyAvailable         bool                                    `json:"smbContinuouslyAvailable,omitempty" bson:"smbContinuouslyAvailable,omitempty"`
+	SmbEncryption                    bool                                    `json:"smbEncryption,omitempty" bson:"smbEncryption,omitempty"`
+	SmbNonBrowsable                  string                                  `json:"smbNonBrowsable,omitempty" bson:"smbNonBrowsable,omitempty"`
+	SmsReceivers                     []any                                   `json:"smsReceivers,omitempty" bson:"smsReceivers,omitempty"`
+	SnapshotDirectoryVisible         bool                                    `json:"snapshotDirectoryVisible,omitempty" bson:"snapshotDirectoryVisible,omitempty"`
 	Snat                             *struct {
 		PrivateRanges []string `json:"privateRanges,omitempty" bson:"privateRanges,omitempty"`
 	} `json:"snat,omitempty" bson:"snat,omitempty"`
@@ -3473,90 +3469,90 @@ type ResourceProperties struct {
 	SourceVirtualMachine      *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"sourceVirtualMachine,omitempty" bson:"sourceVirtualMachine,omitempty"`
-	Sources                     []*ResourceSources      `json:"sources,omitempty" bson:"sources,omitempty"`
-	SpotExpirationTime          any                     `json:"spotExpirationTime,omitempty" bson:"spotExpirationTime,omitempty"`
-	SQLEndpoint                 string                  `json:"sqlEndpoint,omitempty" bson:"sqlEndpoint,omitempty"`
-	SQLImageOffer               string                  `json:"sqlImageOffer,omitempty" bson:"sqlImageOffer,omitempty"`
-	SQLImageSku                 string                  `json:"sqlImageSku,omitempty" bson:"sqlImageSku,omitempty"`
-	SQLManagement               string                  `json:"sqlManagement,omitempty" bson:"sqlManagement,omitempty"`
-	SQLServerLicenseType        string                  `json:"sqlServerLicenseType,omitempty" bson:"sqlServerLicenseType,omitempty"`
-	SSHEnabled                  any                     `json:"sshEnabled,omitempty" bson:"sshEnabled,omitempty"`
-	SslCertificates             any                     `json:"sslCertificates,omitempty" bson:"sslCertificates,omitempty"`
-	Stag                        float64                 `json:"stag,omitempty" bson:"stag,omitempty"`
-	StagingResourceGroup        string                  `json:"stagingResourceGroup,omitempty" bson:"stagingResourceGroup,omitempty"`
-	StartTime                   string                  `json:"startTime,omitempty" bson:"startTime,omitempty"`
-	State                       string                  `json:"state,omitempty" bson:"state,omitempty"`
-	StaticIp                    string                  `json:"staticIp,omitempty" bson:"staticIp,omitempty"`
-	Status                      string                  `json:"status,omitempty" bson:"status,omitempty"`
-	StatusOfPrimary             string                  `json:"statusOfPrimary,omitempty" bson:"statusOfPrimary,omitempty"`
-	StatusOfSecondary           string                  `json:"statusOfSecondary,omitempty" bson:"statusOfSecondary,omitempty"`
-	Statuses                    []*ResourceStatus       `json:"statuses,omitempty" bson:"statuses,omitempty"`
-	Storage                     *ResourceStorage        `json:"storage,omitempty" bson:"storage,omitempty"`
-	StorageAccountRequired      bool                    `json:"storageAccountRequired,omitempty" bson:"storageAccountRequired,omitempty"`
-	StorageID                   string                  `json:"storageId,omitempty" bson:"storageId,omitempty"`
-	StorageProfile              *ResourceStorageProfile `json:"storageProfile,omitempty" bson:"storageProfile,omitempty"`
-	StorageRecoveryDefaultState string                  `json:"storageRecoveryDefaultState,omitempty" bson:"storageRecoveryDefaultState,omitempty"`
+	Sources                     []*AzureResourceSources      `json:"sources,omitempty" bson:"sources,omitempty"`
+	SpotExpirationTime          any                          `json:"spotExpirationTime,omitempty" bson:"spotExpirationTime,omitempty"`
+	SQLEndpoint                 string                       `json:"sqlEndpoint,omitempty" bson:"sqlEndpoint,omitempty"`
+	SQLImageOffer               string                       `json:"sqlImageOffer,omitempty" bson:"sqlImageOffer,omitempty"`
+	SQLImageSku                 string                       `json:"sqlImageSku,omitempty" bson:"sqlImageSku,omitempty"`
+	SQLManagement               string                       `json:"sqlManagement,omitempty" bson:"sqlManagement,omitempty"`
+	SQLServerLicenseType        string                       `json:"sqlServerLicenseType,omitempty" bson:"sqlServerLicenseType,omitempty"`
+	SSHEnabled                  any                          `json:"sshEnabled,omitempty" bson:"sshEnabled,omitempty"`
+	SslCertificates             any                          `json:"sslCertificates,omitempty" bson:"sslCertificates,omitempty"`
+	Stag                        float64                      `json:"stag,omitempty" bson:"stag,omitempty"`
+	StagingResourceGroup        string                       `json:"stagingResourceGroup,omitempty" bson:"stagingResourceGroup,omitempty"`
+	StartTime                   string                       `json:"startTime,omitempty" bson:"startTime,omitempty"`
+	State                       string                       `json:"state,omitempty" bson:"state,omitempty"`
+	StaticIp                    string                       `json:"staticIp,omitempty" bson:"staticIp,omitempty"`
+	Status                      string                       `json:"status,omitempty" bson:"status,omitempty"`
+	StatusOfPrimary             string                       `json:"statusOfPrimary,omitempty" bson:"statusOfPrimary,omitempty"`
+	StatusOfSecondary           string                       `json:"statusOfSecondary,omitempty" bson:"statusOfSecondary,omitempty"`
+	Statuses                    []*AzureResourceStatus       `json:"statuses,omitempty" bson:"statuses,omitempty"`
+	Storage                     *AzureResourceStorage        `json:"storage,omitempty" bson:"storage,omitempty"`
+	StorageAccountRequired      bool                         `json:"storageAccountRequired,omitempty" bson:"storageAccountRequired,omitempty"`
+	StorageID                   string                       `json:"storageId,omitempty" bson:"storageId,omitempty"`
+	StorageProfile              *AzureResourceStorageProfile `json:"storageProfile,omitempty" bson:"storageProfile,omitempty"`
+	StorageRecoveryDefaultState string                       `json:"storageRecoveryDefaultState,omitempty" bson:"storageRecoveryDefaultState,omitempty"`
 	StorageSettings             []struct {
 		DatastoreType string `json:"datastoreType,omitempty" bson:"datastoreType,omitempty"`
 		Type          string `json:"type,omitempty" bson:"type,omitempty"`
 	} `json:"storageSettings,omitempty" bson:"storageSettings,omitempty"`
-	StorageToNetworkProximity string                      `json:"storageToNetworkProximity,omitempty" bson:"storageToNetworkProximity,omitempty"`
-	StorageURI                any                         `json:"storageUri,omitempty" bson:"storageUri,omitempty"`
-	StreamDeclarations        *ResourceStreamDeclarations `json:"streamDeclarations,omitempty" bson:"streamDeclarations,omitempty"`
+	StorageToNetworkProximity string                           `json:"storageToNetworkProximity,omitempty" bson:"storageToNetworkProximity,omitempty"`
+	StorageURI                any                              `json:"storageUri,omitempty" bson:"storageUri,omitempty"`
+	StreamDeclarations        *AzureResourceStreamDeclarations `json:"streamDeclarations,omitempty" bson:"streamDeclarations,omitempty"`
 	Subnet                    *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"subnet,omitempty" bson:"subnet,omitempty"`
-	SubnetID              string            `json:"subnetId,omitempty" bson:"subnetId,omitempty"`
-	Subnets               []ResourceSubnets `json:"subnets,omitempty" bson:"subnets,omitempty"`
-	Subscription          string            `json:"subscription,omitempty" bson:"subscription,omitempty"`
-	SupportPlan           string            `json:"supportPlan,omitempty" bson:"supportPlan,omitempty"`
+	SubnetID              string                 `json:"subnetId,omitempty" bson:"subnetId,omitempty"`
+	Subnets               []AzureResourceSubnets `json:"subnets,omitempty" bson:"subnets,omitempty"`
+	Subscription          string                 `json:"subscription,omitempty" bson:"subscription,omitempty"`
+	SupportPlan           string                 `json:"supportPlan,omitempty" bson:"supportPlan,omitempty"`
 	SupportedCapabilities *struct {
 		AcceleratedNetwork  bool   `json:"acceleratedNetwork,omitempty" bson:"acceleratedNetwork,omitempty"`
 		Architecture        string `json:"architecture,omitempty" bson:"architecture,omitempty"`
 		DiskControllerTypes string `json:"diskControllerTypes,omitempty" bson:"diskControllerTypes,omitempty"`
 	} `json:"supportedCapabilities,omitempty" bson:"supportedCapabilities,omitempty"`
-	SupportsHibernation      bool                          `json:"supportsHibernation,omitempty" bson:"supportsHibernation,omitempty"`
-	SupportsHTTPSTrafficOnly bool                          `json:"supportsHttpsTrafficOnly,omitempty" bson:"supportsHttpsTrafficOnly,omitempty"`
-	SuppressFailures         bool                          `json:"suppressFailures,omitempty" bson:"suppressFailures,omitempty"`
-	SuspendedTill            any                           `json:"suspendedTill,omitempty" bson:"suspendedTill,omitempty"`
-	SystemData               *ResourceSystemData           `json:"systemData,omitempty" bson:"systemData,omitempty"`
-	Tags                     any                           `json:"tags,omitempty" bson:"tags,omitempty"`
-	TapConfigurations        []any                         `json:"tapConfigurations,omitempty" bson:"tapConfigurations,omitempty"`
-	TargetBuildVersion       any                           `json:"targetBuildVersion,omitempty" bson:"targetBuildVersion,omitempty"`
-	TargetResourceGuid       string                        `json:"targetResourceGuid,omitempty" bson:"targetResourceGuid,omitempty"`
-	TargetResourceID         string                        `json:"targetResourceId,omitempty" bson:"targetResourceId,omitempty"`
-	TargetResourceRegion     string                        `json:"targetResourceRegion,omitempty" bson:"targetResourceRegion,omitempty"`
-	TargetResourceType       string                        `json:"targetResourceType,omitempty" bson:"targetResourceType,omitempty"`
-	TargetResourceTypes      []string                      `json:"targetResourceTypes,omitempty" bson:"targetResourceTypes,omitempty"`
-	TargetSwapSlot           any                           `json:"targetSwapSlot,omitempty" bson:"targetSwapSlot,omitempty"`
-	TargetWorkerCount        float64                       `json:"targetWorkerCount,omitempty" bson:"targetWorkerCount,omitempty"`
-	TargetWorkerSizeID       float64                       `json:"targetWorkerSizeId,omitempty" bson:"targetWorkerSizeId,omitempty"`
-	TaskType                 string                        `json:"taskType,omitempty" bson:"taskType,omitempty"`
-	Template                 *ResourceTemplate             `json:"template,omitempty" bson:"template,omitempty"`
-	TenantIDOther            string                        `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
-	TestConfigurations       []*ResourceTestConfigurations `json:"testConfigurations,omitempty" bson:"testConfigurations,omitempty"`
-	TestGroups               []*ResourceTestGroups         `json:"testGroups,omitempty" bson:"testGroups,omitempty"`
+	SupportsHibernation      bool                               `json:"supportsHibernation,omitempty" bson:"supportsHibernation,omitempty"`
+	SupportsHTTPSTrafficOnly bool                               `json:"supportsHttpsTrafficOnly,omitempty" bson:"supportsHttpsTrafficOnly,omitempty"`
+	SuppressFailures         bool                               `json:"suppressFailures,omitempty" bson:"suppressFailures,omitempty"`
+	SuspendedTill            any                                `json:"suspendedTill,omitempty" bson:"suspendedTill,omitempty"`
+	SystemData               *AzureResourceSystemData           `json:"systemData,omitempty" bson:"systemData,omitempty"`
+	Tags                     any                                `json:"tags,omitempty" bson:"tags,omitempty"`
+	TapConfigurations        []any                              `json:"tapConfigurations,omitempty" bson:"tapConfigurations,omitempty"`
+	TargetBuildVersion       any                                `json:"targetBuildVersion,omitempty" bson:"targetBuildVersion,omitempty"`
+	TargetResourceGuid       string                             `json:"targetResourceGuid,omitempty" bson:"targetResourceGuid,omitempty"`
+	TargetResourceID         string                             `json:"targetResourceId,omitempty" bson:"targetResourceId,omitempty"`
+	TargetResourceRegion     string                             `json:"targetResourceRegion,omitempty" bson:"targetResourceRegion,omitempty"`
+	TargetResourceType       string                             `json:"targetResourceType,omitempty" bson:"targetResourceType,omitempty"`
+	TargetResourceTypes      []string                           `json:"targetResourceTypes,omitempty" bson:"targetResourceTypes,omitempty"`
+	TargetSwapSlot           any                                `json:"targetSwapSlot,omitempty" bson:"targetSwapSlot,omitempty"`
+	TargetWorkerCount        float64                            `json:"targetWorkerCount,omitempty" bson:"targetWorkerCount,omitempty"`
+	TargetWorkerSizeID       float64                            `json:"targetWorkerSizeId,omitempty" bson:"targetWorkerSizeId,omitempty"`
+	TaskType                 string                             `json:"taskType,omitempty" bson:"taskType,omitempty"`
+	Template                 *AzureResourceTemplate             `json:"template,omitempty" bson:"template,omitempty"`
+	TenantIDOther            string                             `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
+	TestConfigurations       []*AzureResourceTestConfigurations `json:"testConfigurations,omitempty" bson:"testConfigurations,omitempty"`
+	TestGroups               []*AzureResourceTestGroups         `json:"testGroups,omitempty" bson:"testGroups,omitempty"`
 	TestLinks                []*struct {
 		Method     string `json:"method,omitempty" bson:"method,omitempty"`
 		RequestURI string `json:"requestUri,omitempty" bson:"requestUri,omitempty"`
 	} `json:"testLinks,omitempty" bson:"testLinks,omitempty"`
-	TestRequests            []*ResourceTestRequests    `json:"testRequests,omitempty" bson:"testRequests,omitempty"`
-	ThreatIntelMode         string                     `json:"threatIntelMode,omitempty" bson:"threatIntelMode,omitempty"`
-	ThroughputMibps         float64                    `json:"throughputMibps,omitempty" bson:"throughputMibps,omitempty"`
-	Tier                    string                     `json:"tier,omitempty" bson:"tier,omitempty"`
-	TimeCreated             string                     `json:"timeCreated,omitempty" bson:"timeCreated,omitempty"`
-	TimeModified            string                     `json:"timeModified,omitempty" bson:"timeModified,omitempty"`
-	TimeZoneID              string                     `json:"timeZoneId,omitempty" bson:"timeZoneId,omitempty"`
-	TopicType               string                     `json:"topicType,omitempty" bson:"topicType,omitempty"`
-	TotalThroughputMibps    float64                    `json:"totalThroughputMibps,omitempty" bson:"totalThroughputMibps,omitempty"`
-	TrafficManagerHostNames any                        `json:"trafficManagerHostNames,omitempty" bson:"trafficManagerHostNames,omitempty"`
-	TrafficSelectorPolicies []any                      `json:"trafficSelectorPolicies,omitempty" bson:"trafficSelectorPolicies,omitempty"`
-	TransportSecurity       *ResourceTransportSecurity `json:"transportSecurity,omitempty" bson:"transportSecurity,omitempty"`
-	Type                    string                     `json:"type,omitempty" bson:"type,omitempty"`
-	TypeHandlerVersion      string                     `json:"typeHandlerVersion,omitempty" bson:"typeHandlerVersion,omitempty"`
-	UniqueID                string                     `json:"uniqueId,omitempty" bson:"uniqueId,omitempty"`
-	UniqueIdentifier        string                     `json:"uniqueIdentifier,omitempty" bson:"uniqueIdentifier,omitempty"`
-	UpdatedAt               string                     `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
+	TestRequests            []*AzureResourceTestRequests    `json:"testRequests,omitempty" bson:"testRequests,omitempty"`
+	ThreatIntelMode         string                          `json:"threatIntelMode,omitempty" bson:"threatIntelMode,omitempty"`
+	ThroughputMibps         float64                         `json:"throughputMibps,omitempty" bson:"throughputMibps,omitempty"`
+	Tier                    string                          `json:"tier,omitempty" bson:"tier,omitempty"`
+	TimeCreated             string                          `json:"timeCreated,omitempty" bson:"timeCreated,omitempty"`
+	TimeModified            string                          `json:"timeModified,omitempty" bson:"timeModified,omitempty"`
+	TimeZoneID              string                          `json:"timeZoneId,omitempty" bson:"timeZoneId,omitempty"`
+	TopicType               string                          `json:"topicType,omitempty" bson:"topicType,omitempty"`
+	TotalThroughputMibps    float64                         `json:"totalThroughputMibps,omitempty" bson:"totalThroughputMibps,omitempty"`
+	TrafficManagerHostNames any                             `json:"trafficManagerHostNames,omitempty" bson:"trafficManagerHostNames,omitempty"`
+	TrafficSelectorPolicies []any                           `json:"trafficSelectorPolicies,omitempty" bson:"trafficSelectorPolicies,omitempty"`
+	TransportSecurity       *AzureResourceTransportSecurity `json:"transportSecurity,omitempty" bson:"transportSecurity,omitempty"`
+	Type                    string                          `json:"type,omitempty" bson:"type,omitempty"`
+	TypeHandlerVersion      string                          `json:"typeHandlerVersion,omitempty" bson:"typeHandlerVersion,omitempty"`
+	UniqueID                string                          `json:"uniqueId,omitempty" bson:"uniqueId,omitempty"`
+	UniqueIdentifier        string                          `json:"uniqueIdentifier,omitempty" bson:"uniqueIdentifier,omitempty"`
+	UpdatedAt               string                          `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
 	UpgradePolicy           *struct {
 		Mode string `json:"mode,omitempty" bson:"mode,omitempty"`
 	} `json:"upgradePolicy,omitempty" bson:"upgradePolicy,omitempty"`
@@ -3565,19 +3561,19 @@ type ResourceProperties struct {
 			ForceUpgrade bool `json:"forceUpgrade,omitempty" bson:"forceUpgrade,omitempty"`
 		} `json:"overrideSettings,omitempty" bson:"overrideSettings,omitempty"`
 	} `json:"upgradeSettings,omitempty" bson:"upgradeSettings,omitempty"`
-	UsageState                     string                       `json:"usageState,omitempty" bson:"usageState,omitempty"`
-	UsageThreshold                 float64                      `json:"usageThreshold,omitempty" bson:"usageThreshold,omitempty"`
-	UseContainerLocalhostBindings  any                          `json:"useContainerLocalhostBindings,omitempty" bson:"useContainerLocalhostBindings,omitempty"`
-	UseLocalAzureIpAddress         bool                         `json:"useLocalAzureIpAddress,omitempty" bson:"useLocalAzureIpAddress,omitempty"`
-	UsePolicyBasedTrafficSelectors bool                         `json:"usePolicyBasedTrafficSelectors,omitempty" bson:"usePolicyBasedTrafficSelectors,omitempty"`
-	UseRadiusProxyIPs              bool                         `json:"useRadiusProxyIPs,omitempty" bson:"useRadiusProxyIPs,omitempty"`
-	UserEngagementTracking         string                       `json:"userEngagementTracking,omitempty" bson:"userEngagementTracking,omitempty"`
-	UserID                         string                       `json:"userId,omitempty" bson:"userId,omitempty"`
-	UtilizedThroughputMibps        float64                      `json:"utilizedThroughputMibps,omitempty" bson:"utilizedThroughputMibps,omitempty"`
-	VaultURI                       string                       `json:"vaultUri,omitempty" bson:"vaultUri,omitempty"`
-	VerificationRecords            *ResourceVerificationRecords `json:"verificationRecords,omitempty" bson:"verificationRecords,omitempty"`
-	VerificationStates             *ResourceVerificationStates  `json:"verificationStates,omitempty" bson:"verificationStates,omitempty"`
-	Version                        string                       `json:"version,omitempty" bson:"version,omitempty"`
+	UsageState                     string                            `json:"usageState,omitempty" bson:"usageState,omitempty"`
+	UsageThreshold                 float64                           `json:"usageThreshold,omitempty" bson:"usageThreshold,omitempty"`
+	UseContainerLocalhostBindings  any                               `json:"useContainerLocalhostBindings,omitempty" bson:"useContainerLocalhostBindings,omitempty"`
+	UseLocalAzureIpAddress         bool                              `json:"useLocalAzureIpAddress,omitempty" bson:"useLocalAzureIpAddress,omitempty"`
+	UsePolicyBasedTrafficSelectors bool                              `json:"usePolicyBasedTrafficSelectors,omitempty" bson:"usePolicyBasedTrafficSelectors,omitempty"`
+	UseRadiusProxyIPs              bool                              `json:"useRadiusProxyIPs,omitempty" bson:"useRadiusProxyIPs,omitempty"`
+	UserEngagementTracking         string                            `json:"userEngagementTracking,omitempty" bson:"userEngagementTracking,omitempty"`
+	UserID                         string                            `json:"userId,omitempty" bson:"userId,omitempty"`
+	UtilizedThroughputMibps        float64                           `json:"utilizedThroughputMibps,omitempty" bson:"utilizedThroughputMibps,omitempty"`
+	VaultURI                       string                            `json:"vaultUri,omitempty" bson:"vaultUri,omitempty"`
+	VerificationRecords            *AzureResourceVerificationRecords `json:"verificationRecords,omitempty" bson:"verificationRecords,omitempty"`
+	VerificationStates             *AzureResourceVerificationStates  `json:"verificationStates,omitempty" bson:"verificationStates,omitempty"`
+	Version                        string                            `json:"version,omitempty" bson:"version,omitempty"`
 	VirtualHub                     *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"virtualHub,omitempty" bson:"virtualHub,omitempty"`
@@ -3588,8 +3584,8 @@ type ResourceProperties struct {
 	VirtualMachine *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"virtualMachine,omitempty" bson:"virtualMachine,omitempty"`
-	VirtualMachineProfile    *ResourceVirtualMachineProfile `json:"virtualMachineProfile,omitempty" bson:"virtualMachineProfile,omitempty"`
-	VirtualMachineResourceID string                         `json:"virtualMachineResourceId,omitempty" bson:"virtualMachineResourceId,omitempty"`
+	VirtualMachineProfile    *AzureResourceVirtualMachineProfile `json:"virtualMachineProfile,omitempty" bson:"virtualMachineProfile,omitempty"`
+	VirtualMachineResourceID string                              `json:"virtualMachineResourceId,omitempty" bson:"virtualMachineResourceId,omitempty"`
 	VirtualMachines          []struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"virtualMachines,omitempty" bson:"virtualMachines,omitempty"`
@@ -3604,9 +3600,9 @@ type ResourceProperties struct {
 		Phase        string `json:"phase,omitempty" bson:"phase,omitempty"`
 		State        string `json:"state,omitempty" bson:"state,omitempty"`
 	} `json:"virtualNetworkGatewayMigrationStatus,omitempty" bson:"virtualNetworkGatewayMigrationStatus,omitempty"`
-	VirtualNetworkGatewayPolicyGroups []any                            `json:"virtualNetworkGatewayPolicyGroups,omitempty" bson:"virtualNetworkGatewayPolicyGroups,omitempty"`
-	VirtualNetworkLinkState           string                           `json:"virtualNetworkLinkState,omitempty" bson:"virtualNetworkLinkState,omitempty"`
-	VirtualNetworkPeerings            []*ResourceVirtualNetworkPeering `json:"virtualNetworkPeerings,omitempty" bson:"virtualNetworkPeerings,omitempty"`
+	VirtualNetworkGatewayPolicyGroups []any                                 `json:"virtualNetworkGatewayPolicyGroups,omitempty" bson:"virtualNetworkGatewayPolicyGroups,omitempty"`
+	VirtualNetworkLinkState           string                                `json:"virtualNetworkLinkState,omitempty" bson:"virtualNetworkLinkState,omitempty"`
+	VirtualNetworkPeerings            []*AzureResourceVirtualNetworkPeering `json:"virtualNetworkPeerings,omitempty" bson:"virtualNetworkPeerings,omitempty"`
 	VirtualNetworkRules               []struct {
 		ID                               string `json:"id,omitempty" bson:"id,omitempty"`
 		IgnoreMissingVNetServiceEndpoint bool   `json:"ignoreMissingVNetServiceEndpoint,omitempty" bson:"ignoreMissingVNetServiceEndpoint,omitempty"`
@@ -3626,22 +3622,22 @@ type ResourceProperties struct {
 		OSDiskSizeGb float64 `json:"osDiskSizeGB,omitempty" bson:"osDiskSizeGB,omitempty"`
 		VmSize       string  `json:"vmSize,omitempty" bson:"vmSize,omitempty"`
 	} `json:"vmProfile,omitempty" bson:"vmProfile,omitempty"`
-	VnetBackupRestoreEnabled     bool                           `json:"vnetBackupRestoreEnabled,omitempty" bson:"vnetBackupRestoreEnabled,omitempty"`
-	VnetConfiguration            *ResourceVnetConfiguration     `json:"vnetConfiguration,omitempty" bson:"vnetConfiguration,omitempty"`
-	VnetConnectionsMax           float64                        `json:"vnetConnectionsMax,omitempty" bson:"vnetConnectionsMax,omitempty"`
-	VnetConnectionsUsed          float64                        `json:"vnetConnectionsUsed,omitempty" bson:"vnetConnectionsUsed,omitempty"`
-	VnetContentShareEnabled      bool                           `json:"vnetContentShareEnabled,omitempty" bson:"vnetContentShareEnabled,omitempty"`
-	VnetEncryptionSupported      bool                           `json:"vnetEncryptionSupported,omitempty" bson:"vnetEncryptionSupported,omitempty"`
-	VnetImagePullEnabled         bool                           `json:"vnetImagePullEnabled,omitempty" bson:"vnetImagePullEnabled,omitempty"`
-	VnetRouteAllEnabled          bool                           `json:"vnetRouteAllEnabled,omitempty" bson:"vnetRouteAllEnabled,omitempty"`
-	VoiceReceivers               []any                          `json:"voiceReceivers,omitempty" bson:"voiceReceivers,omitempty"`
-	VolumeBackups                []ResourceVolumeBackups        `json:"volumeBackups,omitempty" bson:"volumeBackups,omitempty"`
-	VolumeSpecName               string                         `json:"volumeSpecName,omitempty" bson:"volumeSpecName,omitempty"`
-	VolumeType                   string                         `json:"volumeType,omitempty" bson:"volumeType,omitempty"`
-	VolumesAssigned              float64                        `json:"volumesAssigned,omitempty" bson:"volumesAssigned,omitempty"`
-	VpnAuthenticationTypes       []string                       `json:"vpnAuthenticationTypes,omitempty" bson:"vpnAuthenticationTypes,omitempty"`
-	VpnClientIpsecPolicies       []ResourceVpnClientIpsecPolicy `json:"vpnClientIpsecPolicies,omitempty" bson:"vpnClientIpsecPolicies,omitempty"`
-	VpnClientRevokedCertificates []any                          `json:"vpnClientRevokedCertificates,omitempty" bson:"vpnClientRevokedCertificates,omitempty"`
+	VnetBackupRestoreEnabled     bool                                `json:"vnetBackupRestoreEnabled,omitempty" bson:"vnetBackupRestoreEnabled,omitempty"`
+	VnetConfiguration            *AzureResourceVnetConfiguration     `json:"vnetConfiguration,omitempty" bson:"vnetConfiguration,omitempty"`
+	VnetConnectionsMax           float64                             `json:"vnetConnectionsMax,omitempty" bson:"vnetConnectionsMax,omitempty"`
+	VnetConnectionsUsed          float64                             `json:"vnetConnectionsUsed,omitempty" bson:"vnetConnectionsUsed,omitempty"`
+	VnetContentShareEnabled      bool                                `json:"vnetContentShareEnabled,omitempty" bson:"vnetContentShareEnabled,omitempty"`
+	VnetEncryptionSupported      bool                                `json:"vnetEncryptionSupported,omitempty" bson:"vnetEncryptionSupported,omitempty"`
+	VnetImagePullEnabled         bool                                `json:"vnetImagePullEnabled,omitempty" bson:"vnetImagePullEnabled,omitempty"`
+	VnetRouteAllEnabled          bool                                `json:"vnetRouteAllEnabled,omitempty" bson:"vnetRouteAllEnabled,omitempty"`
+	VoiceReceivers               []any                               `json:"voiceReceivers,omitempty" bson:"voiceReceivers,omitempty"`
+	VolumeBackups                []AzureResourceVolumeBackups        `json:"volumeBackups,omitempty" bson:"volumeBackups,omitempty"`
+	VolumeSpecName               string                              `json:"volumeSpecName,omitempty" bson:"volumeSpecName,omitempty"`
+	VolumeType                   string                              `json:"volumeType,omitempty" bson:"volumeType,omitempty"`
+	VolumesAssigned              float64                             `json:"volumesAssigned,omitempty" bson:"volumesAssigned,omitempty"`
+	VpnAuthenticationTypes       []string                            `json:"vpnAuthenticationTypes,omitempty" bson:"vpnAuthenticationTypes,omitempty"`
+	VpnClientIpsecPolicies       []AzureResourceVpnClientIpsecPolicy `json:"vpnClientIpsecPolicies,omitempty" bson:"vpnClientIpsecPolicies,omitempty"`
+	VpnClientRevokedCertificates []any                               `json:"vpnClientRevokedCertificates,omitempty" bson:"vpnClientRevokedCertificates,omitempty"`
 	VpnClientRootCertificates    []struct {
 		Name           string `json:"name,omitempty" bson:"name,omitempty"`
 		PublicCertData string `json:"publicCertData,omitempty" bson:"publicCertData,omitempty"`
@@ -3653,72 +3649,118 @@ type ResourceProperties struct {
 	VpnServerConfiguration *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"vpnServerConfiguration,omitempty" bson:"vpnServerConfiguration,omitempty"`
-	VpnServerConfigurationLocation string                     `json:"vpnServerConfigurationLocation,omitempty" bson:"vpnServerConfigurationLocation,omitempty"`
-	VpnType                        string                     `json:"vpnType,omitempty" bson:"vpnType,omitempty"`
-	WebSiteID                      any                        `json:"webSiteId,omitempty" bson:"webSiteId,omitempty"`
-	WebSpace                       string                     `json:"webSpace,omitempty" bson:"webSpace,omitempty"`
-	WebhookReceivers               []ResourceWebhookReceivers `json:"webhookReceivers,omitempty" bson:"webhookReceivers,omitempty"`
-	WeeklyBackupsToKeep            float64                    `json:"weeklyBackupsToKeep,omitempty" bson:"weeklyBackupsToKeep,omitempty"`
-	WeeklySchedule                 *ResourceWeeklySchedule    `json:"weeklySchedule,omitempty" bson:"weeklySchedule,omitempty"`
-	WindowSize                     string                     `json:"windowSize,omitempty" bson:"windowSize,omitempty"`
+	VpnServerConfigurationLocation string                          `json:"vpnServerConfigurationLocation,omitempty" bson:"vpnServerConfigurationLocation,omitempty"`
+	VpnType                        string                          `json:"vpnType,omitempty" bson:"vpnType,omitempty"`
+	WebSiteID                      any                             `json:"webSiteId,omitempty" bson:"webSiteId,omitempty"`
+	WebSpace                       string                          `json:"webSpace,omitempty" bson:"webSpace,omitempty"`
+	WebhookReceivers               []AzureResourceWebhookReceivers `json:"webhookReceivers,omitempty" bson:"webhookReceivers,omitempty"`
+	WeeklyBackupsToKeep            float64                         `json:"weeklyBackupsToKeep,omitempty" bson:"weeklyBackupsToKeep,omitempty"`
+	WeeklySchedule                 *AzureResourceWeeklySchedule    `json:"weeklySchedule,omitempty" bson:"weeklySchedule,omitempty"`
+	WindowSize                     string                          `json:"windowSize,omitempty" bson:"windowSize,omitempty"`
 	WindowsProfile                 *struct {
 		AdminUsername  string `json:"adminUsername,omitempty" bson:"adminUsername,omitempty"`
 		EnableCsiProxy bool   `json:"enableCSIProxy,omitempty" bson:"enableCSIProxy,omitempty"`
 	} `json:"windowsProfile,omitempty" bson:"windowsProfile,omitempty"`
-	WorkbookTemplates         []ResourceWorkbookTemplate `json:"workbookTemplates,omitempty" bson:"workbookTemplates,omitempty"`
-	WorkerSize                string                     `json:"workerSize,omitempty" bson:"workerSize,omitempty"`
-	WorkerSizeID              float64                    `json:"workerSizeId,omitempty" bson:"workerSizeId,omitempty"`
-	WorkerTierName            any                        `json:"workerTierName,omitempty" bson:"workerTierName,omitempty"`
-	WorkloadAutoScalerProfile *struct{}                  `json:"workloadAutoScalerProfile,omitempty" bson:"workloadAutoScalerProfile,omitempty"`
-	WorkloadProfileName       *string                    `json:"workloadProfileName,omitempty" bson:"workloadProfileName,omitempty"`
+	WorkbookTemplates         []AzureResourceWorkbookTemplate `json:"workbookTemplates,omitempty" bson:"workbookTemplates,omitempty"`
+	WorkerSize                string                          `json:"workerSize,omitempty" bson:"workerSize,omitempty"`
+	WorkerSizeID              float64                         `json:"workerSizeId,omitempty" bson:"workerSizeId,omitempty"`
+	WorkerTierName            any                             `json:"workerTierName,omitempty" bson:"workerTierName,omitempty"`
+	WorkloadAutoScalerProfile *struct{}                       `json:"workloadAutoScalerProfile,omitempty" bson:"workloadAutoScalerProfile,omitempty"`
+	WorkloadProfileName       *string                         `json:"workloadProfileName,omitempty" bson:"workloadProfileName,omitempty"`
 	WorkloadProfiles          []struct {
 		Name                string `json:"name,omitempty" bson:"name,omitempty"`
 		WorkloadProfileType string `json:"workloadProfileType,omitempty" bson:"workloadProfileType,omitempty"`
 	} `json:"workloadProfiles,omitempty" bson:"workloadProfiles,omitempty"`
-	WorkspaceCapping         *ResourceWorkspaceCapping `json:"workspaceCapping,omitempty" bson:"workspaceCapping,omitempty"`
-	WorkspaceResourceIDOther string                    `json:"workspaceResourceId,omitempty" bson:"workspaceResourceId,omitempty"`
-	WriteLocations           []*ResourceWriteLocations `json:"writeLocations,omitempty" bson:"writeLocations,omitempty"`
-	ZoneRedundancy           string                    `json:"zoneRedundancy,omitempty" bson:"zoneRedundancy,omitempty"`
-	ZoneRedundant            bool                      `json:"zoneRedundant,omitempty" bson:"zoneRedundant,omitempty"`
-	ZoneType                 string                    `json:"zoneType,omitempty" bson:"zoneType,omitempty"`
+	WorkspaceCapping         *AzureResourceWorkspaceCapping `json:"workspaceCapping,omitempty" bson:"workspaceCapping,omitempty"`
+	WorkspaceResourceIDOther string                         `json:"workspaceResourceId,omitempty" bson:"workspaceResourceId,omitempty"`
+	WriteLocations           []*AzureResourceWriteLocations `json:"writeLocations,omitempty" bson:"writeLocations,omitempty"`
+	ZoneRedundancy           string                         `json:"zoneRedundancy,omitempty" bson:"zoneRedundancy,omitempty"`
+	ZoneRedundant            bool                           `json:"zoneRedundant,omitempty" bson:"zoneRedundant,omitempty"`
+	ZoneType                 string                         `json:"zoneType,omitempty" bson:"zoneType,omitempty"`
 }
 
-type ResourceSku struct {
-	Capacity float64 `json:"capacity,omitempty" bson:"capacity,omitempty"`
-	Family   string  `json:"family,omitempty" bson:"family,omitempty"`
-	Name     string  `json:"name,omitempty" bson:"name,omitempty"`
-	Size     string  `json:"size,omitempty" bson:"size,omitempty"`
-	Tier     string  `json:"tier,omitempty" bson:"tier,omitempty"`
+type AzureVirtualMachineSku struct {
+	LocationInfo []struct {
+		Location string   `json:"location,omitempty"`
+		Zones    []string `json:"zones,omitempty"`
+	} `json:"locationInfo,omitempty"`
+	Locations                                    []string  `json:"locations,omitempty"`
+	Name                                         string    `json:"name,omitempty"`
+	ResourceType                                 string    `json:"resourceType,omitempty"`
+	Size                                         string    `json:"size,omitempty"`
+	Tier                                         string    `json:"tier,omitempty"`
+	MaxResourceVolumeMB                          string    `json:"maxResourceVolumeMB,omitempty"`
+	OSVhdSizeMB                                  string    `json:"oSVhdSizeMB,omitempty"`
+	VCPUs                                        string    `json:"vCPUs,omitempty"`
+	MemoryPreservingMaintenanceSupported         string    `json:"memoryPreservingMaintenanceSupported,omitempty"`
+	HyperVGenerations                            string    `json:"hyperVGenerations,omitempty"`
+	MemoryGB                                     string    `json:"memoryGB,omitempty"`
+	MaxDataDiskCount                             string    `json:"maxDataDiskCount,omitempty"`
+	CpuArchitectureType                          string    `json:"cpuArchitectureType,omitempty"`
+	LowPriorityCapable                           string    `json:"lowPriorityCapable,omitempty"`
+	PremiumIO                                    string    `json:"premiumIO,omitempty"`
+	VMDeploymentTypes                            string    `json:"vMDeploymentTypes,omitempty"`
+	VCPUsAvailable                               string    `json:"vCPUsAvailable,omitempty"`
+	ACUs                                         string    `json:"acus,omitempty"`
+	VCPUsPerCore                                 string    `json:"vCPUsPerCore,omitempty"`
+	CombinedTempDiskAndCachedIOPS                string    `json:"combinedTempDiskAndCachedIOPS,omitempty"`
+	CombinedTempDiskAndCachedReadBytesPerSecond  string    `json:"combinedTempDiskAndCachedReadBytesPerSecond,omitempty"`
+	CombinedTempDiskAndCachedWriteBytesPerSecond string    `json:"combinedTempDiskAndCachedWriteBytesPerSecond,omitempty"`
+	UncachedDiskIOPS                             string    `json:"uncachedDiskIOPS,omitempty"`
+	UncachedDiskBytesPerSecond                   string    `json:"uncachedDiskBytesPerSecond,omitempty"`
+	EphemeralOSDiskSupported                     string    `json:"ephemeralOSDiskSupported,omitempty"`
+	EncryptionAtHostSupported                    string    `json:"encryptionAtHostSupported,omitempty"`
+	CapacityReservationSupported                 string    `json:"capacityReservationSupported,omitempty"`
+	AcceleratedNetworkingEnabled                 string    `json:"acceleratedNetworkingEnabled,omitempty"`
+	RdmaEnabled                                  string    `json:"rdmaEnabled,omitempty"`
+	MaxNetworkInterfaces                         string    `json:"maxNetworkInterfaces,omitempty"`
+	Cores                                        string    `json:"cores,omitempty"`
+	SupportsAutoplacement                        string    `json:"supportsAutoplacement,omitempty"`
+	LastAzureSync                                time.Time `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty"`
+	LastDBSync                                   time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
 }
 
-type ResourceDetails struct {
-	ResourceId                string                          `json:"resourceId,omitempty" bson:"resourceId,omitempty"`
+// type AzureResourceSku struct {
+// 	Capacity float64 `json:"capacity,omitempty" bson:"capacity,omitempty"`
+// 	Family   string  `json:"family,omitempty" bson:"family,omitempty"`
+// 	Name     string  `json:"name,omitempty" bson:"name,omitempty"`
+// 	Size     string  `json:"size,omitempty" bson:"size,omitempty"`
+// 	Tier     string  `json:"tier,omitempty" bson:"tier,omitempty"`
+// }
+
+type AzureResourceDetails struct {
+	CostData                  map[string][]AggregatedCostItem `json:"costData,omitempty" bson:"costData,omitempty" fake:"-"`
+	ExistsInAzure             bool                            `json:"existsInAzure,omitempty" bson:"existsInAzure,omitempty"`
 	ExtendedLocation          any                             `json:"extendedLocation,omitempty" bson:"extendedLocation,omitempty"`
-	ID                        string                          `json:"id,omitempty" bson:"_id,omitempty"`
-	Identity                  *ResourceIdentity               `json:"identity,omitempty" bson:"identity,omitempty"`
+	ID                        string                          `json:"id,omitempty" bson:"_id,omitempty" fake:"{uuid}"`
+	Identity                  *AzureResourceIdentity          `json:"identity,omitempty" bson:"identity,omitempty" fake:"-"`
+	IsSqlRelated              bool                            `json:"isSqlRelated,omitempty" bson:"isSqlRelated,omitempty" fake:"{bool}"`
 	Kind                      string                          `json:"kind,omitempty" bson:"kind,omitempty"`
-	Location                  string                          `json:"location,omitempty" bson:"location,omitempty"`
-	ManagedBy                 string                          `json:"managedBy,omitempty" bson:"managedBy,omitempty"`
-	Name                      string                          `json:"name,omitempty" bson:"name,omitempty"`
-	Plan                      *ResourcePlan                   `json:"plan,omitempty" bson:"plan,omitempty"`
-	Properties                *ResourceProperties             `json:"properties,omitempty" bson:"properties,omitempty"`
-	ResourceGroup             string                          `json:"resourceGroup,omitempty" bson:"resourceGroup,omitempty"`
-	Sku                       *ResourceSku                    `json:"sku,omitempty" bson:"sku,omitempty"`
-	SubscriptionID            string                          `json:"subscriptionId,omitempty" bson:"subscriptionId,omitempty"`
-	SubscriptionName          string                          `json:"subscriptionName,omitempty" bson:"subscriptionName,omitempty"`
-	Tags                      map[string]string               `json:"tags,omitempty" bson:"tags,omitempty"`
-	TenantID                  string                          `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
-	TenantName                string                          `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
-	Type                      string                          `json:"type,omitempty" bson:"type,omitempty"`
-	Zones                     []string                        `json:"zones,omitempty" bson:"zones,omitempty"`
-	RelatedResources          []string                        `json:"relatedResources,omitempty" bson:"relatedResources,omitempty"`
-	RelatedResourcesExpanded  []ResourceDetails               `json:"relatedResourcesExpanded,omitempty" bson:"relatedResourcesExpanded,omitempty"`
-	RelatedCostMeters         []string                        `json:"relatedCostMeters,omitempty" bson:"relatedCostMeters,omitempty"`
-	RelatedCostMetersExpanded []MongoDbCostMeter              `json:"relatedCostMetersExpanded,omitempty" bson:"relatedCostMetersExpanded,omitempty"`
-	CostData                  map[string][]AggregatedCostItem `json:"costData,omitempty" bson:"costData,omitempty"`
+	LastAzureSync             time.Time                       `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty" fake:"-"`
+	LastDBSync                time.Time                       `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty" fake:"-"`
+	Location                  string                          `json:"location,omitempty" bson:"location,omitempty" fake:"-"`
+	ManagedBy                 string                          `json:"managedBy,omitempty" bson:"managedBy,omitempty" fake:"-"`
+	Name                      string                          `json:"name,omitempty" bson:"name,omitempty" fake:"{username}"`
+	Plan                      *AzureResourcePlan              `json:"plan,omitempty" bson:"plan,omitempty" fake:"-"`
+	Properties                *AzureResourceProperties        `json:"properties,omitempty" bson:"properties,omitempty"`
+	RelatedCostMeters         []string                        `json:"relatedCostMeters,omitempty" bson:"relatedCostMeters,omitempty" fake:"-"`
+	RelatedCostMetersExpanded []MongoDbCostMeter              `json:"relatedCostMetersExpanded,omitempty" bson:"relatedCostMetersExpanded,omitempty" fake:"-"`
+	RelatedResources          []string                        `json:"relatedResources,omitempty" bson:"relatedResources,omitempty" fake:"-"`
+	RelatedResourcesExpanded  []AzureResourceDetails          `json:"relatedResourcesExpanded,omitempty" bson:"relatedResourcesExpanded,omitempty" fake:"-"`
+	ResourceGroup             string                          `json:"resourceGroup,omitempty" bson:"resourceGroup,omitempty" fake:"{username}"`
+	ResourceId                string                          `json:"resourceId,omitempty" bson:"resourceId,omitempty" fake:"{uuid}"`
+	Sku                       *AzureResourceSku               `json:"sku,omitempty" bson:"sku,omitempty" fake:"-"`
+	SubscriptionID            string                          `json:"subscriptionId,omitempty" bson:"subscriptionId,omitempty fake:"{uuid}"`
+	SubscriptionName          string                          `json:"subscriptionName,omitempty" bson:"subscriptionName,omitempty" fake:"{username}"`
+	Tags                      map[string]string               `json:"tags,omitempty" bson:"tags,omitempty" fake:"-"`
+	TenantID                  string                          `json:"tenantId,omitempty" bson:"tenantId,omitempty" fake:"{uuid}"`
+	TenantName                string                          `json:"tenantName,omitempty" bson:"tenantName,omitempty" fake:"{username}"`
+	Type                      string                          `json:"type,omitempty" bson:"type,omitempty" fake:"{username}"`
+	WindowsType               string                          `json:"windowsType,omitempty" bson:"windowsType,omitempty" fake:"{randomstring:[desktop,server]}"`
+	Zones                     []string                        `json:"zones,omitempty" bson:"zones,omitempty" fake:"-"`
 }
 
-// type ResourceDetailsWithCosting struct {
+// type AzureResourceDetailsWithCosting struct {
 // 	ResourceDetails
 // 	MeterData                  []AggregatedCostItem
 // 	RelatedResources           []string
@@ -3727,11 +3769,11 @@ type ResourceDetails struct {
 // 	// MeterData Aggre
 // }
 
-type AzureResourceSKUsResp struct {
-	Value []AzureResourceSKU `json:"value" bson:"value"`
+type AzureResourceSkuResp struct {
+	Value []AzureResourceSku `json:"value" bson:"value"`
 }
 
-type AzureResourceSKU struct {
+type AzureResourceSku struct {
 	Capabilities []*struct {
 		Name  string `json:"name,omitempty" bson:"name,omitempty"`
 		Value string `json:"value,omitempty" bson:"value,omitempty"`
@@ -3759,8 +3801,13 @@ type AzureResourceSKU struct {
 		Type   string   `json:"type,omitempty" bson:"type,omitempty"`
 		Values []string `json:"values,omitempty" bson:"values,omitempty"`
 	} `json:"restrictions,omitempty" bson:"restrictions,omitempty"`
-	Size string `json:"size,omitempty" bson:"size,omitempty"`
-	Tier string `json:"tier,omitempty" bson:"tier,omitempty"`
+	Size           string    `json:"size,omitempty" bson:"size,omitempty"`
+	Tier           string    `json:"tier,omitempty" bson:"tier,omitempty"`
+	VMvCPUs        int       `json:"vMvCPUs,omitempty" bson:"vMvCPUs,omitempty"`
+	VMCores        int       `json:"vMCores,omitempty" bson:"vMCores,omitempty"`
+	VMvCPUsPerCore int       `json:"vMvCPUsPerCore,omitempty" bson:"vMvCPUsPerCore,omitempty"`
+	LastAzureSync  time.Time `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty"`
+	LastDBSync     time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
 }
 
 type AzureVirtualMachineSize struct {

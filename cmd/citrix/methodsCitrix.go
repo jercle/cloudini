@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package citrix
 
 import (
@@ -17,8 +14,8 @@ func (machineCatalogs *MachineCatalogs) ListImageVersions() map[string]MachineCa
 		if mc.ProvisioningScheme.CurrentDiskImage == nil {
 			preparedImageVersion := strconv.Itoa(mc.ProvisioningScheme.CurrentImageVersion.ImageVersion.Number)
 			currImg.IsPreparedImage = true
-			currImg.PreparedImageName = &mc.ProvisioningScheme.CurrentImageVersion.ImageVersion.ImageDefinition.Name
-			currImg.PreparedImageVersion = &preparedImageVersion
+			currImg.PreparedImageName = mc.ProvisioningScheme.CurrentImageVersion.ImageVersion.ImageDefinition.Name
+			currImg.PreparedImageVersion = preparedImageVersion
 		}
 
 		XdPath := strings.Split(mc.ProvisioningScheme.MasterImage.XdPath, "\\")
@@ -34,6 +31,8 @@ func (machineCatalogs *MachineCatalogs) ListImageVersions() map[string]MachineCa
 				currImg.Version = strings.Split(str, ".imageversion")[0]
 			}
 		}
+
+		currImg.LastCitrixSync = mc.LastCitrixSync
 
 		mcats[mc.Name] = currImg
 	}

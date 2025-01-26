@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package azure
 
 import (
@@ -151,7 +148,7 @@ func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.AzureMulti
 	switch spDetails.Scope {
 	case "graph":
 		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
-	// case "apc-sharepoint":
+	// case "-sharepoint":
 	// 	tokenRequestOptions.Scopes = []string{"https://asiogovau.sharepoint.com/.default"}
 	case "storage":
 		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
@@ -330,39 +327,48 @@ func GetAllTenantSPTokens(options lib.AzureMultiAuthTokenRequestOptions, cldConf
 
 	config = lib.GetCldConfig(cldConfOpts)
 
-	for _, tenant := range config.Azure.MultiTenantAuth.Tenants {
+	azConfig := *config.Azure
+	tenants := azConfig.MultiTenantAuth.Tenants
+
+	for _, tenant := range tenants {
 		wg.Add(1)
 		go func() {
-
-			options.ClientID = tenant.Writer.ClientID
-			options.ClientSecret = tenant.Writer.ClientSecret
+			var (
+				writerConfig lib.CldConfigClientAuthDetails
+				readerConfig lib.CldConfigClientAuthDetails
+			)
+			configExists := false
 			options.TenantName = tenant.TenantName
 
 			switch options.GetWriteToken {
 			case true:
-				options.ClientID = tenant.Writer.ClientID
-				options.ClientSecret = tenant.Writer.ClientSecret
+				if tenant.Writer != nil {
+					writerConfig = *tenant.Writer
+					options.ClientID = writerConfig.ClientID
+					options.ClientSecret = writerConfig.ClientSecret
+					configExists = true
+				}
 			default:
-				options.ClientID = tenant.Reader.ClientID
-				options.ClientSecret = tenant.Reader.ClientSecret
+				if tenant.Reader != nil {
+					readerConfig = *tenant.Reader
+					options.ClientID = readerConfig.ClientID
+					options.ClientSecret = readerConfig.ClientSecret
+					configExists = true
+				}
 			}
+			if configExists {
+				tokenData, err := GetServicePrincipalToken(tenant.TenantID, options, cldConfOpts)
+				lib.CheckFatalError(err)
 
-			// jsonStr, _ := json.MarshalIndent(cldConfOpts, "", "  ")
-			// fmt.Println(string(jsonStr))
-			// fmt.Println(tenant.TenantID)
-			// os.Exit(0)
-			tokenData, err := GetServicePrincipalToken(tenant.TenantID, options, cldConfOpts)
-			lib.CheckFatalError(err)
-
-			tenantToken := lib.AzureMultiAuthToken{
-				TenantId:   tenant.TenantID,
-				TenantName: tenant.TenantName,
-				TokenData:  *tokenData,
+				tenantToken := lib.AzureMultiAuthToken{
+					TenantId:   tenant.TenantID,
+					TenantName: tenant.TenantName,
+					TokenData:  *tokenData,
+				}
+				mut.Lock()
+				tenantTokens = append(tenantTokens, tenantToken)
+				mut.Unlock()
 			}
-			mut.Lock()
-			tenantTokens = append(tenantTokens, tenantToken)
-			mut.Unlock()
-			// fmt.Println("Obtained token for " + tenant.TenantName)
 			wg.Done()
 		}()
 	}
@@ -414,7 +420,7 @@ func GetTenantSPToken(options lib.AzureMultiAuthTokenRequestOptions, cldConfOpts
 	return &tenantToken, nil
 }
 
-func GetTenantAzCred(tenantName string, getWriteToken bool, cldConfOpts *lib.CldConfigOptions) *azidentity.ClientSecretCredential {
+func GetTenantAzCred(tenantName string, getWriteToken bool, cldConfOpts *lib.CldConfigOptions) (*azidentity.ClientSecretCredential, error) {
 	var (
 		cred *azidentity.ClientSecretCredential
 		err  error
@@ -424,13 +430,19 @@ func GetTenantAzCred(tenantName string, getWriteToken bool, cldConfOpts *lib.Cld
 
 	if getWriteToken {
 		cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Writer.ClientID, tenant.Writer.ClientSecret, nil)
-		lib.CheckFatalError(err)
+		// lib.CheckFatalError(err)
+		if err != nil {
+			return nil, err
+		}
 	} else {
 		cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Reader.ClientID, tenant.Reader.ClientSecret, nil)
-		lib.CheckFatalError(err)
+		// lib.CheckFatalError(err)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	return cred
+	return cred, nil
 }
 
 // envUpp := strings.ToUpper(env)

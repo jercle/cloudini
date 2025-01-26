@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package lib
 
 import "time"
@@ -104,6 +101,7 @@ type MongoDbCostTenant struct {
 	Subscriptions     map[string]MongoDbCostSubscription `json:"subscriptions,omitempty"  bson:"subscriptions,omitempty"`
 	CostGroups        map[string]string                  `json:"costGroups,omitempty"  bson:"costGroups,omitempty"`
 	RelatedCostMeters []string                           `json:"relatedCostMeters,omitempty"  bson:"relatedCostMeters,omitempty"`
+	LastDBSync        time.Time                          `json:"lastDatabaseSync,omitempty"  bson:"lastDatabaseSync,omitempty"`
 }
 
 type MongoDbCostSubscription struct {
@@ -116,6 +114,7 @@ type MongoDbCostSubscription struct {
 	ResourceGroups    map[string]MongoDbCostResourceGroup `json:"resourceGroups,omitempty"  bson:"resourceGroups,omitempty"`
 	CostGroups        map[string]string                   `json:"costGroups,omitempty"  bson:"costGroups,omitempty"`
 	RelatedCostMeters []string                            `json:"relatedCostMeters,omitempty"  bson:"relatedCostMeters,omitempty"`
+	LastDBSync        time.Time                           `json:"lastDatabaseSync,omitempty"  bson:"lastDatabaseSync,omitempty"`
 }
 
 type MongoDbCostResourceGroup struct {
@@ -129,6 +128,7 @@ type MongoDbCostResourceGroup struct {
 	LifetimeTotalCost float64                    `json:"lifetimeTotalCost,omitempty"  bson:"lifetimeTotalCost,omitempty"`
 	CostGroups        map[string]string          `json:"costGroups,omitempty"  bson:"costGroups,omitempty"`
 	RelatedCostMeters []string                   `json:"relatedCostMeters,omitempty"  bson:"relatedCostMeters,omitempty"`
+	LastDBSync        time.Time                  `json:"lastDatabaseSync,omitempty"  bson:"lastDatabaseSync,omitempty"`
 }
 
 type MongoDbCostResource struct {
@@ -144,6 +144,7 @@ type MongoDbCostResource struct {
 	LifetimeTotalCost float64                    `json:"lifetimeTotalCost,omitempty"  bson:"lifetimeTotalCost,omitempty"`
 	CostGroups        map[string]string          `json:"costGroups,omitempty"  bson:"costGroups,omitempty"`
 	RelatedCostMeters []string                   `json:"relatedCostMeters,omitempty"  bson:"relatedCostMeters,omitempty"`
+	LastDBSync        time.Time                  `json:"lastDatabaseSync,omitempty"  bson:"lastDatabaseSync,omitempty"`
 }
 
 type MongoDbCostMeter struct {
@@ -169,6 +170,7 @@ type MongoDbCostMeter struct {
 	ResourceType            string                     `csv:"ResourceType" json:"resourceType,omitempty"  bson:"resourceType,omitempty"`
 	InstanceId              string                     `csv:"InstanceId" json:"instanceId,omitempty"  bson:"instanceId,omitempty"`
 	AdditionalInfo          interface{}                `csv:"AdditionalInfo,omitempty" json:"additionalInfo,omitempty"  bson:"additionalInfo,omitempty"`
+	LastDBSync              time.Time                  `json:"lastDatabaseSync,omitempty"  bson:"lastDatabaseSync,omitempty"`
 }
 
 type CostPerDay map[string]float64
@@ -220,6 +222,37 @@ type AggregatedCostItem struct {
 	// OfferId          string  `csv:"-"`
 	AdditionalInfo          interface{} `csv:"AdditionalInfo,omitempty" json:"additionalInfo,omitempty"  bson:"additionalInfo,omitempty"`
 	ResourceMeterIdentifier string      `json:"resourceMeterIdentifier,omitempty"  bson:"resourceMeterIdentifier,omitempty"`
+}
+
+//
+//
+
+type CostItemFlat struct {
+	Cost                    float64   `json:"cost,omitempty"  bson:"cost,omitempty"`
+	Date                    time.Time `json:"date,omitempty"  bson:"date,omitempty"`
+	TenantName              string    `json:"tenantName,omitempty"  bson:"tenantName,omitempty"`
+	SubscriptionName        string    `json:"subscriptionName,omitempty"  bson:"subscriptionName,omitempty"`
+	ProductName             string    `csv:"ProductName" json:"productName,omitempty"  bson:"productName,omitempty"`
+	InstanceId              string    `csv:"InstanceId" json:"instanceId,omitempty"  bson:"instanceId,omitempty"`
+	UsageQuantity           float64   `csv:"UsageQuantity" json:"usageQuantity" bson:"usageQuantity"`
+	Tags                    string    `csv:"Tags,omitempty" json:"tags,omitempty"  bson:"tags,omitempty"`
+	AdditionalInfo          string    `csv:"AdditionalInfo,omitempty" json:"additionalInfo,omitempty"  bson:"additionalInfo,omitempty"`
+	ResourceMeterIdentifier string    `json:"resourceMeterIdentifier,omitempty"  bson:"resourceMeterIdentifier,omitempty"`
+}
+
+//
+//
+
+type AzureCostMeterFlat struct {
+	ProductName             string  `csv:"ProductName" json:"productName,omitempty"  bson:"productName,omitempty"`
+	MeterCategory           string  `csv:"MeterCategory" json:"meterCategory,omitempty"  bson:"meterCategory,omitempty"`
+	MeterSubcategory        string  `csv:"MeterSubcategory" json:"meterSubcategory,omitempty"  bson:"meterSubcategory,omitempty"`
+	MeterName               string  `csv:"MeterName" json:"meterName,omitempty"  bson:"meterName,omitempty"`
+	UnitOfMeasure           string  `csv:"UnitOfMeasure" json:"unitOfMeasure,omitempty"  bson:"unitOfMeasure,omitempty"`
+	ResourceRate            float64 `csv:"ResourceRate" json:"resourceRate,omitempty"  bson:"resourceRate,omitempty"`
+	ConsumedService         string  `csv:"ConsumedService" json:"consumedService,omitempty"  bson:"consumedService,omitempty"`
+	ResourceType            string  `csv:"ResourceType" json:"resourceType,omitempty"  bson:"resourceType,omitempty"`
+	ResourceMeterIdentifier string  `json:"resourceMeterIdentifier,omitempty"  bson:"resourceMeterIdentifier,omitempty"`
 }
 
 type AzureCostMeter struct {
@@ -364,6 +397,9 @@ type StorageAccountRequestOptions struct {
 	GetWriteToken        bool
 	BlobName             string
 	DownloadFileName     string
+	OverwriteExisting    bool   // Only used with azure.DownloadAllBlobsInContainer
+	ShowDownloadedCount  bool   // Only used with azure.DownloadAllBlobsInContainer
+	DownloadPath         string // Only used with azure.DownloadAllBlobsInContainer
 }
 
 type BlobListFilterOptions struct {

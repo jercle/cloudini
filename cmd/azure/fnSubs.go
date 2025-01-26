@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package azure
 
 import (
@@ -331,4 +328,29 @@ Current Active: ` + currentActive.Name + ` - ` + currentActive.TenantDefaultDoma
 	}
 	jsonStr, _ := json.Marshal(updatedAzureProfile)
 	os.WriteFile(azureProfile, jsonStr, 0644)
+}
+
+func ListAllAuthenticatedSubscriptions(tokens *lib.AllTenantTokens) TenantList {
+	// allSubscriptions := make(map[string]string)
+	// allTenantSubs := TenantList{}
+	var allTenants TenantList
+
+	for _, token := range *tokens {
+		subs, err := ListSubscriptions(token)
+		lib.CheckFatalError(err)
+		var currTenant TenantDetails
+		currTenant.Subscriptions = make(map[string]string)
+		currTenant.TenantId = token.TenantId
+		currTenant.TenantName = token.TenantName
+
+		for _, sub := range subs {
+			currTenant.Subscriptions[sub.DisplayName] = sub.SubscriptionID
+		}
+		allTenants = append(allTenants, currTenant)
+	}
+
+	// jsonStr, _ := json.MarshalIndent(allTenants, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// os.Exit(0)
+	return allTenants
 }

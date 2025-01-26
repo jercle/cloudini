@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package azure
 
 import (
@@ -12,7 +9,6 @@ import (
 // var Fetch bool
 
 var addTenant string
-var tenantName string
 
 // configCmd represents the subs command
 var configCmd = &cobra.Command{

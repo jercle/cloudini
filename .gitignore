@@ -33,5 +33,7 @@ dev/tok.txt
 dev/listVnets.json
 dev/publicIp.json
 dev/subnets.json
+dev/
 gpg_pwd
 dist
+lib/certtostorelocal/testdata/ca

@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package main
 
 import (
@@ -11,6 +8,7 @@ import (
 	_ "github.com/jercle/cloudini/cmd/config"
 	_ "github.com/jercle/cloudini/cmd/jira"
 	_ "github.com/jercle/cloudini/cmd/m365"
+	_ "github.com/jercle/cloudini/cmd/mongodb"
 	_ "github.com/jercle/cloudini/cmd/utils"
 	_ "github.com/jercle/cloudini/cmd/web"
 )

@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package azure
 
 import "time"
@@ -84,7 +81,7 @@ type EntraApplication struct {
 		} `json:"tokenEncryptionSetting,omitempty" bson:"tokenEncryptionSetting,omitempty"`
 	} `json:"api,omitempty" bson:"api,omitempty"`
 	AppCapabilities []any  `json:"appCapabilities,omitempty" bson:"appCapabilities,omitempty"`
-	AppID           string `json:"appId,omitempty" bson:"_id,omitempty"`
+	AppID           string `json:"appId,omitempty" bson:"appId,omitempty"`
 	AppRoles        *[]struct {
 		AllowedMemberTypes         []string `json:"allowedMemberTypes,omitempty" bson:"allowedMemberTypes,omitempty"`
 		Description                string   `json:"description,omitempty" bson:"description,omitempty"`
@@ -102,11 +99,11 @@ type EntraApplication struct {
 	CreatedDateTime           time.Time `json:"createdDateTime,omitempty" bson:"createdDateTime,omitempty"`
 	DefaultRedirectURI        *string   `json:"defaultRedirectUri,omitempty" bson:"defaultRedirectUri,omitempty"`
 	DeletedDateTime           any       `json:"deletedDateTime,omitempty" bson:"deletedDateTime,omitempty"`
-	Description               any       `json:"description,omitempty" bson:"description,omitempty"`
+	Description               string    `json:"description,omitempty" bson:"description,omitempty"`
 	DisabledByMicrosoftStatus any       `json:"disabledByMicrosoftStatus,omitempty" bson:"disabledByMicrosoftStatus,omitempty"`
 	DisplayName               string    `json:"displayName,omitempty" bson:"displayName,omitempty"`
 	GroupMembershipClaims     *string   `json:"groupMembershipClaims,omitempty" bson:"groupMembershipClaims,omitempty"`
-	ID                        string    `json:"id,omitempty" bson:"id,omitempty"`
+	ID                        string    `json:"id,omitempty" bson:"objectId,omitempty"`
 	IdentifierUris            []string  `json:"identifierUris,omitempty" bson:"identifierUris,omitempty"`
 	Info                      *struct {
 		LogoURL             any `json:"logoUrl,omitempty" bson:"logoUrl,omitempty"`
@@ -151,10 +148,10 @@ type EntraApplication struct {
 		LegalAgeGroupRule         string `json:"legalAgeGroupRule,omitempty" bson:"legalAgeGroupRule,omitempty"`
 	} `json:"parentalControlSettings,omitempty" bson:"parentalControlSettings,omitempty"`
 	PasswordCredentials *[]struct {
-		CustomKeyIdentifier *string   `json:"customKeyIdentifier,omitempty" bson:"customKeyIdentifier,omitempty"`
-		DisplayName         *string   `json:"displayName,omitempty" bson:"displayName,omitempty"`
+		CustomKeyIdentifier string    `json:"customKeyIdentifier,omitempty" bson:"customKeyIdentifier,omitempty"`
+		DisplayName         string    `json:"displayName,omitempty" bson:"displayName,omitempty"`
 		EndDateTime         time.Time `json:"endDateTime,omitempty" bson:"endDateTime,omitempty"`
-		Hint                *string   `json:"hint,omitempty" bson:"hint,omitempty"`
+		Hint                string    `json:"hint,omitempty" bson:"hint,omitempty"`
 		KeyID               string    `json:"keyId,omitempty" bson:"keyId,omitempty"`
 		SecretText          any       `json:"secretText,omitempty" bson:"secretText,omitempty"`
 		StartDateTime       time.Time `json:"startDateTime,omitempty" bson:"startDateTime,omitempty"`
@@ -210,5 +207,126 @@ type EntraApplication struct {
 		} `json:"redirectUriSettings,omitempty" bson:"redirectUriSettings,omitempty"`
 		RedirectUris []string `json:"redirectUris,omitempty" bson:"redirectUris,omitempty"`
 	} `json:"web,omitempty" bson:"web,omitempty"`
-	Windows any `json:"windows,omitempty" bson:"windows,omitempty"`
+	Windows       any       `json:"windows,omitempty" bson:"windows,omitempty"`
+	MongoDbId     string    `json:"_id,omitempty" bson:"_id,omitempty"`
+	LastAzureSync time.Time `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty" fake:"-"`
+	LastDBSync    time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty" fake:"-"`
+}
+
+type EntraExpiringCredential struct {
+	AppRegAppID             string    `json:"appId,omitempty" bson:"appId,omitempty"`
+	AppRegDescription       string    `json:"description,omitempty" bson:"description,omitempty"`
+	AppRegDisplayName       string    `json:"appRegDisplayName,omitempty" bson:"appRegDisplayName,omitempty"`
+	AppRegCreatedDateTime   time.Time `json:"appRegCreatedDateTime,omitempty" bson:"appRegCreatedDateTime,omitempty"`
+	AppRegObjectID          string    `json:"appRegObjectId,omitempty" bson:"appRegObjectId,omitempty"`
+	CredCustomKeyIdentifier string    `json:"credCustomKeyIdentifier,omitempty" bson:"credCustomKeyIdentifier,omitempty"`
+	CredDisplayName         string    `json:"credDisplayName,omitempty" bson:"credDisplayName,omitempty"`
+	CredEndDateTime         time.Time `json:"credEndDateTime,omitempty" bson:"credEndDateTime,omitempty"`
+	CredID                  string    `json:"credId,omitempty" bson:"credId,omitempty"`
+	CredKeyType             string    `json:"credKeyType,omitempty" bson:"credKeyType,omitempty"`
+	CredKeyUsage            string    `json:"credKeyUsage,omitempty" bson:"credKeyUsage,omitempty"`
+	CredStartDateTime       time.Time `json:"credStartDateTime,omitempty" bson:"credStartDateTime,omitempty"`
+	CredType                string    `json:"credType,omitempty" bson:"credType,omitempty"`
+	MongoDbId               string    `json:"_id,omitempty" bson:"_id,omitempty"`
+	TenantName              string    `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
+	LastAzureSync           time.Time `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty" fake:"-"`
+	LastDBSync              time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty" fake:"-"`
+}
+
+type AzureB2CUser struct {
+	AccountEnabled                                           bool      `json:"accountEnabled"`
+	CreatedDateTime                                          time.Time `json:"createdDateTime"`
+	CreationType                                             string    `json:"creationType"`
+	DisplayName                                              string    `json:"displayName"`
+	Extension4e4fa41c1d3246639764b37ff949534dLastLogonTime   time.Time `json:"extension_4e4fa41c1d3246639764b37ff949534d_lastLogonTime"`
+	Extension4e4fa41c1d3246639764b37ff949534dPasswordResetOn time.Time `json:"extension_4e4fa41c1d3246639764b37ff949534d_passwordResetOn"`
+	ID                                                       string    `json:"id"`
+	UserPrincipalName                                        string    `json:"userPrincipalName"`
+}
+
+type TenantList []TenantDetails
+
+type TenantDetails struct {
+	TenantId      string            `json:"id" bson:"_id`
+	TenantName    string            `json:"tenantName" bson:"tenantName`
+	Subscriptions map[string]string `json:"subscriptions" bson:"subscriptions`
+}
+
+type GetAllImageGalleriesForSubscriptionResponse struct {
+	Value []ImageGallery `json:"value"`
+}
+
+type ImageGallery struct {
+	ID             string `json:"id"`
+	Location       string `json:"location"`
+	Name           string `json:"name"`
+	SubscriptionId string `json:"subscriptionId"`
+	ResourceGroup  string `json:"resourceGroup"`
+	TenantName     string `json:"tenantName"`
+	Properties     struct {
+		Description string `json:"description,omitempty"`
+		Identifier  struct {
+			UniqueName string `json:"uniqueName"`
+		} `json:"identifier"`
+		ProvisioningState string `json:"provisioningState"`
+		SoftDeletePolicy  *struct {
+			IsSoftDeleteEnabled bool `json:"isSoftDeleteEnabled"`
+		} `json:"softDeletePolicy,omitempty"`
+	} `json:"properties"`
+	Tags *struct {
+		CitrixCustomerID           string `json:"CitrixCustomerId"`
+		CitrixProvisioningSchemeID string `json:"CitrixProvisioningSchemeId"`
+		CitrixResource             string `json:"CitrixResource"`
+		CitrixVirtualSiteID        string `json:"CitrixVirtualSiteId"`
+	} `json:"tags,omitempty"`
+	Type string `json:"type"`
+}
+
+//
+//
+
+type ListManagementGroupsResponse struct {
+	Value []ManagementGroup `json:"value"`
+}
+
+//
+//
+
+type ManagementGroup struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Properties struct {
+		DisplayName string `json:"displayName"`
+		TenantID    string `json:"tenantId"`
+	} `json:"properties"`
+	Type string `json:"type"`
+}
+
+//
+//
+
+type ResourceRoleDefinition struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Properties struct {
+		AssignableScopes []string  `json:"assignableScopes"`
+		CreatedBy        any       `json:"createdBy"`
+		CreatedOn        time.Time `json:"createdOn"`
+		Description      string    `json:"description"`
+		Permissions      []struct {
+			Actions        []string `json:"actions"`
+			DataActions    []any    `json:"dataActions"`
+			NotActions     []any    `json:"notActions"`
+			NotDataActions []any    `json:"notDataActions"`
+		} `json:"permissions"`
+		RoleName  string    `json:"roleName"`
+		Type      string    `json:"type"`
+		UpdatedBy any       `json:"updatedBy"`
+		UpdatedOn time.Time `json:"updatedOn"`
+	} `json:"properties"`
+	Type string `json:"type"`
+}
+
+type ListResourceRoleDefinitionsResponse struct {
+	Value []ResourceRoleDefinition `json:"value"`
 }

@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 Evan Colwell ercolwell@gmail.com
-*/
 package lib
 
 import (
@@ -8,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
@@ -205,7 +203,7 @@ func (tenants *TransformedCostItemsByTenant) AddPreTaxCost(tci TransformedCostIt
 	t := *tenants
 
 	tenantName := ""
-	custTntName := MapAzureSubscriptionToCustomTenantName(tci.SubscriptionId, cfg.Azure)
+	custTntName := MapAzureSubscriptionToCustomTenantName(tci.SubscriptionId, *cfg.Azure)
 	if custTntName != "" {
 		tenantName = custTntName
 	} else {
@@ -216,10 +214,34 @@ func (tenants *TransformedCostItemsByTenant) AddPreTaxCost(tci TransformedCostIt
 	tenant.PreTaxCost += tci.PreTaxCost
 	t[tenantName] = tenant
 	*tenants = t
+	// switch tci.Datafile {
+	// case "Blue":
+	// 	tenants.Blue.PreTaxCost += tci.PreTaxCost
+	// case "BlueDTQ":
+	// 	tenants.BlueDTQ.PreTaxCost += tci.PreTaxCost
+	// case "Red":
+	// 	tenants.Red.PreTaxCost += tci.PreTaxCost
+	// case "RedDTQ":
+	// 	tenants.RedDTQ.PreTaxCost += tci.PreTaxCost
+	// case "Yellow":
+	// 	tenants.Yellow.PreTaxCost += tci.PreTaxCost
+	// case "PUD":
+	// 	tenants.PUD.PreTaxCost += tci.PreTaxCost
+	// case "PUDDTQ":
+	// 	tenants.PUDDTQ.PreTaxCost += tci.PreTaxCost
+	// case "Purple":
+	// 	tenants.Purple.PreTaxCost += tci.PreTaxCost
+	// case "PurpleDTQ":
+	// 	tenants.PurpleDTQ.PreTaxCost += tci.PreTaxCost
+	// }
+
 }
 
 func (t *TransformedCostItemsByTenant) AppendTenantData(tci TransformedCostItem) {
 	tenants := *t
+	// jsonStr, _ := json.MarshalIndent(tenants, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// os.Exit(0)
 	entry, exists := tenants[tci.Tenant]
 	if !exists {
 		tenant := TransformedTenantData{}
@@ -234,6 +256,44 @@ func (t *TransformedCostItemsByTenant) AppendTenantData(tci TransformedCostItem)
 	}
 	*t = tenants
 }
+
+// func (tenants *TransformedCostItemsByTenant) AppendTenantData(tci TransformedCostItem) {
+// 	t := *tenants
+// 	tenant := t[tci.Datafile]
+// 	tenant.PreTaxCost += tci.PreTaxCost
+// 	t[tci.Datafile] = tenant
+// 	*tenants = t
+
+// 	switch tci.Tenant {
+// 	case "BLUE":
+// 		tenants.Blue.ResGroups = append(tenants.Blue.ResGroups, tci)
+// 		tenants.Blue.PreTaxCost += tci.PreTaxCost
+// 	case "BLUEDTQ":
+// 		tenants.BlueDTQ.ResGroups = append(tenants.BlueDTQ.ResGroups, tci)
+// 		tenants.BlueDTQ.PreTaxCost += tci.PreTaxCost
+// 	case "RED":
+// 		tenants.Red.ResGroups = append(tenants.Red.ResGroups, tci)
+// 		tenants.Red.PreTaxCost += tci.PreTaxCost
+// 	case "REDDTQ":
+// 		tenants.RedDTQ.ResGroups = append(tenants.RedDTQ.ResGroups, tci)
+// 		tenants.RedDTQ.PreTaxCost += tci.PreTaxCost
+// 	case "YELLOW":
+// 		tenants.Yellow.ResGroups = append(tenants.Yellow.ResGroups, tci)
+// 		tenants.Yellow.PreTaxCost += tci.PreTaxCost
+// 	case "PUD":
+// 		tenants.PUD.ResGroups = append(tenants.PUD.ResGroups, tci)
+// 		tenants.PUD.PreTaxCost += tci.PreTaxCost
+// 	case "PUDDTQ":
+// 		tenants.PUDDTQ.ResGroups = append(tenants.PUDDTQ.ResGroups, tci)
+// 		tenants.PUDDTQ.PreTaxCost += tci.PreTaxCost
+// 	case "PURPLE":
+// 		tenants.Purple.ResGroups = append(tenants.Purple.ResGroups, tci)
+// 		tenants.Purple.PreTaxCost += tci.PreTaxCost
+// 	case "PURPLEDTQ":
+// 		tenants.PurpleDTQ.ResGroups = append(tenants.PurpleDTQ.ResGroups, tci)
+// 		tenants.PurpleDTQ.PreTaxCost += tci.PreTaxCost
+// 	}
+// }
 
 func (e *FieldMismatch) Error() string {
 	return "CSV line fields mismatch. Expected " + strconv.Itoa(e.Expected) + " found " + strconv.Itoa(e.Found)
@@ -266,11 +326,33 @@ func (blob *BlobItem) Download(cred *azidentity.ClientSecretCredential, fileName
 	serviceURL := "https://" + blob.StorageAccountName + ".blob.core.windows.net"
 	client, err := azblob.NewClient(serviceURL, cred, nil)
 	CheckFatalError(err)
+
+	path := filepath.Dir(fileName)
+	if _, err := os.Stat(path); err != nil {
+		os.MkdirAll(path, os.ModePerm)
+	}
+
 	file, err := os.Create(fileName)
 	CheckFatalError(err)
 	defer file.Close()
 	_, err = client.DownloadFile(ctx, blob.ContainerName, blob.Name, file, nil)
 }
+
+// TODO: Method to get data without saving file
+// func (blob *BlobItem) FetchData(cred *azidentity.ClientSecretCredential, fileName string) {
+// 	var (
+// 		ctx = context.Background()
+// 	)
+// 	serviceURL := "https://" + blob.StorageAccountName + ".blob.core.windows.net"
+// 	client, err := azblob.NewClient(serviceURL, cred, nil)
+// 	CheckFatalError(err)
+// 	// file, err := os.Create(fileName)
+// 	// CheckFatalError(err)
+// 	// defer file.Close()
+// 	data := []byte{}
+// 	client.DownloadBuffer(ctx, blob.ContainerName, blob.Name, data)
+// 	_, err = client.DownloadFile(ctx, blob.ContainerName, blob.Name, file, nil)
+// }
 
 func (bl *BlobList) Filter(opts BlobListFilterOptions) {
 	var filteredBlobs []BlobItem
