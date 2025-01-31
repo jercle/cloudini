@@ -5,11 +5,13 @@ import (
 )
 
 var (
-	rootPath string
-	printOne bool
-	gpoGuid  string
-	gpoName  string
-	backupId string
+	rootPath         string
+	printOne         bool
+	gpoGuid          string
+	gpoName          string
+	backupId         string
+	domain           string
+	domainController string
 )
 
 // subsCmd represents the subs command
@@ -35,7 +37,7 @@ Example:
 		// lib.CheckFatalError(err)
 		// fmt.Println(pwd)
 		if printOne {
-			GenerateGpoBkupInfoToStdOut(gpoName, gpoGuid, backupId)
+			GenerateGpoBkupInfoToStdOut(gpoName, gpoGuid, backupId, domain, domainController)
 		} else {
 			GenerateGpoBkupInfoFiles(rootPath)
 		}
@@ -60,5 +62,7 @@ func init() {
 	cmdGenerateGpoBkupInfoFiles.Flags().StringVar(&gpoGuid, "gpoGuid", "", "GPO GUID")
 	cmdGenerateGpoBkupInfoFiles.Flags().StringVar(&gpoName, "gpoName", "", "GPO display name")
 	cmdGenerateGpoBkupInfoFiles.Flags().StringVar(&backupId, "backupId", "", "GPO Backup ID GUID")
-	cmdGenerateGpoBkupInfoFiles.MarkFlagsRequiredTogether("print-one", "gpoGuid", "gpoName", "backupId")
+	cmdGenerateGpoBkupInfoFiles.Flags().StringVar(&domain, "domain", "", "GPO domain")
+	cmdGenerateGpoBkupInfoFiles.Flags().StringVar(&domainController, "domainController", "", "GPO domain controller")
+	cmdGenerateGpoBkupInfoFiles.MarkFlagsRequiredTogether("print-one", "gpoGuid", "gpoName", "backupId", "domain", "domainController")
 }
