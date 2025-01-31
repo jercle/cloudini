@@ -47,7 +47,7 @@ import (
 // 	return tokens
 // }
 
-func GetServicePrincipalToken(tenant string, servicePrincipalDetails lib.AzureMultiAuthTokenRequestOptions, cldConfigOpts *lib.CldConfigOptions) (*lib.AzureTokenData, error) {
+func GetServicePrincipalToken(tenant string, servicePrincipalDetails lib.AzureMultiAuthTokenRequestOptions, cldConfigOpts *lib.CldConfigOptions, mut *sync.Mutex) (*lib.AzureTokenData, error) {
 	ctx := context.Background()
 	spDetails := servicePrincipalDetails
 
@@ -57,7 +57,13 @@ func GetServicePrincipalToken(tenant string, servicePrincipalDetails lib.AzureMu
 		spDetails.Scope = "default"
 	}
 
+	if mut != nil {
+		mut.Lock()
+	}
 	cachedToken := lib.GetCachedToken[lib.AzureTokenData]("az"+strings.ToLower(spDetails.TenantName)+spDetails.Scope, cldConfigOpts)
+	if mut != nil {
+		mut.Unlock()
+	}
 
 	if cachedToken != nil {
 		isExpired := lib.CheckCachedTokenExpired(cachedToken.ExpiresOn)
@@ -105,7 +111,13 @@ func GetServicePrincipalToken(tenant string, servicePrincipalDetails lib.AzureMu
 			Token: token.AccessToken,
 		}
 
+		if mut != nil {
+			mut.Lock()
+		}
 		lib.CacheSaveToken(tokenData, "az"+strings.ToLower(spDetails.TenantName)+spDetails.Scope, cldConfigOpts)
+		if mut != nil {
+			mut.Unlock()
+		}
 		return &tokenData, nil
 
 	default:
@@ -356,8 +368,9 @@ func GetAllTenantSPTokens(options lib.AzureMultiAuthTokenRequestOptions, cldConf
 					configExists = true
 				}
 			}
+
 			if configExists {
-				tokenData, err := GetServicePrincipalToken(tenant.TenantID, options, cldConfOpts)
+				tokenData, err := GetServicePrincipalToken(tenant.TenantID, options, cldConfOpts, &mut)
 				lib.CheckFatalError(err)
 
 				tenantToken := lib.AzureMultiAuthToken{
@@ -406,7 +419,7 @@ func GetTenantSPToken(options lib.AzureMultiAuthTokenRequestOptions, cldConfOpts
 		options.ClientSecret = tenant.Reader.ClientSecret
 	}
 
-	tokenData, err := GetServicePrincipalToken(tenant.TenantID, options, cldConfOpts)
+	tokenData, err := GetServicePrincipalToken(tenant.TenantID, options, cldConfOpts, nil)
 	lib.CheckFatalError(err)
 
 	mat := lib.AzureMultiAuthToken{

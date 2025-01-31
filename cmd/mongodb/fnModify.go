@@ -273,11 +273,25 @@ func UpdateImageDataWithBuildHostLogs(buildData []lib.PackerLogBuildData, collec
 		imagesById[img.ID] = img
 	}
 
+	// jsonStr, _ := json.MarshalIndent(imagesById, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// os.Exit(0)
+
 	for _, data := range buildData {
 
-		currVersion := imagesById[data.OutputImgId].ImageVersions[data.OutputImgVersion]
+		imageId := strings.Split(data.OutputImgId, "/versions")[0]
+
+		currVersion := imagesById[imageId].ImageVersions[data.OutputImgVersion]
 		currVersion.AzDoBuildData = data
-		imagesById[data.OutputImgId].ImageVersions[data.OutputImgVersion] = currVersion
+
+		// if _, ok := imagesById[data.OutputImgId]; !ok {
+		// 	continue
+		// // }
+		// if _, ok := imagesById[data.OutputImgId].ImageVersions[data.OutputImgVersion]; !ok {
+		// 	continue
+		// }
+
+		imagesById[imageId].ImageVersions[data.OutputImgVersion] = currVersion
 	}
 
 	for _, img := range imagesById {
@@ -337,4 +351,15 @@ func UpdateResourcesNotExistInAzure(azureResources []lib.AzureResourceDetails, c
 	lib.CheckFatalError(err)
 
 	return results
+}
+
+//
+//
+
+func DeleteAllDocumentsInCollection(collection *mongo.Collection) (results *mongo.DeleteResult) {
+	filter := bson.D{{}}
+	results, err := collection.DeleteMany(context.TODO(), filter)
+	lib.CheckFatalError(err)
+
+	return
 }

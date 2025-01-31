@@ -1,6 +1,7 @@
 package datatransforms
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -39,10 +40,11 @@ type GenerateOptions struct {
 }
 
 func Generate(opts GenerateOptions) (string, error) {
-	err := clipboard.Init()
-	if err != nil {
-		panic(err)
-	}
+	// err := clipboard.Init()
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// 	os.Exit(0)
+	// }
 	generator := NewGenerator()
 
 	// if flag.NArg() == 0 {
@@ -56,6 +58,11 @@ func Generate(opts GenerateOptions) (string, error) {
 	} else if opts.JsonString != "" {
 		generator.ObserveJSONString(opts.JsonString)
 	} else if opts.GetFromClipboard {
+		err := clipboard.Init()
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(0)
+		}
 		generator.ObserveJSONString(string(clipboard.Read(clipboard.FmtText)))
 		// } else if opts.WebApi != "" {
 		// TODO, implement getting and parsing direct from an API
