@@ -29,6 +29,9 @@ type ListRoleEligibilityScheduleInstancesResponse struct {
 	Value []RoleEligibilityScheduleInstance `json:"value,omitempty" bson:"value,omitempty"`
 }
 
+//
+//
+
 type RoleEligibilityScheduleInstance struct {
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -68,9 +71,15 @@ type RoleEligibilityScheduleInstance struct {
 	TenantName    string    `json:"tenantName,omitempty" bson:"tenantName,omitempty" fake:"-"`
 }
 
+//
+//
+
 type ListRoleAssignmentScheduleInstancesResponse struct {
 	Value []RoleAssignmentScheduleInstance `json:"value,omitempty" bson:"value,omitempty"`
 }
+
+//
+//
 
 type RoleAssignmentScheduleInstance struct {
 	ID         string `json:"id,omitempty" bson:"_id,omitempty"`
@@ -115,6 +124,9 @@ type RoleAssignmentScheduleInstance struct {
 	TenantName    string    `json:"tenantName,omitempty" bson:"tenantName,omitempty" fake:"-"`
 }
 
+//
+//
+
 type ListRoleAssignmentSchedulesResponse struct {
 	Odata_Context  string                   `json:"@odata.context,omitempty" bson:"@odata.context,omitempty"`
 	Odata_NextLink string                   `json:"@odata.nextLink,omitempty" bson:"@odata.nextLink,omitempty"`
@@ -154,6 +166,9 @@ type RoleAssignmentScheduleProcessed struct {
 	} `json:"roleDefinition,omitempty" bson:"roleDefinition,omitempty"`
 	RoleDefinitionID string `json:"roleDefinitionId,omitempty" bson:"roleDefinitionId,omitempty"`
 }
+
+//
+//
 
 type RoleAssignmentSchedule struct {
 	ActivatedUsing   any           `json:"activatedUsing,omitempty" bson:"activatedUsing,omitempty"`
@@ -425,3 +440,6 @@ type RolePrinciple struct {
 	// 	OnPremisesGroupType any `json:"onPremisesGroupType,omitempty" bson:"onPremisesGroupType,omitempty"`
 	// } `json:"writebackConfiguration,omitempty" bson:"writebackConfiguration,omitempty"`
 }
+
+//
+//

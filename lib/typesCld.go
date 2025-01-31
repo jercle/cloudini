@@ -5,6 +5,7 @@ import "time"
 type CldConfigRoot struct {
 	// Cloudini     *CloudiniConfig         `json:"cloudini,omitempty"`
 	Azure         *AzureConfig            `json:"azure,omitempty"`
+	AzureDevOps   *AzureDevOpsConfig      `json:"azureDevOps,omitempty"`
 	CitrixCloud   *CitrixCloud            `json:"citrixCloud,omitempty"`
 	Domains       *map[string]string      `json:"domains,omitempty" fakesize:"2"`
 	MongoDBConfig *MongoDBConfig          `json:"mongoDbConfig,omitempty"`
@@ -39,6 +40,21 @@ type SophosEnvironment struct {
 	Hosts   []string `json:"hosts,omitempty" fake:"-"`
 	ApiUser string   `json:"api_user,omitempty" fake:"{username}"`
 	ApiKey  string   `json:"api_key,omitempty" fake:"{password:true,true,true,true,false,30}"`
+}
+
+type PackerConfig struct {
+	Logs struct {
+		TenantName    string `json:"tenantName,omitempty"`
+		StorageAcct   string `json:"storageAccount,omitempty"`
+		BlobContainer struct {
+			Hosts     string `json:"hosts,omitempty"`
+			Pipelines string `json:"pipelines,omitempty"`
+		}
+	}
+}
+
+type AzureDevOpsConfig struct {
+	Packer *PackerConfig `json:"packer,omitempty"`
 }
 
 type MongoDBConfig struct {
@@ -95,6 +111,7 @@ type AzureConfig struct {
 	SkuListSubscription        string              `json:"skuListSubscription,omitempty"`
 	SkuListAuthTenant          string              `json:"skuListAuthTenant,omitempty"`
 	ResourceLocation           string              `json:"resourceLocation,omitempty"`
+	VirtualMachines            map[string]string   `json:"virtualMachines,omitempty"`
 }
 
 type CldConfigOptions struct {

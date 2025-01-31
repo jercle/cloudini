@@ -1,11 +1,13 @@
 package mongodb
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"time"
 
 	"github.com/briandowns/spinner"
+	"github.com/jercle/cloudini/cmd/ado"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
 	"github.com/jercle/cloudini/lib"
@@ -48,6 +50,8 @@ func UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(imageGalleryImagesColl *mon
 		MarkImageGalleryImagesUsedByCitrix(mcMasterImageVersions, imageGalleryImagesColl)
 		s.Stop()
 	}
+
+	GetBuildDataAndUpdateImageVesionData(imageGalleryImagesColl)
 }
 
 //
@@ -91,6 +95,9 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	s.Start()
 	allResources, allResourcesSlice := azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
 	s.Stop()
+	allResourcesSliceStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
+	os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
+
 	fmt.Println("Updating Azure Resources in database...")
 	s.Start()
 	UpsertMultipleResources(allResourcesSlice, opts.AzResResourceListColl)
@@ -119,6 +126,8 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 		_,
 		vCpuCountWithResources := azure.GetVcpuCountForAllConfiguredTenants(allResources, nil, config.Azure.MultiTenantAuth.Tenants)
 	s.Stop()
+	vCpuCountWithResourcesStr, _ := json.MarshalIndent(vCpuCountWithResources, "", "  ")
+	os.WriteFile(cachePath+"/vCpuCountWithResources.json", vCpuCountWithResourcesStr, 0644)
 	fmt.Println("Updating vCPU Counts in database...")
 	s.Start()
 	UpsertVcpuCounts(vCpuCountWithResources, opts.AzResVcpuCountsColl)
@@ -145,6 +154,8 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 
 	fmt.Println("Transforming cost export data")
 	transformedData := azure.TransformCostDataNew(combinedCostData, 1, 2)
+	transformedDataStr, _ := json.MarshalIndent(transformedData, "", "  ")
+	os.WriteFile(cachePath+"/transformedData.json", transformedDataStr, 0644)
 
 	fmt.Println("Updating cost data in database")
 	UpsertMonthlyTenantSubResGrpCosts(transformedData,
@@ -177,7 +188,12 @@ func UpdateAzureResourceRelations(transformedData lib.AggregatedCostData, opts U
 	resourceFromDatabase := GetAllResources(opts.AzResResourceListColl)
 	s.Stop()
 
-	// fmt.Println("Processing all resources and cost meters to create relations")
+	_, _, cachePath := lib.InitConfig(nil)
+	fmt.Println("Processing all resources and cost meters to create relations")
+	costDataSliceStr, _ := json.MarshalIndent(costDataSlice, "", "  ")
+	os.WriteFile(cachePath+"/costDataSlice.json", costDataSliceStr, 0644)
+	resourceFromDatabaseStr, _ := json.MarshalIndent(resourceFromDatabase, "", "  ")
+	os.WriteFile(cachePath+"/resourceFromDatabase.json", resourceFromDatabaseStr, 0644)
 	_, processedResourcesSlice := azure.GatherRelatedResourcesAndCostMeters(costDataSlice, resourceFromDatabase, 2, 2)
 	fmt.Println("Updating all resources with related cost data in database")
 
@@ -192,11 +208,19 @@ func UpdateAzureResourceRelations(transformedData lib.AggregatedCostData, opts U
 
 func UpdateEntraItems(opts UpdateEntraItemsOptions, tokenReq lib.AllTenantTokens) {
 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+	_, _, cachePath := lib.InitConfig(nil)
 
 	fmt.Println("Fetching all App Registrations...")
 	s.Start()
 	allAppRegistrations, appRegExpiringCreds := azure.GetAppRegDataForAllConfiguredTenants("")
 	s.Stop()
+
+	allAppRegistrationsStr, _ := json.MarshalIndent(allAppRegistrations, "", "  ")
+	os.WriteFile(cachePath+"/allAppRegistrations.json", allAppRegistrationsStr, 0644)
+	defer os.Remove(cachePath + "/allAppRegistrations.json")
+	appRegExpiringCredsStr, _ := json.MarshalIndent(appRegExpiringCreds, "", "  ")
+	os.WriteFile(cachePath+"/appRegExpiringCreds.json", appRegExpiringCredsStr, 0644)
+	defer os.Remove(cachePath + "/appRegExpiringCreds.json")
 
 	fmt.Println("Updating App Registrations in database...")
 	s.Start()
@@ -205,7 +229,10 @@ func UpdateEntraItems(opts UpdateEntraItemsOptions, tokenReq lib.AllTenantTokens
 
 	fmt.Println("Updating App Registrations with expired or expiring credentials in database...")
 	s.Start()
+	DeleteAllDocumentsInCollection(opts.EntraAppRegCredsExpiringColl)
 	UpsertMultipleEntraApps(appRegExpiringCreds, opts.EntraAppRegCredsExpiringColl)
+	s.Stop()
+
 }
 
 //
@@ -228,4 +255,16 @@ func UpdateEntraPimItems(opts UpdateEntraPimItemsOptions) {
 	s.Start()
 	UpsertMultipleRoleEligibilityScheduleInstances(eligibilities, opts.EntraRoleEligibilityScheduleInstancesColl)
 	s.Stop()
+}
+
+//
+//
+
+func GetBuildDataAndUpdateImageVesionData(imageGalleryImagesColl *mongo.Collection) {
+	_, _, cachePath := lib.InitConfig(nil)
+	dlPath := cachePath + "/aib-logs"
+
+	ado.DownloadPackerHostLogs(&dlPath)
+	buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
+	UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
 }

@@ -709,6 +709,9 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 
 	for _, res := range resources {
 		resource := res
+		if !strings.EqualFold(resource.Type, "microsoft.compute/virtualmachines") {
+			resource.Properties.Sku = ""
+		}
 		resource.LastDBSync = time.Now()
 		resource.ID = strings.ToLower(res.ID)
 		filter := bson.D{{"_id", resource.ID}}
@@ -719,11 +722,17 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 		// _, err := resourcesListColl.UpdateOne(ctx, filter, update, nil)
 		// lib.CheckFatalError(err)
 		// if err != nil {
-		// 	fmt.Println(err)
+		// 	// fmt.Println(err)
+		// 	_, _, cachePath := lib.InitConfig(nil)
+		// 	_ = updates
+		// 	allResStr, _ := json.MarshalIndent(resources, "", "  ")
+		// 	os.WriteFile(cachePath+"/mongo.updateOne-error.resources.json", allResStr, 0644)
 		// 	jsonStr, _ := json.MarshalIndent(res, "", "  ")
-		// 	os.WriteFile("mongo.updateOne.err.json", jsonStr, 0644)
-		// 	fmt.Println(string(jsonStr))
-		// 	os.Exit(1)
+		// 	os.WriteFile(cachePath+"/mongo.updateOne-error.err.json", jsonStr, 0644)
+		// 	// fmt.Println(string(jsonStr))
+		// 	fmt.Println(res.ID)
+		// 	lib.CheckFatalError(err)
+		// 	// os.Exit(1)
 		// }
 	}
 

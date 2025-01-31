@@ -211,11 +211,9 @@ func Encode(b []byte) []byte {
 	return []byte(base64.StdEncoding.EncodeToString(b))
 }
 
-func Decode(s []byte) []byte {
+func Decode(s []byte) ([]byte, error) {
 	data, err := base64.StdEncoding.DecodeString(string(s))
-	// fmt.Println(string(data))
-	CheckFatalError(err)
-	return data
+	return data, err
 }
 
 var cipherBytes = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}
@@ -236,16 +234,29 @@ func Decrypt(text []byte, opts *CldConfigOptions) ([]byte, error) {
 
 	// fmt.Println("decrypting")
 	secret := GetCipherKey(opts)
+
 	block, err := aes.NewCipher([]byte(secret))
 	CheckFatalError(err)
 	if err != nil {
 		return []byte{}, err
 	}
 	// fmt.Println("decoding")
-	cipherText := Decode(text)
+	cipherText, err := Decode(text)
+	// if err != nil {
+	// jsonStr, _ := json.MarshalIndent(secret, "", "  ")
+	// fmt.Println(string(text))
+	// fmt.Println(err.Error())
+	// os.WriteFile("main-test-text", text, 0644)
+	// os.Exit(0)
+	// return []byte{}, err
+	// }
+	CheckFatalError(err)
+
 	cfb := cipher.NewCFBDecrypter(block, cipherBytes)
+
 	plainText := make([]byte, len(cipherText))
 	cfb.XORKeyStream(plainText, cipherText)
+
 	return plainText, nil
 }
 
@@ -415,7 +426,8 @@ func GetCachedToken[T AzureMultiAuthToken | AzureTokenData | CitrixTokenData](to
 		return &token
 	} else {
 		// fmt.Println(encodedTokenStr)
-		decodedTokenStr := Decode([]byte(encodedTokenStr))
+		decodedTokenStr, err := Decode([]byte(encodedTokenStr))
+		CheckFatalError(err)
 		// fmt.Println(string(decodedTokenStr))
 		var token T
 		json.Unmarshal(decodedTokenStr, &token)
