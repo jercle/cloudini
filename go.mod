@@ -23,7 +23,7 @@ require (
 	github.com/gernest/wow v0.1.0
 	github.com/github/smimesign v0.2.0
 	github.com/google/certtostore v1.0.4
-	github.com/google/deck v0.0.0-20230104221208-105ad94aa8ae
+	github.com/google/deck v1.1.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/iancoleman/strcase v0.3.0
 	github.com/manifoldco/promptui v0.9.0
