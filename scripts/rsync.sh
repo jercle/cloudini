@@ -1,4 +1,4 @@
-rsync -r ./ ../cloudini/ \
+rsync -r ./ ../cloudini-pre-update/ \
 --exclude dev/db \
 --exclude dev/sophos \
 --exclude dev/sophosResponses \
