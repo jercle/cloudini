@@ -10,10 +10,13 @@ updates:
   directory: "/" # Location of package manifests
   schedule:
     interval: "daily"
+  assignees:
+    - "jercle"
 
 - package-ecosystem: github-actions
   target-branch: "develop"
   directory: /
   schedule:
     interval: daily
- 
+  assignees:
+    - "jercle"
