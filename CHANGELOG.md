@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.1.15]
+* Update deps
+* Fix up bkupInfo generator cmd
+* Add packer funcs, vm control commands, update auth caching, add packer build logs to image data in db, bkupInfo.xml generation for AD
+
 ## [0.1.14]
 * Add commands for Azure B2C
 * Add commands for Azure Entra
