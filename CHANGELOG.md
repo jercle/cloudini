@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.16]
+* Update deps
+
 ## [0.1.15]
 * Update deps
 * Fix up bkupInfo generator cmd
