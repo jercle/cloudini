@@ -12,7 +12,7 @@ require (
 	github.com/alecthomas/assert/v2 v2.10.0
 	github.com/antonmedv/clipboard v1.0.1
 	github.com/briandowns/spinner v1.23.2
-	github.com/brianvoe/gofakeit/v7 v7.0.4
+	github.com/brianvoe/gofakeit/v7 v7.2.1
 	github.com/charmbracelet/bubbles v0.20.0
 	github.com/charmbracelet/bubbletea v1.2.4
 	github.com/charmbracelet/lipgloss v1.0.0
