@@ -42,7 +42,7 @@ require (
 	golang.design/x/clipboard v0.7.0
 	golang.org/x/crypto v0.32.0
 	golang.org/x/exp v0.0.0-20250128182459-e0ece0dbea4c
-	golang.org/x/mod v0.22.0
+	golang.org/x/mod v0.23.0
 	golang.org/x/sys v0.29.0
 	golang.org/x/text v0.21.0
 	gopkg.in/yaml.v3 v3.0.1
