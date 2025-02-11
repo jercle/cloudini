@@ -34,7 +34,7 @@ var (
 // rootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:     "cld",
-	Version: "0.1.16",
+	Version: "0.1.15",
 	Short:   "A brief description of your application",
 	Long: `This CLI has been created to add additional functionality
 to https://docs.microsoft.com/en-us/cli/azure/ such as data

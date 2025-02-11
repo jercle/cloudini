@@ -3750,7 +3750,7 @@ type AzureResourceDetails struct {
 	ResourceGroup             string                          `json:"resourceGroup,omitempty" bson:"resourceGroup,omitempty" fake:"{username}"`
 	ResourceId                string                          `json:"resourceId,omitempty" bson:"resourceId,omitempty" fake:"{uuid}"`
 	Sku                       *AzureResourceSku               `json:"sku,omitempty" bson:"sku,omitempty" fake:"-"`
-	SubscriptionID            string                          `json:"subscriptionId,omitempty" bson:"subscriptionId,omitempty fake:"{uuid}"`
+	SubscriptionID            string                          `json:"subscriptionId,omitempty" bson:"subscriptionId,omitempty" fake:"{uuid}"`
 	SubscriptionName          string                          `json:"subscriptionName,omitempty" bson:"subscriptionName,omitempty" fake:"{username}"`
 	Tags                      map[string]string               `json:"tags,omitempty" bson:"tags,omitempty" fake:"-"`
 	TenantID                  string                          `json:"tenantId,omitempty" bson:"tenantId,omitempty" fake:"{uuid}"`

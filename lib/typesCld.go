@@ -75,6 +75,7 @@ type MongoDBConfig struct {
 	CollAzResSKU                string `json:"collAzResSKU,omitempty"`
 	CollAzResTenants            string `json:"collAzResTenants,omitempty"`
 	CollAzResVcpuCounts         string `json:"collAzResVcpuCounts,omitempty"`
+	CollAzResIPAddresses        string `json:"collAzResIPAddresses,omitempty"`
 
 	CollCitrixMachineCatalogs string `json:"collCitrixMachineCatalogs,omitempty"`
 

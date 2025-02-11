@@ -1,0 +1,36 @@
+# customize trigger to your needs
+trigger:
+  branches:
+    include:
+      - main
+      - refs/tags/*
+
+variables:
+  GO_VERSION: "1.22.5"
+
+pool:
+    name: automon-temp
+
+jobs:
+  # - job: Test
+  #   steps:
+  #     - task: GoTool@0
+  #       inputs:
+  #         version: "$(GO_VERSION)"
+  #       displayName: Install Go
+
+
+  - job: Release
+    condition: startsWith(variables['Build.SourceBranch'], 'refs/tags')
+    steps:
+    #   - task: GoTool@0
+    #     inputs:
+    #       version: "$(GO_VERSION)"
+    #     displayName: Install Go
+
+      - task: goreleaser@0
+        inputs:
+          version: 'latest'
+          distribution: 'goreleaser'
+          args: ''
+          workdir: '$(Build.SourcesDirectory)'

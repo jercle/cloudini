@@ -153,14 +153,14 @@ func GetServicePrincipalToken(tenant string, servicePrincipalDetails lib.AzureMu
 	return &token, nil
 }
 
-func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.AzureMultiAuthTokenRequestOptions) (*lib.AzureMultiAuthToken, error) {
+func GetServicePrincipalMultiAuthToken(spDetails lib.AzureMultiAuthTokenRequestOptions) (*lib.AzureMultiAuthToken, error) {
 	ctx := context.Background()
 	var tokenRequestOptions policy.TokenRequestOptions
 
 	switch spDetails.Scope {
 	case "graph":
 		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
-	// case "-sharepoint":
+	// case "apc-sharepoint":
 	// 	tokenRequestOptions.Scopes = []string{"https://asiogovau.sharepoint.com/.default"}
 	case "storage":
 		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
@@ -169,7 +169,7 @@ func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.AzureMulti
 	}
 	tokenRequestOptions.EnableCAE = true
 
-	cred, err := azidentity.NewClientSecretCredential(tenantId, spDetails.ClientID, spDetails.ClientSecret, nil)
+	cred, err := azidentity.NewClientSecretCredential(spDetails.TenantID, spDetails.ClientID, spDetails.ClientSecret, nil)
 	if err != nil {
 		log.Error("Unable to obtain Azure token", err, err)
 		return nil, err
@@ -186,7 +186,8 @@ func GetServicePrincipalMultiAuthToken(tenantId string, spDetails lib.AzureMulti
 	}
 
 	token := lib.AzureMultiAuthToken{
-		TenantId: tenantId,
+		TenantId:   spDetails.TenantID,
+		TenantName: spDetails.TenantName,
 		TokenData: lib.AzureTokenData{
 			Token:     tokenResponse.Token,
 			ExpiresOn: tokenResponse.ExpiresOn,

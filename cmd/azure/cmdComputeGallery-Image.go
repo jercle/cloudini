@@ -32,12 +32,13 @@ to quickly create a Cobra application.`,
 			err      error
 		)
 
-		if clientId != "" && clientSecret != "" && tenantId != "" {
+		if clientId != "" && clientSecret != "" && tenantId != "" && tenantName != "" {
 			authOpts.ClientID = clientId
 			authOpts.ClientSecret = clientSecret
 			authOpts.TenantID = tenantId
+			authOpts.TenantName = tenantName
 
-			token, err = GetServicePrincipalMultiAuthToken(tenantId, authOpts)
+			token, err = GetServicePrincipalMultiAuthToken(authOpts)
 			lib.CheckFatalError(err)
 
 			imageDefinition := GetGalleryImage(subscriptionId, resourceGroup, galleryName, galleryImageName, token)
