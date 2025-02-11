@@ -31,8 +31,8 @@ func init() {
 	cmd.RootCmd.AddCommand(azCmd)
 	azCmd.Flags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")
 	azCmd.Flags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")
-	azCmd.Flags().StringVar(&clientId, "clientId", "", "Client ID for Service Principal authentication.")
-	azCmd.Flags().StringVar(&clientSecret, "clientSecret", "", "Client Secret for Service Principal authentication.")
+	azCmd.PersistentFlags().StringVar(&clientId, "clientId", "", "Client ID for Service Principal authentication.")
+	azCmd.PersistentFlags().StringVar(&clientSecret, "clientSecret", "", "Client Secret for Service Principal authentication.")
 	azCmd.Flags().StringVarP(&tenantId, "tenantId", "t", "", "Tenant ID.")
 
 	// if subscriptionId == "" {

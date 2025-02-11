@@ -52,6 +52,8 @@ to quickly create a Cobra application.`,
 		azResSKUColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResSKU)
 		azResTenantsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResTenants)
 		azResVcpuCountsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResVcpuCounts)
+		azResIpAddresses := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResIPAddresses)
+		_ = azResIpAddresses
 
 		citrixMachineCatalogsColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMachineCatalogs)
 

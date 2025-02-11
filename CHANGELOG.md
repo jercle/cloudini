@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.17]
+* Update deps
+*
 ## [0.1.16]
 * Update deps
 

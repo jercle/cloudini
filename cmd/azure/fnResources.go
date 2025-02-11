@@ -91,7 +91,7 @@ func GetAllResourcesForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfi
 
 				var currSubResources SubscriptionResourceList
 				for _, resource := range subResources.Resources {
-					// if token.TenantName == "RED" && strings.Contains(resource.ResourceGroup, "") {
+					// if token.TenantName == "RED" && strings.Contains(resource.ResourceGroup, "apcdtqmgmt") {
 					// 	continue
 					// }
 
@@ -380,6 +380,218 @@ func GetAllTenantResources(outputFile string, token *lib.AzureMultiAuthToken) Te
 
 	return allTenantResources
 }
+
+//
+//
+
+func GetAllTenantIpAddresses(outputFile string, token *lib.AzureMultiAuthToken) []AzureResourceIPConfig {
+	subscriptions, err := ListSubscriptions(*token)
+	lib.CheckFatalError(err)
+	var allTenantResourceIPs []AzureResourceIPConfig
+	subIdsByNameMap := make(map[string]string)
+
+	for _, sub := range subscriptions {
+		subIdsByNameMap[sub.SubscriptionID] = sub.DisplayName
+	}
+
+	urlString := "https://management.azure.com/providers/Microsoft.ResourceGraph/resources?api-version=2022-10-01"
+
+	// graphQueryByVM := `Resources
+	//   | where type =~ 'microsoft.compute/virtualmachines'
+	//   | project id, vmId = tolower(tostring(id)), vmName = name, type, tenantId, subscriptionId
+	//   | join (Resources
+	//       | where type =~ 'microsoft.network/networkinterfaces'
+	//       | mv-expand ipconfig=properties.ipConfigurations
+	//       | project vmId = tolower(tostring(properties.virtualMachine.id)), nicId = id, privateIp = ipconfig.properties.privateIPAddress, publicIpId = tostring(ipconfig.properties.publicIPAddress.id)
+	//       | join kind=leftouter (Resources
+	//           | where type =~ 'microsoft.network/publicipaddresses'
+	//           | project publicIpId = id, publicIp = properties.ipAddress
+	//       ) on publicIpId
+	//       | project-away publicIpId, publicIpId1
+	//       | summarize vmNics = make_list(nicId), privateIps = make_list(privateIp), publicIps = make_list(publicIp) by vmId
+	//   ) on vmId
+	//   | project-away vmId, vmId1
+	//   | project id, name = vmName, type, privateIps, publicIps, tenantId, subscriptionId, vmNics
+	//   | union (
+	//       Resources
+	//       | where type =~ 'microsoft.network/loadbalancers'
+	//       | project id, lbId = tolower(tostring(id)), lbName = name, properties, type, tenantId, subscriptionId
+	//           | mv-expand feIpConfig=properties.frontendIPConfigurations
+	//           | project lbId = id, lbName, type, privateIp = feIpConfig.properties.privateIPAddress, publicIpId = tostring(feIpConfig.properties.publicIPAddress.id), tenantId, subscriptionId
+	//           | join kind=leftouter (Resources
+	//               | where type =~ 'microsoft.network/publicipaddresses'
+	//               | project publicIpId = id, publicIp = properties.ipAddress
+	//           ) on publicIpId
+	//           | project-away publicIpId, publicIpId1
+	//           | summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp) by lbId, lbName, type, tenantId, subscriptionId
+	//           | project id = lbId, name = lbName, type, privateIps, publicIps, tenantId, subscriptionId
+	//   )`
+
+	graphQuery := `Resources
+    | where type =~ 'microsoft.network/networkinterfaces'
+    | mv-expand ipconfig=properties.ipConfigurations
+    | project vmId = tolower(tostring(properties.virtualMachine.id)), nicId = id, name, type, snetId = tolower(tostring(ipconfig.properties.subnet.id)),privateIp = ipconfig.properties.privateIPAddress, publicIpId = tostring(ipconfig.properties.publicIPAddress.id)
+    | join kind=leftouter (Resources
+        | where type =~ 'microsoft.network/publicipaddresses'
+        | project publicIpId = id, publicIp = properties.ipAddress
+    ) on publicIpId
+    | project-away publicIpId, publicIpId1
+    | summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp), snetIds = make_list(snetId) by nicId, name, vmId, type
+    | join (Resources
+        | where type =~ 'microsoft.compute/virtualmachines'
+        | project vmId = tolower(tostring(id)), vmName = name,tenantId, subscriptionId) on vmId
+    | project id = tolower(tostring(nicId)), name, type, privateIps, snetIds, publicIps, attachedVmId = vmId, attachedVmName = vmName, tenantId, subscriptionId
+    | union (
+        Resources
+        | where type =~ 'microsoft.network/loadbalancers'
+        | project id, lbId = tolower(tostring(id)), lbName = name, properties, type, tenantId, subscriptionId
+            | mv-expand feIpConfig=properties.frontendIPConfigurations
+            | project lbId = id, lbName, type, snetId = feIpConfig.properties.subnet.id, privateIp = feIpConfig.properties.privateIPAddress, publicIpId = tostring(feIpConfig.properties.publicIPAddress.id), tenantId, subscriptionId
+            | join kind=leftouter (Resources
+                | where type =~ 'microsoft.network/publicipaddresses'
+                | project publicIpId = id, publicIp = properties.ipAddress
+            ) on publicIpId
+            | project-away publicIpId, publicIpId1
+            | summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp), snetIds = make_list(snetId) by lbId, lbName, type, tenantId, subscriptionId
+            | project id = lbId, name = lbName, type, privateIps, snetIds, publicIps, tenantId, subscriptionId
+    )`
+
+	jsonBody := `{
+	"query": "` + graphQuery + `"
+}`
+
+	res, _, err := HttpPost(urlString, jsonBody, *token)
+	lib.CheckFatalError(err)
+
+	var response ResourceGraphGetIpsResponse
+	err = json.Unmarshal(res, &response)
+	lib.CheckFatalError(err)
+
+	for _, res := range response.Data {
+		currRes := res
+		currRes.TenantName = token.TenantName
+		currRes.TenantId = token.TenantId
+		currRes.SubscriptionName = subIdsByNameMap[currRes.SubscriptionId]
+		currRes.ID = strings.ToLower(res.ID)
+		currRes.LastAzureSync = time.Now()
+		allTenantResourceIPs = append(allTenantResourceIPs, currRes)
+	}
+
+	// allResources = append(allResources, response.Data...)
+
+	hasSkipToken := false
+	skipToken := ""
+
+	if response.SkipToken != "" {
+		hasSkipToken = true
+		skipToken = response.SkipToken
+	}
+
+	for hasSkipToken {
+		var whileRes ResourceGraphGetIpsResponse
+		jsonBody := `{
+			"query": "` + graphQuery + `",
+			"options": {
+				"$skipToken": "` + skipToken + `"
+			}
+		}`
+
+		res, _, err := HttpPost(urlString, jsonBody, *token)
+		lib.CheckFatalError(err)
+		err = json.Unmarshal(res, &whileRes)
+		lib.CheckFatalError(err)
+
+		// allResources = append(allResources, whileRes.Data...)
+		for _, res := range whileRes.Data {
+			currRes := res
+			currRes.ID = strings.ToLower(res.ID)
+			allTenantResourceIPs = append(allTenantResourceIPs, currRes)
+		}
+
+		if whileRes.SkipToken != "" {
+			hasSkipToken = true
+			skipToken = whileRes.SkipToken
+		} else {
+			hasSkipToken = false
+			skipToken = ""
+		}
+	}
+
+	if outputFile != "" {
+		jsonStr, _ := json.MarshalIndent(allTenantResourceIPs, "", "  ")
+
+		err = os.WriteFile(outputFile, jsonStr, 0644)
+		lib.CheckFatalError(err)
+		fmt.Println("Saved to " + outputFile)
+	}
+
+	// var allTenantResources TenantResourceList
+
+	// fmt.Println(allTenantResources.ResourceCount)
+	// os.Exit(0)
+	// allTenantResources.ResourceCount = len(allTenantResourcesBySub)
+	// allTenantResources.resources
+
+	return allTenantResourceIPs
+}
+
+//
+//
+
+func GetAllIpAddrForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfiguredTenantsOptions, tokens lib.AllTenantTokens) (allResourceIPs []AzureResourceIPConfig) {
+	var (
+		wg    sync.WaitGroup
+		mutex sync.Mutex
+	)
+
+	for _, token := range tokens {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			if !opts.SuppressSteps {
+				fmt.Println(token.TenantName + ": Fetching resources")
+			}
+			// allResources[token.TenantName] = make(map[string]SubscriptionResourceList)
+			tenantResourceIPs := GetAllTenantIpAddresses("", &token)
+			if !opts.SuppressSteps {
+				fmt.Println(token.TenantName + ": Fetch complete")
+			}
+			// var processedTenantResources TenantResourceList
+
+			mutex.Lock()
+			allResourceIPs = append(allResourceIPs, tenantResourceIPs...)
+			mutex.Unlock()
+			if !opts.SuppressSteps {
+				fmt.Println(token.TenantName + ": Processing complete")
+			}
+		}()
+	}
+
+	wg.Wait()
+
+	options := *opts
+
+	outputFilePath := options.OutputFilePath
+
+	if outputFilePath != "" {
+		jsonStr, _ := json.MarshalIndent(allResourceIPs, "", "  ")
+
+		currentDate := time.Now().Format("20060102")
+
+		arrayFileName := outputFilePath + "/allRes-GraphResources-AllTenantIPs-" + currentDate + ".json"
+
+		err := os.WriteFile(arrayFileName, jsonStr, 0644)
+		lib.CheckFatalError(err)
+		fmt.Println("Saved to " + arrayFileName + " and " + arrayFileName)
+	}
+
+	// fmt.Println(len(allResourcesSlice))
+
+	return allResourceIPs
+}
+
+//
+//
 
 func GetAllTenantResourceGroups(outputFile string, token *lib.AzureMultiAuthToken) (allResGrps []ResourceGroup) {
 	urlString := "https://management.azure.com/providers/Microsoft.ResourceGraph/resources?api-version=2022-10-01"

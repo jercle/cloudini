@@ -718,22 +718,22 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 		update := bson.D{{"$set", resource}}
 
 		// .SetUpsert(true)
-		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
-		// _, err := resourcesListColl.UpdateOne(ctx, filter, update, nil)
-		// lib.CheckFatalError(err)
-		// if err != nil {
-		// 	// fmt.Println(err)
-		// 	_, _, cachePath := lib.InitConfig(nil)
-		// 	_ = updates
-		// 	allResStr, _ := json.MarshalIndent(resources, "", "  ")
-		// 	os.WriteFile(cachePath+"/mongo.updateOne-error.resources.json", allResStr, 0644)
-		// 	jsonStr, _ := json.MarshalIndent(res, "", "  ")
-		// 	os.WriteFile(cachePath+"/mongo.updateOne-error.err.json", jsonStr, 0644)
-		// 	// fmt.Println(string(jsonStr))
-		// 	fmt.Println(res.ID)
-		// 	lib.CheckFatalError(err)
-		// 	// os.Exit(1)
-		// }
+		// updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+		_, err := resourcesListColl.UpdateOne(ctx, filter, update, nil)
+		lib.CheckFatalError(err)
+		if err != nil {
+			// fmt.Println(err)
+			_, _, cachePath := lib.InitConfig(nil)
+			_ = updates
+			allResStr, _ := json.MarshalIndent(resources, "", "  ")
+			os.WriteFile(cachePath+"/mongo.updateOne-error.resources.json", allResStr, 0644)
+			jsonStr, _ := json.MarshalIndent(res, "", "  ")
+			os.WriteFile(cachePath+"/mongo.updateOne-error.err.json", jsonStr, 0644)
+			// fmt.Println(string(jsonStr))
+			fmt.Println(res.ID)
+			lib.CheckFatalError(err)
+			// os.Exit(1)
+		}
 	}
 
 	results, err := resourcesListColl.BulkWrite(ctx, updates)
@@ -901,4 +901,30 @@ func UpsertCertInfo(caCertInfo []lib.CertAuthorityCertInfo, serverCertInfo []lib
 	// jsonStr, _ := json.MarshalIndent(results.UpsertedIDs, "", "  ")
 	// fmt.Println(string(jsonStr))
 	return
+}
+
+//
+//
+
+func UpsertAzureIPAddresses(resources []azure.AzureResourceIPConfig, resIPAddressesColl *mongo.Collection) *mongo.BulkWriteResult {
+	ctx := context.TODO()
+
+	DeleteAllDocumentsInCollection(resIPAddressesColl)
+
+	var updates []mongo.WriteModel
+
+	for _, res := range resources {
+		resource := res
+		resource.LastDBSync = time.Now()
+		resource.ID = strings.ToLower(res.ID)
+		filter := bson.D{{"_id", resource.ID}}
+		update := bson.D{{"$set", resource}}
+
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+	}
+
+	results, err := resIPAddressesColl.BulkWrite(ctx, updates)
+	lib.CheckFatalError(err)
+
+	return results
 }

@@ -57,6 +57,32 @@ func UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(imageGalleryImagesColl *mon
 //
 //
 
+func UpdateAllAzureResourceIPAddresses(resIPAddressesColl *mongo.Collection, tokenReq lib.AllTenantTokens) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	opts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
+		SuppressSteps: true,
+	}
+
+	fmt.Println("Fetching all resource IPs...")
+	s.Start()
+	resources := azure.GetAllIpAddrForAllConfiguredTenants(&opts, tokenReq)
+	s.Stop()
+
+	jsonStr, _ := json.MarshalIndent(resources, "", "  ")
+	fmt.Println(string(jsonStr))
+	os.Exit(0)
+
+	fmt.Println("Updating all resource IPs in database...")
+	s.Start()
+	UpsertAzureIPAddresses(resources, resIPAddressesColl)
+	s.Stop()
+
+}
+
+//
+//
+
 func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVcpuCountsOptions, tokenReq lib.AllTenantTokens) lib.AggregatedCostData {
 	if opts.AzResGrpsListColl == nil {
 		fmt.Println("AzResGrpsListColl == nil")
