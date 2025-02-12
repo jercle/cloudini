@@ -29,6 +29,7 @@ to quickly create a Cobra application.`,
 
 func init() {
 	cmd.RootCmd.AddCommand(azCmd)
+	azCmd.PersistentFlags().StringVarP(&tenantId, "tenantId", "t", "", "Tenant ID.")
 	azCmd.Flags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")
 	azCmd.Flags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")
 	azCmd.PersistentFlags().StringVar(&clientId, "clientId", "", "Client ID for Service Principal authentication.")
