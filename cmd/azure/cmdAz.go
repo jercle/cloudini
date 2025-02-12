@@ -34,7 +34,6 @@ func init() {
 	azCmd.Flags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")
 	azCmd.PersistentFlags().StringVar(&clientId, "clientId", "", "Client ID for Service Principal authentication.")
 	azCmd.PersistentFlags().StringVar(&clientSecret, "clientSecret", "", "Client Secret for Service Principal authentication.")
-	azCmd.Flags().StringVarP(&tenantId, "tenantId", "t", "", "Tenant ID.")
 
 	// if subscriptionId == "" {
 	// 	sub, err := GetActiveSub()

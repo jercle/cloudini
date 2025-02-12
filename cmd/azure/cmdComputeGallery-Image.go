@@ -104,4 +104,6 @@ func init() {
 	cmdComputeGalleryImage.Flags().BoolVarP(&getNewVersionPatchNumber, "getNewVersionPatchNumber", "p", false, "Increment version patch number")
 	cmdComputeGalleryImage.MarkFlagsMutuallyExclusive("getLatestVersionNumber", "getNewVersionPatchNumber")
 	cmdComputeGalleryImage.Flags().StringVarP(&checkVersionExists, "checkVersionExists", "c", "", "Compute Gallery Image version")
+	cmdComputeGalleryImage.Flags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")
+	cmdComputeGalleryImage.Flags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")
 }
