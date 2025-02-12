@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.20]
+* Remove tenantName check in cmdComputeGalleryImage
+
 ## [0.1.19]
 * Add subscriptionId and resourceGroup flags to cmdComputeGalleryImage
 

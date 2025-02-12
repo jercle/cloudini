@@ -32,11 +32,11 @@ to quickly create a Cobra application.`,
 			err      error
 		)
 
-		if clientId != "" && clientSecret != "" && tenantId != "" && tenantName != "" {
+		if clientId != "" && clientSecret != "" && tenantId != "" {
 			authOpts.ClientID = clientId
 			authOpts.ClientSecret = clientSecret
 			authOpts.TenantID = tenantId
-			authOpts.TenantName = tenantName
+			// authOpts.TenantName = tenantName
 
 			token, err = GetServicePrincipalMultiAuthToken(authOpts)
 			lib.CheckFatalError(err)
