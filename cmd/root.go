@@ -12,6 +12,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var cliVersion = "0.1.20"
+
 var (
 	// The name of our config file, without the file extension because viper supports many different config file languages.
 	defaultConfigFilename = "cldConf"
@@ -34,7 +36,7 @@ var (
 // rootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:     "cld",
-	Version: "0.1.17",
+	Version: cliVersion,
 	Short:   "A brief description of your application",
 	Long: `This CLI has been created to add additional functionality
 to https://docs.microsoft.com/en-us/cli/azure/ such as data

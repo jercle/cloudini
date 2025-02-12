@@ -1,8 +1,19 @@
 # Change Log
 
+## [0.1.20]
+* Remove tenantName check in cmdComputeGalleryImage
+
+## [0.1.19]
+* Add subscriptionId and resourceGroup flags to cmdComputeGalleryImage
+
+## [0.1.18]
+* Update deps
+* Add tenantId back as persistant flag to azCmd
+
 ## [0.1.17]
 * Update deps
-*
+* Add clientId and clientSecret flags back as persistant flags to azCmd
+
 ## [0.1.16]
 * Update deps
 
