@@ -471,7 +471,7 @@ type AzureResourceDefaultSecurityRules struct {
 }
 
 type AzureResourceDefinition struct {
-	Schema  string `json:"$schema,omitempty" bson:"$schema,omitempty"`
+	Schema  string `json:"$schema,omitempty" bson:"_schema,omitempty"`
 	Actions struct {
 		ComposeEmailResponse *struct {
 			Inputs   string `json:"inputs,omitempty" bson:"inputs,omitempty"`
@@ -2113,7 +2113,7 @@ type AzureResourceSystemData struct {
 }
 
 type AzureResourceTemplate struct {
-	Schema     string `json:"$schema,omitempty" bson:"$schema,omitempty"`
+	Schema     string `json:"$schema,omitempty" bson:"_schema,omitempty"`
 	Containers []struct {
 		Env []struct {
 			Name      string `json:"name,omitempty" bson:"name,omitempty"`

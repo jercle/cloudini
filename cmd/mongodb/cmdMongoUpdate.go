@@ -17,6 +17,7 @@ var (
 	costDataMonth                                   string
 	updateEntraItems                                bool
 	updateEntraPimItems                             bool
+	updateIpAddresses                               bool
 	showExecutionTime                               bool
 
 // tenantId       string
@@ -53,7 +54,6 @@ to quickly create a Cobra application.`,
 		azResTenantsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResTenants)
 		azResVcpuCountsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResVcpuCounts)
 		azResIpAddresses := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResIPAddresses)
-		_ = azResIpAddresses
 
 		citrixMachineCatalogsColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMachineCatalogs)
 
@@ -74,6 +74,10 @@ to quickly create a Cobra application.`,
 
 		tokenReq, err := azure.GetAllTenantSPTokens(lib.AzureMultiAuthTokenRequestOptions{}, nil)
 		lib.CheckFatalError(err)
+
+		if updateIpAddresses {
+			UpdateAllAzureResourceIPAddresses(azResIpAddresses, tokenReq)
+		}
 
 		if updateAllGalleryImagesAndUpdateWithUsedByCitrix {
 			UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(azResImageGalleryImagesColl, citrixMachineCatalogsColl, tokenReq)
@@ -134,6 +138,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateAzureResVcpuCountsCostData, "updateAzureResVcpuCountsCostData", "c", false, "Gets latest cost data and all resources, transforms and relates them, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAzureResourceRelations, "updateAzureResourceRelations", "r", false, "Gets all resources from cost data and database, aggregates and finds relations, then updates database. This can only be used in conjunction with 'updateAzureResVcpuCountsCostData'")
 	cmdMongoUpdate.Flags().BoolVarP(&updateEntraItems, "updateEntraItems", "e", false, "Gets all App Registrations from configured Azure tenants and finds expiring credentials, then updates database")
+	cmdMongoUpdate.Flags().BoolVarP(&updateIpAddresses, "updateIpAddresses", "i", false, "Gets all App Registrations from configured Azure tenants and finds expiring credentials, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateEntraPimItems, "updateEntraPimItems", "p", false, "Gets all PIM assignments and eligibilities, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&showExecutionTime, "showExecutionTime", "t", false, "Prints execution time when complete")
 	cmdMongoUpdate.Flags().StringVarP(&costDataMonth, "costDataMonth", "m", "", "Which month to get cost data from - defaults to whatever month it was yesterday. Use with 'updateAzureResVcpuCountsCostData' Format: YYYYMM")
