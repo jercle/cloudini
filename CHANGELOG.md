@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.23]
+* Fix bug: update bson flags so $connections is now _connections
+
 ## [0.1.22]
 * Fix bug with function for getting IP addresses from Azure
 
