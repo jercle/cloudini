@@ -13,7 +13,6 @@ require (
 	github.com/antonmedv/clipboard v1.0.1
 	github.com/briandowns/spinner v1.23.2
 	github.com/brianvoe/gofakeit/v7 v7.2.1
-	github.com/brotherpowers/ipsubnet v0.0.0-20170914094241-30bc98f0a5b1
 	github.com/charmbracelet/bubbles v0.20.0
 	github.com/charmbracelet/bubbletea v1.3.3
 	github.com/charmbracelet/lipgloss v1.0.0
@@ -27,6 +26,7 @@ require (
 	github.com/google/deck v1.1.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/iancoleman/strcase v0.3.0
+	github.com/jercle/ipsubnet v0.0.0-20250224020338-42597e25c99a
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mattn/go-sqlite3 v1.14.24
 	github.com/microsoft/azure-devops-go-api/azuredevops/v7 v7.1.0
