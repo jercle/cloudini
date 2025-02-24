@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.22]
+* Fix bug with function for getting IP addresses from Azure
+
 ## [0.1.21]
 * Update deps, update Go to 1.24
 * Add util/networking and subnet calc cmd
