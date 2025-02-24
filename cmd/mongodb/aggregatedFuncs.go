@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/briandowns/spinner"
 	"github.com/jercle/cloudini/cmd/ado"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
 	"github.com/jercle/cloudini/lib"
+	"github.com/briandowns/spinner"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -68,10 +68,6 @@ func UpdateAllAzureResourceIPAddresses(resIPAddressesColl *mongo.Collection, tok
 	s.Start()
 	resources := azure.GetAllIpAddrForAllConfiguredTenants(&opts, tokenReq)
 	s.Stop()
-
-	jsonStr, _ := json.MarshalIndent(resources, "", "  ")
-	fmt.Println(string(jsonStr))
-	os.Exit(0)
 
 	fmt.Println("Updating all resource IPs in database...")
 	s.Start()
