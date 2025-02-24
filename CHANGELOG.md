@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.21]
+* Update deps, update Go to 1.24
+* Add util/networking and subnet calc cmd
+* Add mongodb/UpdateIpAddresses command
+* Update bson flags so $schema is now _schema for CosmosDB compatibility
+
 ## [0.1.20]
 * Remove tenantName check in cmdComputeGalleryImage
 
