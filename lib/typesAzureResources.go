@@ -560,7 +560,7 @@ type AzureResourceDefinition struct {
 		Connections *struct {
 			DefaultValue *struct{} `json:"defaultValue,omitempty" bson:"defaultValue,omitempty"`
 			Type         string    `json:"type,omitempty" bson:"type,omitempty"`
-		} `json:"$connections,omitempty" bson:"$connections,omitempty"`
+		} `json:"$connections,omitempty" bson:"_connections,omitempty"`
 		// "Company logo link" cannot be unmarshalled into a struct field by encoding/json.
 		// "Report name" cannot be unmarshalled into a struct field by encoding/json.
 	} `json:"parameters,omitempty" bson:"parameters,omitempty"`
@@ -1343,7 +1343,7 @@ type AzureResourceParameters struct {
 	ComplianceTableName      *AzureResourceParameter `json:"ComplianceTableName,omitempty" bson:"ComplianceTableName,omitempty"`
 	Connections              *struct {
 		Value map[string]AzureResourceParameterConnection `json:"value,omitempty" bson:"value,omitempty"`
-	} `json:"$connections,omitempty" bson:"$connections,omitempty"`
+	} `json:"$connections,omitempty" bson:"_connections,omitempty"`
 	Days                       *AzureResourceParameter `json:"days,omitempty" bson:"days,omitempty"`
 	Details                    *AzureResourceParameter `json:"Details,omitempty" bson:"Details,omitempty"`
 	DomainCredentialName       *AzureResourceParameter `json:"DomainCredentialName,omitempty" bson:"DomainCredentialName,omitempty"`
