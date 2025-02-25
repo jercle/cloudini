@@ -39,7 +39,7 @@ require (
 	github.com/spf13/viper v1.19.0
 	github.com/tidwall/pretty v1.2.1
 	github.com/xuri/excelize/v2 v2.9.0
-	go.mongodb.org/mongo-driver v1.17.2
+	go.mongodb.org/mongo-driver v1.17.3
 	golang.design/x/clipboard v0.7.0
 	golang.org/x/crypto v0.34.0
 	golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa
