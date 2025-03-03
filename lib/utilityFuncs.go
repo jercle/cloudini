@@ -446,3 +446,48 @@ func GetStringInBetween(str string, startS string, endS string) (result string, 
 
 //
 //
+
+func AddXmlTagsFromJsonTagsToStructFile(path string, overwriteFile bool) (processedStruct string) {
+	readFile, err := os.Open(path)
+	CheckFatalError(err)
+
+	fileScanner := bufio.NewScanner(readFile)
+	fileScanner.Split(bufio.ScanLines)
+	var fileLines []string
+
+	for fileScanner.Scan() {
+		fileLines = append(fileLines, fileScanner.Text())
+	}
+
+	readFile.Close()
+
+	var processedLines []string
+
+	for _, line := range fileLines {
+		lineSplit := strings.SplitN(line, "`", 2)
+		if len(lineSplit) > 1 && strings.Contains(line, "json:") && !strings.Contains(line, "xml:") {
+			tagString := strings.ReplaceAll(lineSplit[1], "`", "")
+			tagString = tagString[:len(tagString)-1] + "\""
+			xmlTag := strings.ReplaceAll(tagString, "json:", "xml:")
+			jsonTag := tagString[5:]
+			tagString = "`json:" + jsonTag + " " + xmlTag + "`"
+			processedLines = append(processedLines, lineSplit[0]+tagString)
+		} else {
+			processedLines = append(processedLines, line)
+		}
+	}
+	processedFile := strings.Join(processedLines, "\n")
+	formattedAndProcessed, err := format.Source([]byte(processedFile))
+	CheckFatalError(err)
+
+	if overwriteFile {
+		err := os.WriteFile(path, formattedAndProcessed, 0644)
+		CheckFatalError(err)
+		return string(formattedAndProcessed)
+	} else {
+		return string(formattedAndProcessed)
+	}
+}
+
+//
+//
