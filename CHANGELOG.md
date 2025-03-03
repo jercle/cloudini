@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.24]
+* Add xmltags utility func and update deps
+
 ## [0.1.23]
 * Fix bug: update bson flags so $connections is now _connections
 
