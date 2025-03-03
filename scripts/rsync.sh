@@ -1,0 +1,18 @@
+rsync -r ./ ../cloudini-pre-update/ \
+--exclude dev/db \
+--exclude dev/sophos \
+--exclude dev/sophosResponses \
+--exclude dev/vcms \
+--exclude dev/outputs \
+--exclude dev/citrix \
+--exclude dev/resources \
+--exclude dev/outputs \
+--exclude dev/resources \
+--exclude dev/fakedata \
+--exclude dev/cost-exports \
+--exclude departmental \
+--exclude docker \
+--exclude db \
+--exclude .gitignore \
+--exclude .git \
+--progress --dry-run
