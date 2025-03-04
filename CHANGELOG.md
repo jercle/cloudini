@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.1.25]
+* Bugfix: fixed issue using mongo bulkwrite and updateone in same func
+* Update deps
+
 ## [0.1.24]
 * Add xmltags utility func and update deps
 
