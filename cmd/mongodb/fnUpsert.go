@@ -718,22 +718,22 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 		update := bson.D{{"$set", resource}}
 
 		// .SetUpsert(true)
-		// updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
-		_, err := resourcesListColl.UpdateOne(ctx, filter, update, nil)
-		lib.CheckFatalError(err)
-		if err != nil {
-			// fmt.Println(err)
-			_, _, cachePath := lib.InitConfig(nil)
-			_ = updates
-			allResStr, _ := json.MarshalIndent(resources, "", "  ")
-			os.WriteFile(cachePath+"/mongo.updateOne-error.resources.json", allResStr, 0644)
-			jsonStr, _ := json.MarshalIndent(res, "", "  ")
-			os.WriteFile(cachePath+"/mongo.updateOne-error.err.json", jsonStr, 0644)
-			// fmt.Println(string(jsonStr))
-			fmt.Println(res.ID)
-			lib.CheckFatalError(err)
-			// os.Exit(1)
-		}
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+		// _, err := resourcesListColl.UpdateOne(ctx, filter, update, nil)
+		// lib.CheckFatalError(err)
+		// if err != nil {
+		// 	// fmt.Println(err)
+		// 	_, _, cachePath := lib.InitConfig(nil)
+		// 	_ = updates
+		// 	allResStr, _ := json.MarshalIndent(resources, "", "  ")
+		// 	os.WriteFile(cachePath+"/mongo.updateOne-error.resources.json", allResStr, 0644)
+		// 	jsonStr, _ := json.MarshalIndent(res, "", "  ")
+		// 	os.WriteFile(cachePath+"/mongo.updateOne-error.err.json", jsonStr, 0644)
+		// 	// fmt.Println(string(jsonStr))
+		// 	fmt.Println(res.ID)
+		// 	lib.CheckFatalError(err)
+		// 	// os.Exit(1)
+		// }
 	}
 
 	results, err := resourcesListColl.BulkWrite(ctx, updates)
@@ -771,7 +771,15 @@ func UpsertMultipleResGrps(resGrps []azure.ResourceGroup, resourcesListColl *mon
 	}
 
 	results, err := resourcesListColl.BulkWrite(ctx, updates)
-	lib.CheckFatalError(err)
+	if err != nil {
+		_, _, cachePath := lib.InitConfig(nil)
+		jsonStr, _ := json.MarshalIndent(resGrps, "", "  ")
+		os.WriteFile(cachePath+"/UpserMultipleResGrps-resGrps.json", jsonStr, 0644)
+		jsonStr, _ = json.MarshalIndent(updates, "", "  ")
+		os.WriteFile(cachePath+"/UpserMultipleResGrps-updates.json", jsonStr, 0644)
+		return nil
+	}
+	// lib.CheckFatalError(err)
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
