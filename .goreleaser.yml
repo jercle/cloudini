@@ -27,7 +27,7 @@ builds:
 signs:
   - artifacts: checksum
     # stdin: "{{ .Env.GPG_PASSWORD }}"
-    stdin_file: ./gpg_pwd
+    # stdin_file: ./gpg_pwd
 
 brews:
   -
