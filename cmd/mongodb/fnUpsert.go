@@ -701,8 +701,8 @@ func UpsertVcpuCounts(vcpuCountData lib.VCpuCountByTenant, collection *mongo.Col
 //
 //
 
-// func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) {
-func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) {
+	// func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) *mongo.BulkWriteResult {
 	ctx := context.TODO()
 
 	var updates []mongo.WriteModel
@@ -736,8 +736,8 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 		}
 	}
 
-	results, err := resourcesListColl.BulkWrite(ctx, updates)
-	lib.CheckFatalError(err)
+	// results, err := resourcesListColl.BulkWrite(ctx, updates)
+	// lib.CheckFatalError(err)
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
@@ -748,7 +748,7 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 	// fmt.Println("Upserted IDs:")
 	// jsonStr, _ := json.MarshalIndent(results.UpsertedIDs, "", "  ")
 	// fmt.Println(string(jsonStr))
-	return results
+	// return results
 }
 
 //
