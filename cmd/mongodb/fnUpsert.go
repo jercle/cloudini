@@ -706,6 +706,7 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 	ctx := context.TODO()
 
 	var updates []mongo.WriteModel
+	fmt.Println(len(resources))
 
 	for _, res := range resources {
 		resource := res
