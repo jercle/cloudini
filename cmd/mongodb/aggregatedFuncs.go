@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/jercle/cloudini/cmd/ado"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
 	"github.com/jercle/cloudini/lib"
-	"github.com/briandowns/spinner"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -42,7 +42,6 @@ func UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(imageGalleryImagesColl *mon
 		fmt.Println("Updating Citrix Machine Catalogs in database...")
 		s.Start()
 		UpsertCitrixMachineCatalogs(machineCatalogs, machineCatalogsColl)
-		s.Stop()
 		mcMasterImageVersions := machineCatalogs.ListImageVersions()
 		s.Stop()
 		fmt.Println("Updating Azure Images used by Citrix in database...")
