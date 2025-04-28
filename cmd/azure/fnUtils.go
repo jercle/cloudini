@@ -26,6 +26,8 @@ func HttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 	// 	return nil, err
 	// }
 
+	// lib.JsonMarshalAndPrint(res.Header)
+
 	responseBody, err := io.ReadAll(res.Body)
 
 	if res.StatusCode == 404 {

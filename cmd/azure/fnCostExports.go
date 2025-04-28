@@ -15,8 +15,8 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/briandowns/spinner"
 	"github.com/jercle/cloudini/lib"
+	"github.com/briandowns/spinner"
 	"github.com/xuri/excelize/v2"
 )
 

@@ -11,8 +11,8 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/TylerBrock/colorjson"
 	"github.com/jercle/cloudini/lib"
+	"github.com/TylerBrock/colorjson"
 	"github.com/tidwall/pretty"
 )
 

@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/brianvoe/gofakeit/v7"
 	"github.com/jercle/cloudini/cmd/citrix"
 	"github.com/jercle/cloudini/lib"
+	"github.com/brianvoe/gofakeit/v7"
 )
 
 func main() {

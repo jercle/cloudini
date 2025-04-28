@@ -60,4 +60,3 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
-      - "^dev:"
