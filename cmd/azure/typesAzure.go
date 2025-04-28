@@ -46,6 +46,7 @@ type AzureResourceIPConfig struct {
 	SubscriptionId   string    `json:"subscriptionId,omitempty" bson:"subscriptionId,omitempty"`
 	PrivateIPs       []string  `json:"privateIps,omitempty" bson:"privateIps,omitempty"`
 	PublicIPs        []string  `json:"publicIps,omitempty" bson:"publicIps,omitempty"`
+	SubnetIds        []string  `json:"snetIds,omitempty" bson:"snetIds,omitempty"`
 	AttachedVmId     string    `json:"attachedVmId,omitempty" bson:"attachedVmId,omitempty"`
 	AttachedVmName   string    `json:"attachedVmName,omitempty" bson:"attachedVmName,omitempty"`
 	LastAzureSync    time.Time `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty"`

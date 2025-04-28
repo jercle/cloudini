@@ -11,8 +11,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/fatih/color"
 	"github.com/jercle/cloudini/lib"
+	"github.com/fatih/color"
 	"github.com/rodaine/table"
 )
 
