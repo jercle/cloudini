@@ -14,10 +14,12 @@ type AzureMultiAuthTokenRequestOptions struct {
 	ClientSecret                 string `json:"clientSecret,omitempty" bson:"clientSecret,omitempty"`
 	Scope                        string `json:"scope,omitempty" bson:"scope,omitempty"`
 	AzureContainerRepositoryName string `json:"azureContainerRepositoryName,omitempty" bson:"azureContainerRepositoryName,omitempty"`
+	NoCache                      bool   `json:"noCache,omitempty" bson:"noCache,omitempty"` // Does not use cached token
 }
 
 type AzureMultiAuthToken struct {
 	TenantId   string `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
+	ClientId   string `json:"clientId,omitempty" bson:"clientId,omitempty"`
 	TenantName string `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
 	TokenData  AzureTokenData
 }

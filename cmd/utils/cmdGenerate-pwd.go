@@ -3,8 +3,8 @@ package utils
 import (
 	"fmt"
 
-	"github.com/antonmedv/clipboard"
 	"github.com/jercle/cloudini/lib"
+	"github.com/antonmedv/clipboard"
 	"github.com/spf13/cobra"
 )
 

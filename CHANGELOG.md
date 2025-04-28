@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.26]
+* Add function for updating cert info
+* Begin improving how we get all IP addresses
+* Add "NoCache" option to getting tokens
+* Update deps
+
 ## [0.1.25]
 * Bugfix: fixed issue using mongo bulkwrite and updateone in same func
 * Update deps
