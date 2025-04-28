@@ -55,7 +55,9 @@ Note: You can only run this command for vms in one tenant at a time
 				}
 			} else {
 				for _, vm := range configuredVMs {
-					vmList = append(vmList, config.Azure.VirtualMachines[vm])
+					if config.Azure.VirtualMachines[vm] != "" {
+						vmList = append(vmList, config.Azure.VirtualMachines[vm])
+					}
 				}
 			}
 		}
@@ -92,7 +94,7 @@ func init() {
 	cmdVirtualMachines.Flags().BoolVarP(&statusVMs, "status-info", "i", false, "Gets the current status of the provided VMs")
 	cmdVirtualMachines.Flags().BoolVarP(&listConfiguredVMs, "list-configured-vms", "l", false, "Lists currently configured VMs in the cloudini config file")
 	cmdVirtualMachines.Flags().BoolVar(&runAgainstAllConfiguredVMs, "all", false, "Runs the command against all configured VMs")
-	cmdVirtualMachines.Flags().StringVarP(&tenantName, "tenantName", "n", "", "Name of Tenant for configured auth")
+	cmdVirtualMachines.Flags().StringVarP(&tenantName, "tenantName", "t", "", "Name of Tenant for configured auth")
 	cmdVirtualMachines.MarkFlagRequired("tenantName")
 	// cmdVirtualMachines.MarkFlagRequired("configured-vms")
 	cmdVirtualMachines.MarkFlagsMutuallyExclusive("start", "stop", "deallocate", "status-info", "list-configured-vms")

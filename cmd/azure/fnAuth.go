@@ -47,46 +47,54 @@ import (
 // 	return tokens
 // }
 
-func GetServicePrincipalToken(tenant string, servicePrincipalDetails lib.AzureMultiAuthTokenRequestOptions, cldConfigOpts *lib.CldConfigOptions, mut *sync.Mutex) (*lib.AzureTokenData, error) {
+func GetServicePrincipalToken(tenant string, matOptions lib.AzureMultiAuthTokenRequestOptions, cldConfigOpts *lib.CldConfigOptions, mut *sync.Mutex) (*lib.AzureTokenData, error) {
 	ctx := context.Background()
-	spDetails := servicePrincipalDetails
+	options := matOptions
 
 	var tokenRequestOptions policy.TokenRequestOptions
+	var cachedToken *lib.AzureTokenData
 
-	if spDetails.Scope == "" {
-		spDetails.Scope = "default"
+	if options.Scope == "" {
+		options.Scope = "default"
 	}
 
 	if mut != nil {
 		mut.Lock()
 	}
-	cachedToken := lib.GetCachedToken[lib.AzureTokenData]("az"+strings.ToLower(spDetails.TenantName)+spDetails.Scope, cldConfigOpts)
-	if mut != nil {
-		mut.Unlock()
-	}
 
-	if cachedToken != nil {
-		isExpired := lib.CheckCachedTokenExpired(cachedToken.ExpiresOn)
-		if !isExpired {
-			return cachedToken, nil
+	if !options.NoCache {
+		cachedToken = lib.GetCachedToken[lib.AzureTokenData]("az"+strings.ToLower(options.TenantName)+options.Scope, cldConfigOpts)
+		if mut != nil {
+			mut.Unlock()
+		}
+
+		if cachedToken != nil {
+			isExpired := lib.CheckCachedTokenExpired(cachedToken.ExpiresOn)
+			if !isExpired {
+				return cachedToken, nil
+			}
 		}
 	}
 
-	// jsonBytes, _ := json.MarshalIndent(spDetails, "", "  ")
+	// jsonBytes, _ := json.MarshalIndent(options, "", "  ")
 	// fmt.Println(string(jsonBytes))
 
-	switch spDetails.Scope {
+	switch options.Scope {
+	case "defender":
+		tokenRequestOptions.Scopes = []string{"https://api.securitycenter.microsoft.com/.default"}
 	case "graph":
 		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
 	case "storage":
 		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
+	case "monitor":
+		tokenRequestOptions.Scopes = []string{"https://monitor.azure.com//.default"}
 	case "acr":
 		tokenRequestOptions.Scopes = []string{}
-		encodedData := b64.StdEncoding.EncodeToString([]byte(spDetails.ClientID + ":" + spDetails.ClientSecret))
+		encodedData := b64.StdEncoding.EncodeToString([]byte(options.ClientID + ":" + options.ClientSecret))
 		urlString := "https://" +
-			spDetails.AzureContainerRepositoryName +
+			options.AzureContainerRepositoryName +
 			".azurecr.io/oauth2/token?service=" +
-			spDetails.AzureContainerRepositoryName +
+			options.AzureContainerRepositoryName +
 			".azurecr.io&scope=repository:*:*"
 		req, err := http.NewRequest(http.MethodGet, urlString, nil)
 		lib.CheckFatalError(err)
@@ -114,7 +122,7 @@ func GetServicePrincipalToken(tenant string, servicePrincipalDetails lib.AzureMu
 		if mut != nil {
 			mut.Lock()
 		}
-		lib.CacheSaveToken(tokenData, "az"+strings.ToLower(spDetails.TenantName)+spDetails.Scope, cldConfigOpts)
+		lib.CacheSaveToken(tokenData, "az"+strings.ToLower(options.TenantName)+options.Scope, cldConfigOpts)
 		if mut != nil {
 			mut.Unlock()
 		}
@@ -125,7 +133,7 @@ func GetServicePrincipalToken(tenant string, servicePrincipalDetails lib.AzureMu
 	}
 	tokenRequestOptions.EnableCAE = true
 
-	cred, err := azidentity.NewClientSecretCredential(tenant, spDetails.ClientID, spDetails.ClientSecret, nil)
+	cred, err := azidentity.NewClientSecretCredential(tenant, options.ClientID, options.ClientSecret, nil)
 	if err != nil {
 		// log.Error("Unable to obtain Azure token", err, err)
 		lib.CheckFatalError(err)
@@ -149,7 +157,7 @@ func GetServicePrincipalToken(tenant string, servicePrincipalDetails lib.AzureMu
 	}
 
 	// fmt.Println(token)
-	lib.CacheSaveToken(token, "az"+strings.ToLower(spDetails.TenantName)+spDetails.Scope, cldConfigOpts)
+	lib.CacheSaveToken(token, "az"+strings.ToLower(options.TenantName)+options.Scope, cldConfigOpts)
 	return &token, nil
 }
 
@@ -158,12 +166,12 @@ func GetServicePrincipalMultiAuthToken(spDetails lib.AzureMultiAuthTokenRequestO
 	var tokenRequestOptions policy.TokenRequestOptions
 
 	switch spDetails.Scope {
-	case "defender":
-		tokenRequestOptions.Scopes = []string{"https://api.securitycenter.microsoft.com/.default"}
 	case "graph":
 		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
 	case "storage":
 		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
+	case "monitor":
+		tokenRequestOptions.Scopes = []string{"https://monitor.azure.com//.default"}
 	default:
 		tokenRequestOptions.Scopes = []string{"https://management.core.windows.net/.default"}
 	}
@@ -352,30 +360,32 @@ func GetAllTenantSPTokens(options lib.AzureMultiAuthTokenRequestOptions, cldConf
 			)
 			configExists := false
 			options.TenantName = tenant.TenantName
+			opts := options
 
 			switch options.GetWriteToken {
 			case true:
 				if tenant.Writer != nil {
 					writerConfig = *tenant.Writer
-					options.ClientID = writerConfig.ClientID
-					options.ClientSecret = writerConfig.ClientSecret
+					opts.ClientID = writerConfig.ClientID
+					opts.ClientSecret = writerConfig.ClientSecret
 					configExists = true
 				}
 			default:
 				if tenant.Reader != nil {
 					readerConfig = *tenant.Reader
-					options.ClientID = readerConfig.ClientID
-					options.ClientSecret = readerConfig.ClientSecret
+					opts.ClientID = readerConfig.ClientID
+					opts.ClientSecret = readerConfig.ClientSecret
 					configExists = true
 				}
 			}
 
 			if configExists {
-				tokenData, err := GetServicePrincipalToken(tenant.TenantID, options, cldConfOpts, &mut)
+				tokenData, err := GetServicePrincipalToken(tenant.TenantID, opts, cldConfOpts, &mut)
 				lib.CheckFatalError(err)
 
 				tenantToken := lib.AzureMultiAuthToken{
 					TenantId:   tenant.TenantID,
+					ClientId:   opts.ClientID,
 					TenantName: tenant.TenantName,
 					TokenData:  *tokenData,
 				}

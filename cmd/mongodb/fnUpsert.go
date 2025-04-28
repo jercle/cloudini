@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/briandowns/spinner"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
 	"github.com/jercle/cloudini/lib"
+	"github.com/briandowns/spinner"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -706,7 +706,6 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 	ctx := context.TODO()
 
 	var updates []mongo.WriteModel
-	fmt.Println(len(resources))
 
 	for _, res := range resources {
 		resource := res
@@ -719,26 +718,32 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 		update := bson.D{{"$set", resource}}
 
 		// .SetUpsert(true)
-		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
-		// _, err := resourcesListColl.UpdateOne(ctx, filter, update, nil)
-		// lib.CheckFatalError(err)
-		// if err != nil {
-		// 	// fmt.Println(err)
-		// 	_, _, cachePath := lib.InitConfig(nil)
-		// 	_ = updates
-		// 	allResStr, _ := json.MarshalIndent(resources, "", "  ")
-		// 	os.WriteFile(cachePath+"/mongo.updateOne-error.resources.json", allResStr, 0644)
-		// 	jsonStr, _ := json.MarshalIndent(res, "", "  ")
-		// 	os.WriteFile(cachePath+"/mongo.updateOne-error.err.json", jsonStr, 0644)
-		// 	// fmt.Println(string(jsonStr))
-		// 	fmt.Println(res.ID)
-		// 	lib.CheckFatalError(err)
-		// 	// os.Exit(1)
-		// }
+		// updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+		_, err := resourcesListColl.UpdateOne(ctx, filter, update, nil)
+		lib.CheckFatalError(err)
+		if err != nil {
+			// fmt.Println(err)
+			_, _, cachePath := lib.InitConfig(nil)
+			_ = updates
+			allResStr, _ := json.MarshalIndent(resources, "", "  ")
+			os.WriteFile(cachePath+"/mongo.updateOne-error.resources.json", allResStr, 0644)
+			jsonStr, _ := json.MarshalIndent(res, "", "  ")
+			os.WriteFile(cachePath+"/mongo.updateOne-error.err.json", jsonStr, 0644)
+			// fmt.Println(string(jsonStr))
+			fmt.Println(res.ID)
+			lib.CheckFatalError(err)
+			// os.Exit(1)
+		}
 	}
 
-	results, err := resourcesListColl.BulkWrite(ctx, updates)
-	lib.CheckFatalError(err)
+	if len(updates) > 0 {
+		results, err := resourcesListColl.BulkWrite(ctx, updates)
+		lib.CheckFatalError(err)
+		return results
+	} else {
+		results := mongo.BulkWriteResult{}
+		return &results
+	}
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
@@ -749,7 +754,7 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 	// fmt.Println("Upserted IDs:")
 	// jsonStr, _ := json.MarshalIndent(results.UpsertedIDs, "", "  ")
 	// fmt.Println(string(jsonStr))
-	return results
+
 }
 
 //
@@ -772,15 +777,7 @@ func UpsertMultipleResGrps(resGrps []azure.ResourceGroup, resourcesListColl *mon
 	}
 
 	results, err := resourcesListColl.BulkWrite(ctx, updates)
-	if err != nil {
-		_, _, cachePath := lib.InitConfig(nil)
-		jsonStr, _ := json.MarshalIndent(resGrps, "", "  ")
-		os.WriteFile(cachePath+"/UpserMultipleResGrps-resGrps.json", jsonStr, 0644)
-		jsonStr, _ = json.MarshalIndent(updates, "", "  ")
-		os.WriteFile(cachePath+"/UpserMultipleResGrps-updates.json", jsonStr, 0644)
-		return nil
-	}
-	// lib.CheckFatalError(err)
+	lib.CheckFatalError(err)
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
@@ -935,5 +932,84 @@ func UpsertAzureIPAddresses(resources []azure.AzureResourceIPConfig, resIPAddres
 	results, err := resIPAddressesColl.BulkWrite(ctx, updates)
 	lib.CheckFatalError(err)
 
+	return results
+}
+
+//
+//
+
+func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.Collection) *mongo.BulkWriteResult {
+	if len(serverCertInfo) == 0 {
+		fmt.Println("No apps in slice")
+		return nil
+	}
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+
+	fmt.Println(len(serverCertInfo))
+
+	for _, cert := range serverCertInfo {
+		curr := cert
+
+		timeNow := time.Now()
+		curr.LastDBSync = &timeNow
+		filter := bson.D{{"_id", curr.SerialNumber}}
+		update := bson.D{{"$set", curr}}
+
+		// .SetUpsert(true)
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+	}
+
+	results, err := coll.BulkWrite(ctx, updates)
+	lib.CheckFatalError(err)
+
+	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
+	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
+	// fmt.Printf("Number of documents matched: %d\n", )
+	// fmt.Printf("Number of documents inserted: %d\n", results.UpsertedCount)
+	// fmt.Printf("Number of documents replaced or updated: %d\n", results.ModifiedCount)
+	// fmt.Printf("Number of documents deleted: %d\n", results.DeletedCount)
+	// fmt.Println("Upserted IDs:")
+	// jsonStr, _ := json.MarshalIndent(results.UpsertedIDs, "", "  ")
+	// fmt.Println(string(jsonStr))
+	return results
+}
+
+func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Collection) *mongo.BulkWriteResult {
+	if len(caCertInfo) == 0 {
+		fmt.Println("No apps in slice")
+		return nil
+	}
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+
+	fmt.Println(len(caCertInfo))
+
+	for _, cert := range caCertInfo {
+		curr := cert
+
+		timeNow := time.Now()
+		curr.LastDBSync = &timeNow
+		filter := bson.D{{"_id", curr.SerialNumber}}
+		update := bson.D{{"$set", curr}}
+
+		// .SetUpsert(true)
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+	}
+
+	results, err := coll.BulkWrite(ctx, updates)
+	lib.CheckFatalError(err)
+
+	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
+	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
+	// fmt.Printf("Number of documents matched: %d\n", )
+	// fmt.Printf("Number of documents inserted: %d\n", results.UpsertedCount)
+	// fmt.Printf("Number of documents replaced or updated: %d\n", results.ModifiedCount)
+	// fmt.Printf("Number of documents deleted: %d\n", results.DeletedCount)
+	// fmt.Println("Upserted IDs:")
+	// jsonStr, _ := json.MarshalIndent(results.UpsertedIDs, "", "  ")
+	// fmt.Println(string(jsonStr))
 	return results
 }

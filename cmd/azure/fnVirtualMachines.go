@@ -3,7 +3,6 @@ package azure
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"strings"
 	"sync"
 	"time"
@@ -162,7 +161,6 @@ func StopAzureVm(resourceId string, mat *lib.AzureMultiAuthToken) {
 		apiVersion
 
 	_, resHeader, err := HttpPost(urlString, "", *mat)
-	fmt.Println(string(resHeader))
 	lib.CheckFatalError(err)
 
 	var reqRes AzureAsyncRequestResponse
@@ -219,9 +217,6 @@ func DeallocateAzureVm(resourceId string, mat *lib.AzureMultiAuthToken) {
 	var reqRes AzureAsyncRequestResponse
 
 	json.Unmarshal(resHeader, &reqRes)
-
-	fmt.Println(string(resHeader))
-	os.Exit(0)
 
 	updRes, err := HttpGet(reqRes.AzureAsyncoperation[0], *mat)
 	lib.CheckFatalError(err)
