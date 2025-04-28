@@ -50,7 +50,7 @@
   },
   "citrixCloud": {
     "environments": {
-      "ENV1": {
+      "RED": {
         "customerId": "",
         "clientId": "",
         "clientSecret": ""

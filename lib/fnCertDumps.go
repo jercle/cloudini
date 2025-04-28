@@ -16,6 +16,9 @@ func GetCertAuthCertInfoFromFile(path string) (processedItems []CertAuthorityCer
 	file, err := ReadFileUTF16(path)
 	CheckFatalError(err)
 
+	if len(file) == 0 {
+		return nil
+	}
 	// fmt.Println(path)
 	var fileData []map[string]string
 	err = json.Unmarshal(file, &fileData)

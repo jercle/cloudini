@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/briandowns/spinner"
 	"github.com/jercle/cloudini/cmd/ado"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
 	"github.com/jercle/cloudini/lib"
+	"github.com/briandowns/spinner"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -42,6 +42,7 @@ func UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(imageGalleryImagesColl *mon
 		fmt.Println("Updating Citrix Machine Catalogs in database...")
 		s.Start()
 		UpsertCitrixMachineCatalogs(machineCatalogs, machineCatalogsColl)
+		s.Stop()
 		mcMasterImageVersions := machineCatalogs.ListImageVersions()
 		s.Stop()
 		fmt.Println("Updating Azure Images used by Citrix in database...")
@@ -65,14 +66,13 @@ func UpdateAllAzureResourceIPAddresses(resIPAddressesColl *mongo.Collection, tok
 
 	fmt.Println("Fetching all resource IPs...")
 	s.Start()
-	resources := azure.GetAllIpAddrForAllConfiguredTenants(&opts, tokenReq)
+	resources := azure.GetAllVMIpAddrForAllConfiguredTenants(&opts, tokenReq)
 	s.Stop()
 
 	fmt.Println("Updating all resource IPs in database...")
 	s.Start()
 	UpsertAzureIPAddresses(resources, resIPAddressesColl)
 	s.Stop()
-
 }
 
 //
@@ -288,4 +288,41 @@ func GetBuildDataAndUpdateImageVesionData(imageGalleryImagesColl *mongo.Collecti
 	ado.DownloadPackerHostLogs(&dlPath)
 	buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
 	UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
+}
+
+//
+//
+
+func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *mongo.Collection) {
+
+	// azure.DownloadAllBlobsInContainer()
+	// lib.GetServerCertInfoFromFile()
+	_, _, cachePath := lib.InitConfig(nil)
+	config := lib.GetCldConfig(nil)
+	// dlPath := cachePath + "/aib-logs"
+	var opts lib.StorageAccountRequestOptions
+	opts.ConfiguredTenantName = "REDDTQ"
+	opts.ContainerName = "cert-sync"
+	opts.DownloadPath = cachePath + "/cert-sync"
+	opts.StorageAccountName = config.AzureDevOps.Packer.Logs.StorageAcct
+	opts.OverwriteExisting = true
+	opts.GetWriteToken = true
+
+	azure.DownloadAllBlobsInContainer(opts)
+
+	caCertInfo, serverCertInfo := lib.GetCertInfoFromFiles(cachePath+"/cert-sync", cachePath+"/cert-sync-processed")
+
+	caCertInfoRelated, serverCertInfoRelated := lib.RelateCertAuthCertsToServerCerts(caCertInfo, serverCertInfo)
+
+	caCertUpdates := UpsertCACertificates(caCertInfoRelated, certsCaCertInfo)
+	serverCertUpdates := UpsertServerCertificates(serverCertInfoRelated, serverCertsInfoColl)
+	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
+	// fmt.Println(string(jsonStr))
+	lib.MarshalAndPrintJson(caCertUpdates)
+	lib.MarshalAndPrintJson(serverCertUpdates)
+	os.RemoveAll(cachePath + "/cert-sync")
+	os.RemoveAll(cachePath + "/cert-sync-processed")
+	// ado.DownloadPackerHostLogs(&dlPath)
+	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
+	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
 }
