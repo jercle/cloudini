@@ -3,6 +3,7 @@ package lib
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"go/format"
 	"os"
 	"path/filepath"
@@ -85,7 +86,7 @@ func AddJsonOmitemptyTagsToStructFile(path string, overwriteFile bool) (processe
 			tagString = tagString[:len(tagString)-1] + "\""
 			jsonTag := tagString[5 : len(tagString)-1]
 			// fmt.Println(jsonTag)
-			jsonTag = "json:" + strings.ToLower(jsonTag[:1]) + jsonTag[1:] + ",omitempty\"`"
+			jsonTag = "json:" + strings.ToLower(jsonTag[:1]) + jsonTag[1:] + ",omitempty,omitzero\"`"
 			jsonTag = strings.ReplaceAll(jsonTag, ",attr", "")
 			tagString = "`" + jsonTag
 			processedLines = append(processedLines, lineSplit[0]+tagString)
@@ -491,3 +492,16 @@ func AddXmlTagsFromJsonTagsToStructFile(path string, overwriteFile bool) (proces
 
 //
 //
+
+func PrintSliceStringsWithIndexes(slice []string) {
+	for i, element := range slice {
+		fmt.Println(i, element)
+	}
+}
+
+//
+//
+
+func IsSpecificDay(t time.Time, year int, month time.Month, day int) bool {
+	return t.Year() == year && t.Month() == month && t.Day() == day
+}

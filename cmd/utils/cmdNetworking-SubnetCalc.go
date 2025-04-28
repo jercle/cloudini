@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/jercle/cloudini/lib"
-	"github.com/jercle/ipsubnet"
+	"github.com/brotherpowers/ipsubnet"
 	"github.com/spf13/cobra"
 )
 
@@ -54,7 +54,7 @@ var cmdSubnetCalc = &cobra.Command{
 				os.Exit(1)
 			}
 
-			snet := ipsubnet.SubnetCalculator(cidrIp, uint(cidrNotation))
+			snet := ipsubnet.SubnetCalculator(cidrIp, cidrNotation)
 
 			startAddress := snet.GetIPAddressRange()[0]
 			endAddress := snet.GetIPAddressRange()[1]

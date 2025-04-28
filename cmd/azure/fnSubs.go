@@ -14,8 +14,8 @@ import (
 	// "log"
 	"os"
 
-	"github.com/charmbracelet/log"
 	"github.com/jercle/cloudini/lib"
+	"github.com/charmbracelet/log"
 	"github.com/manifoldco/promptui"
 )
 
