@@ -102,6 +102,9 @@ func StartAzureVm(resourceId string, mat *lib.AzureMultiAuthToken) {
 
 	json.Unmarshal(resHeader, &reqRes)
 
+	// lib.JsonMarshalAndPrint(reqRes)
+	// fmt.Println(string(resBody))
+
 	updRes, err := HttpGet(reqRes.AzureAsyncoperation[0], *mat)
 	lib.CheckFatalError(err)
 
@@ -257,6 +260,8 @@ func GetMultipleAzureVMStatuses(resourceIds []string, token *lib.AzureMultiAuthT
 
 func StartMultipleAzureVms(resourceIds []string, token *lib.AzureMultiAuthToken) {
 	var wg sync.WaitGroup
+	// lib.JsonMarshalAndPrint(resourceIds)
+	// os.Exit(0)
 	for _, resource := range resourceIds {
 		wg.Add(1)
 		go func() {
