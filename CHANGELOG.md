@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.1.27]
+## [0.1.28]
 * Bugfix: Update to azure.GetServicePrincipalToken to differentiate between read/write tokens when performing cache operations
 
 ## [0.1.27]
