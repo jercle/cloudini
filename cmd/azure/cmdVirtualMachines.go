@@ -31,18 +31,22 @@ Note: You can only run this command for vms in one tenant at a time
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		var (
-			tokOpts lib.AzureMultiAuthTokenRequestOptions
-			token   *lib.AzureMultiAuthToken
-			vmList  []string
+			token  *lib.AzureMultiAuthToken
+			vmList []string
 		)
 
 		config := lib.GetCldConfig(nil)
 
-		tokOpts.TenantName = tenantName
+		tokOpts := lib.AzureMultiAuthTokenRequestOptions{
+			TenantName: tenantName,
+		}
 
 		if startVMs || stopVMs || deallocateVMs {
 			tokOpts.GetWriteToken = true
 		}
+
+		// lib.JsonMarshalAndPrint(tokOpts)
+		// os.Exit(0)
 
 		if !listConfiguredVMs {
 			tokenReq, err := GetTenantSPToken(tokOpts, nil)
