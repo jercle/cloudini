@@ -15,8 +15,8 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/jercle/cloudini/lib"
 	"github.com/briandowns/spinner"
+	"github.com/jercle/cloudini/lib"
 	"github.com/xuri/excelize/v2"
 )
 
@@ -544,7 +544,16 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 					}
 				}
 			} else if strings.ToLower(res.Type) == "microsoft.compute/restorepointcollections" {
-				resName = strings.ToLower(strings.Split(res.Name, "_")[1])
+				resNameSplit := strings.Split(res.Name, "_")
+				if len(resNameSplit) > 1 {
+					resName = strings.ToLower(resNameSplit[1])
+				} else {
+					fmt.Println("res.Name")
+					// fmt.Println(res.Name)
+
+					lib.JsonMarshalAndPrint(res)
+					os.Exit(0)
+				}
 				// if len(resName) != 3 {
 				// 	jsonName, _ := json.MarshalIndent(resName, "", "  ")
 				// 	fmt.Println(string(jsonName))
