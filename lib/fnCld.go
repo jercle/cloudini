@@ -412,6 +412,11 @@ func GetCachedToken[T AzureMultiAuthToken | AzureTokenData | CitrixTokenData](to
 
 	// os.Exit(0)
 
+	// fmt.Println(string(decrypted))
+	// JsonMarshalAndPrint(opts)
+	// fmt.Println(tokenType)
+	// os.Exit(0)
+
 	err = json.Unmarshal(decrypted, &cacheFileData)
 	if err != nil {
 		var token T
