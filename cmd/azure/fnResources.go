@@ -288,7 +288,12 @@ func GetAllTenantResources(outputFile string, token *lib.AzureMultiAuthToken) Te
 
 	var response ResourceGraphResponse
 	err = json.Unmarshal(res, &response)
-	lib.CheckFatalError(err)
+
+	if err != nil {
+		_, _, cachePath := lib.InitConfig(nil)
+		os.WriteFile(cachePath+"/allResResponse-Errored.json", res, 0644)
+		lib.CheckFatalError(err)
+	}
 
 	for _, res := range response.Data {
 		currRes := res

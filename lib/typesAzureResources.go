@@ -3844,3 +3844,8 @@ type AzureVirtualMachineSize struct {
 	Size string `json:"size,omitempty" bson:"size,omitempty"`
 	Tier string `json:"tier,omitempty" bson:"tier,omitempty"`
 }
+
+type AzureRestorePointCollectionSource struct {
+	ID       string `json:"id,omitempty" bson:"id,omitempty"`
+	Location string `json:"location,omitempty" bson:"location,omitempty"`
+}

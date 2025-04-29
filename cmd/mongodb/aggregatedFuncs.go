@@ -121,6 +121,9 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	fmt.Println(elapsed)
 	allResourcesSliceStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
 	os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
+	allResourcesStr, _ := json.MarshalIndent(allResources, "", "  ")
+	os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
+	// os.Exit(0)
 
 	fmt.Println("Updating Azure Resources in database...")
 	s.Start()
