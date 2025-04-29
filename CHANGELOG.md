@@ -1,6 +1,9 @@
 # Change Log
 
 ## [0.1.27]
+* Bugfix: Update to azure.GetServicePrincipalToken to differentiate between read/write tokens when performing cache operations
+
+## [0.1.27]
 * Bugfix: Change subnetcalc to use "github.com/rmasci/ipsubnet" instead of "github.com/brotherpowers/ipsubnet" for the time being, due to issues building 32-bit builds.
 
 ## [0.1.26]

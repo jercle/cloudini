@@ -51,6 +51,9 @@ as well as other functionality.`,
 
 		if DebugMode {
 			fmt.Println("DEBUG MODE")
+
+			cmd.DebugFlags()
+
 			// Create a CPU profile file
 			f, err := os.Create("profile.prof")
 			if err != nil {

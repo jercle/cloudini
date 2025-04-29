@@ -62,8 +62,14 @@ func GetServicePrincipalToken(tenant string, matOptions lib.AzureMultiAuthTokenR
 		mut.Lock()
 	}
 
+	readOrWrite := "read"
+
+	if options.GetWriteToken {
+		readOrWrite = "write"
+	}
+
 	if !options.NoCache {
-		cachedToken = lib.GetCachedToken[lib.AzureTokenData]("az"+strings.ToLower(options.TenantName)+options.Scope, cldConfigOpts)
+		cachedToken = lib.GetCachedToken[lib.AzureTokenData]("az"+strings.ToLower(options.TenantName)+options.Scope+readOrWrite, cldConfigOpts)
 		if mut != nil {
 			mut.Unlock()
 		}
