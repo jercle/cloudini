@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cliVersion = "0.1.27"
+var cliVersion = "0.1.28"
 
 var (
 	// The name of our config file, without the file extension because viper supports many different config file languages.
@@ -51,6 +51,9 @@ as well as other functionality.`,
 
 		if DebugMode {
 			fmt.Println("DEBUG MODE")
+
+			cmd.DebugFlags()
+
 			// Create a CPU profile file
 			f, err := os.Create("profile.prof")
 			if err != nil {
