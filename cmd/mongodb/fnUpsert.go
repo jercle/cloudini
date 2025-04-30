@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
 	"github.com/jercle/cloudini/lib"
-	"github.com/briandowns/spinner"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -1012,4 +1012,32 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 	// jsonStr, _ := json.MarshalIndent(results.UpsertedIDs, "", "  ")
 	// fmt.Println(string(jsonStr))
 	return results
+}
+
+// func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) {
+func UpsertStorageAccountMinTlsVersions(resources []azure.StorageAccountTlsVersion, mongoColl *mongo.Collection) *mongo.BulkWriteResult {
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+
+	for _, res := range resources {
+		resource := res
+
+		resource.LastDBSync = time.Now()
+		resource.ID = strings.ToLower(res.ID)
+		filter := bson.D{{"_id", resource.ID}}
+		update := bson.D{{"$set", resource}}
+
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+
+	}
+
+	if len(updates) > 0 {
+		results, err := mongoColl.BulkWrite(ctx, updates)
+		lib.CheckFatalError(err)
+		return results
+	} else {
+		results := mongo.BulkWriteResult{}
+		return &results
+	}
 }

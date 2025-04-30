@@ -12,6 +12,7 @@ var (
 	// onlyShowId       bool
 	// onlyShowName     bool
 	checkStorageAcctTlsVersions bool
+	getAll                      bool
 )
 
 // configCmd represents the subs command
@@ -38,7 +39,13 @@ to quickly create a Cobra application.`,
 			opts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
 				SuppressSteps: true,
 			}
-			storageAccounts := CheckStorageAccountTlsVersionsForAllConfiguredTenants(&opts, tokenReq)
+			var storageAccounts []StorageAccountTlsVersion
+			if getAll {
+				opts.GetAllStorageAccountsInTlsCheck = true
+				storageAccounts = CheckStorageAccountTlsVersionsForAllConfiguredTenants(&opts, tokenReq)
+			} else {
+				storageAccounts = CheckStorageAccountTlsVersionsForAllConfiguredTenants(&opts, tokenReq)
+			}
 
 			lib.JsonMarshalAndPrint(storageAccounts)
 		}
@@ -48,6 +55,7 @@ to quickly create a Cobra application.`,
 func init() {
 	azCmd.AddCommand(generalCmd)
 	generalCmd.Flags().BoolVar(&checkStorageAcctTlsVersions, "checkStorageAcctTlsVersions", false, "Returns Storage Accounts with a minimum TLS version of less than 1.2")
+	generalCmd.Flags().BoolVar(&getAll, "getAll", false, "Returns all storage account with minimum TLS details")
 	// resourcesCmd.Flags().StringVar(&getRoleDefById, "getRoleDefById", "", "Get  Role Definition details by Role Def ID")
 	// resourcesCmd.Flags().StringVarP(&tenantName, "tenantName", "n", "", "Tenant name to use configured auth. Defaults to Tenant of current active Az CLI subscription")
 	// resourcesCmd.Flags().BoolVar(&onlyShowId, "onlyId", false, "Flag to only print the Role Def ID for 'getRoleDefByName'")
