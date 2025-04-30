@@ -603,3 +603,25 @@ type VirtualMachineInstanceView struct {
 
 //
 //
+
+type CheckStorageAccountTlsVersionsResponse struct {
+	Count           float64                    `json:"count"`
+	Data            []StorageAccountTlsVersion `json:"data"`
+	Facets          []any                      `json:"facets"`
+	ResultTruncated string                     `json:"resultTruncated"`
+	TotalRecords    float64                    `json:"totalRecords"`
+	SkipToken       string                     `json:"$skipToken"`
+}
+
+//
+//
+
+type StorageAccountTlsVersion struct {
+	ID                          string `json:"id"`
+	Name                        string `json:"name"`
+	PropertiesMinimumTlsVersion string `json:"properties_minimumTlsVersion"`
+	ResourceGroup               string `json:"resourceGroup"`
+	SubscriptionID              string `json:"subscriptionId"`
+	TenantID                    string `json:"tenantId"`
+	TenantName                  string `json:"tenantName"`
+}
