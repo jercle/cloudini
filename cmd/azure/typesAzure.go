@@ -622,6 +622,7 @@ type StorageAccountTlsVersion struct {
 	MinimumTlsVersion string    `json:"minimumTlsVersion,omitempty,omitzero" bson:"minimumTlsVersion,omitempty,omitzero"`
 	ResourceGroup     string    `json:"resourceGroup,omitempty,omitzero" bson:"resourceGroup,omitempty,omitzero"`
 	SubscriptionID    string    `json:"subscriptionId,omitempty,omitzero" bson:"subscriptionId,omitempty,omitzero"`
+	SubscriptionName  string    `json:"subscriptionName,omitempty,omitzero" bson:"subscriptionName,omitempty,omitzero"`
 	TenantID          string    `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
 	TenantName        string    `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
 	LastDBSync        time.Time `json:"lastDBSync,omitempty,omitzero" bson:"lastDBSync,omitempty,omitzero"`

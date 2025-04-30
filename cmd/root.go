@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cliVersion = "0.1.30"
+var cliVersion = "0.1.31"
 
 var (
 	// The name of our config file, without the file extension because viper supports many different config file languages.
