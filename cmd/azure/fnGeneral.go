@@ -39,11 +39,25 @@ func CheckStorageAccountTlsVersions(outputFile string, getAll bool, token *lib.A
 	err = json.Unmarshal(res, &response)
 	lib.CheckFatalError(err)
 
+	subs, err := ListSubscriptions(*token)
+	lib.CheckFatalError(err)
+
+	// lib.JsonMarshalAndPrint(subs)
+	// os.Exit(0)
+
 	for _, res := range response.Data {
 		currRes := res
+
+		for _, sub := range subs {
+			if sub.SubscriptionID == res.SubscriptionID {
+				currRes.SubscriptionName = sub.DisplayName
+			}
+		}
+
 		currRes.ID = strings.ToLower(res.ID)
 		currRes.LastAzureSync = time.Now()
 		currRes.TenantName = lib.MapTenantIdToConfiguredTenantName(res.TenantID, *config.Azure)
+
 		allResources = append(allResources, currRes)
 	}
 
