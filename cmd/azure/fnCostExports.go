@@ -578,21 +578,22 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 					}
 				}
 			} else if strings.ToLower(res.Type) == "microsoft.compute/restorepointcollections" {
-				rpSource := res.Properties.Source
-				rpSourceProc, ok := rpSource.(lib.AzureRestorePointCollectionSource)
-				rpSourceId := ""
+				var rpSource lib.AzureRestorePointCollectionSource
 
-				if ok {
-					rpSourceId = rpSourceProc.ID
-				}
+				err = json.Unmarshal([]byte(res.Properties.Source), &rpSource)
+				// rpSourceProc, ok := rpSource.(lib.AzureRestorePointCollectionSource)
+				// rpSourceId := ""
+
+				// if ok {
+				// 	rpSourceId = rpSourceProc.ID
+				// }
 
 				// if strings.EqualFold(res.ID, comparisonResource.Properties.VirtualMachine.ID) {
-				if !slices.Contains(currRes.RelatedResources, rpSourceId) {
-					currRes.RelatedResources = append(currRes.RelatedResources, rpSourceId)
+				if !slices.Contains(currRes.RelatedResources, rpSource.ID) {
+					currRes.RelatedResources = append(currRes.RelatedResources, rpSource.ID)
 				}
 
 				lib.JsonMarshalAndPrint(currRes)
-				fmt.Println(ok)
 
 				os.Exit(0)
 				// }

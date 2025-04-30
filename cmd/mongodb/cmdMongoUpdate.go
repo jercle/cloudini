@@ -141,7 +141,7 @@ func init() {
 	cmdMongo.AddCommand(cmdMongoUpdate)
 	cmdMongoUpdate.Flags().BoolVarP(&updateAllGalleryImagesAndUpdateWithUsedByCitrix, "updateAllGalleryImagesAndUpdateWithUsedByCitrix", "g", false, "Gets all gallery images in configured tenants, then checks agains Citrix and updates in database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAzureResVcpuCountsCostData, "updateAzureResVcpuCountsCostData", "c", false, "Gets latest cost data and all resources, transforms and relates them, then updates database")
-	// cmdMongoUpdate.Flags().BoolVarP(&updateAzureResourceRelations, "updateAzureResourceRelations", "r", false, "Gets all resources from cost data and database, aggregates and finds relations, then updates database. This can only be used in conjunction with 'updateAzureResVcpuCountsCostData'")
+	cmdMongoUpdate.Flags().BoolVarP(&updateAzureResourceRelations, "updateAzureResourceRelations", "r", false, "Gets all resources from cost data and database, aggregates and finds relations, then updates database. This can only be used in conjunction with 'updateAzureResVcpuCountsCostData'")
 	cmdMongoUpdate.Flags().BoolVarP(&updateEntraItems, "updateEntraItems", "e", false, "Gets all App Registrations from configured Azure tenants and finds expiring credentials, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateIpAddresses, "updateIpAddresses", "i", false, "Gets all App Registrations from configured Azure tenants and finds expiring credentials, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAllCertInfo, "updateAllCertInfo", "x", false, "Update server certificates and expiries")
