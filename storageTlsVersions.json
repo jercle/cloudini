@@ -1,0 +1,911 @@
+[
+  {
+    "id": "/subscriptions/1165d2dd-0291-4947-85d0-0334e20d3bec/resourcegroups/rg-apcdtqmgmt-log/providers/microsoft.storage/storageaccounts/stcompliance6sjkywe62zgb",
+    "name": "stcompliance6sjkywe62zgb",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rg-apcdtqmgmt-log",
+    "subscriptionId": "1165d2dd-0291-4947-85d0-0334e20d3bec",
+    "tenantId": "ea508bc7-b43c-4b96-8470-489756e59a14",
+    "tenantName": "REDDTQ"
+  },
+  {
+    "id": "/subscriptions/1165d2dd-0291-4947-85d0-0334e20d3bec/resourcegroups/rg-apcdtqmgmt-log/providers/microsoft.storage/storageaccounts/stkvdiag6sjkywe62zgbm",
+    "name": "stkvdiag6sjkywe62zgbm",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rg-apcdtqmgmt-log",
+    "subscriptionId": "1165d2dd-0291-4947-85d0-0334e20d3bec",
+    "tenantId": "ea508bc7-b43c-4b96-8470-489756e59a14",
+    "tenantName": "REDDTQ"
+  },
+  {
+    "id": "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourcegroups/rg-apcdtqshared-adc/providers/microsoft.storage/storageaccounts/vpxuog4knilwmv7w",
+    "name": "vpxuog4knilwmv7w",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rg-apcdtqshared-adc",
+    "subscriptionId": "2ff9367c-2183-4ef6-9ba2-102c2b014d94",
+    "tenantId": "ea508bc7-b43c-4b96-8470-489756e59a14",
+    "tenantName": "REDDTQ"
+  },
+  {
+    "id": "/subscriptions/041ffed4-3b28-453c-a937-d7655df9e2a7/resourcegroups/rg-pud-citrix/providers/microsoft.storage/storageaccounts/stpudcitrix",
+    "name": "stpudcitrix",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rg-pud-citrix",
+    "subscriptionId": "041ffed4-3b28-453c-a937-d7655df9e2a7",
+    "tenantId": "648a5ed7-c5ac-45b7-b406-791f0d4334a6",
+    "tenantName": "RED"
+  },
+  {
+    "id": "/subscriptions/9564369d-5e7c-42c8-bea5-328ea671bbc6/resourcegroups/rg-apcshared-adc/providers/microsoft.storage/storageaccounts/vpxe7clvjcrmpezi",
+    "name": "vpxe7clvjcrmpezi",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rg-apcshared-adc",
+    "subscriptionId": "9564369d-5e7c-42c8-bea5-328ea671bbc6",
+    "tenantId": "648a5ed7-c5ac-45b7-b406-791f0d4334a6",
+    "tenantName": "RED"
+  },
+  {
+    "id": "/subscriptions/e2c7dc3c-2eaa-48c0-8375-885f7d1c8839/resourcegroups/rg-apcmgmt-log/providers/microsoft.storage/storageaccounts/stcompliancenqnazf73orya",
+    "name": "stcompliancenqnazf73orya",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rg-apcmgmt-log",
+    "subscriptionId": "e2c7dc3c-2eaa-48c0-8375-885f7d1c8839",
+    "tenantId": "648a5ed7-c5ac-45b7-b406-791f0d4334a6",
+    "tenantName": "RED"
+  },
+  {
+    "id": "/subscriptions/697e00b8-5420-45bb-89bc-ba2455d9d7e6/resourcegroups/rg-hapdtqmgmt-log/providers/microsoft.storage/storageaccounts/stcompliancesthbi6wkzlnk",
+    "name": "stcompliancesthbi6wkzlnk",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rg-hapdtqmgmt-log",
+    "subscriptionId": "697e00b8-5420-45bb-89bc-ba2455d9d7e6",
+    "tenantId": "2e703149-52b6-4dae-8cd8-110ae24b6599",
+    "tenantName": "BLUEDTQ"
+  },
+  {
+    "id": "/subscriptions/697e00b8-5420-45bb-89bc-ba2455d9d7e6/resourcegroups/rg-hapdtqmgmt-log/providers/microsoft.storage/storageaccounts/stkvdiagsthbi6wkzlnkk",
+    "name": "stkvdiagsthbi6wkzlnkk",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rg-hapdtqmgmt-log",
+    "subscriptionId": "697e00b8-5420-45bb-89bc-ba2455d9d7e6",
+    "tenantId": "2e703149-52b6-4dae-8cd8-110ae24b6599",
+    "tenantName": "BLUEDTQ"
+  },
+  {
+    "id": "/subscriptions/edb8885d-0541-4ff7-a95f-315ee856e058/resourcegroups/rg-hapmgmt-log/providers/microsoft.storage/storageaccounts/stcompliancekuqyv5rfh5ho",
+    "name": "stcompliancekuqyv5rfh5ho",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rg-hapmgmt-log",
+    "subscriptionId": "edb8885d-0541-4ff7-a95f-315ee856e058",
+    "tenantId": "002386e6-a9d2-49c0-a359-c01ffacf5a7b",
+    "tenantName": "BLUE"
+  },
+  {
+    "id": "/subscriptions/edb8885d-0541-4ff7-a95f-315ee856e058/resourcegroups/rg-hapmgmt-log/providers/microsoft.storage/storageaccounts/stkvdiagkuqyv5rfh5hoo",
+    "name": "stkvdiagkuqyv5rfh5hoo",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rg-hapmgmt-log",
+    "subscriptionId": "edb8885d-0541-4ff7-a95f-315ee856e058",
+    "tenantId": "002386e6-a9d2-49c0-a359-c01ffacf5a7b",
+    "tenantName": "BLUE"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-ads-biztalk-rg/providers/microsoft.storage/storageaccounts/agddev1adsbiztalkrgdiag",
+    "name": "agddev1adsbiztalkrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-ads-biztalk-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-advisor-rg/providers/microsoft.storage/storageaccounts/advisordashboard",
+    "name": "advisordashboard",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-advisor-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-alerts-rg/providers/microsoft.storage/storageaccounts/agddev1alertsrgdiag",
+    "name": "agddev1alertsrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-alerts-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-arch-rg/providers/microsoft.storage/storageaccounts/agddev1archrgdiag",
+    "name": "agddev1archrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-arch-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-cameronge-rg/providers/microsoft.storage/storageaccounts/agddev1camerongergdiag",
+    "name": "agddev1camerongergdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-cameronge-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-carlb-rg/providers/microsoft.storage/storageaccounts/agddev1carlbrgdiag",
+    "name": "agddev1carlbrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-carlb-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-chrisf-rg/providers/microsoft.storage/storageaccounts/agddev1chrisfrgdiag",
+    "name": "agddev1chrisfrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-chrisf-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-cos-rg/providers/microsoft.storage/storageaccounts/agddev1cosrgdiag",
+    "name": "agddev1cosrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-cos-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-dataflow-rg/providers/microsoft.storage/storageaccounts/agddev1seanwargdiag",
+    "name": "agddev1seanwargdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-dataflow-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-datasetsstorage-rg/providers/microsoft.storage/storageaccounts/agddevdatasetsstorage",
+    "name": "agddevdatasetsstorage",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-datasetsstorage-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-devops-rg/providers/microsoft.storage/storageaccounts/agddev1devopsrgdiag",
+    "name": "agddev1devopsrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-devops-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-dm-rg/providers/microsoft.storage/storageaccounts/agddev1dmrgdiag",
+    "name": "agddev1dmrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-dm-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-dm-rg/providers/microsoft.storage/storageaccounts/agddev1dmrgdiag435",
+    "name": "agddev1dmrgdiag435",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-dm-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-dm-rg/providers/microsoft.storage/storageaccounts/formrecognisertest",
+    "name": "formrecognisertest",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-dm-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-dm-rg/providers/microsoft.storage/storageaccounts/testformrecogniser",
+    "name": "testformrecogniser",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-dm-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-drewa-rg/providers/microsoft.storage/storageaccounts/agddev1drewargdiag",
+    "name": "agddev1drewargdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-drewa-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-dtac-rg/providers/microsoft.storage/storageaccounts/agddev1dtacrgdiag",
+    "name": "agddev1dtacrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-dtac-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-jasong-rg/providers/microsoft.storage/storageaccounts/agddev1jasongrgdiag",
+    "name": "agddev1jasongrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-jasong-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-joem-rg/providers/microsoft.storage/storageaccounts/joemtestaccount",
+    "name": "joemtestaccount",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-joem-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-lukep-rg/providers/microsoft.storage/storageaccounts/agddev1lukeprgdiag",
+    "name": "agddev1lukeprgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-lukep-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-markl-rg/providers/microsoft.storage/storageaccounts/agddev1marklrgdiag",
+    "name": "agddev1marklrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-markl-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-nsg-rg/providers/microsoft.storage/storageaccounts/nsg7e2629bcb5954289a04e9",
+    "name": "nsg7e2629bcb5954289a04e9",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-nsg-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-nsg2-rg/providers/microsoft.storage/storageaccounts/nsg8d2629bcb5954289b04d9",
+    "name": "nsg8d2629bcb5954289b04d9",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-nsg2-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-robertmi-rg/providers/microsoft.storage/storageaccounts/robertmistorageacct",
+    "name": "robertmistorageacct",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-robertmi-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-1-stellar-rg/providers/microsoft.storage/storageaccounts/26oevgyjhxfx4sacustmdata",
+    "name": "26oevgyjhxfx4sacustmdata",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-1-stellar-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-2-dtac-rg/providers/microsoft.storage/storageaccounts/agddev2dtacrgdiag",
+    "name": "agddev2dtacrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-2-dtac-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-2-itsa-rg/providers/microsoft.storage/storageaccounts/agddev2itsargdiag",
+    "name": "agddev2itsargdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-2-itsa-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/0559b839-8313-4d1b-9c9e-edb1e7395bb5/resourcegroups/agd-dev-sec-d-rg/providers/microsoft.storage/storageaccounts/agddevsecddiag",
+    "name": "agddevsecddiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-dev-sec-d-rg",
+    "subscriptionId": "0559b839-8313-4d1b-9c9e-edb1e7395bb5",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1896e0c9-b67f-481d-8dc7-a2d4be1959fc/resourcegroups/agd-sharedservices-1-kv-rg/providers/microsoft.storage/storageaccounts/agdsharedservices1kv",
+    "name": "agdsharedservices1kv",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-sharedservices-1-kv-rg",
+    "subscriptionId": "1896e0c9-b67f-481d-8dc7-a2d4be1959fc",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1896e0c9-b67f-481d-8dc7-a2d4be1959fc/resourcegroups/agd-sharedservices-1-nsg-rg/providers/microsoft.storage/storageaccounts/nsg70eb256bb944445197af3",
+    "name": "nsg70eb256bb944445197af3",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-sharedservices-1-nsg-rg",
+    "subscriptionId": "1896e0c9-b67f-481d-8dc7-a2d4be1959fc",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1896e0c9-b67f-481d-8dc7-a2d4be1959fc/resourcegroups/agd-shareservices-testrestore-1-rg/providers/microsoft.storage/storageaccounts/agssstestrestore",
+    "name": "agssstestrestore",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-shareservices-testrestore-1-rg",
+    "subscriptionId": "1896e0c9-b67f-481d-8dc7-a2d4be1959fc",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1896e0c9-b67f-481d-8dc7-a2d4be1959fc/resourcegroups/id-rgp-auc2-ss-servicedesk/providers/microsoft.storage/storageaccounts/idrgpauc2ssservicedeskdi",
+    "name": "idrgpauc2ssservicedeskdi",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgp-auc2-ss-servicedesk",
+    "subscriptionId": "1896e0c9-b67f-481d-8dc7-a2d4be1959fc",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1896e0c9-b67f-481d-8dc7-a2d4be1959fc/resourcegroups/id-rgp-auc2-ss-storage/providers/microsoft.storage/storageaccounts/idauc2ssvm",
+    "name": "idauc2ssvm",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgp-auc2-ss-storage",
+    "subscriptionId": "1896e0c9-b67f-481d-8dc7-a2d4be1959fc",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1896e0c9-b67f-481d-8dc7-a2d4be1959fc/resourcegroups/id-rgp-auc2-ss-storage/providers/microsoft.storage/storageaccounts/idauc2ssvmdia",
+    "name": "idauc2ssvmdia",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgp-auc2-ss-storage",
+    "subscriptionId": "1896e0c9-b67f-481d-8dc7-a2d4be1959fc",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1896e0c9-b67f-481d-8dc7-a2d4be1959fc/resourcegroups/rgp-auc2-ss-dev-storage/providers/microsoft.storage/storageaccounts/auc2datasetstorage",
+    "name": "auc2datasetstorage",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rgp-auc2-ss-dev-storage",
+    "subscriptionId": "1896e0c9-b67f-481d-8dc7-a2d4be1959fc",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1896e0c9-b67f-481d-8dc7-a2d4be1959fc/resourcegroups/rgp-auc2-ss-dev-storage/providers/microsoft.storage/storageaccounts/auc2ssdevtoolsstorage",
+    "name": "auc2ssdevtoolsstorage",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rgp-auc2-ss-dev-storage",
+    "subscriptionId": "1896e0c9-b67f-481d-8dc7-a2d4be1959fc",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1896e0c9-b67f-481d-8dc7-a2d4be1959fc/resourcegroups/rgp-auc2-ss-dev-storage/providers/microsoft.storage/storageaccounts/auc2ssvaultstorage",
+    "name": "auc2ssvaultstorage",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rgp-auc2-ss-dev-storage",
+    "subscriptionId": "1896e0c9-b67f-481d-8dc7-a2d4be1959fc",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1896e0c9-b67f-481d-8dc7-a2d4be1959fc/resourcegroups/rgp-auc2-ss-dev-storage/providers/microsoft.storage/storageaccounts/auc2ssvaultterraform",
+    "name": "auc2ssvaultterraform",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rgp-auc2-ss-dev-storage",
+    "subscriptionId": "1896e0c9-b67f-481d-8dc7-a2d4be1959fc",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1896e0c9-b67f-481d-8dc7-a2d4be1959fc/resourcegroups/rgp-auc2-ss-devtools/providers/microsoft.storage/storageaccounts/resucelinuxagent",
+    "name": "resucelinuxagent",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rgp-auc2-ss-devtools",
+    "subscriptionId": "1896e0c9-b67f-481d-8dc7-a2d4be1959fc",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1896e0c9-b67f-481d-8dc7-a2d4be1959fc/resourcegroups/rgp-auc2-ss-tfbasestorage/providers/microsoft.storage/storageaccounts/auc2sstfbase",
+    "name": "auc2sstfbase",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "rgp-auc2-ss-tfbasestorage",
+    "subscriptionId": "1896e0c9-b67f-481d-8dc7-a2d4be1959fc",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1980c76f-28d6-4505-a7af-ac7dc72f8288/resourcegroups/agd-hub-1-fwbld-rg/providers/microsoft.storage/storageaccounts/fwblddiag7ol63uoc4iaw67",
+    "name": "fwblddiag7ol63uoc4iaw67",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-hub-1-fwbld-rg",
+    "subscriptionId": "1980c76f-28d6-4505-a7af-ac7dc72f8288",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1980c76f-28d6-4505-a7af-ac7dc72f8288/resourcegroups/agd-hub-1-kv-rg/providers/microsoft.storage/storageaccounts/kvdiageq2bzjlxxdgoaeq2bz",
+    "name": "kvdiageq2bzjlxxdgoaeq2bz",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-hub-1-kv-rg",
+    "subscriptionId": "1980c76f-28d6-4505-a7af-ac7dc72f8288",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1980c76f-28d6-4505-a7af-ac7dc72f8288/resourcegroups/agd-hub-1-log-rg/providers/microsoft.storage/storageaccounts/compliancee4bc2976cd6644",
+    "name": "compliancee4bc2976cd6644",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-hub-1-log-rg",
+    "subscriptionId": "1980c76f-28d6-4505-a7af-ac7dc72f8288",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1980c76f-28d6-4505-a7af-ac7dc72f8288/resourcegroups/agd-hub-1-net-rg/providers/microsoft.storage/storageaccounts/agdhub1netrgdiag",
+    "name": "agdhub1netrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-hub-1-net-rg",
+    "subscriptionId": "1980c76f-28d6-4505-a7af-ac7dc72f8288",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1980c76f-28d6-4505-a7af-ac7dc72f8288/resourcegroups/agd-hub-1-nsg-rg/providers/microsoft.storage/storageaccounts/nsg4aa13b295431480ab3cb1",
+    "name": "nsg4aa13b295431480ab3cb1",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-hub-1-nsg-rg",
+    "subscriptionId": "1980c76f-28d6-4505-a7af-ac7dc72f8288",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1980c76f-28d6-4505-a7af-ac7dc72f8288/resourcegroups/agd-hub-1-proxy-rg/providers/microsoft.storage/storageaccounts/agdhub1proxystorage",
+    "name": "agdhub1proxystorage",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-hub-1-proxy-rg",
+    "subscriptionId": "1980c76f-28d6-4505-a7af-ac7dc72f8288",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1980c76f-28d6-4505-a7af-ac7dc72f8288/resourcegroups/agd-hub-1-rvpn-rg/providers/microsoft.storage/storageaccounts/rvpncrash",
+    "name": "rvpncrash",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-hub-1-rvpn-rg",
+    "subscriptionId": "1980c76f-28d6-4505-a7af-ac7dc72f8288",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/1980c76f-28d6-4505-a7af-ac7dc72f8288/resourcegroups/agd-hub-1-rvpn-rg/providers/microsoft.storage/storageaccounts/rvpnvm1f58ce97c72e94",
+    "name": "rvpnvm1f58ce97c72e94",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-hub-1-rvpn-rg",
+    "subscriptionId": "1980c76f-28d6-4505-a7af-ac7dc72f8288",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/4cf8e064-077b-4ae2-8d53-d0ceadc2fd23/resourcegroups/agd-prod-1-kv-rg/providers/microsoft.storage/storageaccounts/kvdiagteyag6l2xulgsteyag",
+    "name": "kvdiagteyag6l2xulgsteyag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-prod-1-kv-rg",
+    "subscriptionId": "4cf8e064-077b-4ae2-8d53-d0ceadc2fd23",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/4cf8e064-077b-4ae2-8d53-d0ceadc2fd23/resourcegroups/agd-prod-1-nsg-rg/providers/microsoft.storage/storageaccounts/nsg2kl9emlr9u3bnxw1uv7fp",
+    "name": "nsg2kl9emlr9u3bnxw1uv7fp",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-prod-1-nsg-rg",
+    "subscriptionId": "4cf8e064-077b-4ae2-8d53-d0ceadc2fd23",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/4cf8e064-077b-4ae2-8d53-d0ceadc2fd23/resourcegroups/agd-prod-1-nsg-rg/providers/microsoft.storage/storageaccounts/nsg5db8d16d5ca744769d8d3",
+    "name": "nsg5db8d16d5ca744769d8d3",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-prod-1-nsg-rg",
+    "subscriptionId": "4cf8e064-077b-4ae2-8d53-d0ceadc2fd23",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/5c48c925-e163-4e2e-87a7-909de1d06c1a/resourcegroups/agd-security-1-events-rg/providers/microsoft.storage/storageaccounts/agdsecurityeventloglinux",
+    "name": "agdsecurityeventloglinux",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-security-1-events-rg",
+    "subscriptionId": "5c48c925-e163-4e2e-87a7-909de1d06c1a",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/5c48c925-e163-4e2e-87a7-909de1d06c1a/resourcegroups/agd-security-1-events-rg/providers/microsoft.storage/storageaccounts/agdsecurityeventlogs",
+    "name": "agdsecurityeventlogs",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-security-1-events-rg",
+    "subscriptionId": "5c48c925-e163-4e2e-87a7-909de1d06c1a",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/5c48c925-e163-4e2e-87a7-909de1d06c1a/resourcegroups/agd-security-1-events-rg/providers/microsoft.storage/storageaccounts/agdsecurityrsyslog",
+    "name": "agdsecurityrsyslog",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-security-1-events-rg",
+    "subscriptionId": "5c48c925-e163-4e2e-87a7-909de1d06c1a",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/5c48c925-e163-4e2e-87a7-909de1d06c1a/resourcegroups/agd-security-1-log-rg/providers/microsoft.storage/storageaccounts/compliancez50ymy36bz68ih",
+    "name": "compliancez50ymy36bz68ih",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-security-1-log-rg",
+    "subscriptionId": "5c48c925-e163-4e2e-87a7-909de1d06c1a",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/5c48c925-e163-4e2e-87a7-909de1d06c1a/resourcegroups/agd-security-1-nsg-rg/providers/microsoft.storage/storageaccounts/nsg7dc069d6566b46c4bd863",
+    "name": "nsg7dc069d6566b46c4bd863",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-security-1-nsg-rg",
+    "subscriptionId": "5c48c925-e163-4e2e-87a7-909de1d06c1a",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/5c48c925-e163-4e2e-87a7-909de1d06c1a/resourcegroups/agd-security-1-tools/providers/microsoft.storage/storageaccounts/sectools",
+    "name": "sectools",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-security-1-tools",
+    "subscriptionId": "5c48c925-e163-4e2e-87a7-909de1d06c1a",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/5c48c925-e163-4e2e-87a7-909de1d06c1a/resourcegroups/agd-security-1-vm-rg/providers/microsoft.storage/storageaccounts/agdsecurity1vmrgdiag",
+    "name": "agdsecurity1vmrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-security-1-vm-rg",
+    "subscriptionId": "5c48c925-e163-4e2e-87a7-909de1d06c1a",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/5c48c925-e163-4e2e-87a7-909de1d06c1a/resourcegroups/agd-security-1-vm-rg/providers/microsoft.storage/storageaccounts/agdsecurity1vmrgdiag457",
+    "name": "agdsecurity1vmrgdiag457",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-security-1-vm-rg",
+    "subscriptionId": "5c48c925-e163-4e2e-87a7-909de1d06c1a",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/agd-vdi-1-alerts-rg/providers/microsoft.storage/storageaccounts/agdvdi1alertsrgdiag",
+    "name": "agdvdi1alertsrgdiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-vdi-1-alerts-rg",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/agd-vdi-1-nsg-rg/providers/microsoft.storage/storageaccounts/nsga42a72eec6534ad599db9",
+    "name": "nsga42a72eec6534ad599db9",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-vdi-1-nsg-rg",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/citrix-xd-5e2ab942-08ad-4fdb-909a-fb95e0bb57a7-r50s8/providers/microsoft.storage/storageaccounts/citrixxdpxclbqofzw95q1cn",
+    "name": "citrixxdpxclbqofzw95q1cn",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "citrix-xd-5e2ab942-08ad-4fdb-909a-fb95e0bb57a7-r50s8",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/citrix-xd-5e2ab942-08ad-4fdb-909a-fb95e0bb57a7-r50s8/providers/microsoft.storage/storageaccounts/citrixxdswko408a0ku8t2ge",
+    "name": "citrixxdswko408a0ku8t2ge",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "citrix-xd-5e2ab942-08ad-4fdb-909a-fb95e0bb57a7-r50s8",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/citrix-xd-5e2ab942-08ad-4fdb-909a-fb95e0bb57a7-r50s8/providers/microsoft.storage/storageaccounts/citrixxdzoc4wyaxlzam8oe9",
+    "name": "citrixxdzoc4wyaxlzam8oe9",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "citrix-xd-5e2ab942-08ad-4fdb-909a-fb95e0bb57a7-r50s8",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/citrix-xd-f98d4aa0-ee7c-45d3-9cf1-ac88d6ab442e-zw5x5/providers/microsoft.storage/storageaccounts/citrixxdmc9v63as2aw32vcb",
+    "name": "citrixxdmc9v63as2aw32vcb",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "citrix-xd-f98d4aa0-ee7c-45d3-9cf1-ac88d6ab442e-zw5x5",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/citrix-xd-f98d4aa0-ee7c-45d3-9cf1-ac88d6ab442e-zw5x5/providers/microsoft.storage/storageaccounts/citrixxdus8sjsxqq6prkcye",
+    "name": "citrixxdus8sjsxqq6prkcye",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "citrix-xd-f98d4aa0-ee7c-45d3-9cf1-ac88d6ab442e-zw5x5",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-onespan/providers/microsoft.storage/storageaccounts/idrgdauc2ctxonespandiag",
+    "name": "idrgdauc2ctxonespandiag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-onespan",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-storage/providers/microsoft.storage/storageaccounts/idauc2ctxvm",
+    "name": "idauc2ctxvm",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-storage",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-storage/providers/microsoft.storage/storageaccounts/idauc2ctxvmdia",
+    "name": "idauc2ctxvmdia",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-storage",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopa-0821/providers/microsoft.storage/storageaccounts/citrixxd2v908sgl52f5goro",
+    "name": "citrixxd2v908sgl52f5goro",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopa-0821",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopa-0821/providers/microsoft.storage/storageaccounts/citrixxd7vxn51eemrnmcr2b",
+    "name": "citrixxd7vxn51eemrnmcr2b",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopa-0821",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopa-0821/providers/microsoft.storage/storageaccounts/citrixxdcy5od1b26kzpfj3m",
+    "name": "citrixxdcy5od1b26kzpfj3m",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopa-0821",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopa-0821/providers/microsoft.storage/storageaccounts/citrixxdeca8uz628hm0fp66",
+    "name": "citrixxdeca8uz628hm0fp66",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopa-0821",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopa-0821/providers/microsoft.storage/storageaccounts/citrixxdo7awbuceda3bdtl5",
+    "name": "citrixxdo7awbuceda3bdtl5",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopa-0821",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopa-0821/providers/microsoft.storage/storageaccounts/citrixxdzp0nw3o6u4lqabbm",
+    "name": "citrixxdzp0nw3o6u4lqabbm",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopa-0821",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0219/providers/microsoft.storage/storageaccounts/citrixvdddiagnostics",
+    "name": "citrixvdddiagnostics",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0219",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0219/providers/microsoft.storage/storageaccounts/idrgdauc2ctxvdideskto316",
+    "name": "idrgdauc2ctxvdideskto316",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0219",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0221/providers/microsoft.storage/storageaccounts/citrixxd8cbkm1sxpwxb9218",
+    "name": "citrixxd8cbkm1sxpwxb9218",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0221",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0221/providers/microsoft.storage/storageaccounts/citrixxdels7hqx27ifvdjkr",
+    "name": "citrixxdels7hqx27ifvdjkr",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0221",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0221/providers/microsoft.storage/storageaccounts/citrixxdz0vzenhmtl3q77th",
+    "name": "citrixxdz0vzenhmtl3q77th",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0221",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0320/providers/microsoft.storage/storageaccounts/citrixxd7zcb154d3s25ml5p",
+    "name": "citrixxd7zcb154d3s25ml5p",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0320",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0320/providers/microsoft.storage/storageaccounts/citrixxdtubzp0fvooxrjc0p",
+    "name": "citrixxdtubzp0fvooxrjc0p",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0320",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0320/providers/microsoft.storage/storageaccounts/citrixxdy0dqxfzd8p3riujx",
+    "name": "citrixxdy0dqxfzd8p3riujx",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0320",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0721/providers/microsoft.storage/storageaccounts/citrixxd422xsu45ximisa1e",
+    "name": "citrixxd422xsu45ximisa1e",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0721",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0721/providers/microsoft.storage/storageaccounts/citrixxds2gxv954dgjiecln",
+    "name": "citrixxds2gxv954dgjiecln",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0721",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0721/providers/microsoft.storage/storageaccounts/citrixxdtkyqy2thahytz8ku",
+    "name": "citrixxdtkyqy2thahytz8ku",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0721",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0721/providers/microsoft.storage/storageaccounts/citrixxdzhiy7f227q2hqj90",
+    "name": "citrixxdzhiy7f227q2hqj90",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0721",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0819/providers/microsoft.storage/storageaccounts/citrixxdu0pnuob6x82n69z7",
+    "name": "citrixxdu0pnuob6x82n69z7",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0819",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/da2a1eca-47ea-41c9-8387-e6073a25a8ee/resourcegroups/id-rgd-auc2-ctx-vdidesktopd-0819/providers/microsoft.storage/storageaccounts/citrixxdvp3dx4n9ygv9z7po",
+    "name": "citrixxdvp3dx4n9ygv9z7po",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "id-rgd-auc2-ctx-vdidesktopd-0819",
+    "subscriptionId": "da2a1eca-47ea-41c9-8387-e6073a25a8ee",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/fe148c8f-0145-468a-8c9a-946e44df90df/resourcegroups/agd-security-tools-1/providers/microsoft.storage/storageaccounts/agdsecuritytools1diag",
+    "name": "agdsecuritytools1diag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-security-tools-1",
+    "subscriptionId": "fe148c8f-0145-468a-8c9a-946e44df90df",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  },
+  {
+    "id": "/subscriptions/fe148c8f-0145-468a-8c9a-946e44df90df/resourcegroups/agd-security-tools-3/providers/microsoft.storage/storageaccounts/agdsecuritytools3diag",
+    "name": "agdsecuritytools3diag",
+    "properties_minimumTlsVersion": "TLS1_0",
+    "resourceGroup": "agd-security-tools-3",
+    "subscriptionId": "fe148c8f-0145-468a-8c9a-946e44df90df",
+    "tenantId": "f66307b7-a99a-43c8-9cf6-34c806f54739",
+    "tenantName": "YELLOW"
+  }
+]
