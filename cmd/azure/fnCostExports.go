@@ -15,8 +15,8 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/jercle/cloudini/lib"
 	"github.com/briandowns/spinner"
+	"github.com/jercle/cloudini/lib"
 	"github.com/xuri/excelize/v2"
 )
 
@@ -500,6 +500,40 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 
 	processedResources := make(map[string][]lib.AzureResourceDetails)
 
+	resById := make(map[string]lib.AzureResourceDetails)
+	// vmById := make(map[string]lib.AzureResourceDetails)
+
+	for _, res := range resources {
+		resById[res.ID] = res
+		// if strings.EqualFold(res.Type, "microsoft.compute/virtualmachines") {
+		// 	vmById[res.ID] = res
+		// }
+	}
+
+	for _, md := range costData {
+		meterId := md.ResourceMeterIdentifier
+		res := resById[md.InstanceId]
+		if !slices.Contains(res.RelatedCostMeters, meterId) {
+			res.RelatedCostMeters = append(res.RelatedCostMeters, meterId)
+			resById[md.InstanceId] = res
+		}
+		// if strings.Contains(meterId, res.SubscriptionID) &&
+		// 	strings.Contains(meterId, resName) &&
+		// 	strings.Contains(meterId, strings.ToLower(res.ResourceGroup)) {
+		// 	if !slices.Contains(currRes.RelatedCostMeters, meterId) {
+		// 		currRes.RelatedCostMeters = append(currRes.RelatedCostMeters, meterId)
+		// 	}
+		// }
+	}
+
+	// lib.JsonMarshalAndPrint(resById)
+	_, _, cachePath := lib.InitConfig(nil)
+	jsonStr, err := json.MarshalIndent(resById, "", "  ")
+	lib.CheckFatalError(err)
+	os.WriteFile(cachePath+"/resById.json", jsonStr, 0644)
+
+	os.Exit(0)
+
 	for _, res := range resources {
 		bar.Add(1)
 		// bar.Describe("Processing resource " + strconv.Itoa(i) + " of " + strconv.Itoa(len(resources)))
@@ -544,7 +578,35 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 					}
 				}
 			} else if strings.ToLower(res.Type) == "microsoft.compute/restorepointcollections" {
-				resName = strings.ToLower(strings.Split(res.Name, "_")[1])
+				var rpSource lib.AzureRestorePointCollectionSource
+
+				err = json.Unmarshal([]byte(res.Properties.Source), &rpSource)
+				// rpSourceProc, ok := rpSource.(lib.AzureRestorePointCollectionSource)
+				// rpSourceId := ""
+
+				// if ok {
+				// 	rpSourceId = rpSourceProc.ID
+				// }
+
+				// if strings.EqualFold(res.ID, comparisonResource.Properties.VirtualMachine.ID) {
+				if !slices.Contains(currRes.RelatedResources, rpSource.ID) {
+					currRes.RelatedResources = append(currRes.RelatedResources, rpSource.ID)
+				}
+
+				lib.JsonMarshalAndPrint(currRes)
+
+				os.Exit(0)
+				// }
+				// resNameSplit := strings.Split(res.Name, "_")
+				// if len(resNameSplit) > 1 {
+				// 	resName = strings.ToLower(resNameSplit[1])
+				// } else {
+				// 	fmt.Println("res.Name")
+				// 	fmt.Println(res.Name)
+
+				// 	lib.JsonMarshalAndPrint(res)
+				// 	os.Exit(0)
+				// }
 				// if len(resName) != 3 {
 				// 	jsonName, _ := json.MarshalIndent(resName, "", "  ")
 				// 	fmt.Println(string(jsonName))

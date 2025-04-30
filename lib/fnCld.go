@@ -500,3 +500,16 @@ func IsValidJson(s string) bool {
 	var js interface{}
 	return json.Unmarshal([]byte(s), &js) == nil
 }
+
+//
+//
+
+func MapTenantIdToConfiguredTenantName(tenantId string, config AzureConfig) (tenantName string) {
+	for _, tConf := range config.MultiTenantAuth.Tenants {
+		if tConf.TenantID == tenantId {
+			tenantName = tConf.TenantName
+			continue
+		}
+	}
+	return
+}
