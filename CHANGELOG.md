@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.31]
+* Feature: Add subName and change min tls prop name to storage acct min tls data
+
 ## [0.1.30]
 * Feature: Add Mongo update to include storage acct min TLS versions
 
