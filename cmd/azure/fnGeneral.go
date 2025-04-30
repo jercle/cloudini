@@ -20,12 +20,12 @@ func CheckStorageAccountTlsVersions(outputFile string, getAll bool, token *lib.A
 	graphQuery := `Resources
     | where type == 'microsoft.storage/storageaccounts'
     | where properties['minimumTlsVersion'] != 'TLS1_2'
-    | project name, resourceGroup, properties.minimumTlsVersion, tenantId, subscriptionId, id`
+    | project name, resourceGroup, minimumTlsVersion = properties.minimumTlsVersion, tenantId, subscriptionId, id`
 
 	if getAll {
 		graphQuery = `Resources
     | where type == 'microsoft.storage/storageaccounts'
-    | project name, resourceGroup, properties.minimumTlsVersion, tenantId, subscriptionId, id`
+    | project name, resourceGroup, minimumTlsVersion = properties.minimumTlsVersion, tenantId, subscriptionId, id`
 	}
 
 	jsonBody := `{

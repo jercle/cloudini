@@ -617,13 +617,13 @@ type CheckStorageAccountTlsVersionsResponse struct {
 //
 
 type StorageAccountTlsVersion struct {
-	ID                          string    `json:"id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
-	Name                        string    `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
-	PropertiesMinimumTlsVersion string    `json:"properties_minimumTlsVersion,omitempty,omitzero" bson:"properties_minimumTlsVersion,omitempty,omitzero"`
-	ResourceGroup               string    `json:"resourceGroup,omitempty,omitzero" bson:"resourceGroup,omitempty,omitzero"`
-	SubscriptionID              string    `json:"subscriptionId,omitempty,omitzero" bson:"subscriptionId,omitempty,omitzero"`
-	TenantID                    string    `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
-	TenantName                  string    `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
-	LastDBSync                  time.Time `json:"lastDBSync,omitempty,omitzero" bson:"lastDBSync,omitempty,omitzero"`
-	LastAzureSync               time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
+	ID                string    `json:"id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
+	Name              string    `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
+	MinimumTlsVersion string    `json:"minimumTlsVersion,omitempty,omitzero" bson:"minimumTlsVersion,omitempty,omitzero"`
+	ResourceGroup     string    `json:"resourceGroup,omitempty,omitzero" bson:"resourceGroup,omitempty,omitzero"`
+	SubscriptionID    string    `json:"subscriptionId,omitempty,omitzero" bson:"subscriptionId,omitempty,omitzero"`
+	TenantID          string    `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
+	TenantName        string    `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
+	LastDBSync        time.Time `json:"lastDBSync,omitempty,omitzero" bson:"lastDBSync,omitempty,omitzero"`
+	LastAzureSync     time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
 }
