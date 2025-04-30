@@ -125,6 +125,19 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
 	// os.Exit(0)
 
+	fmt.Println("Getting then updating all storage accounts with minimum TLS versions...")
+	s.Start()
+	startTime = time.Now()
+	stgAccountsOptions := lib.GetAllResourcesForAllConfiguredTenantsOptions{
+		GetAllStorageAccountsInTlsCheck: true,
+		SuppressSteps:                   true,
+	}
+	stgAccounts := azure.CheckStorageAccountTlsVersionsForAllConfiguredTenants(&stgAccountsOptions, tokenReq)
+	UpsertStorageAccountMinTlsVersions(stgAccounts, opts.AzStorageAcctMinTlsVersions)
+	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
+
 	fmt.Println("Updating Azure Resources in database...")
 	s.Start()
 	startTime = time.Now()

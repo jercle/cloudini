@@ -11,7 +11,7 @@ import (
 	"github.com/jercle/cloudini/lib"
 )
 
-func CheckStorageAccountTlsVersions(outputFile string, token *lib.AzureMultiAuthToken) (allResources []StorageAccountTlsVersion) {
+func CheckStorageAccountTlsVersions(outputFile string, getAll bool, token *lib.AzureMultiAuthToken) (allResources []StorageAccountTlsVersion) {
 
 	config := lib.GetCldConfig(nil)
 
@@ -21,6 +21,12 @@ func CheckStorageAccountTlsVersions(outputFile string, token *lib.AzureMultiAuth
     | where type == 'microsoft.storage/storageaccounts'
     | where properties['minimumTlsVersion'] != 'TLS1_2'
     | project name, resourceGroup, properties.minimumTlsVersion, tenantId, subscriptionId, id`
+
+	if getAll {
+		graphQuery = `Resources
+    | where type == 'microsoft.storage/storageaccounts'
+    | project name, resourceGroup, properties.minimumTlsVersion, tenantId, subscriptionId, id`
+	}
 
 	jsonBody := `{
 	"query": "` + graphQuery + `"
@@ -36,6 +42,7 @@ func CheckStorageAccountTlsVersions(outputFile string, token *lib.AzureMultiAuth
 	for _, res := range response.Data {
 		currRes := res
 		currRes.ID = strings.ToLower(res.ID)
+		currRes.LastAzureSync = time.Now()
 		currRes.TenantName = lib.MapTenantIdToConfiguredTenantName(res.TenantID, *config.Azure)
 		allResources = append(allResources, currRes)
 	}
@@ -65,6 +72,8 @@ func CheckStorageAccountTlsVersions(outputFile string, token *lib.AzureMultiAuth
 		for _, res := range whileRes.Data {
 			currRes := res
 			currRes.ID = strings.ToLower(res.ID)
+			currRes.LastAzureSync = time.Now()
+			currRes.TenantName = lib.MapTenantIdToConfiguredTenantName(res.TenantID, *config.Azure)
 			allResources = append(allResources, currRes)
 		}
 
@@ -97,7 +106,7 @@ func CheckStorageAccountTlsVersionsForAllConfiguredTenants(opts *lib.GetAllResou
 				fmt.Println(token.TenantName + ": Fetching resources")
 			}
 			// allResources[token.TenantName] = make(map[string]SubscriptionResourceList)
-			storageAccounts := CheckStorageAccountTlsVersions("", &token)
+			storageAccounts := CheckStorageAccountTlsVersions("", opts.GetAllStorageAccountsInTlsCheck, &token)
 
 			mutex.Lock()
 			allResources = append(allResources, storageAccounts...)

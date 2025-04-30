@@ -17,20 +17,20 @@ type AzureRequestOptions struct {
 //
 
 type ListAllResourcesResponse struct {
-	Value    []ListRspResource `json:"value"`
-	NextLink string            `json:"nextLink"`
+	Value    []ListRspResource `json:"value,omitempty,omitzero" bson:"value,omitempty,omitzero"`
+	NextLink string            `json:"nextLink,omitempty,omitzero" bson:"nextLink,omitempty,omitzero"`
 }
 
 //
 //
 
 type ResourceGraphGetIpsResponse struct {
-	Count           float64                 `json:"count"`
-	Data            []AzureResourceIPConfig `json:"data"`
-	Facets          []interface{}           `json:"facets"`
-	ResultTruncated string                  `json:"resultTruncated"`
-	SkipToken       string                  `json:"$skipToken"`
-	TotalRecords    float64                 `json:"totalRecords"`
+	Count           float64                 `json:"count,omitempty,omitzero" bson:"count,omitempty,omitzero"`
+	Data            []AzureResourceIPConfig `json:"data,omitempty,omitzero" bson:"data,omitempty,omitzero"`
+	Facets          []interface{}           `json:"facets,omitempty,omitzero" bson:"facets,omitempty,omitzero"`
+	ResultTruncated string                  `json:"resultTruncated,omitempty,omitzero" bson:"resultTruncated,omitempty,omitzero"`
+	SkipToken       string                  `json:"$skipToken,omitempty,omitzero" bson:"$skipToken,omitempty,omitzero"`
+	TotalRecords    float64                 `json:"totalRecords,omitempty,omitzero" bson:"totalRecords,omitempty,omitzero"`
 }
 
 //
@@ -57,22 +57,22 @@ type AzureResourceIPConfig struct {
 //
 
 type ListRspResource struct {
-	ID       string `json:"id"`
+	ID       string `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
 	Identity *struct {
-		PrincipalID string `json:"principalId"`
-		TenantID    string `json:"tenantId"`
-		Type        string `json:"type"`
-	} `json:"identity,omitempty"`
-	Location  string `json:"location"`
-	ManagedBy string `json:"managedBy,omitempty"`
-	Name      string `json:"name"`
+		PrincipalID string `json:"principalId,omitempty,omitzero" bson:"principalId,omitempty,omitzero"`
+		TenantID    string `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
+		Type        string `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+	} `json:"identity,omitempty" bson:"identity,omitempty"`
+	Location  string `json:"location,omitempty,omitzero" bson:"location,omitempty,omitzero"`
+	ManagedBy string `json:"managedBy,omitempty" bson:"managedBy,omitempty"`
+	Name      string `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
 	Sku       *struct {
-		Name string `json:"name"`
-		Tier string `json:"tier"`
-	} `json:"sku,omitempty"`
-	Tags  map[string]string `json:"tags,omitempty"`
-	Type  string            `json:"type"`
-	Zones []string          `json:"zones,omitempty"`
+		Name string `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
+		Tier string `json:"tier,omitempty,omitzero" bson:"tier,omitempty,omitzero"`
+	} `json:"sku,omitempty" bson:"sku,omitempty"`
+	Tags  map[string]string `json:"tags,omitempty" bson:"tags,omitempty"`
+	Type  string            `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+	Zones []string          `json:"zones,omitempty" bson:"zones,omitempty"`
 }
 
 //
@@ -284,14 +284,14 @@ type EntraExpiringCredential struct {
 //
 
 type AzureB2CUser struct {
-	AccountEnabled                                           bool      `json:"accountEnabled"`
-	CreatedDateTime                                          time.Time `json:"createdDateTime"`
-	CreationType                                             string    `json:"creationType"`
-	DisplayName                                              string    `json:"displayName"`
-	Extension4e4fa41c1d3246639764b37ff949534dLastLogonTime   time.Time `json:"extension_4e4fa41c1d3246639764b37ff949534d_lastLogonTime"`
-	Extension4e4fa41c1d3246639764b37ff949534dPasswordResetOn time.Time `json:"extension_4e4fa41c1d3246639764b37ff949534d_passwordResetOn"`
-	ID                                                       string    `json:"id"`
-	UserPrincipalName                                        string    `json:"userPrincipalName"`
+	AccountEnabled                                           bool      `json:"accountEnabled,omitempty,omitzero" bson:"accountEnabled,omitempty,omitzero"`
+	CreatedDateTime                                          time.Time `json:"createdDateTime,omitempty,omitzero" bson:"createdDateTime,omitempty,omitzero"`
+	CreationType                                             string    `json:"creationType,omitempty,omitzero" bson:"creationType,omitempty,omitzero"`
+	DisplayName                                              string    `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
+	Extension4e4fa41c1d3246639764b37ff949534dLastLogonTime   time.Time `json:"extension_4e4fa41c1d3246639764b37ff949534d_lastLogonTime,omitempty,omitzero" bson:"extension_4e4fa41c1d3246639764b37ff949534d_lastLogonTime,omitempty,omitzero"`
+	Extension4e4fa41c1d3246639764b37ff949534dPasswordResetOn time.Time `json:"extension_4e4fa41c1d3246639764b37ff949534d_passwordResetOn,omitempty,omitzero" bson:"extension_4e4fa41c1d3246639764b37ff949534d_passwordResetOn,omitempty,omitzero"`
+	ID                                                       string    `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	UserPrincipalName                                        string    `json:"userPrincipalName,omitempty,omitzero" bson:"userPrincipalName,omitempty,omitzero"`
 }
 
 //
@@ -303,325 +303,327 @@ type TenantList []TenantDetails
 //
 
 type TenantDetails struct {
-	TenantId      string            `json:"id" bson:"_id`
-	TenantName    string            `json:"tenantName" bson:"tenantName`
-	Subscriptions map[string]string `json:"subscriptions" bson:"subscriptions`
+	TenantId      string            `json:"id" bson:"_i,omitempty,omitzero"`
+	TenantName    string            `json:"tenantName" bson:"tenantNam,omitempty,omitzero"`
+	Subscriptions map[string]string `json:"subscriptions" bson:"subscription,omitempty,omitzero"`
 }
 
 //
 //
 
 type GetAllImageGalleriesForSubscriptionResponse struct {
-	Value []ImageGallery `json:"value"`
+	Value []ImageGallery `json:"value,omitempty,omitzero" bson:"value,omitempty,omitzero"`
 }
 
 //
 //
 
 type ImageGallery struct {
-	ID             string `json:"id"`
-	Location       string `json:"location"`
-	Name           string `json:"name"`
-	SubscriptionId string `json:"subscriptionId"`
-	ResourceGroup  string `json:"resourceGroup"`
-	TenantName     string `json:"tenantName"`
+	ID             string `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	Location       string `json:"location,omitempty,omitzero" bson:"location,omitempty,omitzero"`
+	Name           string `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
+	SubscriptionId string `json:"subscriptionId,omitempty,omitzero" bson:"subscriptionId,omitempty,omitzero"`
+	ResourceGroup  string `json:"resourceGroup,omitempty,omitzero" bson:"resourceGroup,omitempty,omitzero"`
+	TenantName     string `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
 	Properties     struct {
-		Description string `json:"description,omitempty"`
+		Description string `json:"description,omitempty" bson:"description,omitempty"`
 		Identifier  struct {
-			UniqueName string `json:"uniqueName"`
-		} `json:"identifier"`
-		ProvisioningState string `json:"provisioningState"`
+			UniqueName string `json:"uniqueName,omitempty,omitzero" bson:"uniqueName,omitempty,omitzero"`
+		} `json:"identifier,omitempty,omitzero" bson:"identifier,omitempty,omitzero"`
+		ProvisioningState string `json:"provisioningState,omitempty,omitzero" bson:"provisioningState,omitempty,omitzero"`
 		SoftDeletePolicy  *struct {
-			IsSoftDeleteEnabled bool `json:"isSoftDeleteEnabled"`
-		} `json:"softDeletePolicy,omitempty"`
-	} `json:"properties"`
+			IsSoftDeleteEnabled bool `json:"isSoftDeleteEnabled,omitempty,omitzero" bson:"isSoftDeleteEnabled,omitempty,omitzero"`
+		} `json:"softDeletePolicy,omitempty" bson:"softDeletePolicy,omitempty"`
+	} `json:"properties,omitempty,omitzero" bson:"properties,omitempty,omitzero"`
 	Tags *struct {
-		CitrixCustomerID           string `json:"CitrixCustomerId"`
-		CitrixProvisioningSchemeID string `json:"CitrixProvisioningSchemeId"`
-		CitrixResource             string `json:"CitrixResource"`
-		CitrixVirtualSiteID        string `json:"CitrixVirtualSiteId"`
-	} `json:"tags,omitempty"`
-	Type string `json:"type"`
+		CitrixCustomerID           string `json:"CitrixCustomerId,omitempty,omitzero" bson:"CitrixCustomerId,omitempty,omitzero"`
+		CitrixProvisioningSchemeID string `json:"CitrixProvisioningSchemeId,omitempty,omitzero" bson:"CitrixProvisioningSchemeId,omitempty,omitzero"`
+		CitrixResource             string `json:"CitrixResource,omitempty,omitzero" bson:"CitrixResource,omitempty,omitzero"`
+		CitrixVirtualSiteID        string `json:"CitrixVirtualSiteId,omitempty,omitzero" bson:"CitrixVirtualSiteId,omitempty,omitzero"`
+	} `json:"tags,omitempty" bson:"tags,omitempty"`
+	Type string `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
 }
 
 //
 //
 
 type ListManagementGroupsResponse struct {
-	Value []ManagementGroup `json:"value"`
+	Value []ManagementGroup `json:"value,omitempty,omitzero" bson:"value,omitempty,omitzero"`
 }
 
 //
 //
 
 type ManagementGroup struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
+	ID         string `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	Name       string `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
 	Properties struct {
-		DisplayName string `json:"displayName"`
-		TenantID    string `json:"tenantId"`
-	} `json:"properties"`
-	Type string `json:"type"`
+		DisplayName string `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
+		TenantID    string `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
+	} `json:"properties,omitempty,omitzero" bson:"properties,omitempty,omitzero"`
+	Type string `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
 }
 
 //
 //
 
 type ResourceRoleDefinition struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
+	ID         string `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	Name       string `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
 	Properties struct {
-		AssignableScopes []string  `json:"assignableScopes"`
-		CreatedBy        any       `json:"createdBy"`
-		CreatedOn        time.Time `json:"createdOn"`
-		Description      string    `json:"description"`
+		AssignableScopes []string  `json:"assignableScopes,omitempty,omitzero" bson:"assignableScopes,omitempty,omitzero"`
+		CreatedBy        any       `json:"createdBy,omitempty,omitzero" bson:"createdBy,omitempty,omitzero"`
+		CreatedOn        time.Time `json:"createdOn,omitempty,omitzero" bson:"createdOn,omitempty,omitzero"`
+		Description      string    `json:"description,omitempty,omitzero" bson:"description,omitempty,omitzero"`
 		Permissions      []struct {
-			Actions        []string `json:"actions"`
-			DataActions    []any    `json:"dataActions"`
-			NotActions     []any    `json:"notActions"`
-			NotDataActions []any    `json:"notDataActions"`
-		} `json:"permissions"`
-		RoleName  string    `json:"roleName"`
-		Type      string    `json:"type"`
-		UpdatedBy any       `json:"updatedBy"`
-		UpdatedOn time.Time `json:"updatedOn"`
-	} `json:"properties"`
-	Type string `json:"type"`
+			Actions        []string `json:"actions,omitempty,omitzero" bson:"actions,omitempty,omitzero"`
+			DataActions    []any    `json:"dataActions,omitempty,omitzero" bson:"dataActions,omitempty,omitzero"`
+			NotActions     []any    `json:"notActions,omitempty,omitzero" bson:"notActions,omitempty,omitzero"`
+			NotDataActions []any    `json:"notDataActions,omitempty,omitzero" bson:"notDataActions,omitempty,omitzero"`
+		} `json:"permissions,omitempty,omitzero" bson:"permissions,omitempty,omitzero"`
+		RoleName  string    `json:"roleName,omitempty,omitzero" bson:"roleName,omitempty,omitzero"`
+		Type      string    `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+		UpdatedBy any       `json:"updatedBy,omitempty,omitzero" bson:"updatedBy,omitempty,omitzero"`
+		UpdatedOn time.Time `json:"updatedOn,omitempty,omitzero" bson:"updatedOn,omitempty,omitzero"`
+	} `json:"properties,omitempty,omitzero" bson:"properties,omitempty,omitzero"`
+	Type string `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
 }
 
 //
 //
 
 type ListResourceRoleDefinitionsResponse struct {
-	Value []ResourceRoleDefinition `json:"value"`
+	Value []ResourceRoleDefinition `json:"value,omitempty,omitzero" bson:"value,omitempty,omitzero"`
 }
 
 //
 //
 
 type AzureAsyncRequestResponse struct {
-	AzureAsyncnotification                        []string `json:"Azure-Asyncnotification"`
-	AzureAsyncoperation                           []string `json:"Azure-Asyncoperation"`
-	CacheControl                                  []string `json:"Cache-Control"`
-	ContentLength                                 []string `json:"Content-Length"`
-	Date                                          []string `json:"Date"`
-	Expires                                       []string `json:"Expires"`
-	Location                                      []string `json:"Location"`
-	Pragma                                        []string `json:"Pragma"`
-	StrictTransportSecurity                       []string `json:"Strict-Transport-Security"`
-	XCache                                        []string `json:"X-Cache"`
-	XContentTypeOptions                           []string `json:"X-Content-Type-Options"`
-	XMsCorrelationRequestID                       []string `json:"X-Ms-Correlation-Request-Id"`
-	XMsRatelimitRemainingResource                 []string `json:"X-Ms-Ratelimit-Remaining-Resource"`
-	XMsRatelimitRemainingSubscriptionGlobalWrites []string `json:"X-Ms-Ratelimit-Remaining-Subscription-Global-Writes"`
-	XMsRatelimitRemainingSubscriptionWrites       []string `json:"X-Ms-Ratelimit-Remaining-Subscription-Writes"`
-	XMsRequestID                                  []string `json:"X-Ms-Request-Id"`
-	XMsRoutingRequestID                           []string `json:"X-Ms-Routing-Request-Id"`
-	XMsedgeRef                                    []string `json:"X-Msedge-Ref"`
+	AzureAsyncnotification                        []string `json:"Azure-Asyncnotification,omitempty,omitzero" bson:"Azure-Asyncnotification,omitempty,omitzero"`
+	AzureAsyncoperation                           []string `json:"Azure-Asyncoperation,omitempty,omitzero" bson:"Azure-Asyncoperation,omitempty,omitzero"`
+	CacheControl                                  []string `json:"Cache-Control,omitempty,omitzero" bson:"Cache-Control,omitempty,omitzero"`
+	ContentLength                                 []string `json:"Content-Length,omitempty,omitzero" bson:"Content-Length,omitempty,omitzero"`
+	Date                                          []string `json:"Date,omitempty,omitzero" bson:"Date,omitempty,omitzero"`
+	Expires                                       []string `json:"Expires,omitempty,omitzero" bson:"Expires,omitempty,omitzero"`
+	Location                                      []string `json:"Location,omitempty,omitzero" bson:"Location,omitempty,omitzero"`
+	Pragma                                        []string `json:"Pragma,omitempty,omitzero" bson:"Pragma,omitempty,omitzero"`
+	StrictTransportSecurity                       []string `json:"Strict-Transport-Security,omitempty,omitzero" bson:"Strict-Transport-Security,omitempty,omitzero"`
+	XCache                                        []string `json:"X-Cache,omitempty,omitzero" bson:"X-Cache,omitempty,omitzero"`
+	XContentTypeOptions                           []string `json:"X-Content-Type-Options,omitempty,omitzero" bson:"X-Content-Type-Options,omitempty,omitzero"`
+	XMsCorrelationRequestID                       []string `json:"X-Ms-Correlation-Request-Id,omitempty,omitzero" bson:"X-Ms-Correlation-Request-Id,omitempty,omitzero"`
+	XMsRatelimitRemainingResource                 []string `json:"X-Ms-Ratelimit-Remaining-Resource,omitempty,omitzero" bson:"X-Ms-Ratelimit-Remaining-Resource,omitempty,omitzero"`
+	XMsRatelimitRemainingSubscriptionGlobalWrites []string `json:"X-Ms-Ratelimit-Remaining-Subscription-Global-Writes,omitempty,omitzero" bson:"X-Ms-Ratelimit-Remaining-Subscription-Global-Writes,omitempty,omitzero"`
+	XMsRatelimitRemainingSubscriptionWrites       []string `json:"X-Ms-Ratelimit-Remaining-Subscription-Writes,omitempty,omitzero" bson:"X-Ms-Ratelimit-Remaining-Subscription-Writes,omitempty,omitzero"`
+	XMsRequestID                                  []string `json:"X-Ms-Request-Id,omitempty,omitzero" bson:"X-Ms-Request-Id,omitempty,omitzero"`
+	XMsRoutingRequestID                           []string `json:"X-Ms-Routing-Request-Id,omitempty,omitzero" bson:"X-Ms-Routing-Request-Id,omitempty,omitzero"`
+	XMsedgeRef                                    []string `json:"X-Msedge-Ref,omitempty,omitzero" bson:"X-Msedge-Ref,omitempty,omitzero"`
 }
 
 //
 //
 
 type AzureAsyncOpUpdateResponse struct {
-	EndTime   time.Time `json:"endTime"`
-	Name      string    `json:"name"`
-	StartTime time.Time `json:"startTime"`
-	Status    string    `json:"status"`
+	EndTime   time.Time `json:"endTime,omitempty,omitzero" bson:"endTime,omitempty,omitzero"`
+	Name      string    `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
+	StartTime time.Time `json:"startTime,omitempty,omitzero" bson:"startTime,omitempty,omitzero"`
+	Status    string    `json:"status,omitempty,omitzero" bson:"status,omitempty,omitzero"`
 }
 
 //
 //
 
 type VirtualMachine struct {
-	ID         string `json:"id"`
-	Location   string `json:"location"`
-	Name       string `json:"name"`
+	ID         string `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	Location   string `json:"location,omitempty,omitzero" bson:"location,omitempty,omitzero"`
+	Name       string `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
 	Properties struct {
 		AdditionalCapabilities struct {
-			HibernationEnabled bool `json:"hibernationEnabled"`
-		} `json:"additionalCapabilities"`
+			HibernationEnabled bool `json:"hibernationEnabled,omitempty,omitzero" bson:"hibernationEnabled,omitempty,omitzero"`
+		} `json:"additionalCapabilities,omitempty,omitzero" bson:"additionalCapabilities,omitempty,omitzero"`
 		DiagnosticsProfile struct {
 			BootDiagnostics struct {
-				Enabled bool `json:"enabled"`
-			} `json:"bootDiagnostics"`
-		} `json:"diagnosticsProfile"`
+				Enabled bool `json:"enabled,omitempty,omitzero" bson:"enabled,omitempty,omitzero"`
+			} `json:"bootDiagnostics,omitempty,omitzero" bson:"bootDiagnostics,omitempty,omitzero"`
+		} `json:"diagnosticsProfile,omitempty,omitzero" bson:"diagnosticsProfile,omitempty,omitzero"`
 		HardwareProfile struct {
-			VmSize string `json:"vmSize"`
-		} `json:"hardwareProfile"`
+			VmSize string `json:"vmSize,omitempty,omitzero" bson:"vmSize,omitempty,omitzero"`
+		} `json:"hardwareProfile,omitempty,omitzero" bson:"hardwareProfile,omitempty,omitzero"`
 		NetworkProfile struct {
 			NetworkInterfaces []struct {
-				ID         string `json:"id"`
+				ID         string `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
 				Properties struct {
-					DeleteOption string `json:"deleteOption"`
-				} `json:"properties"`
-			} `json:"networkInterfaces"`
-		} `json:"networkProfile"`
+					DeleteOption string `json:"deleteOption,omitempty,omitzero" bson:"deleteOption,omitempty,omitzero"`
+				} `json:"properties,omitempty,omitzero" bson:"properties,omitempty,omitzero"`
+			} `json:"networkInterfaces,omitempty,omitzero" bson:"networkInterfaces,omitempty,omitzero"`
+		} `json:"networkProfile,omitempty,omitzero" bson:"networkProfile,omitempty,omitzero"`
 		OSProfile struct {
-			AdminUsername            string `json:"adminUsername"`
-			AllowExtensionOperations bool   `json:"allowExtensionOperations"`
-			ComputerName             string `json:"computerName"`
+			AdminUsername            string `json:"adminUsername,omitempty,omitzero" bson:"adminUsername,omitempty,omitzero"`
+			AllowExtensionOperations bool   `json:"allowExtensionOperations,omitempty,omitzero" bson:"allowExtensionOperations,omitempty,omitzero"`
+			ComputerName             string `json:"computerName,omitempty,omitzero" bson:"computerName,omitempty,omitzero"`
 			LinuxConfiguration       struct {
-				DisablePasswordAuthentication bool `json:"disablePasswordAuthentication"`
-				EnableVmAgentPlatformUpdates  bool `json:"enableVMAgentPlatformUpdates"`
+				DisablePasswordAuthentication bool `json:"disablePasswordAuthentication,omitempty,omitzero" bson:"disablePasswordAuthentication,omitempty,omitzero"`
+				EnableVmAgentPlatformUpdates  bool `json:"enableVMAgentPlatformUpdates,omitempty,omitzero" bson:"enableVMAgentPlatformUpdates,omitempty,omitzero"`
 				PatchSettings                 struct {
-					AssessmentMode              string `json:"assessmentMode"`
+					AssessmentMode              string `json:"assessmentMode,omitempty,omitzero" bson:"assessmentMode,omitempty,omitzero"`
 					AutomaticByPlatformSettings struct {
-						BypassPlatformSafetyChecksOnUserSchedule bool   `json:"bypassPlatformSafetyChecksOnUserSchedule"`
-						RebootSetting                            string `json:"rebootSetting"`
-					} `json:"automaticByPlatformSettings"`
-					PatchMode string `json:"patchMode"`
-				} `json:"patchSettings"`
-				ProvisionVmAgent bool `json:"provisionVMAgent"`
+						BypassPlatformSafetyChecksOnUserSchedule bool   `json:"bypassPlatformSafetyChecksOnUserSchedule,omitempty,omitzero" bson:"bypassPlatformSafetyChecksOnUserSchedule,omitempty,omitzero"`
+						RebootSetting                            string `json:"rebootSetting,omitempty,omitzero" bson:"rebootSetting,omitempty,omitzero"`
+					} `json:"automaticByPlatformSettings,omitempty,omitzero" bson:"automaticByPlatformSettings,omitempty,omitzero"`
+					PatchMode string `json:"patchMode,omitempty,omitzero" bson:"patchMode,omitempty,omitzero"`
+				} `json:"patchSettings,omitempty,omitzero" bson:"patchSettings,omitempty,omitzero"`
+				ProvisionVmAgent bool `json:"provisionVMAgent,omitempty,omitzero" bson:"provisionVMAgent,omitempty,omitzero"`
 				SSH              struct {
 					PublicKeys []struct {
-						KeyData string `json:"keyData"`
-						Path    string `json:"path"`
-					} `json:"publicKeys"`
-				} `json:"ssh"`
-			} `json:"linuxConfiguration"`
-			RequireGuestProvisionSignal bool  `json:"requireGuestProvisionSignal"`
-			Secrets                     []any `json:"secrets"`
-		} `json:"osProfile"`
-		ProvisioningState string `json:"provisioningState"`
+						KeyData string `json:"keyData,omitempty,omitzero" bson:"keyData,omitempty,omitzero"`
+						Path    string `json:"path,omitempty,omitzero" bson:"path,omitempty,omitzero"`
+					} `json:"publicKeys,omitempty,omitzero" bson:"publicKeys,omitempty,omitzero"`
+				} `json:"ssh,omitempty,omitzero" bson:"ssh,omitempty,omitzero"`
+			} `json:"linuxConfiguration,omitempty,omitzero" bson:"linuxConfiguration,omitempty,omitzero"`
+			RequireGuestProvisionSignal bool  `json:"requireGuestProvisionSignal,omitempty,omitzero" bson:"requireGuestProvisionSignal,omitempty,omitzero"`
+			Secrets                     []any `json:"secrets,omitempty,omitzero" bson:"secrets,omitempty,omitzero"`
+		} `json:"osProfile,omitempty,omitzero" bson:"osProfile,omitempty,omitzero"`
+		ProvisioningState string `json:"provisioningState,omitempty,omitzero" bson:"provisioningState,omitempty,omitzero"`
 		SecurityProfile   struct {
-			SecurityType string `json:"securityType"`
+			SecurityType string `json:"securityType,omitempty,omitzero" bson:"securityType,omitempty,omitzero"`
 			UefiSettings struct {
-				SecureBootEnabled bool `json:"secureBootEnabled"`
-				VTpmEnabled       bool `json:"vTpmEnabled"`
-			} `json:"uefiSettings"`
-		} `json:"securityProfile"`
+				SecureBootEnabled bool `json:"secureBootEnabled,omitempty,omitzero" bson:"secureBootEnabled,omitempty,omitzero"`
+				VTpmEnabled       bool `json:"vTpmEnabled,omitempty,omitzero" bson:"vTpmEnabled,omitempty,omitzero"`
+			} `json:"uefiSettings,omitempty,omitzero" bson:"uefiSettings,omitempty,omitzero"`
+		} `json:"securityProfile,omitempty,omitzero" bson:"securityProfile,omitempty,omitzero"`
 		StorageProfile struct {
-			DataDisks          []any  `json:"dataDisks"`
-			DiskControllerType string `json:"diskControllerType"`
+			DataDisks          []any  `json:"dataDisks,omitempty,omitzero" bson:"dataDisks,omitempty,omitzero"`
+			DiskControllerType string `json:"diskControllerType,omitempty,omitzero" bson:"diskControllerType,omitempty,omitzero"`
 			ImageReference     struct {
-				ExactVersion string `json:"exactVersion"`
-				Offer        string `json:"offer"`
-				Publisher    string `json:"publisher"`
-				Sku          string `json:"sku"`
-				Version      string `json:"version"`
-			} `json:"imageReference"`
+				ExactVersion string `json:"exactVersion,omitempty,omitzero" bson:"exactVersion,omitempty,omitzero"`
+				Offer        string `json:"offer,omitempty,omitzero" bson:"offer,omitempty,omitzero"`
+				Publisher    string `json:"publisher,omitempty,omitzero" bson:"publisher,omitempty,omitzero"`
+				Sku          string `json:"sku,omitempty,omitzero" bson:"sku,omitempty,omitzero"`
+				Version      string `json:"version,omitempty,omitzero" bson:"version,omitempty,omitzero"`
+			} `json:"imageReference,omitempty,omitzero" bson:"imageReference,omitempty,omitzero"`
 			OSDisk struct {
-				Caching      string  `json:"caching"`
-				CreateOption string  `json:"createOption"`
-				DeleteOption string  `json:"deleteOption"`
-				DiskSizeGb   float64 `json:"diskSizeGB"`
+				Caching      string  `json:"caching,omitempty,omitzero" bson:"caching,omitempty,omitzero"`
+				CreateOption string  `json:"createOption,omitempty,omitzero" bson:"createOption,omitempty,omitzero"`
+				DeleteOption string  `json:"deleteOption,omitempty,omitzero" bson:"deleteOption,omitempty,omitzero"`
+				DiskSizeGb   float64 `json:"diskSizeGB,omitempty,omitzero" bson:"diskSizeGB,omitempty,omitzero"`
 				ManagedDisk  struct {
-					StorageAccountType string `json:"storageAccountType"`
-				} `json:"managedDisk"`
-				OSType string `json:"osType"`
-			} `json:"osDisk"`
-		} `json:"storageProfile"`
-		TimeCreated time.Time `json:"timeCreated"`
-		VmID        string    `json:"vmId"`
-	} `json:"properties"`
-	Type  string   `json:"type"`
-	Zones []string `json:"zones"`
+					StorageAccountType string `json:"storageAccountType,omitempty,omitzero" bson:"storageAccountType,omitempty,omitzero"`
+				} `json:"managedDisk,omitempty,omitzero" bson:"managedDisk,omitempty,omitzero"`
+				OSType string `json:"osType,omitempty,omitzero" bson:"osType,omitempty,omitzero"`
+			} `json:"osDisk,omitempty,omitzero" bson:"osDisk,omitempty,omitzero"`
+		} `json:"storageProfile,omitempty,omitzero" bson:"storageProfile,omitempty,omitzero"`
+		TimeCreated time.Time `json:"timeCreated,omitempty,omitzero" bson:"timeCreated,omitempty,omitzero"`
+		VmID        string    `json:"vmId,omitempty,omitzero" bson:"vmId,omitempty,omitzero"`
+	} `json:"properties,omitempty,omitzero" bson:"properties,omitempty,omitzero"`
+	Type  string   `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+	Zones []string `json:"zones,omitempty,omitzero" bson:"zones,omitempty,omitzero"`
 }
 
 //
 //
 
 type VirtualMachineInstanceView struct {
-	BootDiagnostics struct{} `json:"bootDiagnostics"`
-	ComputerName    string   `json:"computerName"`
+	BootDiagnostics struct{} `json:"bootDiagnostics,omitempty,omitzero" bson:"bootDiagnostics,omitempty,omitzero"`
+	ComputerName    string   `json:"computerName,omitempty,omitzero" bson:"computerName,omitempty,omitzero"`
 	Disks           []struct {
-		Name     string `json:"name"`
+		Name     string `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
 		Statuses []struct {
-			Code          string    `json:"code"`
-			DisplayStatus string    `json:"displayStatus"`
-			Level         string    `json:"level"`
-			Time          time.Time `json:"time"`
-		} `json:"statuses"`
-	} `json:"disks"`
+			Code          string    `json:"code,omitempty,omitzero" bson:"code,omitempty,omitzero"`
+			DisplayStatus string    `json:"displayStatus,omitempty,omitzero" bson:"displayStatus,omitempty,omitzero"`
+			Level         string    `json:"level,omitempty,omitzero" bson:"level,omitempty,omitzero"`
+			Time          time.Time `json:"time,omitempty,omitzero" bson:"time,omitempty,omitzero"`
+		} `json:"statuses,omitempty,omitzero" bson:"statuses,omitempty,omitzero"`
+	} `json:"disks,omitempty,omitzero" bson:"disks,omitempty,omitzero"`
 	Extensions []struct {
-		Name     string `json:"name"`
+		Name     string `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
 		Statuses []struct {
-			Code          string `json:"code"`
-			DisplayStatus string `json:"displayStatus"`
-			Level         string `json:"level"`
-			Message       string `json:"message"`
-		} `json:"statuses"`
-		Type               string `json:"type"`
-		TypeHandlerVersion string `json:"typeHandlerVersion"`
-	} `json:"extensions"`
-	HyperVGeneration string `json:"hyperVGeneration"`
-	OSName           string `json:"osName"`
-	OSVersion        string `json:"osVersion"`
+			Code          string `json:"code,omitempty,omitzero" bson:"code,omitempty,omitzero"`
+			DisplayStatus string `json:"displayStatus,omitempty,omitzero" bson:"displayStatus,omitempty,omitzero"`
+			Level         string `json:"level,omitempty,omitzero" bson:"level,omitempty,omitzero"`
+			Message       string `json:"message,omitempty,omitzero" bson:"message,omitempty,omitzero"`
+		} `json:"statuses,omitempty,omitzero" bson:"statuses,omitempty,omitzero"`
+		Type               string `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+		TypeHandlerVersion string `json:"typeHandlerVersion,omitempty,omitzero" bson:"typeHandlerVersion,omitempty,omitzero"`
+	} `json:"extensions,omitempty,omitzero" bson:"extensions,omitempty,omitzero"`
+	HyperVGeneration string `json:"hyperVGeneration,omitempty,omitzero" bson:"hyperVGeneration,omitempty,omitzero"`
+	OSName           string `json:"osName,omitempty,omitzero" bson:"osName,omitempty,omitzero"`
+	OSVersion        string `json:"osVersion,omitempty,omitzero" bson:"osVersion,omitempty,omitzero"`
 	PatchStatus      struct {
 		AvailablePatchSummary struct {
-			AssessmentActivityID          string  `json:"assessmentActivityId"`
-			CriticalAndSecurityPatchCount float64 `json:"criticalAndSecurityPatchCount"`
+			AssessmentActivityID          string  `json:"assessmentActivityId,omitempty,omitzero" bson:"assessmentActivityId,omitempty,omitzero"`
+			CriticalAndSecurityPatchCount float64 `json:"criticalAndSecurityPatchCount,omitempty,omitzero" bson:"criticalAndSecurityPatchCount,omitempty,omitzero"`
 			Error                         struct {
-				Code    string `json:"code"`
+				Code    string `json:"code,omitempty,omitzero" bson:"code,omitempty,omitzero"`
 				Details []struct {
-					Code    string `json:"code"`
-					Message string `json:"message"`
-				} `json:"details"`
-				Message string `json:"message"`
-			} `json:"error"`
-			LastModifiedTime time.Time `json:"lastModifiedTime"`
-			OtherPatchCount  float64   `json:"otherPatchCount"`
-			RebootPending    bool      `json:"rebootPending"`
-			StartTime        time.Time `json:"startTime"`
-			Status           string    `json:"status"`
-		} `json:"availablePatchSummary"`
+					Code    string `json:"code,omitempty,omitzero" bson:"code,omitempty,omitzero"`
+					Message string `json:"message,omitempty,omitzero" bson:"message,omitempty,omitzero"`
+				} `json:"details,omitempty,omitzero" bson:"details,omitempty,omitzero"`
+				Message string `json:"message,omitempty,omitzero" bson:"message,omitempty,omitzero"`
+			} `json:"error,omitempty,omitzero" bson:"error,omitempty,omitzero"`
+			LastModifiedTime time.Time `json:"lastModifiedTime,omitempty,omitzero" bson:"lastModifiedTime,omitempty,omitzero"`
+			OtherPatchCount  float64   `json:"otherPatchCount,omitempty,omitzero" bson:"otherPatchCount,omitempty,omitzero"`
+			RebootPending    bool      `json:"rebootPending,omitempty,omitzero" bson:"rebootPending,omitempty,omitzero"`
+			StartTime        time.Time `json:"startTime,omitempty,omitzero" bson:"startTime,omitempty,omitzero"`
+			Status           string    `json:"status,omitempty,omitzero" bson:"status,omitempty,omitzero"`
+		} `json:"availablePatchSummary,omitempty,omitzero" bson:"availablePatchSummary,omitempty,omitzero"`
 		ConfigurationStatuses []struct {
-			Code          string    `json:"code"`
-			DisplayStatus string    `json:"displayStatus"`
-			Level         string    `json:"level"`
-			Time          time.Time `json:"time"`
-		} `json:"configurationStatuses"`
-	} `json:"patchStatus"`
+			Code          string    `json:"code,omitempty,omitzero" bson:"code,omitempty,omitzero"`
+			DisplayStatus string    `json:"displayStatus,omitempty,omitzero" bson:"displayStatus,omitempty,omitzero"`
+			Level         string    `json:"level,omitempty,omitzero" bson:"level,omitempty,omitzero"`
+			Time          time.Time `json:"time,omitempty,omitzero" bson:"time,omitempty,omitzero"`
+		} `json:"configurationStatuses,omitempty,omitzero" bson:"configurationStatuses,omitempty,omitzero"`
+	} `json:"patchStatus,omitempty,omitzero" bson:"patchStatus,omitempty,omitzero"`
 	Statuses []struct {
-		Code          string    `json:"code"`
-		DisplayStatus string    `json:"displayStatus"`
-		Level         string    `json:"level"`
-		Time          time.Time `json:"time,omitempty"`
-	} `json:"statuses"`
+		Code          string    `json:"code,omitempty,omitzero" bson:"code,omitempty,omitzero"`
+		DisplayStatus string    `json:"displayStatus,omitempty,omitzero" bson:"displayStatus,omitempty,omitzero"`
+		Level         string    `json:"level,omitempty,omitzero" bson:"level,omitempty,omitzero"`
+		Time          time.Time `json:"time,omitempty" bson:"time,omitempty"`
+	} `json:"statuses,omitempty,omitzero" bson:"statuses,omitempty,omitzero"`
 	VmAgent struct {
 		ExtensionHandlers []struct {
 			Status struct {
-				Code          string `json:"code"`
-				DisplayStatus string `json:"displayStatus"`
-				Level         string `json:"level"`
-				Message       string `json:"message"`
-			} `json:"status"`
-			Type               string `json:"type"`
-			TypeHandlerVersion string `json:"typeHandlerVersion"`
-		} `json:"extensionHandlers"`
+				Code          string `json:"code,omitempty,omitzero" bson:"code,omitempty,omitzero"`
+				DisplayStatus string `json:"displayStatus,omitempty,omitzero" bson:"displayStatus,omitempty,omitzero"`
+				Level         string `json:"level,omitempty,omitzero" bson:"level,omitempty,omitzero"`
+				Message       string `json:"message,omitempty,omitzero" bson:"message,omitempty,omitzero"`
+			} `json:"status,omitempty,omitzero" bson:"status,omitempty,omitzero"`
+			Type               string `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+			TypeHandlerVersion string `json:"typeHandlerVersion,omitempty,omitzero" bson:"typeHandlerVersion,omitempty,omitzero"`
+		} `json:"extensionHandlers,omitempty,omitzero" bson:"extensionHandlers,omitempty,omitzero"`
 		Statuses []struct {
-			Code          string    `json:"code"`
-			DisplayStatus string    `json:"displayStatus"`
-			Level         string    `json:"level"`
-			Message       string    `json:"message"`
-			Time          time.Time `json:"time"`
-		} `json:"statuses"`
-		VmAgentVersion string `json:"vmAgentVersion"`
-	} `json:"vmAgent"`
+			Code          string    `json:"code,omitempty,omitzero" bson:"code,omitempty,omitzero"`
+			DisplayStatus string    `json:"displayStatus,omitempty,omitzero" bson:"displayStatus,omitempty,omitzero"`
+			Level         string    `json:"level,omitempty,omitzero" bson:"level,omitempty,omitzero"`
+			Message       string    `json:"message,omitempty,omitzero" bson:"message,omitempty,omitzero"`
+			Time          time.Time `json:"time,omitempty,omitzero" bson:"time,omitempty,omitzero"`
+		} `json:"statuses,omitempty,omitzero" bson:"statuses,omitempty,omitzero"`
+		VmAgentVersion string `json:"vmAgentVersion,omitempty,omitzero" bson:"vmAgentVersion,omitempty,omitzero"`
+	} `json:"vmAgent,omitempty,omitzero" bson:"vmAgent,omitempty,omitzero"`
 }
 
 //
 //
 
 type CheckStorageAccountTlsVersionsResponse struct {
-	Count           float64                    `json:"count"`
-	Data            []StorageAccountTlsVersion `json:"data"`
-	Facets          []any                      `json:"facets"`
-	ResultTruncated string                     `json:"resultTruncated"`
-	TotalRecords    float64                    `json:"totalRecords"`
-	SkipToken       string                     `json:"$skipToken"`
+	Count           float64                    `json:"count,omitempty,omitzero" bson:"count,omitempty,omitzero"`
+	Data            []StorageAccountTlsVersion `json:"data,omitempty,omitzero" bson:"data,omitempty,omitzero"`
+	Facets          []any                      `json:"facets,omitempty,omitzero" bson:"facets,omitempty,omitzero"`
+	ResultTruncated string                     `json:"resultTruncated,omitempty,omitzero" bson:"resultTruncated,omitempty,omitzero"`
+	TotalRecords    float64                    `json:"totalRecords,omitempty,omitzero" bson:"totalRecords,omitempty,omitzero"`
+	SkipToken       string                     `json:"$skipToken,omitempty,omitzero" bson:"$skipToken,omitempty,omitzero"`
 }
 
 //
 //
 
 type StorageAccountTlsVersion struct {
-	ID                          string `json:"id"`
-	Name                        string `json:"name"`
-	PropertiesMinimumTlsVersion string `json:"properties_minimumTlsVersion"`
-	ResourceGroup               string `json:"resourceGroup"`
-	SubscriptionID              string `json:"subscriptionId"`
-	TenantID                    string `json:"tenantId"`
-	TenantName                  string `json:"tenantName"`
+	ID                          string    `json:"id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
+	Name                        string    `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
+	PropertiesMinimumTlsVersion string    `json:"properties_minimumTlsVersion,omitempty,omitzero" bson:"properties_minimumTlsVersion,omitempty,omitzero"`
+	ResourceGroup               string    `json:"resourceGroup,omitempty,omitzero" bson:"resourceGroup,omitempty,omitzero"`
+	SubscriptionID              string    `json:"subscriptionId,omitempty,omitzero" bson:"subscriptionId,omitempty,omitzero"`
+	TenantID                    string    `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
+	TenantName                  string    `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
+	LastDBSync                  time.Time `json:"lastDBSync,omitempty,omitzero" bson:"lastDBSync,omitempty,omitzero"`
+	LastAzureSync               time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
 }

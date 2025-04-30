@@ -55,6 +55,7 @@ to quickly create a Cobra application.`,
 		azResTenantsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResTenants)
 		azResVcpuCountsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResVcpuCounts)
 		azResIpAddresses := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResIPAddresses)
+		azStorageAcctMinTlsVersions := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzStorageAcctMinTlsVersions)
 
 		citrixMachineCatalogsColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMachineCatalogs)
 
@@ -107,21 +108,22 @@ to quickly create a Cobra application.`,
 		// Longest running, so keep last
 		if updateAzureResVcpuCountsCostData {
 			opts := UpdateAllAzureResourcesAndVcpuCountsOptions{
-				SkuListSubscription:        config.Azure.SkuListSubscription,
-				SkuListAuth:                config.Azure.MultiTenantAuth.Tenants[config.Azure.SkuListAuthTenant],
-				Location:                   config.Azure.ResourceLocation,
-				CostDataMonth:              costDataMonth,
-				CostDataBlobPrefix:         config.Azure.CostDataBlobPrefix,
-				AzResSKUColl:               azResSKUColl,
-				AzResVcpuCountsColl:        azResVcpuCountsColl,
-				AzResTenantsColl:           azResTenantsColl,
-				AzResResourceListColl:      azResResourceListColl,
-				AzResGrpsListColl:          azResGrpsListColl,
-				EnvOptCostingTenantsColl:   envOptCostingTenantsColl,
-				EnvOptCostingSubsColl:      envOptCostingSubsColl,
-				EnvOptCostingResGrpsColl:   envOptCostingResGrpsColl,
-				EnvOptCostingResourcesColl: envOptCostingResourcesColl,
-				EnvOptCostingMetersColl:    envOptCostingMetersColl,
+				SkuListSubscription:         config.Azure.SkuListSubscription,
+				SkuListAuth:                 config.Azure.MultiTenantAuth.Tenants[config.Azure.SkuListAuthTenant],
+				Location:                    config.Azure.ResourceLocation,
+				CostDataMonth:               costDataMonth,
+				CostDataBlobPrefix:          config.Azure.CostDataBlobPrefix,
+				AzResSKUColl:                azResSKUColl,
+				AzResVcpuCountsColl:         azResVcpuCountsColl,
+				AzResTenantsColl:            azResTenantsColl,
+				AzResResourceListColl:       azResResourceListColl,
+				AzResGrpsListColl:           azResGrpsListColl,
+				AzStorageAcctMinTlsVersions: azStorageAcctMinTlsVersions,
+				EnvOptCostingTenantsColl:    envOptCostingTenantsColl,
+				EnvOptCostingSubsColl:       envOptCostingSubsColl,
+				EnvOptCostingResGrpsColl:    envOptCostingResGrpsColl,
+				EnvOptCostingResourcesColl:  envOptCostingResourcesColl,
+				EnvOptCostingMetersColl:     envOptCostingMetersColl,
 			}
 			transformedData := UpdateAllAzureResourcesVcpuCountsCostData(opts, tokenReq)
 
