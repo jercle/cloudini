@@ -67,15 +67,17 @@ type MongoDBConfig struct {
 	DbCitrix                  string `json:"dbCitrix,omitempty"`
 	DbEntra                   string `json:"dbEntra,omitempty"`
 	DbEnvironmentOptimisation string `json:"dbEnvironmentOptimisation,omitempty"`
+	DbGeneral                 string `json:"dbGeneral,omitempty"`
 
 	// Collections
-	CollAzResImageGalleryImages string `json:"collAzResImageGalleryImages,omitempty"`
-	CollAzResResourceList       string `json:"collAzResResourceList,omitempty"`
-	CollAzResGrpsList           string `json:"collAzResGrps,omitempty"`
-	CollAzResSKU                string `json:"collAzResSKU,omitempty"`
-	CollAzResTenants            string `json:"collAzResTenants,omitempty"`
-	CollAzResVcpuCounts         string `json:"collAzResVcpuCounts,omitempty"`
-	CollAzResIPAddresses        string `json:"collAzResIPAddresses,omitempty"`
+	CollAzResImageGalleryImages     string `json:"collAzResImageGalleryImages,omitempty"`
+	CollAzResResourceList           string `json:"collAzResResourceList,omitempty"`
+	CollAzResGrpsList               string `json:"collAzResGrps,omitempty"`
+	CollAzResSKU                    string `json:"collAzResSKU,omitempty"`
+	CollAzResTenants                string `json:"collAzResTenants,omitempty"`
+	CollAzResVcpuCounts             string `json:"collAzResVcpuCounts,omitempty"`
+	CollAzResIPAddresses            string `json:"collAzResIPAddresses,omitempty"`
+	CollAzStorageAcctMinTlsVersions string `json:"collAzStorageAcctMinTlsVersions,omitempty"`
 
 	CollCitrixMachineCatalogs string `json:"collCitrixMachineCatalogs,omitempty"`
 
@@ -93,6 +95,8 @@ type MongoDBConfig struct {
 	CollEnvOptCostingResources string `json:"collEnvOptCostingResources,omitempty"`
 	CollEnvOptCostingSubs      string `json:"collEnvOptCostingSubs,omitempty"`
 	CollEnvOptCostingTenants   string `json:"collEnvOptCostingTenants,omitempty"`
+
+	CollGenEolTracking string `json:"collGenEolTracking,omitempty"`
 }
 
 // type ServerList []string
