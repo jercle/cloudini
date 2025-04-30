@@ -237,12 +237,13 @@ type GalleryImageFlat struct {
 //
 
 type GetAllResourcesForAllConfiguredTenantsOptions struct {
-	SubscriptionId string
-	TenantName     string
-	AzureAuth      CldConfigTenantAuth
-	Location       string
-	OutputFilePath string
-	SuppressSteps  bool
+	SubscriptionId                  string
+	TenantName                      string
+	AzureAuth                       CldConfigTenantAuth
+	Location                        string
+	OutputFilePath                  string
+	SuppressSteps                   bool
+	GetAllStorageAccountsInTlsCheck bool
 }
 
 type VCpuCountByTenant map[string]struct {

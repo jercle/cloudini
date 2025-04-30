@@ -3463,9 +3463,9 @@ type AzureResourceProperties struct {
 	SoftDeletePolicy *struct {
 		IsSoftDeleteEnabled bool `json:"isSoftDeleteEnabled,omitempty" bson:"isSoftDeleteEnabled,omitempty"`
 	} `json:"softDeletePolicy,omitempty" bson:"softDeletePolicy,omitempty"`
-	SoftDeleteRetentionInDays float64 `json:"softDeleteRetentionInDays,omitempty" bson:"softDeleteRetentionInDays,omitempty"`
-	Source                    string  `json:"source,omitempty" bson:"source,omitempty"`
-	SourceID                  string  `json:"sourceId,omitempty" bson:"sourceId,omitempty"`
+	SoftDeleteRetentionInDays float64     `json:"softDeleteRetentionInDays,omitempty" bson:"softDeleteRetentionInDays,omitempty"`
+	Source                    interface{} `json:"source,omitempty" bson:"source,omitempty"`
+	SourceID                  string      `json:"sourceId,omitempty" bson:"sourceId,omitempty"`
 	SourceVirtualMachine      *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"sourceVirtualMachine,omitempty" bson:"sourceVirtualMachine,omitempty"`
