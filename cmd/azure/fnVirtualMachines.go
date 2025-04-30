@@ -95,15 +95,15 @@ func StartAzureVm(resourceId string, mat *lib.AzureMultiAuthToken) {
 		vmName +
 		"/start?api-version=2024-03-01"
 
-	resBody, resHeader, err := HttpPost(urlString, "", *mat)
+	_, resHeader, err := HttpPost(urlString, "", *mat)
 	lib.CheckFatalError(err)
 
 	var reqRes AzureAsyncRequestResponse
 
 	json.Unmarshal(resHeader, &reqRes)
 
-	lib.JsonMarshalAndPrint(reqRes)
-	fmt.Println(string(resBody))
+	// lib.JsonMarshalAndPrint(reqRes)
+	// fmt.Println(string(resBody))
 
 	updRes, err := HttpGet(reqRes.AzureAsyncoperation[0], *mat)
 	lib.CheckFatalError(err)

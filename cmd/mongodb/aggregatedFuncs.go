@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/jercle/cloudini/cmd/ado"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
 	"github.com/jercle/cloudini/lib"
-	"github.com/briandowns/spinner"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -114,29 +114,47 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 
 	fmt.Println("Fetching all Azure Resources...")
 	s.Start()
+	startTime := time.Now()
 	allResources, allResourcesSlice := azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
 	s.Stop()
+	elapsed := time.Since(startTime)
+	fmt.Println(elapsed)
 	allResourcesSliceStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
 	os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
+	allResourcesStr, _ := json.MarshalIndent(allResources, "", "  ")
+	os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
+	// os.Exit(0)
 
 	fmt.Println("Updating Azure Resources in database...")
 	s.Start()
+	startTime = time.Now()
 	UpsertMultipleResources(allResourcesSlice, opts.AzResResourceListColl)
 	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
 
 	fmt.Println("Updating 'existsInAzure' value for all resources in database...")
 	s.Start()
+	startTime = time.Now()
 	UpdateResourcesNotExistInAzure(allResourcesSlice, opts.AzResResourceListColl)
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
 	s.Stop()
 
 	fmt.Println("Fetching all Azure Resource Groups...")
 	s.Start()
+	startTime = time.Now()
 	allResGrps := azure.GetAllResGrpsForAllConfiguredTenants(&resSkuOpts, tokenReq)
 	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
 	fmt.Println("Updating Azure Resource Groups in database...")
 	s.Start()
+	startTime = time.Now()
 	UpsertMultipleResGrps(allResGrps, opts.AzResGrpsListColl)
 	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
 
 	fmt.Println("Getting vCPU Counts...")
 	s.Start()
@@ -210,7 +228,7 @@ func UpdateAzureResourceRelations(transformedData lib.AggregatedCostData, opts U
 	s.Stop()
 
 	_, _, cachePath := lib.InitConfig(nil)
-	fmt.Println("Processing all resources and cost meters to create relations")
+	// fmt.Println("Processing all resources and cost meters to create relations")
 	costDataSliceStr, _ := json.MarshalIndent(costDataSlice, "", "  ")
 	os.WriteFile(cachePath+"/costDataSlice.json", costDataSliceStr, 0644)
 	resourceFromDatabaseStr, _ := json.MarshalIndent(resourceFromDatabase, "", "  ")

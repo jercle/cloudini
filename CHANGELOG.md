@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.29]
+* Feature: Add cmd to check Min TLS versions of storage accounts in all configured tenants
+
 ## [0.1.28]
 * Bugfix: Update to azure.GetServicePrincipalToken to differentiate between read/write tokens when performing cache operations
 
