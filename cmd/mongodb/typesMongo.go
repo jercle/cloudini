@@ -13,21 +13,22 @@ type UpdateAllAzureResourcesAndVcpuCountsOptionsOptions struct {
 }
 
 type UpdateAllAzureResourcesAndVcpuCountsOptions struct {
-	SkuListSubscription        string
-	SkuListAuth                lib.CldConfigTenantAuth
-	Location                   string
-	CostDataMonth              string
-	CostDataBlobPrefix         string
-	AzResSKUColl               *mongo.Collection
-	AzResVcpuCountsColl        *mongo.Collection
-	EnvOptCostingTenantsColl   *mongo.Collection
-	EnvOptCostingSubsColl      *mongo.Collection
-	EnvOptCostingResGrpsColl   *mongo.Collection
-	EnvOptCostingResourcesColl *mongo.Collection
-	EnvOptCostingMetersColl    *mongo.Collection
-	AzResTenantsColl           *mongo.Collection
-	AzResResourceListColl      *mongo.Collection
-	AzResGrpsListColl          *mongo.Collection
+	SkuListSubscription         string
+	SkuListAuth                 lib.CldConfigTenantAuth
+	Location                    string
+	CostDataMonth               string
+	CostDataBlobPrefix          string
+	AzResSKUColl                *mongo.Collection
+	AzResVcpuCountsColl         *mongo.Collection
+	AzStorageAcctMinTlsVersions *mongo.Collection
+	EnvOptCostingTenantsColl    *mongo.Collection
+	EnvOptCostingSubsColl       *mongo.Collection
+	EnvOptCostingResGrpsColl    *mongo.Collection
+	EnvOptCostingResourcesColl  *mongo.Collection
+	EnvOptCostingMetersColl     *mongo.Collection
+	AzResTenantsColl            *mongo.Collection
+	AzResResourceListColl       *mongo.Collection
+	AzResGrpsListColl           *mongo.Collection
 }
 
 type UpdateEntraItemsOptions struct {
