@@ -1009,8 +1009,20 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 	var opts options.BulkWriteOptions
 	opts.SetOrdered(false)
 
-	results, err := coll.BulkWrite(ctx, updates, &opts)
-	lib.CheckFatalError(err)
+	chunkSize := 10
+	var chunks [][]mongo.WriteModel
+	for i := 0; i < len(updates); i += chunkSize {
+		end := i + chunkSize
+		if end > len(updates) {
+			end = len(updates)
+		}
+		chunks = append(chunks, updates[i:end])
+	}
+
+	for _, chunk := range chunks {
+		results, err := coll.BulkWrite(ctx, chunk, &opts)
+		lib.CheckFatalError(err)
+	}
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
