@@ -327,6 +327,7 @@ func GetBuildDataAndUpdateImageVesionData(imageGalleryImagesColl *mongo.Collecti
 //
 
 func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 
 	// azure.DownloadAllBlobsInContainer()
 	// lib.GetServerCertInfoFromFile()
@@ -341,16 +342,33 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	opts.OverwriteExisting = true
 	opts.GetWriteToken = true
 
+	fmt.Println("Fetching certs from storage")
+	s.Start()
 	azure.DownloadAllBlobsInContainer(opts)
+	s.Stop()
 
+	fmt.Println("Getting cert info from downloaded files")
+	startTime := time.Now()
+	s.Start()
 	caCertInfo, serverCertInfo := lib.GetCertInfoFromFiles(cachePath+"/cert-sync", cachePath+"/cert-sync-processed")
+	s.Stop()
+	elapsed := time.Since(startTime)
+	fmt.Println(elapsed)
 
+	fmt.Println("Relating server certs to CA requests")
+	startTime = time.Now()
+	s.Start()
 	caCertInfoRelated, serverCertInfoRelated := lib.RelateCertAuthCertsToServerCerts(caCertInfo, serverCertInfo)
+	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
 
-	delResult, err := serverCertsInfoColl.DeleteMany(context.TODO(), bson.D{{}}, nil)
+	fmt.Println("Clearing collections")
+	_, err := serverCertsInfoColl.DeleteMany(context.TODO(), bson.D{{}}, nil)
 	lib.CheckFatalError(err)
-	lib.JsonMarshalAndPrint(delResult)
-	os.Exit(0)
+	// lib.JsonMarshalAndPrint(delResult)
+	// os.Exit(0)
+
 	caCertUpdates := UpsertCACertificates(caCertInfoRelated, certsCaCertInfo)
 	serverCertUpdates := UpsertServerCertificates(serverCertInfoRelated, serverCertsInfoColl)
 	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
