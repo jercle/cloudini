@@ -1,6 +1,7 @@
 package mongodb
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -11,6 +12,7 @@ import (
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
 	"github.com/jercle/cloudini/lib"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -345,6 +347,10 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 
 	caCertInfoRelated, serverCertInfoRelated := lib.RelateCertAuthCertsToServerCerts(caCertInfo, serverCertInfo)
 
+	delResult, err := serverCertsInfoColl.DeleteMany(context.TODO(), bson.D{{}}, nil)
+	lib.CheckFatalError(err)
+	lib.JsonMarshalAndPrint(delResult)
+	os.Exit(0)
 	caCertUpdates := UpsertCACertificates(caCertInfoRelated, certsCaCertInfo)
 	serverCertUpdates := UpsertServerCertificates(serverCertInfoRelated, serverCertsInfoColl)
 	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
