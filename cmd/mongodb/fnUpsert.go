@@ -947,7 +947,7 @@ func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.C
 
 	var updates []mongo.WriteModel
 
-	fmt.Println(len(serverCertInfo))
+	// fmt.Println(len(serverCertInfo))
 
 	for _, cert := range serverCertInfo {
 		curr := cert
@@ -985,7 +985,7 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 
 	var updates []mongo.WriteModel
 
-	fmt.Println(len(caCertInfo))
+	// fmt.Println(len(caCertInfo))
 
 	for _, cert := range caCertInfo {
 		curr := cert
