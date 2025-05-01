@@ -14,6 +14,7 @@ import (
 	"github.com/jercle/cloudini/lib"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(imageGalleryImagesColl *mongo.Collection, machineCatalogsColl *mongo.Collection, tokenReq lib.AllTenantTokens) {
@@ -364,6 +365,7 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	fmt.Println(elapsed)
 
 	fmt.Println("Clearing collections")
+	clearOpts := options.DeleteOptions{}
 	_, err := serverCertsInfoColl.DeleteMany(context.TODO(), bson.D{{}}, nil)
 	lib.CheckFatalError(err)
 	// lib.JsonMarshalAndPrint(delResult)
