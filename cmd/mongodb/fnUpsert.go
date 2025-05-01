@@ -983,8 +983,7 @@ func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.C
 	return results
 }
 
-func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Collection) {
-	// func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Collection) []mongo.BulkWriteResult {
 	if len(caCertInfo) == 0 {
 		fmt.Println("No apps in slice")
 		return nil
@@ -992,7 +991,7 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 	ctx := context.TODO()
 
 	var updates []mongo.WriteModel
-	// var results []mongo.BulkWriteResult
+	var results []mongo.BulkWriteResult
 
 	// fmt.Println(len(caCertInfo))
 
@@ -1022,7 +1021,8 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 	}
 
 	for _, chunk := range chunks {
-		_, err := coll.BulkWrite(ctx, chunk, &opts)
+		res, err := coll.BulkWrite(ctx, chunk, &opts)
+		results = append(results, *res)
 		lib.CheckFatalError(err)
 	}
 
@@ -1035,7 +1035,7 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 	// fmt.Println("Upserted IDs:")
 	// jsonStr, _ := json.MarshalIndent(results.UpsertedIDs, "", "  ")
 	// fmt.Println(string(jsonStr))
-	// return results
+	return results
 }
 
 // func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) {
