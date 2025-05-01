@@ -1,0 +1,4951 @@
+[
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:04.548127895+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxcc001",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2194217885344,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:04.548127895+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxcc001",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2194218116128,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:04.548127895+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxcc001",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2194218108288,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:04.548127895+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxcc001",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2194218240480,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:04.548127895+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxcc001",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2194218250208,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:04.548127895+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxcc001",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2194218346352,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:04.838127404+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxcc002",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1210183750080,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:04.838127404+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxcc002",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1210183802800,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:04.838127404+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxcc002",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1210183806128,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:04.838127404+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxcc002",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1210183953200,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:04.838127404+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxcc002",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1210183944240,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:04.838127404+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxcc002",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1210183925792,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.128126913+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxsf001",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 3130931572816,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.128126913+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxsf001",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 3130931639248,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.128126913+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxsf001",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 3130931743152,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.128126913+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxsf001",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 3130931794848,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.128126913+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxsf001",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 3130931378656,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.128126913+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxsf001",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 3130931973488,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.398126459+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxsf002",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1918312441856,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.398126459+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxsf002",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1918312539264,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.398126459+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxsf002",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1918312632336,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.398126459+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxsf002",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1918312754960,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.398126459+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxsf002",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1918312749456,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.398126459+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-cxsf002",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1918312833984,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.668126+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-prnt001",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2049960623152,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.668126+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-prnt001",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2049960621872,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.668126+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-prnt001",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2049960654080,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.668126+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-prnt001",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2049960785344,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.668126+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-prnt001",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2049960361936,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:05.668126+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-prnt001",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2049960360912,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:06.02812539+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-tac001",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2311764417088,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:06.02812539+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-tac001",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2311764483504,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:06.02812539+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-tac001",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2311764571824,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:06.02812539+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-tac001",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2311764711296,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:06.02812539+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-tac001",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2311764762064,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:06.02812539+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apdt-tac001",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2311764873136,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:06.628124375+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-azcc001",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2504436278880,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:06.628124375+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-azcc001",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2504439672432,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:06.628124375+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-azcc001",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2504439703216,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:06.628124375+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-azcc001",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2504439777024,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:06.628124375+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-azcc001",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2504439974640,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:06.628124375+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-azcc001",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2504439973104,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.058123649+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-exch001",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2624178778544,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.058123649+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-exch001",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2624178894192,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.058123649+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-exch001",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2624178951008,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.058123649+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-exch001",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2624182256768,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.058123649+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-exch001",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2624182410704,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.058123649+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-exch001",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2624178942048,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.478122938+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-exch002",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 3040813684032,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.478122938+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-exch002",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 3040813678624,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.478122938+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-exch002",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 3040813872592,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.478122938+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-exch002",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 3040814070208,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.478122938+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-exch002",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 3040815759392,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.478122938+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-exch002",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 3040815748768,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.888122242+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-nps001",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1888661082480,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.888122242+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-nps001",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1889070207136,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.888122242+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-nps001",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1889070073216,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.888122242+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-nps001",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1889069958784,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.888122242+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-nps001",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1889076729680,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:07.888122242+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-nps001",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1889076785408,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:08.2681216+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-nps002",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2125842674048,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:08.2681216+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-nps002",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2125852488032,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:08.2681216+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-nps002",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2125852482528,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:08.2681216+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-nps002",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2125845641072,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:08.2681216+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-nps002",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2125850740528,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:08.2681216+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-nps002",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2125850847248,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:08.678120906+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-spki001",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1740546278192,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:08.678120906+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-spki001",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1740546413024,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:08.678120906+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-spki001",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1740546415968,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:08.678120906+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-spki001",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1740546613664,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:08.678120906+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-spki001",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1740546748336,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:08.678120906+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-spki001",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1740551526320,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.038119963+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-spki002",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1865396452592,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.038119963+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-spki002",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1865396496848,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.038119963+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-spki002",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1865396534224,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.038119963+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-spki002",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1865396542672,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.038119963+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-spki002",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1865400863040,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.038119963+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-apid-spki002",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 1865400862400,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.398118522+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-ashr-loki001",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2230332247056,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.398118522+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-ashr-loki001",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2230332231968,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.398118522+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-ashr-loki001",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2230332318832,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.398118522+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-ashr-loki001",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2230332373296,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.398118522+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-ashr-loki001",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2230332159360,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.398118522+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-ashr-loki001",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2230332703664,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.78811696+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-ashr-loki002",
+        "certificatePath": "LocalMachine/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2097602991360,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.78811696+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-ashr-loki002",
+        "certificatePath": "LocalMachine/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2097602751424,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.78811696+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-ashr-loki002",
+        "certificatePath": "LocalMachine/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2097603151936,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "LocalMachine/TrustedPublisher"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.78811696+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-ashr-loki002",
+        "certificatePath": "CurrentUser/Root"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2097603145792,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/Root"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.78811696+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-ashr-loki002",
+        "certificatePath": "CurrentUser/CA"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2097603452976,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/CA"
+  },
+  {
+    "id": "78b5e4cd429a487ca2e7f4341ca26525",
+    "lastServerSync": "2025-05-01T13:31:09.78811696+10:00",
+    "serversPulledFrom": [
+      {
+        "serverName": "vm-ashr-loki002",
+        "certificatePath": "CurrentUser/TrustedPublisher"
+      }
+    ],
+    "tenantName": "APC",
+    "dnsNameList": [
+      "desktop",
+      "desktop.apc.asio.gov.au"
+    ],
+    "enhancedKeyUsageList": [
+      "Server Authentication (1.3.6.1.5.5.7.3.1)",
+      "Client Authentication (1.3.6.1.5.5.7.3.2)"
+    ],
+    "extensions": [
+      "System.Security.Cryptography.X509Certificates.X509KeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension",
+      "System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509Extension",
+      "System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension"
+    ],
+    "handle": 2097603450800,
+    "hasPrivateKey": true,
+    "issuer": "CN=desktop.apc.asio.gov.au",
+    "issuerName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "notAfter": "2023-01-25T10:16:28+11:00",
+    "notBefore": "2022-01-25T10:06:28+11:00",
+    "publicKey": {
+      "encodedKeyValue": "System.Security.Cryptography.AsnEncodedData",
+      "encodedParameters": "System.Security.Cryptography.AsnEncodedData",
+      "key": "System.Security.Cryptography.RSACryptoServiceProvider",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "serialNumber": "78b5e4cd429a487ca2e7f4341ca26525",
+    "signatureAlgorithm": {
+      "friendlyName": "sha256RSA",
+      "value": "1.2.840.113549.1.1.11"
+    },
+    "subject": "CN=desktop.apc.asio.gov.au",
+    "subjectName": {
+      "name": "CN=desktop.apc.asio.gov.au",
+      "oid": "System.Security.Cryptography.Oid"
+    },
+    "thumbprint": "946f3b318186bd6fd376aecf3ad258556613cfe0",
+    "version": 3,
+    "parentPath": "CurrentUser/TrustedPublisher"
+  }
+]
