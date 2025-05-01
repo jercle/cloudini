@@ -551,7 +551,9 @@ func UpsertResourceSKUs(skus []lib.AzureResourceSku, collection *mongo.Collectio
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
-	results, err := collection.BulkWrite(ctx, updates)
+	var opts options.BulkWriteOptions
+	opts.SetOrdered(false)
+	results, err := collection.BulkWrite(ctx, updates, &opts)
 	lib.CheckFatalError(err)
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
