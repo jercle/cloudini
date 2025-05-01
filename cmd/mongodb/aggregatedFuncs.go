@@ -362,10 +362,19 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
 
-	for _, cert := range caCertInfoRelated {
-		lib.JsonMarshalAndPrint(cert)
-		os.Exit(0)
+	certsCount := make(map[string]int)
+	var multi []lib.ServerCertInfo
+	for _, cert := range serverCertInfoRelated {
+		certsCount[cert.ID]++
+
+		if cert.ID == "78b5e4cd429a487ca2e7f4341ca26525" {
+			multi = append(multi, cert)
+		}
+		// os.Exit(0)
 	}
+	// lib.JsonMarshalAndPrint(certsCount)
+	lib.JsonMarshalAndPrint(multi)
+	os.Exit(0)
 
 	fmt.Println("Clearing collections")
 	// clearOpts := options.DeleteOptions{}
