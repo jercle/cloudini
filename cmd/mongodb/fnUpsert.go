@@ -738,7 +738,9 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 	}
 
 	if len(updates) > 0 {
-		results, err := resourcesListColl.BulkWrite(ctx, updates)
+		var opts options.BulkWriteOptions
+		opts.SetOrdered(false)
+		results, err := resourcesListColl.BulkWrite(ctx, updates, &opts)
 		lib.CheckFatalError(err)
 		return results
 	} else {
