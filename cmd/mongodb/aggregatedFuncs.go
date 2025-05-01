@@ -366,6 +366,7 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	// clearOpts := options.DeleteOptions{}
 	err := serverCertsInfoColl.Drop(context.TODO())
 	lib.CheckFatalError(err)
+	os.Exit(0)
 	// _, err := serverCertsInfoColl.DeleteMany(context.TODO(), bson.D{{}}, nil)
 	// lib.CheckFatalError(err)
 	// lib.JsonMarshalAndPrint(delResult)
