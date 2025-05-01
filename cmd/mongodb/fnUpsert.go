@@ -1010,7 +1010,7 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 	var opts options.BulkWriteOptions
 	opts.SetOrdered(false)
 
-	chunkSize := 10
+	chunkSize := 100
 	var chunks [][]mongo.WriteModel
 	for i := 0; i < len(updates); i += chunkSize {
 		end := i + chunkSize
