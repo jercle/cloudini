@@ -827,10 +827,10 @@ func GetAllTenantIpAddresses(outputFile string, token *lib.AzureMultiAuthToken) 
 		currRes.ID = strings.ToLower(res.ID)
 		currRes.LastAzureSync = time.Now()
 		allTenantResourceIPs = append(allTenantResourceIPs, currRes)
-		lib.JsonMarshalAndPrint(currRes)
+		// lib.JsonMarshalAndPrint(currRes)
 		// lib.JsonMarshalAndPrint(subIdsByNameMap)
 		// fmt.Println(subIdsByNameMap[currRes.SubscriptionId])
-		os.Exit(0)
+		// os.Exit(0)
 	}
 
 	// allResources = append(allResources, response.Data...)
