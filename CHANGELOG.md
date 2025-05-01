@@ -3,6 +3,7 @@
 ## [0.1.32]
 * Change cert upserts to clear collection before upserting current certificates
 * Enhancement: Vastly improved upsert perf with CosmosDB by using unordered writes, and chunking requests
+* Bugfix: Fix issue with computegalleryimage cmd to re-enable persistent flags at az cmd level
 
 ## [0.1.31]
 * Feature: Add subName and change min tls prop name to storage acct min tls data
