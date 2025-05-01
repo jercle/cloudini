@@ -943,7 +943,7 @@ func UpsertAzureIPAddresses(resources []azure.AzureResourceIPConfig, resIPAddres
 //
 //
 
-func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(serverCertInfo) == 0 {
 		fmt.Println("No apps in slice")
 		return nil
@@ -968,8 +968,22 @@ func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.C
 
 	var opts options.BulkWriteOptions
 	opts.SetOrdered(false)
-	results, err := coll.BulkWrite(ctx, updates, &opts)
-	lib.CheckFatalError(err)
+
+	chunkSize := 100
+	var chunks [][]mongo.WriteModel
+	for i := 0; i < len(updates); i += chunkSize {
+		end := i + chunkSize
+		if end > len(updates) {
+			end = len(updates)
+		}
+		chunks = append(chunks, updates[i:end])
+	}
+
+	for _, chunk := range chunks {
+		res, err := coll.BulkWrite(ctx, chunk, &opts)
+		results = append(results, *res)
+		lib.CheckFatalError(err)
+	}
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
@@ -983,7 +997,7 @@ func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.C
 	return results
 }
 
-func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Collection) []mongo.BulkWriteResult {
+func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(caCertInfo) == 0 {
 		fmt.Println("No apps in slice")
 		return nil
@@ -991,7 +1005,6 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 	ctx := context.TODO()
 
 	var updates []mongo.WriteModel
-	var results []mongo.BulkWriteResult
 
 	// fmt.Println(len(caCertInfo))
 
