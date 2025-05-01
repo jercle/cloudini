@@ -14,6 +14,7 @@ import (
 	"github.com/jercle/cloudini/lib"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func UpsertMonthlyTenantSubResGrpCosts(
@@ -496,7 +497,7 @@ func UpsertTenantAndSubs(tenantsColl *mongo.Collection, tokenReq *lib.AllTenantT
 //
 //
 
-func UpsertImageGalleryImages(images []lib.GalleryImage, collection *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertImageGalleryImages(images []lib.GalleryImage, collection *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(images) == 0 {
 		fmt.Println("No images in slice")
 		return nil
@@ -513,8 +514,24 @@ func UpsertImageGalleryImages(images []lib.GalleryImage, collection *mongo.Colle
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
-	results, err := collection.BulkWrite(ctx, updates)
-	lib.CheckFatalError(err)
+	var opts options.BulkWriteOptions
+	opts.SetOrdered(false)
+
+	chunkSize := 100
+	var chunks [][]mongo.WriteModel
+	for i := 0; i < len(updates); i += chunkSize {
+		end := i + chunkSize
+		if end > len(updates) {
+			end = len(updates)
+		}
+		chunks = append(chunks, updates[i:end])
+	}
+
+	for _, chunk := range chunks {
+		res, err := collection.BulkWrite(ctx, chunk, &opts)
+		results = append(results, *res)
+		lib.CheckFatalError(err)
+	}
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
@@ -531,7 +548,7 @@ func UpsertImageGalleryImages(images []lib.GalleryImage, collection *mongo.Colle
 //
 //
 
-func UpsertResourceSKUs(skus []lib.AzureResourceSku, collection *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertResourceSKUs(skus []lib.AzureResourceSku, collection *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(skus) == 0 {
 		fmt.Println("No apps in slice")
 		return nil
@@ -550,8 +567,24 @@ func UpsertResourceSKUs(skus []lib.AzureResourceSku, collection *mongo.Collectio
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
-	results, err := collection.BulkWrite(ctx, updates)
-	lib.CheckFatalError(err)
+	var opts options.BulkWriteOptions
+	opts.SetOrdered(false)
+
+	chunkSize := 100
+	var chunks [][]mongo.WriteModel
+	for i := 0; i < len(updates); i += chunkSize {
+		end := i + chunkSize
+		if end > len(updates) {
+			end = len(updates)
+		}
+		chunks = append(chunks, updates[i:end])
+	}
+
+	for _, chunk := range chunks {
+		res, err := collection.BulkWrite(ctx, chunk, &opts)
+		results = append(results, *res)
+		lib.CheckFatalError(err)
+	}
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
@@ -568,7 +601,7 @@ func UpsertResourceSKUs(skus []lib.AzureResourceSku, collection *mongo.Collectio
 //
 //
 
-func UpsertCitrixMachineCatalogs(machineCatalogs citrix.MachineCatalogs, coll *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertCitrixMachineCatalogs(machineCatalogs citrix.MachineCatalogs, coll *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(machineCatalogs) == 0 {
 		fmt.Println("No apps in slice")
 		return nil
@@ -587,8 +620,24 @@ func UpsertCitrixMachineCatalogs(machineCatalogs citrix.MachineCatalogs, coll *m
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
-	results, err := coll.BulkWrite(ctx, updates)
-	lib.CheckFatalError(err)
+	var opts options.BulkWriteOptions
+	opts.SetOrdered(false)
+
+	chunkSize := 100
+	var chunks [][]mongo.WriteModel
+	for i := 0; i < len(updates); i += chunkSize {
+		end := i + chunkSize
+		if end > len(updates) {
+			end = len(updates)
+		}
+		chunks = append(chunks, updates[i:end])
+	}
+
+	for _, chunk := range chunks {
+		res, err := coll.BulkWrite(ctx, chunk, &opts)
+		results = append(results, *res)
+		lib.CheckFatalError(err)
+	}
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
@@ -605,7 +654,7 @@ func UpsertCitrixMachineCatalogs(machineCatalogs citrix.MachineCatalogs, coll *m
 //
 //
 
-func UpsertMultipleEntraApps[T azure.EntraApplication | azure.EntraExpiringCredential](apps []T, collection *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertMultipleEntraApps[T azure.EntraApplication | azure.EntraExpiringCredential](apps []T, collection *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(apps) == 0 {
 		fmt.Println("No apps in slice")
 		return nil
@@ -646,8 +695,24 @@ func UpsertMultipleEntraApps[T azure.EntraApplication | azure.EntraExpiringCrede
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
-	results, err := collection.BulkWrite(ctx, updates)
-	lib.CheckFatalError(err)
+	var opts options.BulkWriteOptions
+	opts.SetOrdered(false)
+
+	chunkSize := 100
+	var chunks [][]mongo.WriteModel
+	for i := 0; i < len(updates); i += chunkSize {
+		end := i + chunkSize
+		if end > len(updates) {
+			end = len(updates)
+		}
+		chunks = append(chunks, updates[i:end])
+	}
+
+	for _, chunk := range chunks {
+		res, err := collection.BulkWrite(ctx, chunk, &opts)
+		results = append(results, *res)
+		lib.CheckFatalError(err)
+	}
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
@@ -664,7 +729,7 @@ func UpsertMultipleEntraApps[T azure.EntraApplication | azure.EntraExpiringCrede
 //
 //
 
-func UpsertVcpuCounts(vcpuCountData lib.VCpuCountByTenant, collection *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertVcpuCounts(vcpuCountData lib.VCpuCountByTenant, collection *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(vcpuCountData) == 0 {
 		fmt.Println("No data in slice")
 		return nil
@@ -683,8 +748,24 @@ func UpsertVcpuCounts(vcpuCountData lib.VCpuCountByTenant, collection *mongo.Col
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
-	results, err := collection.BulkWrite(ctx, updates)
-	lib.CheckFatalError(err)
+	var opts options.BulkWriteOptions
+	opts.SetOrdered(false)
+
+	chunkSize := 100
+	var chunks [][]mongo.WriteModel
+	for i := 0; i < len(updates); i += chunkSize {
+		end := i + chunkSize
+		if end > len(updates) {
+			end = len(updates)
+		}
+		chunks = append(chunks, updates[i:end])
+	}
+
+	for _, chunk := range chunks {
+		res, err := collection.BulkWrite(ctx, chunk, &opts)
+		results = append(results, *res)
+		lib.CheckFatalError(err)
+	}
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
@@ -702,7 +783,7 @@ func UpsertVcpuCounts(vcpuCountData lib.VCpuCountByTenant, collection *mongo.Col
 //
 
 // func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) {
-func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) (results []mongo.BulkWriteResult) {
 	ctx := context.TODO()
 
 	var updates []mongo.WriteModel
@@ -737,12 +818,28 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 	}
 
 	if len(updates) > 0 {
-		results, err := resourcesListColl.BulkWrite(ctx, updates)
-		lib.CheckFatalError(err)
+		var opts options.BulkWriteOptions
+		opts.SetOrdered(false)
+
+		chunkSize := 100
+		var chunks [][]mongo.WriteModel
+		for i := 0; i < len(updates); i += chunkSize {
+			end := i + chunkSize
+			if end > len(updates) {
+				end = len(updates)
+			}
+			chunks = append(chunks, updates[i:end])
+		}
+
+		for _, chunk := range chunks {
+			res, err := resourcesListColl.BulkWrite(ctx, chunk, &opts)
+			results = append(results, *res)
+			lib.CheckFatalError(err)
+		}
 		return results
 	} else {
-		results := mongo.BulkWriteResult{}
-		return &results
+		results := []mongo.BulkWriteResult{}
+		return results
 	}
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
@@ -938,7 +1035,7 @@ func UpsertAzureIPAddresses(resources []azure.AzureResourceIPConfig, resIPAddres
 //
 //
 
-func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(serverCertInfo) == 0 {
 		fmt.Println("No apps in slice")
 		return nil
@@ -947,7 +1044,7 @@ func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.C
 
 	var updates []mongo.WriteModel
 
-	fmt.Println(len(serverCertInfo))
+	// fmt.Println(len(serverCertInfo))
 
 	for _, cert := range serverCertInfo {
 		curr := cert
@@ -961,8 +1058,24 @@ func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.C
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
-	results, err := coll.BulkWrite(ctx, updates)
-	lib.CheckFatalError(err)
+	var opts options.BulkWriteOptions
+	opts.SetOrdered(false)
+
+	chunkSize := 100
+	var chunks [][]mongo.WriteModel
+	for i := 0; i < len(updates); i += chunkSize {
+		end := i + chunkSize
+		if end > len(updates) {
+			end = len(updates)
+		}
+		chunks = append(chunks, updates[i:end])
+	}
+
+	for _, chunk := range chunks {
+		res, err := coll.BulkWrite(ctx, chunk, &opts)
+		results = append(results, *res)
+		lib.CheckFatalError(err)
+	}
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
@@ -976,7 +1089,7 @@ func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.C
 	return results
 }
 
-func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(caCertInfo) == 0 {
 		fmt.Println("No apps in slice")
 		return nil
@@ -985,7 +1098,7 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 
 	var updates []mongo.WriteModel
 
-	fmt.Println(len(caCertInfo))
+	// fmt.Println(len(caCertInfo))
 
 	for _, cert := range caCertInfo {
 		curr := cert
@@ -999,8 +1112,24 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
-	results, err := coll.BulkWrite(ctx, updates)
-	lib.CheckFatalError(err)
+	var opts options.BulkWriteOptions
+	opts.SetOrdered(false)
+
+	chunkSize := 100
+	var chunks [][]mongo.WriteModel
+	for i := 0; i < len(updates); i += chunkSize {
+		end := i + chunkSize
+		if end > len(updates) {
+			end = len(updates)
+		}
+		chunks = append(chunks, updates[i:end])
+	}
+
+	for _, chunk := range chunks {
+		res, err := coll.BulkWrite(ctx, chunk, &opts)
+		results = append(results, *res)
+		lib.CheckFatalError(err)
+	}
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)

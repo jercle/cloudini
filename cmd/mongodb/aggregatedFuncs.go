@@ -1,6 +1,7 @@
 package mongodb
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -325,6 +326,7 @@ func GetBuildDataAndUpdateImageVesionData(imageGalleryImagesColl *mongo.Collecti
 //
 
 func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 
 	// azure.DownloadAllBlobsInContainer()
 	// lib.GetServerCertInfoFromFile()
@@ -339,14 +341,68 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	opts.OverwriteExisting = true
 	opts.GetWriteToken = true
 
+	fmt.Println("Fetching certs from storage")
+	s.Start()
 	azure.DownloadAllBlobsInContainer(opts)
+	s.Stop()
 
+	fmt.Println("Getting cert info from downloaded files")
+	startTime := time.Now()
+	s.Start()
 	caCertInfo, serverCertInfo := lib.GetCertInfoFromFiles(cachePath+"/cert-sync", cachePath+"/cert-sync-processed")
+	s.Stop()
+	elapsed := time.Since(startTime)
+	fmt.Println(elapsed)
 
+	fmt.Println("Relating server certs to CA requests")
+	startTime = time.Now()
+	s.Start()
 	caCertInfoRelated, serverCertInfoRelated := lib.RelateCertAuthCertsToServerCerts(caCertInfo, serverCertInfo)
+	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
 
+	certsCount := make(map[string]int)
+	var multi []lib.ServerCertInfo
+	for _, cert := range serverCertInfoRelated {
+		certsCount[cert.ID]++
+
+		if cert.ID == "78b5e4cd429a487ca2e7f4341ca26525" {
+			multi = append(multi, cert)
+		}
+		// os.Exit(0)
+	}
+	// lib.JsonMarshalAndPrint(certsCount)
+	lib.JsonMarshalAndPrint(multi)
+	os.Exit(0)
+
+	fmt.Println("Clearing collections")
+	// clearOpts := options.DeleteOptions{}
+	err := serverCertsInfoColl.Drop(context.TODO())
+	lib.CheckFatalError(err)
+	err = certsCaCertInfo.Drop(context.TODO())
+	lib.CheckFatalError(err)
+	// _, err := serverCertsInfoColl.DeleteMany(context.TODO(), bson.D{{}}, nil)
+	// lib.CheckFatalError(err)
+	// lib.JsonMarshalAndPrint(delResult)
+	// os.Exit(0)
+
+	fmt.Println("Upserting CA cert info")
+	s.Start()
+	startTime = time.Now()
 	caCertUpdates := UpsertCACertificates(caCertInfoRelated, certsCaCertInfo)
+	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
+	// os.Exit(0)
+
+	fmt.Println("Upserting Server cert info")
+	s.Start()
+	startTime = time.Now()
 	serverCertUpdates := UpsertServerCertificates(serverCertInfoRelated, serverCertsInfoColl)
+	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
 	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
 	// fmt.Println(string(jsonStr))
 	lib.MarshalAndPrintJson(caCertUpdates)
