@@ -14,6 +14,7 @@ import (
 	"github.com/jercle/cloudini/lib"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func UpsertMonthlyTenantSubResGrpCosts(
@@ -961,7 +962,9 @@ func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.C
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
-	results, err := coll.BulkWrite(ctx, updates)
+	var opts options.BulkWriteOptions
+	opts.SetOrdered(false)
+	results, err := coll.BulkWrite(ctx, updates, &opts)
 	lib.CheckFatalError(err)
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
@@ -999,7 +1002,10 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
-	results, err := coll.BulkWrite(ctx, updates)
+	var opts options.BulkWriteOptions
+	opts.SetOrdered(false)
+
+	results, err := coll.BulkWrite(ctx, updates, &opts)
 	lib.CheckFatalError(err)
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
