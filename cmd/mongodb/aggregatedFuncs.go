@@ -354,6 +354,11 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	elapsed := time.Since(startTime)
 	fmt.Println(elapsed)
 
+	for _, cert := range serverCertInfo {
+		lib.JsonMarshalAndPrint(cert)
+		os.Exit(0)
+	}
+
 	fmt.Println("Relating server certs to CA requests")
 	startTime = time.Now()
 	s.Start()
@@ -365,6 +370,8 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	fmt.Println("Clearing collections")
 	// clearOpts := options.DeleteOptions{}
 	err := serverCertsInfoColl.Drop(context.TODO())
+	lib.CheckFatalError(err)
+	err = certsCaCertInfo.Drop(context.TODO())
 	lib.CheckFatalError(err)
 	// _, err := serverCertsInfoColl.DeleteMany(context.TODO(), bson.D{{}}, nil)
 	// lib.CheckFatalError(err)
