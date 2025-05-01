@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.32]
+* Change cert upserts to clear collection before upserting current certificates
+
 ## [0.1.31]
 * Feature: Add subName and change min tls prop name to storage acct min tls data
 
