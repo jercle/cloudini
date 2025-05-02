@@ -1112,9 +1112,9 @@ func DownloadAllConfiguredTenantCostExportsForMonth(opts lib.DownloadAllConfigur
 			continue
 		}
 
-		if tenant.TenantName != "YELLOW" {
-			continue
-		}
+		// if tenant.TenantName != "YELLOW" {
+		// 	continue
+		// }
 
 		wg.Add(1)
 		go func() {
