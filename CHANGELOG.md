@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.1.33]
+* Bugfix: Add back type and subscription Name to IP address fetch
+* Bugfix: Cost data when some subscription names are caps has been resolved.
+
 ## [0.1.32]
 * Change cert upserts to clear collection before upserting current certificates
 * Enhancement: Vastly improved upsert perf with CosmosDB by using unordered writes, and chunking requests

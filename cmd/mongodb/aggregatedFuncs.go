@@ -40,10 +40,10 @@ func UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(imageGalleryImagesColl *mon
 		fmt.Println("Fetching Machine Catalogs for " + envName + "...")
 		s.Start()
 		machineCatalogs := citrix.ListMachineCatalogs(envCreds, tokenData)
+		s.Stop()
 		fmt.Println("Updating Citrix Machine Catalogs in database...")
 		s.Start()
 		UpsertCitrixMachineCatalogs(machineCatalogs, machineCatalogsColl)
-		s.Stop()
 		mcMasterImageVersions := machineCatalogs.ListImageVersions()
 		s.Stop()
 		fmt.Println("Updating Azure Images used by Citrix in database...")
@@ -103,6 +103,11 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 		Location:       opts.Location,
 		SuppressSteps:  true,
 	}
+
+	fmt.Println("Getting and upserting all tenant and subscription details...")
+	s.Start()
+	UpsertTenantAndSubs(opts.AzResTenantsColl, &tokenReq)
+	s.Stop()
 
 	fmt.Println("Getting Azure Resource SKUs...")
 	s.Start()
@@ -373,8 +378,8 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 		// os.Exit(0)
 	}
 	// lib.JsonMarshalAndPrint(certsCount)
-	lib.JsonMarshalAndPrint(multi)
-	os.Exit(0)
+	// lib.JsonMarshalAndPrint(multi)
+	// os.Exit(0)
 
 	fmt.Println("Clearing collections")
 	// clearOpts := options.DeleteOptions{}
@@ -390,7 +395,8 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	fmt.Println("Upserting CA cert info")
 	s.Start()
 	startTime = time.Now()
-	caCertUpdates := UpsertCACertificates(caCertInfoRelated, certsCaCertInfo)
+	// caCertUpdates :=
+	UpsertCACertificates(caCertInfoRelated, certsCaCertInfo)
 	s.Stop()
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
@@ -399,16 +405,17 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	fmt.Println("Upserting Server cert info")
 	s.Start()
 	startTime = time.Now()
-	serverCertUpdates := UpsertServerCertificates(serverCertInfoRelated, serverCertsInfoColl)
+	// serverCertUpdates :=
+	UpsertServerCertificates(serverCertInfoRelated, serverCertsInfoColl)
 	s.Stop()
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
 	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
 	// fmt.Println(string(jsonStr))
-	lib.MarshalAndPrintJson(caCertUpdates)
-	lib.MarshalAndPrintJson(serverCertUpdates)
-	os.RemoveAll(cachePath + "/cert-sync")
-	os.RemoveAll(cachePath + "/cert-sync-processed")
+	// lib.MarshalAndPrintJson(caCertUpdates)
+	// lib.MarshalAndPrintJson(serverCertUpdates)
+	// os.RemoveAll(cachePath + "/cert-sync")
+	// os.RemoveAll(cachePath + "/cert-sync-processed")
 	// ado.DownloadPackerHostLogs(&dlPath)
 	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
 	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)

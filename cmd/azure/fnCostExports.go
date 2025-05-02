@@ -1111,6 +1111,11 @@ func DownloadAllConfiguredTenantCostExportsForMonth(opts lib.DownloadAllConfigur
 		if tenant.CostExportsLocation == "" {
 			continue
 		}
+
+		// if tenant.TenantName != "YELLOW" {
+		// 	continue
+		// }
+
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
