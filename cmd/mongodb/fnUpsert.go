@@ -456,7 +456,9 @@ func UpsertTenantAndSubs(tenantsColl *mongo.Collection, tokenReq *lib.AllTenantT
 		currTenant.TenantName = tData.TenantName
 		currTenant.TenantId = tData.TenantId
 		currTenant.CostExportsLocation = config.Azure.MultiTenantAuth.Tenants[tData.TenantName].CostExportsLocation
-		currTenant.Aliases = append(currTenant.Aliases, config.Azure.TenantAliases[tData.TenantName])
+		// if config.Azure.TenantAliases[tData.TenantName] != "" {
+		// 	currTenant.Aliases = append(currTenant.Aliases, config.Azure.TenantAliases[tData.TenantName])
+		// }
 
 		for alias, tName := range config.Azure.TenantAliases {
 			if tName == tData.TenantName {
