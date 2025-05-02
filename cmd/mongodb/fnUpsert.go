@@ -109,6 +109,10 @@ func UpsertMonthlyTenantSubResGrpCosts(
 		currTenant.TenantName = tenantName
 		currTenant.TenantId = tenantDetails.TenantId
 		currTenant.LastDBSync = time.Now().Local()
+		// lib.JsonMarshalAndPrint(tenantData)
+		// jsonStr, _ := json.MarshalIndent(tenantData, "", "  ")
+		// os.WriteFile("/home/jercle/git/cld/dev/cost-exports/202504/yellowproc.json", jsonStr, 0644)
+		// os.Exit(0)
 
 		// jsonStr, _ := json.MarshalIndent(currTenant, "", "  ")
 		// fmt.Println(string(jsonStr))
@@ -123,7 +127,7 @@ func UpsertMonthlyTenantSubResGrpCosts(
 			currSub.CostGroups = subData.CostGroups
 			currSub.TenantId = currTenant.TenantId
 			currSub.TenantName = tenantName
-			currSub.SubscriptionId = tenantDetails.Subscriptions[subName].SubscriptionID
+			currSub.SubscriptionId = tenantDetails.Subscriptions[strings.ToLower(subName)].SubscriptionID
 			currSub.SubscriptionName = subName
 			currSub.LastDBSync = time.Now()
 
@@ -437,7 +441,7 @@ func UpsertMultipleMonthlyCostData(
 //
 //
 
-func UpsertTenantAndSubs(tenantsColl *mongo.Collection, tokenReq *lib.AllTenantTokens) {
+func UpsertTenantAndSubs(tenantsColl *mongo.Collection, tokenReq *lib.AllTenantTokens) (results *mongo.BulkWriteResult) {
 
 	allSubs := azure.ListAllAuthenticatedSubscriptions(tokenReq)
 
@@ -451,6 +455,8 @@ func UpsertTenantAndSubs(tenantsColl *mongo.Collection, tokenReq *lib.AllTenantT
 		currTenant.Subscriptions = make(map[string]MongoDbAzureSubscription)
 		currTenant.TenantName = tData.TenantName
 		currTenant.TenantId = tData.TenantId
+		currTenant.CostExportsLocation = config.Azure.MultiTenantAuth.Tenants[tData.TenantName].CostExportsLocation
+		currTenant.Aliases = append(currTenant.Aliases, config.Azure.TenantAliases[tData.TenantName])
 
 		for alias, tName := range config.Azure.TenantAliases {
 			if tName == tData.TenantName {
@@ -468,7 +474,7 @@ func UpsertTenantAndSubs(tenantsColl *mongo.Collection, tokenReq *lib.AllTenantT
 
 			err = json.Unmarshal(res, &currSub)
 			lib.CheckFatalError(err)
-			currTenant.Subscriptions[currSub.DisplayName] = currSub
+			currTenant.Subscriptions[strings.ToLower(currSub.DisplayName)] = currSub
 			currTenant.TenantId = currSub.TenantId
 		}
 
@@ -490,8 +496,9 @@ func UpsertTenantAndSubs(tenantsColl *mongo.Collection, tokenReq *lib.AllTenantT
 	}
 	results, err := tenantsColl.BulkWrite(ctx, updates)
 	lib.CheckFatalError(err)
-	jsonStr, _ := json.MarshalIndent(results, "", "  ")
-	fmt.Println(string(jsonStr))
+	return
+	// jsonStr, _ := json.MarshalIndent(results, "", "  ")
+	// fmt.Println(string(jsonStr))
 }
 
 //

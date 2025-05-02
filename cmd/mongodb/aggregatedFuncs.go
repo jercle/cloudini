@@ -104,6 +104,11 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 		SuppressSteps:  true,
 	}
 
+	fmt.Println("Getting and upserting all tenant and subscription details...")
+	s.Start()
+	UpsertTenantAndSubs(opts.AzResTenantsColl, &tokenReq)
+	s.Stop()
+
 	fmt.Println("Getting Azure Resource SKUs...")
 	s.Start()
 	resourceSKUs := azure.GetAzureResourceSKUsForSubscription(resSkuOpts)
