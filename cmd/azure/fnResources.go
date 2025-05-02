@@ -141,7 +141,7 @@ func GetAllResourcesForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfi
 		fmt.Println("Saved to " + mapFileName + " and " + arrayFileName)
 	}
 
-	fmt.Println(len(allResourcesSlice))
+	// fmt.Println(len(allResourcesSlice))
 
 	return allResources, allResourcesSlice
 }
@@ -806,7 +806,7 @@ func GetAllTenantIpAddresses(outputFile string, token *lib.AzureMultiAuthToken) 
         | where type =~ 'microsoft.compute/virtualmachines'
         | project attachedId = tolower(tostring(id)), attachedName = name, type, tenantId, subscriptionId) on attachedId
     | project id = tolower(tostring(attachedId)), name = attachedName, type, privateIps, snetIds, publicIps, nicId, nicName = name, tenantId, subscriptionId
-    | summarize privateIps = make_list(privateIps), publicIps = make_list(publicIps), snetIds = make_set(snetIds), nicIds = make_set(nicId) by id, name`
+    | summarize privateIps = make_list(privateIps), publicIps = make_list(publicIps), snetIds = make_set(snetIds), nicIds = make_set(nicId) by id, name, subscriptionId, type`
 
 	jsonBody := `{
 	"query": "` + graphQuery + `"
@@ -827,6 +827,10 @@ func GetAllTenantIpAddresses(outputFile string, token *lib.AzureMultiAuthToken) 
 		currRes.ID = strings.ToLower(res.ID)
 		currRes.LastAzureSync = time.Now()
 		allTenantResourceIPs = append(allTenantResourceIPs, currRes)
+		// lib.JsonMarshalAndPrint(currRes)
+		// lib.JsonMarshalAndPrint(subIdsByNameMap)
+		// fmt.Println(subIdsByNameMap[currRes.SubscriptionId])
+		// os.Exit(0)
 	}
 
 	// allResources = append(allResources, response.Data...)
