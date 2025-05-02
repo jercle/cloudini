@@ -141,7 +141,7 @@ func GetAllResourcesForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfi
 		fmt.Println("Saved to " + mapFileName + " and " + arrayFileName)
 	}
 
-	fmt.Println(len(allResourcesSlice))
+	// fmt.Println(len(allResourcesSlice))
 
 	return allResources, allResourcesSlice
 }
