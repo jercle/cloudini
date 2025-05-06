@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.34]
+* Add TenantId to app reg data
+
 ## [0.1.33]
 * Bugfix: Add back type and subscription Name to IP address fetch
 * Bugfix: Cost data when some subscription names are caps has been resolved.
