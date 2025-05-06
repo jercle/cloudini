@@ -231,6 +231,7 @@ type EntraApplication struct {
 	} `json:"spa,omitempty" bson:"spa,omitempty"`
 	Tags                 *[]string `json:"tags,omitempty" bson:"tags,omitempty"`
 	TenantName           string    `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
+	TenantId             string    `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
 	TokenEncryptionKeyID *string   `json:"tokenEncryptionKeyId,omitempty" bson:"tokenEncryptionKeyId,omitempty"`
 	UniqueName           any       `json:"uniqueName,omitempty" bson:"uniqueName,omitempty"`
 	VerifiedPublisher    *struct {
@@ -276,6 +277,7 @@ type EntraExpiringCredential struct {
 	CredType                string    `json:"credType,omitempty" bson:"credType,omitempty"`
 	MongoDbId               string    `json:"_id,omitempty" bson:"_id,omitempty"`
 	TenantName              string    `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
+	TenantId                string    `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
 	LastAzureSync           time.Time `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty" fake:"-"`
 	LastDBSync              time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty" fake:"-"`
 }
