@@ -196,7 +196,7 @@ func BulkUploadBlob(basePath string, options StorageAccountUploadBlobOptions) (r
 			// fmt.Println(fileName)
 			opts := options
 			opts.BlobFileName = fileName
-			_, err := UploadBlob(file, opts)
+			_, err := UploadBlobFromFile(file, opts)
 			mutex.Lock()
 			if err != nil {
 				responses.Errored = append(responses.Errored, file)
