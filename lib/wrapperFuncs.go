@@ -10,6 +10,8 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+
+	"github.com/briandowns/spinner"
 )
 
 // Simple wrapper to
@@ -20,6 +22,14 @@ import (
 func CheckFatalError(err error) {
 	if err != nil {
 		_, file, no, _ := runtime.Caller(1)
+		log.Fatalln(file+":"+strconv.Itoa(no)+":0", err)
+	}
+}
+
+func CheckFatalErrorWithSpinner(err error, s *spinner.Spinner) {
+	if err != nil {
+		_, file, no, _ := runtime.Caller(1)
+		s.Stop()
 		log.Fatalln(file+":"+strconv.Itoa(no)+":0", err)
 	}
 }
