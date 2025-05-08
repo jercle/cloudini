@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.35]
+* Update StorageBlobHttpGet to use StorageAccountUploadBlobOptions for options input
+
 ## [0.1.34]
 * Add TenantId to app reg data
 * Rename UploadBlob to UploadBlobFromFile
