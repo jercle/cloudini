@@ -1,15 +1,18 @@
 # Change Log
 
+## [0.1.37]
+* Bugfix: Update filename concatenation in azure.UploadBlobFromString and azure.UploadBlobFromFile
+
 ## [0.1.36]
 * Bugfix: typo in StorageBlobHttpGet
 
 ## [0.1.35]
-* Update StorageBlobHttpGet to use StorageAccountUploadBlobOptions for options input
+* Update azure.StorageBlobHttpGet to use azure.StorageAccountUploadBlobOptions for options input
 
 ## [0.1.34]
 * Add TenantId to app reg data
-* Rename UploadBlob to UploadBlobFromFile
-* Create UploadBlobFromString to allow handling of in memory data uploads
+* Rename azure.UploadBlob to azure.UploadBlobFromFile
+* Create azure.UploadBlobFromString to allow handling of in memory data uploads
 * Update to Go 1.24.3
 * Update deps
 
