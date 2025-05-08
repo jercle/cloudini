@@ -18,7 +18,7 @@ import (
 )
 
 func StorageBlobHttpGet(options StorageAccountUploadBlobOptions, mat lib.AzureMultiAuthToken) ([]byte, error) {
-	urlString := "https://" + options.StorageAccountName + ".blob.core.windows.net/" + options.ContainerName + ""
+	urlString := "https://" + options.StorageAccountName + ".blob.core.windows.net/" + options.ContainerName + "/"
 	if options.BlobPrefix != "" {
 		urlString += options.BlobPrefix + "/"
 	}
