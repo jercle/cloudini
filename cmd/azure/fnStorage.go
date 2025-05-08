@@ -141,7 +141,14 @@ func UploadBlobFromString(fileData string, options StorageAccountUploadBlobOptio
 	lib.CheckFatalError(err)
 
 	// Upload the file to the specified container with the specified blob name
-	response, err := client.UploadBuffer(context.TODO(), options.ContainerName, options.BlobFileName+options.BlobFileName, []byte(fileData), nil)
+	blobNameAndPrefix := ""
+	if options.BlobPrefix != "" {
+		blobNameAndPrefix = options.BlobPrefix + "/" + options.BlobFileName
+	} else {
+		blobNameAndPrefix = options.BlobFileName
+	}
+
+	response, err := client.UploadBuffer(context.TODO(), options.ContainerName, blobNameAndPrefix, []byte(fileData), nil)
 	lib.CheckFatalError(err)
 	return response, err
 }
@@ -175,7 +182,14 @@ func UploadBlobFromFile(fileName string, options StorageAccountUploadBlobOptions
 	defer file.Close()
 
 	// Upload the file to the specified container with the specified blob name
-	response, err := client.UploadFile(context.TODO(), options.ContainerName, options.BlobPrefix+options.BlobFileName, file, nil)
+	blobNameAndPrefix := ""
+	if options.BlobPrefix != "" {
+		blobNameAndPrefix = options.BlobPrefix + "/" + options.BlobFileName
+	} else {
+		blobNameAndPrefix = options.BlobFileName
+	}
+
+	response, err := client.UploadFile(context.TODO(), options.ContainerName, blobNameAndPrefix, file, nil)
 	lib.CheckFatalError(err)
 	return response, err
 }
