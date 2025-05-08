@@ -17,7 +17,13 @@ import (
 	"github.com/jercle/cloudini/lib"
 )
 
-func StorageBlobHttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
+func StorageBlobHttpGet(options StorageAccountUploadBlobOptions, mat lib.AzureMultiAuthToken) ([]byte, error) {
+	urlString := "https://" + options.StorageAccountName + ".blob.core.windows.net/" + options.ContainerName + ""
+	if options.BlobPrefix != "" {
+		urlString += options.BlobPrefix + "/"
+	}
+	urlString += options.BlobFileName
+
 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
 	if err != nil {
 		return nil, err
