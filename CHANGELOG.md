@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.36]
+* Bugfix: typo in StorageBlobHttpGet
+
 ## [0.1.35]
 * Update StorageBlobHttpGet to use StorageAccountUploadBlobOptions for options input
 
