@@ -18,13 +18,19 @@ func GetAppRegDataForAllConfiguredTenants(outputPath string) (allAppRegistration
 	}, nil)
 	lib.CheckFatalError(err)
 
-	for tenantName := range azConfTenants {
+	for tenantName, tData := range azConfTenants {
 		token, err := tokenReq.SelectTenant(tenantName)
 		lib.CheckFatalError(err)
 
 		entraApps := ListEntraAppRegistrations(token)
-		allAppRegistrations = append(allAppRegistrations, entraApps...)
-		tenantExpiringCreds := GetAppRegExpiringCredData(entraApps, 30)
+		var entraAppsProcessed []EntraApplication
+		for _, app := range entraApps {
+			currApp := app
+			currApp.TenantId = tData.TenantID
+			entraAppsProcessed = append(entraAppsProcessed, currApp)
+		}
+		allAppRegistrations = append(allAppRegistrations, entraAppsProcessed...)
+		tenantExpiringCreds := GetAppRegExpiringCredData(entraAppsProcessed, 30)
 		expiringCreds = append(expiringCreds, tenantExpiringCreds...)
 	}
 
@@ -171,6 +177,7 @@ func GetAppRegExpiringCredData(apps []EntraApplication, daysUntilExpired int) (e
 					curr.CredCustomKeyIdentifier = cred.CustomKeyIdentifier
 					curr.CredStartDateTime = cred.StartDateTime
 					curr.TenantName = app.TenantName
+					curr.TenantId = app.TenantId
 					curr.LastAzureSync = app.LastAzureSync
 
 					curr.CredType = "pwd"

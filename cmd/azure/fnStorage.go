@@ -11,10 +11,10 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/jercle/cloudini/lib"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob/container"
+	"github.com/jercle/cloudini/lib"
 )
 
 func StorageBlobHttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
@@ -114,7 +114,36 @@ func DownloadAllBlobsInContainer(options lib.StorageAccountRequestOptions) (numF
 	return numFilesDownloaded
 }
 
-func UploadBlob(fileName string, options StorageAccountUploadBlobOptions) (azblob.UploadFileResponse, error) {
+//
+//
+
+func UploadBlobFromString(fileData string, options StorageAccountUploadBlobOptions) (azblob.UploadFileResponse, error) {
+
+	var (
+		cred *azidentity.ClientSecretCredential
+		err  error
+	)
+
+	config := lib.GetCldConfig(nil)
+	tenant := config.Azure.MultiTenantAuth.Tenants[options.ConfiguredTenantName]
+
+	cred, err = azidentity.NewClientSecretCredential(tenant.TenantID, tenant.Writer.ClientID, tenant.Writer.ClientSecret, nil)
+	lib.CheckFatalError(err)
+
+	serviceURL := "https://" + options.StorageAccountName + ".blob.core.windows.net"
+	client, err := azblob.NewClient(serviceURL, cred, nil)
+	lib.CheckFatalError(err)
+
+	// Upload the file to the specified container with the specified blob name
+	response, err := client.UploadBuffer(context.TODO(), options.ContainerName, options.BlobFileName+options.BlobFileName, []byte(fileData), nil)
+	lib.CheckFatalError(err)
+	return response, err
+}
+
+//
+//
+
+func UploadBlobFromFile(fileName string, options StorageAccountUploadBlobOptions) (azblob.UploadFileResponse, error) {
 
 	var (
 		cred *azidentity.ClientSecretCredential
@@ -144,6 +173,9 @@ func UploadBlob(fileName string, options StorageAccountUploadBlobOptions) (azblo
 	lib.CheckFatalError(err)
 	return response, err
 }
+
+//
+//
 
 func BulkUploadBlob(basePath string, options StorageAccountUploadBlobOptions) (responses StorageAccountBulkUploadBlobResponse) {
 	var (
@@ -183,6 +215,9 @@ func BulkUploadBlob(basePath string, options StorageAccountUploadBlobOptions) (r
 	// lib.JsonMarshalAndPrint(responses)
 	return
 }
+
+//
+//
 
 type StorageAccountUploadBlobOptions struct {
 	StorageAccountName   string
