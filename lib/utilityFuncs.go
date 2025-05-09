@@ -512,6 +512,12 @@ func PrintSliceStringsWithIndexes(slice []string) {
 	}
 }
 
+func PrintSliceIntsWithIndexes(slice []int) {
+	for i, element := range slice {
+		fmt.Println(i, element)
+	}
+}
+
 //
 //
 
