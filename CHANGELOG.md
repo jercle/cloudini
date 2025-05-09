@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.38]
+* Add lib.SliceOfStringsToUnique
+
 ## [0.1.37]
 * Bugfix: Update filename concatenation in azure.UploadBlobFromString and azure.UploadBlobFromFile
 

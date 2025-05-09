@@ -29,6 +29,19 @@ func UniqueNonEmptyElementsOf(s []string) []string {
 	return us
 }
 
+func SliceOfStringsToUnique(slice []string) []string {
+	seen := make(map[string]bool)
+	result := []string{}
+
+	for _, str := range slice {
+		if _, ok := seen[str]; !ok {
+			seen[str] = true
+			result = append(result, str)
+		}
+	}
+	return result
+}
+
 func StructToMap(obj interface{}) map[string]interface{} {
 	result := make(map[string]interface{})
 
