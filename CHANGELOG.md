@@ -4,6 +4,7 @@
 * Add lib.SliceOfStringsToUnique
 * Add lib.PrintSliceIntsWithIndexes
 * Add lib.RemoveSubdirectoriesOfPath
+* Skip caching new token if NoCache is configured.
 
 ## [0.1.37]
 * Bugfix: Update filename concatenation in azure.UploadBlobFromString and azure.UploadBlobFromFile
