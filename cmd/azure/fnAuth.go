@@ -125,12 +125,14 @@ func GetServicePrincipalToken(tenant string, matOptions lib.AzureMultiAuthTokenR
 			Token: token.AccessToken,
 		}
 
-		if mut != nil {
-			mut.Lock()
-		}
-		lib.CacheSaveToken(tokenData, "az"+strings.ToLower(options.TenantName)+options.Scope, cldConfigOpts)
-		if mut != nil {
-			mut.Unlock()
+		if !options.NoCache {
+			if mut != nil {
+				mut.Lock()
+			}
+			lib.CacheSaveToken(tokenData, "az"+strings.ToLower(options.TenantName)+options.Scope, cldConfigOpts)
+			if mut != nil {
+				mut.Unlock()
+			}
 		}
 		return &tokenData, nil
 
