@@ -38,7 +38,7 @@ func GetFullFilePaths(path string) []string {
 
 func RemoveSubdirectoriesOfPath(path string) {
 	dirs, err := os.ReadDir(path)
-	lib.CheckFatalError(err)
+	CheckFatalError(err)
 	for _, dir := range dirs {
 		fullDir := filepath.Join(path, dir.Name())
 		os.RemoveAll(fullDir)
