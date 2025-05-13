@@ -24,6 +24,7 @@ func UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(imageGalleryImagesColl *mon
 	s.Stop()
 	fmt.Println("Updating gallery images in database...")
 	s.Start()
+	DeleteAllDocumentsInCollection(imageGalleryImagesColl)
 	UpsertImageGalleryImages(galleryImagesWithVersions, imageGalleryImagesColl)
 	s.Stop()
 
