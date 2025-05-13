@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.40]
+* Bugfix: Fix UpdateImageDataWithBuildHostLogs to only include logs of images currently existing in Azure
+
 ## [0.1.39]
 * Update UpdateAllGalleryImagesAndUpdateWithUsedByCitrix to clear collection first.
 * Update deps
