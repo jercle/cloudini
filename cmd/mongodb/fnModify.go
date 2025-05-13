@@ -281,8 +281,11 @@ func UpdateImageDataWithBuildHostLogs(buildData []lib.PackerLogBuildData, collec
 
 		imageId := strings.Split(data.OutputImgId, "/versions")[0]
 
-		currVersion := imagesById[imageId].ImageVersions[data.OutputImgVersion]
-		currVersion.AzDoBuildData = data
+		if _, ok := imagesById[imageId].ImageVersions[data.OutputImgVersion]; ok {
+			currVersion := imagesById[imageId].ImageVersions[data.OutputImgVersion]
+			currVersion.AzDoBuildData = data
+			imagesById[imageId].ImageVersions[data.OutputImgVersion] = currVersion
+		}
 
 		// if _, ok := imagesById[data.OutputImgId]; !ok {
 		// 	continue
@@ -291,7 +294,6 @@ func UpdateImageDataWithBuildHostLogs(buildData []lib.PackerLogBuildData, collec
 		// 	continue
 		// }
 
-		imagesById[imageId].ImageVersions[data.OutputImgVersion] = currVersion
 	}
 
 	for _, img := range imagesById {
