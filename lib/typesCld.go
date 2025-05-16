@@ -4,13 +4,26 @@ import "time"
 
 type CldConfigRoot struct {
 	// Cloudini     *CloudiniConfig         `json:"cloudini,omitempty"`
-	Azure         *AzureConfig            `json:"azure,omitempty"`
-	AzureDevOps   *AzureDevOpsConfig      `json:"azureDevOps,omitempty"`
-	CitrixCloud   *CitrixCloud            `json:"citrixCloud,omitempty"`
-	Domains       *map[string]string      `json:"domains,omitempty" fakesize:"2"`
-	MongoDBConfig *MongoDBConfig          `json:"mongoDbConfig,omitempty"`
-	ProxyConfig   *map[string]ProxyConfig `json:"proxyConfig,omitempty" fakesize:"2"`
-	SophosConfig  *SophosConfig           `json:"sophos,omitempty"`
+	ActiveDirectory *ActiveDirectoryConfig  `json:"activeDirectory,omitempty"`
+	Azure           *AzureConfig            `json:"azure,omitempty"`
+	AzureDevOps     *AzureDevOpsConfig      `json:"azureDevOps,omitempty"`
+	CitrixCloud     *CitrixCloud            `json:"citrixCloud,omitempty"`
+	Domains         *map[string]string      `json:"domains,omitempty" fakesize:"2"`
+	MongoDBConfig   *MongoDBConfig          `json:"mongoDbConfig,omitempty"`
+	ProxyConfig     *map[string]ProxyConfig `json:"proxyConfig,omitempty" fakesize:"2"`
+	SophosConfig    *SophosConfig           `json:"sophos,omitempty"`
+}
+
+type ActiveDirectoryConfig struct {
+	Domains ADDomains `json:"domains"`
+}
+type ADDomains map[string]ADDomainConfig
+
+type ADDomainConfig struct {
+	DomainController string `json:"domainController,omitempty"`
+	Domain           string `json:"domain,omitempty"`
+	BindUser         string `json:"bindUser,omitempty"`
+	BindPwd          string `json:"bindPwd,omitempty"`
 }
 
 type CitrixCloud struct {
