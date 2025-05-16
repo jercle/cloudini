@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/briandowns/spinner"
+	"github.com/jercle/cloudini/cmd/ad"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
 	"github.com/jercle/cloudini/lib"
@@ -1178,4 +1179,36 @@ func UpsertStorageAccountMinTlsVersions(resources []azure.StorageAccountTlsVersi
 		results := mongo.BulkWriteResult{}
 		return &results
 	}
+}
+
+//
+//
+
+func UpsertADUsers(users []ad.ADUser, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
+	if len(users) == 0 {
+		fmt.Println("No users in slice")
+		return nil
+	}
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+
+	for _, cert := range users {
+		curr := cert
+
+		timeNow := time.Now()
+		curr.LastDBSync = timeNow
+		filter := bson.D{{"_id", curr.UserPrincipalName}}
+		update := bson.D{{"$set", curr}}
+
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+	}
+
+	var opts options.BulkWriteOptions
+	opts.SetOrdered(false)
+
+	results, err := coll.BulkWrite(ctx, updates, &opts)
+	lib.CheckFatalError(err)
+
+	return
 }
