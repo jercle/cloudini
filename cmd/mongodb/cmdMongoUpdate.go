@@ -20,6 +20,7 @@ var (
 	updateIpAddresses                               bool
 	updateAllCertInfo                               bool
 	showExecutionTime                               bool
+	updateADUsers                                   bool
 
 // tenantId       string
 // subscriptionId string
@@ -47,6 +48,8 @@ to quickly create a Cobra application.`,
 
 		c := ClientFromConfig(ctx, cancel)
 		defer c.Disconnect(ctx)
+
+		adUsers := c.Database(mongoConf.DbAD).Collection(mongoConf.CollADUsers)
 
 		azResImageGalleryImagesColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResImageGalleryImages)
 		azResResourceListColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResResourceList)
@@ -132,6 +135,10 @@ to quickly create a Cobra application.`,
 			}
 		}
 
+		if updateADUsers {
+			UpdateADUsers(adUsers)
+		}
+
 		elapsed := time.Since(startTime)
 		if showExecutionTime {
 			fmt.Println("Execution time: " + elapsed.String())
@@ -150,6 +157,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateEntraPimItems, "updateEntraPimItems", "p", false, "Gets all PIM assignments and eligibilities, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&showExecutionTime, "showExecutionTime", "t", false, "Prints execution time when complete")
 	cmdMongoUpdate.Flags().StringVarP(&costDataMonth, "costDataMonth", "m", "", "Which month to get cost data from - defaults to whatever month it was yesterday. Use with 'updateAzureResVcpuCountsCostData' Format: YYYYMM")
+	cmdMongoUpdate.Flags().BoolVarP(&updateADUsers, "updateADUsers", "a", false, "Get AD users and update database")
 
 	// cmdMongo.PersistentFlags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")
 	// cmdMongo.PersistentFlags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")

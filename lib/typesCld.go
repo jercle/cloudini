@@ -4,13 +4,27 @@ import "time"
 
 type CldConfigRoot struct {
 	// Cloudini     *CloudiniConfig         `json:"cloudini,omitempty"`
-	Azure         *AzureConfig            `json:"azure,omitempty"`
-	AzureDevOps   *AzureDevOpsConfig      `json:"azureDevOps,omitempty"`
-	CitrixCloud   *CitrixCloud            `json:"citrixCloud,omitempty"`
-	Domains       *map[string]string      `json:"domains,omitempty" fakesize:"2"`
-	MongoDBConfig *MongoDBConfig          `json:"mongoDbConfig,omitempty"`
-	ProxyConfig   *map[string]ProxyConfig `json:"proxyConfig,omitempty" fakesize:"2"`
-	SophosConfig  *SophosConfig           `json:"sophos,omitempty"`
+	ActiveDirectory *ActiveDirectoryConfig  `json:"activeDirectory,omitempty"`
+	Azure           *AzureConfig            `json:"azure,omitempty"`
+	AzureDevOps     *AzureDevOpsConfig      `json:"azureDevOps,omitempty"`
+	CitrixCloud     *CitrixCloud            `json:"citrixCloud,omitempty"`
+	Domains         *map[string]string      `json:"domains,omitempty" fakesize:"2"`
+	MongoDBConfig   *MongoDBConfig          `json:"mongoDbConfig,omitempty"`
+	ProxyConfig     *map[string]ProxyConfig `json:"proxyConfig,omitempty" fakesize:"2"`
+	SophosConfig    *SophosConfig           `json:"sophos,omitempty"`
+}
+
+type ActiveDirectoryConfig struct {
+	Domains ADDomains `json:"domains"`
+}
+type ADDomains map[string]ADDomainConfig
+
+type ADDomainConfig struct {
+	DomainController string `json:"domainController,omitempty"`
+	Domain           string `json:"domain,omitempty"`
+	BindUser         string `json:"bindUser,omitempty"`
+	BindPwd          string `json:"bindPwd,omitempty"`
+	BaseSearchDn     string `json:"baseSearchDn,omitempty"`
 }
 
 type CitrixCloud struct {
@@ -62,6 +76,7 @@ type MongoDBConfig struct {
 	ConnectionString string `json:"connectionString,omitempty"`
 
 	// Databases
+	DbAD                      string `json:"dbAD,omitempty"`
 	DbAzRes                   string `json:"dbAzureResources,omitempty"`
 	DbCertificates            string `json:"dbCertificates,omitempty"`
 	DbCitrix                  string `json:"dbCitrix,omitempty"`
@@ -70,6 +85,8 @@ type MongoDBConfig struct {
 	DbGeneral                 string `json:"dbGeneral,omitempty"`
 
 	// Collections
+	CollADUsers string `json:"collADUsers,omitempty"`
+
 	CollAzResImageGalleryImages     string `json:"collAzResImageGalleryImages,omitempty"`
 	CollAzResResourceList           string `json:"collAzResResourceList,omitempty"`
 	CollAzResGrpsList               string `json:"collAzResGrps,omitempty"`

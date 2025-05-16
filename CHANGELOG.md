@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.41]
+* Add AD funcs
+
 ## [0.1.40]
 * Bugfix: Fix UpdateImageDataWithBuildHostLogs to only include logs of images currently existing in Azure
 
