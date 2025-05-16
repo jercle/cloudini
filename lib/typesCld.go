@@ -24,6 +24,7 @@ type ADDomainConfig struct {
 	Domain           string `json:"domain,omitempty"`
 	BindUser         string `json:"bindUser,omitempty"`
 	BindPwd          string `json:"bindPwd,omitempty"`
+	BaseSearchDn     string `json:"baseSearchDn,omitempty"`
 }
 
 type CitrixCloud struct {
