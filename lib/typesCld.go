@@ -75,6 +75,7 @@ type MongoDBConfig struct {
 	ConnectionString string `json:"connectionString,omitempty"`
 
 	// Databases
+	DbAD                      string `json:"dbAD,omitempty"`
 	DbAzRes                   string `json:"dbAzureResources,omitempty"`
 	DbCertificates            string `json:"dbCertificates,omitempty"`
 	DbCitrix                  string `json:"dbCitrix,omitempty"`
@@ -83,6 +84,8 @@ type MongoDBConfig struct {
 	DbGeneral                 string `json:"dbGeneral,omitempty"`
 
 	// Collections
+	CollADUsers string `json:"collADUsers,omitempty"`
+
 	CollAzResImageGalleryImages     string `json:"collAzResImageGalleryImages,omitempty"`
 	CollAzResResourceList           string `json:"collAzResResourceList,omitempty"`
 	CollAzResGrpsList               string `json:"collAzResGrps,omitempty"`
