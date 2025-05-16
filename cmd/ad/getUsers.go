@@ -11,7 +11,6 @@ import (
 func GetAllADUsers(options lib.ADDomainConfig) (users []ADUser) {
 
 	searchFilter := "(&(objectClass=user))"
-	baseSearchDn := "OU=Dept,DC=apc,DC=dtq,DC=asio,DC=gov,DC=au"
 
 	l, err := ldap.DialURL("ldap://" + options.DomainController + ":389")
 	lib.CheckFatalError(err)
@@ -29,7 +28,7 @@ func GetAllADUsers(options lib.ADDomainConfig) (users []ADUser) {
 	lib.CheckFatalError(err)
 
 	searchRequest := ldap.NewSearchRequest(
-		baseSearchDn, // The base dn to search
+		options.BaseSearchDn, // The base dn to search
 		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
 		searchFilter, // The filter to apply
 		[]string{},   // A list attributes to retrieve
