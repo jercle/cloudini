@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/briandowns/spinner"
+	"github.com/jercle/cloudini/cmd/ad"
 	"github.com/jercle/cloudini/cmd/ado"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
@@ -411,6 +412,29 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	s.Stop()
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
+	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// lib.MarshalAndPrintJson(caCertUpdates)
+	// lib.MarshalAndPrintJson(serverCertUpdates)
+	// os.RemoveAll(cachePath + "/cert-sync")
+	// os.RemoveAll(cachePath + "/cert-sync-processed")
+	// ado.DownloadPackerHostLogs(&dlPath)
+	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
+	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
+}
+
+//
+//
+
+func UpdateADUsers(coll *mongo.Collection) {
+
+	config := lib.GetCldConfig(nil)
+
+	adConf := config.ActiveDirectory
+
+	users := ad.GetAllADUsersForAllConfiguredDomains(*adConf)
+
+	UpsertADUsers(users, coll)
 	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
 	// fmt.Println(string(jsonStr))
 	// lib.MarshalAndPrintJson(caCertUpdates)
