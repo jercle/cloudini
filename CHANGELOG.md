@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.43]
+* Update deps
+
 ## [0.1.42]
 * Bugfix: Fix to handling lib.AzureMultiAuthTokenRequestOptions.NoCache
 
