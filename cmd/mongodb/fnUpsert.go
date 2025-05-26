@@ -1212,3 +1212,6 @@ func UpsertADUsers(users []ad.ADUser, coll *mongo.Collection) (results *mongo.Bu
 
 	return
 }
+
+//
+//
