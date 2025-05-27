@@ -6,6 +6,7 @@ import (
 	_ "github.com/jercle/cloudini/cmd/azure"
 	_ "github.com/jercle/cloudini/cmd/citrix"
 	_ "github.com/jercle/cloudini/cmd/config"
+	_ "github.com/jercle/cloudini/cmd/forgerock"
 	_ "github.com/jercle/cloudini/cmd/jira"
 	_ "github.com/jercle/cloudini/cmd/m365"
 	_ "github.com/jercle/cloudini/cmd/mongodb"

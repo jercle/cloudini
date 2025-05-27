@@ -9,14 +9,31 @@ type CldConfigRoot struct {
 	AzureDevOps     *AzureDevOpsConfig      `json:"azureDevOps,omitempty"`
 	CitrixCloud     *CitrixCloud            `json:"citrixCloud,omitempty"`
 	Domains         *map[string]string      `json:"domains,omitempty" fakesize:"2"`
+	Forgerock       *ForgerockConfig        `json:"forgerock,omitempty"`
 	MongoDBConfig   *MongoDBConfig          `json:"mongoDbConfig,omitempty"`
 	ProxyConfig     *map[string]ProxyConfig `json:"proxyConfig,omitempty" fakesize:"2"`
 	SophosConfig    *SophosConfig           `json:"sophos,omitempty"`
 }
 
+type ForgerockConfig struct {
+	Domains FRDomains `json:"domains"`
+}
+type FRDomains map[string]FRDomainConfig
+
+type FRDomainConfig struct {
+	ClientID           string `json:"clientId,omitempty"`
+	ClientSecretBase64 string `json:"clientSecretBase64,omitempty"`
+	UrlBase            string `json:"urlBase,omitempty"`
+	AuthScope          string `json:"authScope,omitempty"`
+}
+
+//
+//
+
 type ActiveDirectoryConfig struct {
 	Domains ADDomains `json:"domains"`
 }
+
 type ADDomains map[string]ADDomainConfig
 
 type ADDomainConfig struct {
