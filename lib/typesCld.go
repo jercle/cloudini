@@ -25,6 +25,7 @@ type FRDomainConfig struct {
 	ClientSecretBase64 string `json:"clientSecretBase64,omitempty"`
 	UrlBase            string `json:"urlBase,omitempty"`
 	AuthScope          string `json:"authScope,omitempty"`
+	LDAPConnector      string `json:"ldapConnector,omitempty"`
 }
 
 //
