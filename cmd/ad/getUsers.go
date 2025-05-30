@@ -2,7 +2,9 @@ package ad
 
 import (
 	"crypto/tls"
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/go-ldap/ldap/v3"
 	"github.com/jercle/cloudini/lib"
@@ -38,6 +40,9 @@ func GetAllADUsers(options lib.ADDomainConfig) (users []ADUser) {
 	sr, err := l.Search(searchRequest)
 	lib.CheckFatalError(err)
 	// lib.JsonMarshalAndPrint(sr)
+
+	fmt.Println(sr)
+	os.Exit(0)
 
 	usrs := SearchResponseUserTransform(sr)
 
