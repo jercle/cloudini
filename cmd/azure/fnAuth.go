@@ -3,7 +3,6 @@ package azure
 import (
 	"bytes"
 	"context"
-	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -13,6 +12,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/charmbracelet/log"
@@ -93,70 +93,74 @@ func GetServicePrincipalToken(tenant string, matOptions lib.AzureMultiAuthTokenR
 	case "storage":
 		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
 	case "monitor":
-		tokenRequestOptions.Scopes = []string{"https://monitor.azure.com//.default"}
-	case "acr":
-		tokenRequestOptions.Scopes = []string{}
-		encodedData := b64.StdEncoding.EncodeToString([]byte(options.ClientID + ":" + options.ClientSecret))
-		urlString := "https://" +
-			options.AzureContainerRepositoryName +
-			".azurecr.io/oauth2/token?service=" +
-			options.AzureContainerRepositoryName +
-			".azurecr.io&scope=repository:*:*"
-		req, err := http.NewRequest(http.MethodGet, urlString, nil)
-		lib.CheckFatalError(err)
+		tokenRequestOptions.Scopes = []string{"https://monitor.azure.com/.default"}
+	// case "acr":
+	// tokenRequestOptions.Scopes = []string{}
 
-		req.Header.Add("Content-Type", "application/json")
-		req.Header.Add("Authorization", "Basic "+encodedData)
+	// encodedData := b64.StdEncoding.EncodeToString([]byte(options.ClientID + ":" + options.ClientSecret))
+	// urlString := "https://" +
+	// 	options.AzureContainerRepositoryName +
+	// 	".azurecr.io/oauth2/token?service=" +
+	// 	options.AzureContainerRepositoryName +
+	// 	".azurecr.io&scope=repository:*:*"
+	// req, err := http.NewRequest(http.MethodGet, urlString, nil)
+	// lib.CheckFatalError(err)
 
-		res, err := http.DefaultClient.Do(req)
-		lib.CheckFatalError(err)
+	// req.Header.Add("Content-Type", "application/json")
+	// req.Header.Add("Authorization", "Basic "+encodedData)
 
-		responseBody, err := io.ReadAll(res.Body)
-		lib.CheckFatalError(err)
-		defer res.Body.Close()
+	// res, err := http.DefaultClient.Do(req)
+	// lib.CheckFatalError(err)
 
-		var token lib.AcrAccessToken
-		json.Unmarshal(responseBody, &token)
+	// responseBody, err := io.ReadAll(res.Body)
+	// lib.CheckFatalError(err)
+	// defer res.Body.Close()
 
-		// jsonBytes, _ := json.MarshalIndent(token, "", "  ")
-		// fmt.Println(string(jsonBytes))
+	// var token lib.AcrAccessToken
+	// json.Unmarshal(responseBody, &token)
 
-		tokenData := lib.AzureTokenData{
-			Token: token.AccessToken,
-		}
+	// tokenData := lib.AzureTokenData{
+	// 	Token: token.AccessToken,
+	// }
 
-		if !options.NoCache {
-			if mut != nil {
-				mut.Lock()
-			}
-			lib.CacheSaveToken(tokenData, "az"+strings.ToLower(options.TenantName)+options.Scope, cldConfigOpts)
-			if mut != nil {
-				mut.Unlock()
-			}
-		}
-		return &tokenData, nil
+	// if !options.NoCache {
+	// 	if mut != nil {
+	// 		mut.Lock()
+	// 	}
+	// 	lib.CacheSaveToken(tokenData, "az"+strings.ToLower(options.TenantName)+options.Scope, cldConfigOpts)
+	// 	if mut != nil {
+	// 		mut.Unlock()
+	// 	}
+	// }
+	// return &tokenData, nil
 
 	default:
 		tokenRequestOptions.Scopes = []string{"https://management.core.windows.net/.default"}
 	}
 	tokenRequestOptions.EnableCAE = true
 
-	cred, err := azidentity.NewClientSecretCredential(tenant, options.ClientID, options.ClientSecret, nil)
-	if err != nil {
-		// log.Error("Unable to obtain Azure token", err, err)
+	var tokenResponse azcore.AccessToken
+	if strings.HasPrefix(options.ClientSecret, "certPath:") {
+		opts := azidentity.ClientCertificateCredentialOptions{
+			SendCertificateChain: true,
+		}
+		// tokenRequestOptions.Claims = "CN=automon-automation"
+		certSplit := strings.Split(options.ClientSecret, ":")
+		certPath := certSplit[1]
+		certPwd := certSplit[2]
+		certData, err := os.ReadFile(certPath)
 		lib.CheckFatalError(err)
-		return nil, err
-	}
-	// envCred, err := azidentity.NewEnvironmentCredential(nil)
-	// if err != nil {
-	// 	log.Error("Unable to obtain Azure token", err, err)
-	// }
-
-	tokenResponse, err := cred.GetToken(ctx, tokenRequestOptions)
-	if err != nil {
-		// log.Error("Unable to obtain Azure token", err, err)
+		cert, key, err := azidentity.ParseCertificates(certData, []byte(certPwd))
 		lib.CheckFatalError(err)
-		return nil, err
+		cred, err := azidentity.NewClientCertificateCredential(tenant, options.ClientID, cert, key, &opts)
+		lib.CheckFatalError(err)
+		tokenResponse, err = cred.GetToken(ctx, tokenRequestOptions)
+		lib.CheckFatalError(err)
+	} else {
+		cred, err := azidentity.NewClientSecretCredential(tenant, options.ClientID, options.ClientSecret, nil)
+		lib.CheckFatalError(err)
+		tokenResponse, err = cred.GetToken(ctx, tokenRequestOptions)
+		lib.CheckFatalError(err)
 	}
 
 	token := lib.AzureTokenData{
@@ -174,6 +178,7 @@ func GetServicePrincipalToken(tenant string, matOptions lib.AzureMultiAuthTokenR
 			mut.Unlock()
 		}
 	}
+
 	return &token, nil
 }
 

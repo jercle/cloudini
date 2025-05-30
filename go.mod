@@ -51,6 +51,7 @@ require (
 	golang.org/x/crypto v0.38.0
 	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6
 	golang.org/x/mod v0.24.0
+	golang.org/x/net v0.40.0
 	golang.org/x/sys v0.33.0
 	golang.org/x/text v0.25.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -121,8 +122,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp/shiny v0.0.0-20250506013437-ce4c2cf36ca6 // indirect
 	golang.org/x/image v0.27.0 // indirect
-	golang.org/x/mobile v0.0.0-20250506005352-78cd7a343bde // indirect
-	golang.org/x/net v0.40.0 // indirect
+	golang.org/x/mobile v0.0.0-20250520180527-a1d90793fc63 // indirect
 	golang.org/x/sync v0.14.0 // indirect
 	golang.org/x/term v0.32.0 // indirect
 )
