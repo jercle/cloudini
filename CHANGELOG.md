@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.1.43]
+## [0.1.44]
 * Update type field AzureResourceProperties.Visibility to type 'any'
 * Update deps
 
