@@ -1,6 +1,10 @@
 # Change Log
 
 ## [0.1.43]
+* Update type field AzureResourceProperties.Visibility to type 'any'
+* Update deps
+
+## [0.1.43]
 * Update GetServicePrincipalToken to allow using certificate for App Reg authentication
 * Update deps
 
