@@ -3616,7 +3616,7 @@ type AzureResourceProperties struct {
 	VirtualWan       *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"virtualWan,omitempty" bson:"virtualWan,omitempty"`
-	Visibility string `json:"visibility,omitempty" bson:"visibility,omitempty"`
+	Visibility any    `json:"visibility,omitempty" bson:"visibility,omitempty"`
 	VmID       string `json:"vmId,omitempty" bson:"vmId,omitempty"`
 	VmProfile  *struct {
 		OSDiskSizeGb float64 `json:"osDiskSizeGB,omitempty" bson:"osDiskSizeGB,omitempty"`
