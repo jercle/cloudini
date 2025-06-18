@@ -3,7 +3,9 @@ package azure
 import (
 	"bytes"
 	"context"
+	"crypto/x509"
 	"encoding/json"
+	"encoding/pem"
 	"fmt"
 	"io"
 	"net/http"
@@ -145,14 +147,24 @@ func GetServicePrincipalToken(tenant string, matOptions lib.AzureMultiAuthTokenR
 			SendCertificateChain: true,
 		}
 		// tokenRequestOptions.Claims = "CN=automon-automation"
-		certSplit := strings.Split(options.ClientSecret, ":")
-		certPath := certSplit[1]
-		certPwd := certSplit[2]
-		certData, err := os.ReadFile(certPath)
+		// certSplit := strings.Split(options.ClientSecret, ":")
+		// certPath := certSplit[1]
+		// certPwd := certSplit[2]
+		// certData, err := os.ReadFile(certPath)
+		// lib.CheckFatalError(err)
+		// cert, key, err := azidentity.ParseCertificates(certData, []byte(certPwd))
+		// lib.CheckFatalError(err)
+		keyFile, err := os.ReadFile("/home/jercle/.config/cld/key.pem")
 		lib.CheckFatalError(err)
-		cert, key, err := azidentity.ParseCertificates(certData, []byte(certPwd))
+		block, _ := pem.Decode(keyFile)
+		privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 		lib.CheckFatalError(err)
-		cred, err := azidentity.NewClientCertificateCredential(tenant, options.ClientID, cert, key, &opts)
+		certFile, err := os.ReadFile("/home/jercle/.config/cld/cert.pem")
+		certBlock, _ := pem.Decode(certFile)
+		certData, err := x509.ParseCertificate(certBlock.Bytes)
+		cert := []*x509.Certificate{certData}
+		lib.CheckFatalError(err)
+		cred, err := azidentity.NewClientCertificateCredential(tenant, options.ClientID, cert, privateKey, &opts)
 		lib.CheckFatalError(err)
 		tokenResponse, err = cred.GetToken(ctx, tokenRequestOptions)
 		lib.CheckFatalError(err)
