@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.45]
+* Bug: Fix certificate aggregation to correctly include all servers pulled from
+
 ## [0.1.44]
 * Update type field AzureResourceProperties.Visibility to type 'any'
 * Update deps
