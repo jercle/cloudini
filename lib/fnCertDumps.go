@@ -231,15 +231,18 @@ func RelateCertAuthCertsToServerCerts(caCertInfo []CertAuthorityCertInfo, server
 		curr.SerialNumber = strings.ToLower(sci.SerialNumber)
 		curr.Thumbprint = strings.ToLower(sci.Thumbprint)
 		curr.PulledFromServer = nil
-		spf := *sci.PulledFromServer + ":" + *sci.ParentPath
+		// spf := *sci.PulledFromServer + ":" + *sci.ParentPath
 
-		// ServerCertInfoServersPulledFrom{
-		// 	ServerName:      *sci.PulledFromServer,
-		// 	CertificatePath: *sci.ParentPath,
-		// }
+		spf := ServerCertInfoServersPulledFrom{
+			ServerName:      *sci.PulledFromServer,
+			CertificatePath: *sci.ParentPath,
+		}
 
-		if _, ok := serverCertsBySerialNumber[sci.SerialNumber]; ok {
-			curr.ServersPulledFrom = append(sci.ServersPulledFrom, spf)
+		if data, ok := serverCertsBySerialNumber[sci.SerialNumber]; ok {
+			// fmt.Println(data)
+			// os.Exit(0)
+			// curr = data
+			curr.ServersPulledFrom = append(data.ServersPulledFrom, spf)
 		} else {
 			curr.PulledFromServer = nil
 			curr.ParentPath = nil
