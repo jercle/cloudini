@@ -233,20 +233,28 @@ func RelateCertAuthCertsToServerCerts(caCertInfo []CertAuthorityCertInfo, server
 		curr.PulledFromServer = nil
 		// spf := *sci.PulledFromServer + ":" + *sci.ParentPath
 
-		spf := ServerCertInfoServersPulledFrom{
-			ServerName:      *sci.PulledFromServer,
-			CertificatePath: *sci.ParentPath,
-		}
+		// spf := ServerCertInfoServersPulledFrom{
+		// 	ServerName:      *sci.PulledFromServer,
+		// 	CertificatePath: *sci.ParentPath,
+		// }
+		curr.ServersPulledFrom = make(ServerCertInfoServersPulledFrom)
 
 		if data, ok := serverCertsBySerialNumber[sci.SerialNumber]; ok {
 			// fmt.Println(data)
 			// os.Exit(0)
 			// curr = data
-			curr.ServersPulledFrom = append(data.ServersPulledFrom, spf)
+			// curr.ServersPulledFrom = append(data.ServersPulledFrom, spf)
+			// curr.ServersPulledFrom
+			if d, exists := data.ServersPulledFrom[*sci.PulledFromServer]; exists {
+				curr.ServersPulledFrom[*sci.PulledFromServer] = append(d, *sci.ParentPath)
+			} else {
+				curr.ServersPulledFrom[*sci.PulledFromServer] = append(curr.ServersPulledFrom[*sci.PulledFromServer], *sci.ParentPath)
+			}
 		} else {
 			curr.PulledFromServer = nil
 			curr.ParentPath = nil
-			curr.ServersPulledFrom = append(curr.ServersPulledFrom, spf)
+			// curr.ServersPulledFrom = append(curr.ServersPulledFrom, spf)
+			curr.ServersPulledFrom[*sci.PulledFromServer] = append(curr.ServersPulledFrom[*sci.PulledFromServer], *sci.ParentPath)
 			serverCertsBySerialNumber[sci.SerialNumber] = curr
 		}
 
