@@ -13,14 +13,15 @@ func GetMailboxStorageUsed(token lib.AzureMultiAuthToken) (mbDetails []MailboxUs
 	urlBase := "https://graph.microsoft.com/beta/"
 	urlString := urlBase + "/reports/getMailboxUsageDetail(period='D7')"
 	res, err := azure.HttpGet(urlString, token)
+	lib.CheckFatalError(err)
 
 	bytesReader := bytes.NewReader(res)
 	var csvData []MailboxUsageDetail
-	gocsv.Unmarshal(bytesReader, &csvData)
+	err = gocsv.Unmarshal(bytesReader, &csvData)
+	lib.CheckFatalError(err)
 
 	for _, mb := range csvData {
 		curr := mb
-
 		curr.TenantName = token.TenantName
 		curr.LastAzureSync = time.Now()
 		mbDetails = append(mbDetails, curr)
