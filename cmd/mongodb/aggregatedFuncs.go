@@ -12,6 +12,7 @@ import (
 	"github.com/jercle/cloudini/cmd/ado"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
+	"github.com/jercle/cloudini/cmd/m365"
 	"github.com/jercle/cloudini/lib"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -435,6 +436,33 @@ func UpdateADUsers(coll *mongo.Collection) {
 	users := ad.GetAllADUsersForAllConfiguredDomains(*adConf)
 
 	UpsertADUsers(users, coll)
+	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// lib.MarshalAndPrintJson(caCertUpdates)
+	// lib.MarshalAndPrintJson(serverCertUpdates)
+	// os.RemoveAll(cachePath + "/cert-sync")
+	// os.RemoveAll(cachePath + "/cert-sync-processed")
+	// ado.DownloadPackerHostLogs(&dlPath)
+	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
+	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
+}
+
+//
+//
+
+func UpdateM365Data(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	fmt.Println("Getting mailbox stats")
+	s.Start()
+	data := m365.GetMailboxStorageUsedAllConfiguredTenants()
+	s.Stop()
+
+	fmt.Println("Upserting mailbox stats")
+	s.Start()
+	UpsertMailboxStatistics(data, coll)
+	s.Stop()
+
 	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
 	// fmt.Println(string(jsonStr))
 	// lib.MarshalAndPrintJson(caCertUpdates)
