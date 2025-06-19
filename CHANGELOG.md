@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.46]
+* Feature: Add mailbox statistics cmd and mongodb upsert of mb stats data
+
 ## [0.1.45]
 * Bug: Fix certificate aggregation to correctly include all servers pulled from
 
