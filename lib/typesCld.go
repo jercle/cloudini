@@ -101,6 +101,7 @@ type MongoDBConfig struct {
 	DbEntra                   string `json:"dbEntra,omitempty"`
 	DbEnvironmentOptimisation string `json:"dbEnvironmentOptimisation,omitempty"`
 	DbGeneral                 string `json:"dbGeneral,omitempty"`
+	DbM365                    string `json:"dbM365,omitempty"`
 
 	// Collections
 	CollADUsers string `json:"collADUsers,omitempty"`
@@ -132,6 +133,8 @@ type MongoDBConfig struct {
 	CollEnvOptCostingTenants   string `json:"collEnvOptCostingTenants,omitempty"`
 
 	CollGenEolTracking string `json:"collGenEolTracking,omitempty"`
+
+	CollM365MailboxStatistics string `json:"collM365MailboxStatistics,omitempty"`
 }
 
 // type ServerList []string

@@ -12,6 +12,7 @@ import (
 	"github.com/jercle/cloudini/cmd/ad"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
+	"github.com/jercle/cloudini/cmd/m365"
 	"github.com/jercle/cloudini/lib"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -1215,3 +1216,32 @@ func UpsertADUsers(users []ad.ADUser, coll *mongo.Collection) (results *mongo.Bu
 
 //
 //
+
+func UpsertMailboxStatistics(mailboxStats []m365.MailboxUsageDetail, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
+	if len(mailboxStats) == 0 {
+		fmt.Println("No data in slice")
+		return nil
+	}
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+
+	// fmt.Println(len(serverCertInfo))
+
+	for _, cert := range mailboxStats {
+		curr := cert
+
+		filter := bson.D{{"_id", curr.UserPrincipalName}}
+		update := bson.D{{"$set", curr}}
+
+		// .SetUpsert(true)
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+	}
+
+	res, err := coll.BulkWrite(ctx, updates, nil)
+	lib.CheckFatalError(err)
+
+	results = res
+
+	return
+}
