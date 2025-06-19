@@ -161,18 +161,18 @@ type ServerCertInfo struct {
 		Oid     string  `json:"oid,omitempty" bson:"oid,omitempty"`
 		RawData *string `json:"rawData,omitempty" bson:"rawData,omitempty"`
 	} `json:"issuerName,omitempty" bson:"issuerName,omitempty"`
-	NotAfter   time.Time `json:"notAfter,omitempty" bson:"notAfter,omitempty"`
-	NotBefore  time.Time `json:"notBefore,omitempty" bson:"notBefore,omitempty"`
-	PolicyID   *string   `json:"policyId,omitempty" bson:"policyId,omitempty"`
-	PrivateKey *struct {
-		CspKeyContainerInfo  string  `json:"cspKeyContainerInfo,omitempty" bson:"cspKeyContainerInfo,omitempty"`
-		KeyExchangeAlgorithm string  `json:"keyExchangeAlgorithm,omitempty" bson:"keyExchangeAlgorithm,omitempty"`
-		KeySize              float64 `json:"keySize,omitempty" bson:"keySize,omitempty"`
-		LegalKeySizes        string  `json:"legalKeySizes,omitempty" bson:"legalKeySizes,omitempty"`
-		PersistKeyInCsp      bool    `json:"persistKeyInCsp,omitempty" bson:"persistKeyInCsp,omitempty"`
-		PublicOnly           bool    `json:"publicOnly,omitempty" bson:"publicOnly,omitempty"`
-		SignatureAlgorithm   string  `json:"signatureAlgorithm,omitempty" bson:"signatureAlgorithm,omitempty"`
-	} `json:"privateKey,omitempty" bson:"privateKey,omitempty"`
+	NotAfter  time.Time `json:"notAfter,omitempty" bson:"notAfter,omitempty"`
+	NotBefore time.Time `json:"notBefore,omitempty" bson:"notBefore,omitempty"`
+	PolicyID  *string   `json:"policyId,omitempty" bson:"policyId,omitempty"`
+	// PrivateKey *struct {
+	// 	CspKeyContainerInfo  string  `json:"cspKeyContainerInfo,omitempty" bson:"cspKeyContainerInfo,omitempty"`
+	// 	KeyExchangeAlgorithm string  `json:"keyExchangeAlgorithm,omitempty" bson:"keyExchangeAlgorithm,omitempty"`
+	// 	KeySize              float64 `json:"keySize,omitempty" bson:"keySize,omitempty"`
+	// 	LegalKeySizes        string  `json:"legalKeySizes,omitempty" bson:"legalKeySizes,omitempty"`
+	// 	PersistKeyInCsp      bool    `json:"persistKeyInCsp,omitempty" bson:"persistKeyInCsp,omitempty"`
+	// 	PublicOnly           bool    `json:"publicOnly,omitempty" bson:"publicOnly,omitempty"`
+	// 	SignatureAlgorithm   string  `json:"signatureAlgorithm,omitempty" bson:"signatureAlgorithm,omitempty"`
+	// } `json:"privateKey,omitempty" bson:"privateKey,omitempty"`
 	PublicKey struct {
 		EncodedKeyValue   string  `json:"encodedKeyValue,omitempty" bson:"encodedKeyValue,omitempty"`
 		EncodedParameters string  `json:"encodedParameters,omitempty" bson:"encodedParameters,omitempty"`

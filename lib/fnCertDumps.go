@@ -224,6 +224,7 @@ func RelateCertAuthCertsToServerCerts(caCertInfo []CertAuthorityCertInfo, server
 	}
 
 	for _, sci := range serverCertInfo {
+
 		if sci.SerialNumber == "01" {
 			continue
 		}
@@ -231,6 +232,7 @@ func RelateCertAuthCertsToServerCerts(caCertInfo []CertAuthorityCertInfo, server
 		curr.SerialNumber = strings.ToLower(sci.SerialNumber)
 		curr.Thumbprint = strings.ToLower(sci.Thumbprint)
 		curr.PulledFromServer = nil
+
 		// spf := *sci.PulledFromServer + ":" + *sci.ParentPath
 
 		// spf := ServerCertInfoServersPulledFrom{
@@ -240,21 +242,19 @@ func RelateCertAuthCertsToServerCerts(caCertInfo []CertAuthorityCertInfo, server
 		curr.ServersPulledFrom = make(ServerCertInfoServersPulledFrom)
 
 		if data, ok := serverCertsBySerialNumber[sci.SerialNumber]; ok {
-			// fmt.Println(data)
-			// os.Exit(0)
-			// curr = data
-			// curr.ServersPulledFrom = append(data.ServersPulledFrom, spf)
-			// curr.ServersPulledFrom
+			if len(data.ServersPulledFrom) > 0 {
+				curr.ServersPulledFrom = data.ServersPulledFrom
+			}
 			if d, exists := data.ServersPulledFrom[*sci.PulledFromServer]; exists {
-				curr.ServersPulledFrom[*sci.PulledFromServer] = append(d, *sci.ParentPath)
-			} else {
+				curr.ServersPulledFrom[*sci.PulledFromServer] = d
 				curr.ServersPulledFrom[*sci.PulledFromServer] = append(curr.ServersPulledFrom[*sci.PulledFromServer], *sci.ParentPath)
+			} else {
+				curr.ServersPulledFrom[*sci.PulledFromServer] = []string{*sci.ParentPath}
 			}
 		} else {
 			curr.PulledFromServer = nil
 			curr.ParentPath = nil
-			// curr.ServersPulledFrom = append(curr.ServersPulledFrom, spf)
-			curr.ServersPulledFrom[*sci.PulledFromServer] = append(curr.ServersPulledFrom[*sci.PulledFromServer], *sci.ParentPath)
+			curr.ServersPulledFrom[*sci.PulledFromServer] = []string{*sci.ParentPath}
 			serverCertsBySerialNumber[sci.SerialNumber] = curr
 		}
 
@@ -264,6 +264,7 @@ func RelateCertAuthCertsToServerCerts(caCertInfo []CertAuthorityCertInfo, server
 		serverCertsBySerialNumber[curr.SerialNumber] = curr
 		curr.ID = curr.SerialNumber
 		serverCertInfoWithRelations = append(serverCertInfoWithRelations, curr)
+
 	}
 
 	for _, caci := range caCertsBySerialNumber {
