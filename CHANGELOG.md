@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.47]
+* Fix: Update how serversPulledFrom is stored for certs to now transform them correctly
+
 ## [0.1.46]
 * Feature: Add mailbox statistics cmd and mongodb upsert of mb stats data
 
