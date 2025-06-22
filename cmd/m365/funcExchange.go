@@ -33,6 +33,8 @@ func GetMailboxStorageUsed(token lib.AzureMultiAuthToken) (mbDetails []MailboxUs
 }
 
 func GetMailboxStorageUsedAllConfiguredTenants() (mbDetails []MailboxUsageDetail) {
+	config := lib.GetCldConfig(nil)
+
 	tokenReq, err := azure.GetAllTenantSPTokens(lib.AzureMultiAuthTokenRequestOptions{
 		Scope:         "graph",
 		GetWriteToken: false,
@@ -40,6 +42,10 @@ func GetMailboxStorageUsedAllConfiguredTenants() (mbDetails []MailboxUsageDetail
 	lib.CheckFatalError(err)
 
 	for _, token := range tokenReq {
+		tenantConfig := config.Azure.MultiTenantAuth.Tenants[token.TenantName]
+		if !tenantConfig.CheckExchange {
+			continue
+		}
 		data, err := GetMailboxStorageUsed(token)
 		lib.CheckFatalError(err)
 		mbDetails = append(mbDetails, data...)
