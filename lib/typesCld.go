@@ -171,6 +171,7 @@ type CldConfigTenantAuth struct {
 	Reader              *CldConfigClientAuthDetails `json:"reader,omitempty"`
 	Writer              *CldConfigClientAuthDetails `json:"writer,omitempty"`
 	CostExportsLocation string                      `json:"costExportsLocation,omitempty"`
+	CheckExchange       bool                        `json:"checkExchange"`
 }
 
 type CldConfigClientAuthDetails struct {
