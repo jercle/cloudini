@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.48]
+* Add "checkExchange" config option, update to GetMailboxStorageUsedAllConfiguredTenants to check for checkExchange option
+
 ## [0.1.47]
 * Fix: Update how serversPulledFrom is stored for certs to now transform them correctly
 
