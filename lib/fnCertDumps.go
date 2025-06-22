@@ -235,26 +235,28 @@ func RelateCertAuthCertsToServerCerts(caCertInfo []CertAuthorityCertInfo, server
 
 		// spf := *sci.PulledFromServer + ":" + *sci.ParentPath
 
-		// spf := ServerCertInfoServersPulledFrom{
-		// 	ServerName:      *sci.PulledFromServer,
-		// 	CertificatePath: *sci.ParentPath,
-		// }
-		curr.ServersPulledFrom = make(ServerCertInfoServersPulledFrom)
+		spf := ServerCertInfoServersPulledFrom{
+			ServerName:      *sci.PulledFromServer,
+			CertificatePath: *sci.ParentPath,
+		}
+		// curr.ServersPulledFrom = make(ServerCertInfoServersPulledFrom)
 
 		if data, ok := serverCertsBySerialNumber[sci.SerialNumber]; ok {
 			if len(data.ServersPulledFrom) > 0 {
 				curr.ServersPulledFrom = data.ServersPulledFrom
 			}
-			if d, exists := data.ServersPulledFrom[*sci.PulledFromServer]; exists {
-				curr.ServersPulledFrom[*sci.PulledFromServer] = d
-				curr.ServersPulledFrom[*sci.PulledFromServer] = append(curr.ServersPulledFrom[*sci.PulledFromServer], *sci.ParentPath)
-			} else {
-				curr.ServersPulledFrom[*sci.PulledFromServer] = []string{*sci.ParentPath}
-			}
+			curr.ServersPulledFrom = append(curr.ServersPulledFrom, spf)
+			// if d, exists := data.ServersPulledFrom[*sci.PulledFromServer]; exists {
+			// 	curr.ServersPulledFrom[*sci.PulledFromServer] = d
+			// 	curr.ServersPulledFrom[*sci.PulledFromServer] = append(curr.ServersPulledFrom[*sci.PulledFromServer], *sci.ParentPath)
+			// } else {
+			// 	curr.ServersPulledFrom[*sci.PulledFromServer] = []string{*sci.ParentPath}
+			// }
 		} else {
 			curr.PulledFromServer = nil
 			curr.ParentPath = nil
-			curr.ServersPulledFrom[*sci.PulledFromServer] = []string{*sci.ParentPath}
+			// curr.ServersPulledFrom[*sci.PulledFromServer] = []string{*sci.ParentPath}
+			curr.ServersPulledFrom = append(curr.ServersPulledFrom, spf)
 			serverCertsBySerialNumber[sci.SerialNumber] = curr
 		}
 
@@ -266,6 +268,19 @@ func RelateCertAuthCertsToServerCerts(caCertInfo []CertAuthorityCertInfo, server
 		serverCertInfoWithRelations = append(serverCertInfoWithRelations, curr)
 
 	}
+
+	// for _, cert := range serverCertsBySerialNumber {
+	// 	// if len(cert.ServersPulledFrom) < 2 {
+	// 	// 	continue
+	// 	// }
+	// 	// JsonMarshalAndPrint(cert)
+	// 	// os.Exit(0)
+	// 	if cert.ID == "31360b71167360af4f00f3e3e4d0c213" {
+	// 		JsonMarshalAndPrint(cert)
+	// 	}
+	// }
+
+	JsonMarshalAndPrint(serverCertsBySerialNumber["31360b71167360af4f00f3e3e4d0c213"])
 
 	for _, caci := range caCertsBySerialNumber {
 		curr := caci
