@@ -201,7 +201,7 @@ type ServerCertInfo struct {
 
 type ServerCertInfoServersPulledFrom struct {
 	ServerName       string   `json:"serverName,omitempty" bson:"serverName,omitempty"`
-	CertificatePaths []string `json:"certificatePaths,omitempty" bson:"certificatePath,omitempty"`
+	CertificatePaths []string `json:"certificatePaths,omitempty" bson:"certificatePaths,omitempty"`
 }
 
 //
