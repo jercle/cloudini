@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.50]
+* Fix: Update bson flag for ServerCertInfoServersPulledFrom type CertificatePaths property
+
 ## [0.1.49]
 * Fix: Update how serversPulledFrom is stored for certs to now transform them more efficiently and update the ServerCertInfoServersPulledFrom type
 
