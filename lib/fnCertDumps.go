@@ -225,47 +225,96 @@ func RelateCertAuthCertsToServerCerts(caCertInfo []CertAuthorityCertInfo, server
 
 	for _, sci := range serverCertInfo {
 
-		if sci.SerialNumber == "01" {
+		if sci.SerialNumber == "01" || sci.SerialNumber == "00" {
 			continue
 		}
 		curr := sci
 		curr.SerialNumber = strings.ToLower(sci.SerialNumber)
 		curr.Thumbprint = strings.ToLower(sci.Thumbprint)
-		curr.PulledFromServer = nil
 
-		// spf := *sci.PulledFromServer + ":" + *sci.ParentPath
+		// pfs := *sci.PulledFromServer + ":" + *sci.ParentPath
 
-		// spf := ServerCertInfoServersPulledFrom{
-		// 	ServerName:      *sci.PulledFromServer,
-		// 	CertificatePath: *sci.ParentPath,
-		// }
-		curr.ServersPulledFrom = make(ServerCertInfoServersPulledFrom)
-
-		if data, ok := serverCertsBySerialNumber[sci.SerialNumber]; ok {
-			if len(data.ServersPulledFrom) > 0 {
-				curr.ServersPulledFrom = data.ServersPulledFrom
-			}
-			if d, exists := data.ServersPulledFrom[*sci.PulledFromServer]; exists {
-				curr.ServersPulledFrom[*sci.PulledFromServer] = d
-				curr.ServersPulledFrom[*sci.PulledFromServer] = append(curr.ServersPulledFrom[*sci.PulledFromServer], *sci.ParentPath)
-			} else {
-				curr.ServersPulledFrom[*sci.PulledFromServer] = []string{*sci.ParentPath}
-			}
-		} else {
-			curr.PulledFromServer = nil
-			curr.ParentPath = nil
-			curr.ServersPulledFrom[*sci.PulledFromServer] = []string{*sci.ParentPath}
-			serverCertsBySerialNumber[sci.SerialNumber] = curr
+		pfs := ServerCertInfoServersPulledFrom{
+			ServerName:       *sci.PulledFromServer,
+			CertificatePaths: []string{*sci.ParentPath},
 		}
+		// curr.ServersPulledFrom = make(ServerCertInfoServersPulledFrom)
+
+		// var test bool
+		// var foundData ServerCertInfo
+		if data, ok := serverCertsBySerialNumber[curr.SerialNumber]; ok {
+			// fmt.Println(data)
+			// foundData = data
+			// if curr.SerialNumber == "31360b71167360af4f00f3e3e4d0c213" {
+			// 	test = true
+			// }
+			// fmt.Println("ok")
+			// if len(data.ServersPulledFrom) > 0 {
+			curr.ServersPulledFrom = data.ServersPulledFrom
+			// }
+		}
+
+		matchedSpf := false
+		for index, spf := range curr.ServersPulledFrom {
+			currSpf := spf
+			if spf.ServerName == pfs.ServerName {
+				matchedSpf = true
+				currSpf.CertificatePaths = append(currSpf.CertificatePaths, pfs.CertificatePaths...)
+			}
+			curr.ServersPulledFrom[index] = currSpf
+		}
+
+		if !matchedSpf {
+			curr.ServersPulledFrom = append(curr.ServersPulledFrom, pfs)
+		}
+
+		// if d, exists := data.ServersPulledFrom[*sci.PulledFromServer]; exists {
+		// 	curr.ServersPulledFrom[*sci.PulledFromServer] = d
+		// 	curr.ServersPulledFrom[*sci.PulledFromServer] = append(curr.ServersPulledFrom[*sci.PulledFromServer], *sci.ParentPath)
+		// } else {
+		// 	curr.ServersPulledFrom[*sci.PulledFromServer] = []string{*sci.ParentPath}
+		// }
+		// } else {
+		curr.PulledFromServer = nil
+		curr.ParentPath = nil
+		// curr.ServersPulledFrom[*sci.PulledFromServer] = []string{*sci.ParentPath}
+		// curr.ServersPulledFrom = append(curr.ServersPulledFrom, pfs)
+		// serverCertsBySerialNumber[sci.SerialNumber] = curr
+		// }
 
 		if relatedCertAuth, ok := caCertsBySerialNumber[curr.SerialNumber]; ok {
 			curr.RelatedCertAuthData = &relatedCertAuth
 		}
-		serverCertsBySerialNumber[curr.SerialNumber] = curr
 		curr.ID = curr.SerialNumber
-		serverCertInfoWithRelations = append(serverCertInfoWithRelations, curr)
+		serverCertsBySerialNumber[curr.SerialNumber] = curr
+		// serverCertInfoWithRelations = append(serverCertInfoWithRelations, curr)
 
+		// if test && curr.SerialNumber == "31360b71167360af4f00f3e3e4d0c213" {
+		// JsonMarshalAndPrint(foundData)
+		// JsonMarshalAndPrint(sci)
+		// JsonMarshalAndPrint(curr)
+		// os.Exit(0)
+		// }
 	}
+
+	// for _, cert := range serverCertsBySerialNumber {
+	// 	// if len(cert.ServersPulledFrom) < 2 {
+	// 	// 	continue
+	// 	// }
+	// 	// JsonMarshalAndPrint(cert)
+	// 	// os.Exit(0)
+	// 	if cert.ID == "31360b71167360af4f00f3e3e4d0c213" {
+	// 		JsonMarshalAndPrint(cert)
+	// 	}
+	// }
+
+	// JsonMarshalAndPrint(serverCertsBySerialNumber["31360b71167360af4f00f3e3e4d0c213"])
+
+	for _, cert := range serverCertsBySerialNumber {
+		serverCertInfoWithRelations = append(serverCertInfoWithRelations, cert)
+	}
+
+	// serverCertInfoWithRelations = append(serverCertInfoWithRelations, curr)
 
 	for _, caci := range caCertsBySerialNumber {
 		curr := caci
