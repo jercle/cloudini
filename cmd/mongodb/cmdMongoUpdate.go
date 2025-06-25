@@ -22,6 +22,7 @@ var (
 	updateAllCertInfo                               bool
 	showExecutionTime                               bool
 	updateADUsers                                   bool
+	updateB2CUsers                                  bool
 
 // tenantId       string
 // subscriptionId string
@@ -50,7 +51,8 @@ to quickly create a Cobra application.`,
 		c := ClientFromConfig(ctx, cancel)
 		defer c.Disconnect(ctx)
 
-		adUsers := c.Database(mongoConf.DbAD).Collection(mongoConf.CollADUsers)
+		// adUsers := c.Database(mongoConf.DbAD).Collection(mongoConf.CollADUsers)
+		// _ = adUsers
 
 		azResImageGalleryImagesColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResImageGalleryImages)
 		azResResourceListColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResResourceList)
@@ -70,6 +72,7 @@ to quickly create a Cobra application.`,
 		entraAppRegCredsExpiringColl := c.Database(mongoConf.DbEntra).Collection(mongoConf.CollEntraAppRegCredsExpiring)
 		entraRoleAssignmentScheduleInstancesColl := c.Database(mongoConf.DbEntra).Collection(mongoConf.CollEntraRoleAssignmentScheduleInstances)
 		entraRoleEligibilityScheduleInstancesColl := c.Database(mongoConf.DbEntra).Collection(mongoConf.CollEntraRoleEligibilityScheduleInstances)
+		entraB2CUsersColl := c.Database(mongoConf.DbEntra).Collection(mongoConf.CollEntraB2CUsers)
 
 		// envOptCostingColl := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptCosting)
 		envOptCostingMetersColl := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptCostingMeters)
@@ -138,8 +141,12 @@ to quickly create a Cobra application.`,
 			}
 		}
 
-		if updateADUsers {
-			UpdateADUsers(adUsers)
+		// if updateADUsers {
+		// 	UpdateADUsers(adUsers)
+		// }
+
+		if updateB2CUsers {
+			UpdateB2CUsers(entraB2CUsersColl)
 		}
 
 		if updateO365Data {
@@ -164,8 +171,9 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateEntraPimItems, "updateEntraPimItems", "p", false, "Gets all PIM assignments and eligibilities, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&showExecutionTime, "showExecutionTime", "t", false, "Prints execution time when complete")
 	cmdMongoUpdate.Flags().StringVarP(&costDataMonth, "costDataMonth", "m", "", "Which month to get cost data from - defaults to whatever month it was yesterday. Use with 'updateAzureResVcpuCountsCostData' Format: YYYYMM")
-	cmdMongoUpdate.Flags().BoolVarP(&updateADUsers, "updateADUsers", "a", false, "Get AD users and update database")
+	// cmdMongoUpdate.Flags().BoolVarP(&updateADUsers, "updateADUsers", "a", false, "Get AD users and update database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateO365Data, "updateM365Data", "o", false, "Updates O365 data")
+	cmdMongoUpdate.Flags().BoolVarP(&updateB2CUsers, "updateB2CUsers", "b", false, "Updates B2C users")
 
 	// cmdMongo.PersistentFlags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")
 	// cmdMongo.PersistentFlags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")

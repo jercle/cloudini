@@ -3,6 +3,7 @@ package azure
 import (
 	"encoding/json"
 	"os"
+	"strings"
 	"sync"
 	"time"
 
@@ -132,6 +133,44 @@ func ListEntraRoleDefinitions(mat lib.AzureMultiAuthToken) ([]EntraRoleDefinitio
 
 //
 //
+
+func GetAllB2CTenantUsers() (users []B2CUserMinimal) {
+	tokenReq, err := GetAllTenantSPTokens(lib.AzureMultiAuthTokenRequestOptions{
+		Scope:         "graph",
+		GetWriteToken: true,
+	}, nil)
+	lib.CheckFatalError(err)
+
+	config := lib.GetCldConfig(nil)
+	tenants := config.Azure.MultiTenantAuth.Tenants
+
+	for tName, tConfig := range tenants {
+		_ = tName
+		if tConfig.IsB2C {
+			token, err := tokenReq.SelectTenant(tName)
+			lib.CheckFatalError(err)
+			urlString := "https://graph.microsoft.com/beta/users/"
+			res, err := HttpGet(urlString, *token)
+			lib.CheckFatalError(err)
+			var resData GetAllB2CTenantUsersResponse
+			err = json.Unmarshal(res, &resData)
+			lib.CheckFatalError(err)
+
+			for _, user := range resData.Value {
+				jsonStr, _ := json.Marshal(user)
+				var userData B2CUserMinimal
+				err := json.Unmarshal(jsonStr, &userData)
+				lib.CheckFatalError(err)
+				upn := userData.UserPrincipalName
+				domain := strings.Split(upn, "@")
+				tenant := strings.Split(domain[1], ".")[0]
+				userData.B2CTenant = tenant
+				users = append(users, userData)
+			}
+		}
+	}
+	return
+}
 
 func GetB2CUserByUPN(upn string, token *lib.AzureMultiAuthToken) (user interface{}) {
 	urlString := "https://graph.microsoft.com/beta/users/" + upn

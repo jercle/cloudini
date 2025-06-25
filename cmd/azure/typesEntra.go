@@ -443,3 +443,185 @@ type RolePrinciple struct {
 
 //
 //
+
+type B2CUser struct {
+	AccountEnabled         bool `json:"accountEnabled"`
+	AgeGroup               any  `json:"ageGroup"`
+	AccountLocked          bool `json:"accountLocked,omitempty,omitzero" bson:"accountLocked,omitempty,omitzero"`
+	AlternativeSecurityIds []struct {
+		IdentityProvider any     `json:"identityProvider"`
+		Key              string  `json:"key"`
+		Type             float64 `json:"type"`
+	} `json:"alternativeSecurityIds"`
+	AssignedLicenses  []any `json:"assignedLicenses"`
+	AssignedPlans     []any `json:"assignedPlans"`
+	AuthorizationInfo struct {
+		CertificateUserIds []any `json:"certificateUserIds"`
+	} `json:"authorizationInfo"`
+	BusinessPhones                 []any `json:"businessPhones"`
+	City                           any   `json:"city"`
+	CloudRealtimeCommunicationInfo struct {
+		CloudMsRtcOwnerUrn          any   `json:"cloudMSRtcOwnerUrn"`
+		CloudMsRtcPolicyAssignments []any `json:"cloudMSRtcPolicyAssignments"`
+		CloudMsRtcPool              any   `json:"cloudMSRtcPool"`
+		CloudMsRtcServiceAttributes any   `json:"cloudMSRtcServiceAttributes"`
+		CloudSipLine                any   `json:"cloudSipLine"`
+		CloudSipProxyAddress        any   `json:"cloudSipProxyAddress"`
+		IsSipEnabled                any   `json:"isSipEnabled"`
+	} `json:"cloudRealtimeCommunicationInfo"`
+	CompanyName                                              any       `json:"companyName"`
+	ConsentProvidedForMinor                                  any       `json:"consentProvidedForMinor"`
+	Country                                                  any       `json:"country"`
+	CreatedDateTime                                          time.Time `json:"createdDateTime"`
+	CreationType                                             *string   `json:"creationType"`
+	DeletedDateTime                                          any       `json:"deletedDateTime"`
+	Department                                               any       `json:"department"`
+	DeviceKeys                                               []any     `json:"deviceKeys"`
+	DisplayName                                              string    `json:"displayName"`
+	EmployeeHireDate                                         any       `json:"employeeHireDate"`
+	EmployeeID                                               any       `json:"employeeId"`
+	EmployeeLeaveDateTime                                    any       `json:"employeeLeaveDateTime"`
+	EmployeeOrgData                                          any       `json:"employeeOrgData"`
+	EmployeeType                                             any       `json:"employeeType"`
+	Extension4e4fa41c1d3246639764b37ff949534dLastLogonTime   time.Time `json:"extension_4e4fa41c1d3246639764b37ff949534d_lastLogonTime,omitempty"`
+	Extension4e4fa41c1d3246639764b37ff949534dPasswordResetOn time.Time `json:"extension_4e4fa41c1d3246639764b37ff949534d_passwordResetOn,omitempty"`
+	ExternalUserConvertedOn                                  any       `json:"externalUserConvertedOn"`
+	ExternalUserInformation                                  struct {
+		AcceptedAsMail   any       `json:"acceptedAsMail"`
+		AcceptedDateTime any       `json:"acceptedDateTime"`
+		InviteReplyUrls  []any     `json:"inviteReplyUrls"`
+		InviteResources  []any     `json:"inviteResources"`
+		InvitedAsMail    any       `json:"invitedAsMail"`
+		InvitedDateTime  time.Time `json:"invitedDateTime"`
+		SignInNames      []string  `json:"signInNames"`
+	} `json:"externalUserInformation"`
+	ExternalUserState               any     `json:"externalUserState"`
+	ExternalUserStateChangeDateTime any     `json:"externalUserStateChangeDateTime"`
+	FaxNumber                       any     `json:"faxNumber"`
+	GivenName                       *string `json:"givenName"`
+	ID                              string  `json:"id"`
+	Identities                      []struct {
+		Issuer           string  `json:"issuer"`
+		IssuerAssignedID *string `json:"issuerAssignedId"`
+		SignInType       string  `json:"signInType"`
+	} `json:"identities"`
+	ImAddresses                   []any  `json:"imAddresses"`
+	InfoCatalogs                  []any  `json:"infoCatalogs"`
+	IsLicenseReconciliationNeeded bool   `json:"isLicenseReconciliationNeeded"`
+	IsManagementRestricted        any    `json:"isManagementRestricted"`
+	IsResourceAccount             any    `json:"isResourceAccount"`
+	JobTitle                      any    `json:"jobTitle"`
+	LegalAgeGroupClassification   any    `json:"legalAgeGroupClassification"`
+	Mail                          any    `json:"mail"`
+	MailNickname                  string `json:"mailNickname"`
+	MobilePhone                   any    `json:"mobilePhone"`
+	NetID                         string `json:"netId"`
+	OfficeLocation                any    `json:"officeLocation"`
+	OnPremisesDistinguishedName   any    `json:"onPremisesDistinguishedName"`
+	OnPremisesDomainName          any    `json:"onPremisesDomainName"`
+	OnPremisesExtensionAttributes struct {
+		ExtensionAttribute1  any `json:"extensionAttribute1"`
+		ExtensionAttribute10 any `json:"extensionAttribute10"`
+		ExtensionAttribute11 any `json:"extensionAttribute11"`
+		ExtensionAttribute12 any `json:"extensionAttribute12"`
+		ExtensionAttribute13 any `json:"extensionAttribute13"`
+		ExtensionAttribute14 any `json:"extensionAttribute14"`
+		ExtensionAttribute15 any `json:"extensionAttribute15"`
+		ExtensionAttribute2  any `json:"extensionAttribute2"`
+		ExtensionAttribute3  any `json:"extensionAttribute3"`
+		ExtensionAttribute4  any `json:"extensionAttribute4"`
+		ExtensionAttribute5  any `json:"extensionAttribute5"`
+		ExtensionAttribute6  any `json:"extensionAttribute6"`
+		ExtensionAttribute7  any `json:"extensionAttribute7"`
+		ExtensionAttribute8  any `json:"extensionAttribute8"`
+		ExtensionAttribute9  any `json:"extensionAttribute9"`
+	} `json:"onPremisesExtensionAttributes"`
+	OnPremisesImmutableID        any   `json:"onPremisesImmutableId"`
+	OnPremisesLastSyncDateTime   any   `json:"onPremisesLastSyncDateTime"`
+	OnPremisesObjectIdentifier   any   `json:"onPremisesObjectIdentifier"`
+	OnPremisesProvisioningErrors []any `json:"onPremisesProvisioningErrors"`
+	OnPremisesSamAccountName     any   `json:"onPremisesSamAccountName"`
+	OnPremisesSecurityIdentifier any   `json:"onPremisesSecurityIdentifier"`
+	OnPremisesSipInfo            struct {
+		IsSipEnabled          bool `json:"isSipEnabled"`
+		SipDeploymentLocation any  `json:"sipDeploymentLocation"`
+		SipPrimaryAddress     any  `json:"sipPrimaryAddress"`
+	} `json:"onPremisesSipInfo"`
+	OnPremisesSyncEnabled       any      `json:"onPremisesSyncEnabled"`
+	OnPremisesUserPrincipalName any      `json:"onPremisesUserPrincipalName"`
+	OtherMails                  []string `json:"otherMails"`
+	PasswordPolicies            any      `json:"passwordPolicies"`
+	PasswordProfile             *struct {
+		ForceChangePasswordNextSignIn        bool `json:"forceChangePasswordNextSignIn"`
+		ForceChangePasswordNextSignInWithMfa bool `json:"forceChangePasswordNextSignInWithMfa"`
+		Password                             any  `json:"password"`
+	} `json:"passwordProfile"`
+	PortalSetting                   any       `json:"portalSetting"`
+	PostalCode                      any       `json:"postalCode"`
+	PreferredDataLocation           any       `json:"preferredDataLocation"`
+	PreferredLanguage               any       `json:"preferredLanguage"`
+	ProvisionedPlans                []any     `json:"provisionedPlans"`
+	ProxyAddresses                  []any     `json:"proxyAddresses"`
+	RefreshTokensValidFromDateTime  time.Time `json:"refreshTokensValidFromDateTime"`
+	ReleaseTrack                    any       `json:"releaseTrack"`
+	SecurityIdentifier              string    `json:"securityIdentifier"`
+	ServiceProvisioningErrors       []any     `json:"serviceProvisioningErrors"`
+	ShowInAddressList               any       `json:"showInAddressList"`
+	SignInSessionsValidFromDateTime time.Time `json:"signInSessionsValidFromDateTime"`
+	State                           any       `json:"state"`
+	StreetAddress                   any       `json:"streetAddress"`
+	Surname                         *string   `json:"surname"`
+	UsageLocation                   any       `json:"usageLocation"`
+	UserPrincipalName               string    `json:"userPrincipalName"`
+	UserType                        string    `json:"userType"`
+}
+
+//
+//
+
+type GetAllB2CTenantUsersResponse struct {
+	Odata_Context string    `json:"@odata.context"`
+	Value         []B2CUser `json:"value"`
+}
+
+//
+//
+
+type B2CUserMinimal struct {
+	AccountEnabled                                           bool      `json:"accountEnabled,omitempty,omitzero" bson:"accountEnabled,omitempty,omitzero"`
+	AccountLocked                                            bool      `json:"accountLocked,omitempty,omitzero" bson:"accountLocked,omitempty,omitzero"`
+	CreatedDateTime                                          time.Time `json:"createdDateTime,omitempty,omitzero" bson:"createdDateTime,omitempty,omitzero"`
+	CreationType                                             *string   `json:"creationType,omitempty,omitzero" bson:"creationType,omitempty,omitzero"`
+	DisplayName                                              string    `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
+	Extension4e4fa41c1d3246639764b37ff949534dLastLogonTime   time.Time `json:"extension_4e4fa41c1d3246639764b37ff949534d_lastLogonTime,omitempty" bson:"extension_4e4fa41c1d3246639764b37ff949534d_lastLogonTime,omitempty"`
+	Extension4e4fa41c1d3246639764b37ff949534dPasswordResetOn time.Time `json:"extension_4e4fa41c1d3246639764b37ff949534d_passwordResetOn,omitempty" bson:"extension_4e4fa41c1d3246639764b37ff949534d_passwordResetOn,omitempty"`
+	ExternalUserInformation                                  struct {
+		AcceptedAsMail   any       `json:"acceptedAsMail,omitempty,omitzero" bson:"acceptedAsMail,omitempty,omitzero"`
+		AcceptedDateTime any       `json:"acceptedDateTime,omitempty,omitzero" bson:"acceptedDateTime,omitempty,omitzero"`
+		InviteReplyUrls  []any     `json:"inviteReplyUrls,omitempty,omitzero" bson:"inviteReplyUrls,omitempty,omitzero"`
+		InviteResources  []any     `json:"inviteResources,omitempty,omitzero" bson:"inviteResources,omitempty,omitzero"`
+		InvitedAsMail    any       `json:"invitedAsMail,omitempty,omitzero" bson:"invitedAsMail,omitempty,omitzero"`
+		InvitedDateTime  time.Time `json:"invitedDateTime,omitempty,omitzero" bson:"invitedDateTime,omitempty,omitzero"`
+		SignInNames      []string  `json:"signInNames,omitempty,omitzero" bson:"signInNames,omitempty,omitzero"`
+	} `json:"externalUserInformation,omitempty,omitzero" bson:"externalUserInformation,omitempty,omitzero"`
+	ID         string `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	Identities []struct {
+		Issuer           string  `json:"issuer,omitempty,omitzero" bson:"issuer,omitempty,omitzero"`
+		IssuerAssignedID *string `json:"issuerAssignedId,omitempty,omitzero" bson:"issuerAssignedId,omitempty,omitzero"`
+		SignInType       string  `json:"signInType,omitempty,omitzero" bson:"signInType,omitempty,omitzero"`
+	} `json:"identities,omitempty,omitzero" bson:"identities,omitempty,omitzero"`
+	MailNickname     string `json:"mailNickname,omitempty,omitzero" bson:"mailNickname,omitempty,omitzero"`
+	PasswordPolicies any    `json:"passwordPolicies,omitempty,omitzero" bson:"passwordPolicies,omitempty,omitzero"`
+	PasswordProfile  *struct {
+		ForceChangePasswordNextSignIn        bool `json:"forceChangePasswordNextSignIn,omitempty,omitzero" bson:"forceChangePasswordNextSignIn,omitempty,omitzero"`
+		ForceChangePasswordNextSignInWithMfa bool `json:"forceChangePasswordNextSignInWithMfa,omitempty,omitzero" bson:"forceChangePasswordNextSignInWithMfa,omitempty,omitzero"`
+		Password                             any  `json:"password,omitempty,omitzero" bson:"password,omitempty,omitzero"`
+	} `json:"passwordProfile,omitempty,omitzero" bson:"passwordProfile,omitempty,omitzero"`
+	RefreshTokensValidFromDateTime  time.Time `json:"refreshTokensValidFromDateTime,omitempty,omitzero" bson:"refreshTokensValidFromDateTime,omitempty,omitzero"`
+	SecurityIdentifier              string    `json:"securityIdentifier,omitempty,omitzero" bson:"securityIdentifier,omitempty,omitzero"`
+	SignInSessionsValidFromDateTime time.Time `json:"signInSessionsValidFromDateTime,omitempty,omitzero" bson:"signInSessionsValidFromDateTime,omitempty,omitzero"`
+	UserPrincipalName               string    `json:"userPrincipalName,omitempty,omitzero" bson:"userPrincipalName,omitempty,omitzero"`
+	UserType                        string    `json:"userType,omitempty,omitzero" bson:"userType,omitempty,omitzero"`
+	B2CTenant                       string    `json:"b2cTenant,omitempty,omitzero" bson:"b2cTenant,omitempty,omitzero"`
+	LastDBSync                      time.Time `json:"lastDBSync,omitempty,omitzero" bson:"lastDBSync,omitempty,omitzero"`
+}
