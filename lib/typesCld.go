@@ -124,6 +124,7 @@ type MongoDBConfig struct {
 	CollEntraAppRegCredsExpiring              string `json:"collEntraAppRegCredsExpiring,omitempty"`
 	CollEntraRoleAssignmentScheduleInstances  string `json:"collEntraRoleAssignmentScheduleInstances,omitempty"`
 	CollEntraRoleEligibilityScheduleInstances string `json:"collEntraRoleEligibilityScheduleInstances,omitempty"`
+	CollEntraB2CUsers                         string `json:"collEntraB2CUsers,omitempty"`
 
 	CollEnvOptCosting          string `json:"collEnvOptCosting,omitempty"`
 	CollEnvOptCostingMeters    string `json:"collEnvOptCostingMeters,omitempty"`
@@ -172,6 +173,7 @@ type CldConfigTenantAuth struct {
 	Writer              *CldConfigClientAuthDetails `json:"writer,omitempty"`
 	CostExportsLocation string                      `json:"costExportsLocation,omitempty"`
 	CheckExchange       bool                        `json:"checkExchange"`
+	IsB2C               bool                        `json:"isB2C"`
 }
 
 type CldConfigClientAuthDetails struct {

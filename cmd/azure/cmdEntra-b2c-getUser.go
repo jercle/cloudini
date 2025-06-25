@@ -18,6 +18,7 @@ var (
 	getUserByObjectID    string
 	getUserByUPN         string
 	configuredTenantName string
+	getAllUsers          bool
 )
 
 // configCmd represents the subs command
@@ -37,8 +38,11 @@ to quickly create a Cobra application.`,
 			GetWriteToken: true,
 		}, nil)
 		lib.CheckFatalError(err)
-		token, err := tokenReq.SelectTenant(configuredTenantName)
-		lib.CheckFatalError(err)
+		var token *lib.AzureMultiAuthToken
+		if configuredTenantName != "" {
+			token, err = tokenReq.SelectTenant(configuredTenantName)
+			lib.CheckFatalError(err)
+		}
 
 		if getUserByObjectID != "" {
 			user := GetB2CUserByObjectId(getUserByObjectID, token)
@@ -50,6 +54,11 @@ to quickly create a Cobra application.`,
 			jsonStr, _ := json.MarshalIndent(user, "", "  ")
 			fmt.Println(string(jsonStr))
 		}
+		if getAllUsers {
+			users := GetAllB2CTenantUsers()
+			jsonStr, _ := json.MarshalIndent(users, "", "  ")
+			fmt.Println(string(jsonStr))
+		}
 	},
 }
 
@@ -59,8 +68,12 @@ func init() {
 	entraB2cGetUserCmd.Flags().StringVarP(&getUserByObjectID, "getUserByObjectID", "o", "", "Get user object by ObjectId")
 	entraB2cGetUserCmd.Flags().StringVarP(&getUserByUPN, "getUserByUPN", "u", "", "Get user object by User Principal Name.")
 	entraB2cGetUserCmd.Flags().StringVarP(&configuredTenantName, "configuredTenantName", "n", "", "Tenant name of tenant configured in cldConfig")
+	entraB2cGetUserCmd.Flags().BoolVarP(&getAllUsers, "getAll", "a", false, "Gets all users")
 
-	entraB2cGetUserCmd.MarkFlagsMutuallyExclusive("getUserByObjectID", "getUserByUPN")
+	entraB2cGetUserCmd.MarkFlagsMutuallyExclusive("getUserByObjectID", "getUserByUPN", "getAll")
 
-	entraB2cGetUserCmd.MarkFlagRequired("configuredTenantName")
+	// entraB2cGetUserCmd.MarkFlagRequired("configuredTenantName")
+
+	entraB2cGetUserCmd.MarkFlagsRequiredTogether("getUserByObjectID", "configuredTenantName")
+	entraB2cGetUserCmd.MarkFlagsRequiredTogether("getUserByUPN", "configuredTenantName")
 }
