@@ -450,6 +450,25 @@ func UpdateADUsers(coll *mongo.Collection) {
 //
 //
 
+func UpdateB2CUsers(coll *mongo.Collection) {
+
+	users := azure.GetAllB2CTenantUsers()
+
+	UpsertB2CUsers(users, coll)
+	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// lib.MarshalAndPrintJson(caCertUpdates)
+	// lib.MarshalAndPrintJson(serverCertUpdates)
+	// os.RemoveAll(cachePath + "/cert-sync")
+	// os.RemoveAll(cachePath + "/cert-sync-processed")
+	// ado.DownloadPackerHostLogs(&dlPath)
+	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
+	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
+}
+
+//
+//
+
 func UpdateM365Data(coll *mongo.Collection) {
 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 
