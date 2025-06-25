@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.51]
+* Add UpdateB2CUsers function to mongo update
+
 ## [0.1.50]
 * Fix: Update bson flag for ServerCertInfoServersPulledFrom type CertificatePaths property
 
