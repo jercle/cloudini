@@ -49,7 +49,7 @@ import (
 // 	return tokens
 // }
 
-func GetServicePrincipalToken(tenant string, matOptions lib.AzureMultiAuthTokenRequestOptions, cldConfigOpts *lib.CldConfigOptions, mut *sync.Mutex) (*lib.AzureTokenData, error) {
+func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthTokenRequestOptions, cldConfigOpts *lib.CldConfigOptions, mut *sync.Mutex) (*lib.AzureTokenData, error) {
 	ctx := context.Background()
 	options := matOptions
 
@@ -164,12 +164,12 @@ func GetServicePrincipalToken(tenant string, matOptions lib.AzureMultiAuthTokenR
 		certData, err := x509.ParseCertificate(certBlock.Bytes)
 		cert := []*x509.Certificate{certData}
 		lib.CheckFatalError(err)
-		cred, err := azidentity.NewClientCertificateCredential(tenant, options.ClientID, cert, privateKey, &opts)
+		cred, err := azidentity.NewClientCertificateCredential(tenantId, options.ClientID, cert, privateKey, &opts)
 		lib.CheckFatalError(err)
 		tokenResponse, err = cred.GetToken(ctx, tokenRequestOptions)
 		lib.CheckFatalError(err)
 	} else {
-		cred, err := azidentity.NewClientSecretCredential(tenant, options.ClientID, options.ClientSecret, nil)
+		cred, err := azidentity.NewClientSecretCredential(tenantId, options.ClientID, options.ClientSecret, nil)
 		lib.CheckFatalError(err)
 		tokenResponse, err = cred.GetToken(ctx, tokenRequestOptions)
 		lib.CheckFatalError(err)
