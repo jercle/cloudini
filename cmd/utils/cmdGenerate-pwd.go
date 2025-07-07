@@ -3,8 +3,8 @@ package utils
 import (
 	"fmt"
 
-	"github.com/jercle/cloudini/lib"
 	"github.com/antonmedv/clipboard"
+	"github.com/jercle/cloudini/lib"
 	"github.com/spf13/cobra"
 )
 
@@ -20,7 +20,7 @@ var (
 var cmdGeneratePwd = &cobra.Command{
 	Use:     "password",
 	Aliases: []string{"pwd"},
-	Short:   "Generate random password",
+	Short:   "Generate random secure password",
 	Long: `Generates a random password string, with the default length of 20 characters.
 
 To generate a password of a different length, provide the desired length with the '-p' flag.

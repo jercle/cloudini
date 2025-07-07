@@ -8,7 +8,7 @@ import (
 // utilsCmd represents the util command
 var cmdUtils = &cobra.Command{
 	Use:     "utils",
-	Short:   "Collection of utility commands",
+	Short:   "Utility commands",
 	Aliases: []string{"u"},
 	// 	Long: `A longer description that spans multiple lines and likely contains examples
 	// and usage of using your command. For example:

@@ -39,10 +39,10 @@ var RootCmd = &cobra.Command{
 	Version: cliVersion,
 	Short:   "A brief description of your application",
 	Long: `This CLI has been created to add additional functionality
-to https://docs.microsoft.com/en-us/cli/azure/ such as data
-aggregation from multiple 'az' commands, reporting,
+to Azure CLI such as data
+aggregation from multiple 'az' commands into a MongoDB Dababase, reporting,
 and pulling data from both Azure DevOps and Azure,
-as well as other functionality.`,
+as well as other functionality. AWS functionality is also being added.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
