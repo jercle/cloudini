@@ -7,7 +7,7 @@ import (
 // utilsCmd represents the util command
 var cmdNetworking = &cobra.Command{
 	Use:     "networking",
-	Short:   "Collection of network utility commands",
+	Short:   "Networking - Subnet calc, etc",
 	Aliases: []string{"nw"},
 	// 	Long: `A longer description that spans multiple lines and likely contains examples
 	// and usage of using your command. For example:

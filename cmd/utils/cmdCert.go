@@ -7,7 +7,7 @@ import (
 // utilsCmd represents the util command
 var cmdCert = &cobra.Command{
 	Use:   "cert",
-	Short: "Tools to generate certificates",
+	Short: "Tools to generate certificates - BETA",
 	// Aliases: []string{"gen"},
 	// 	Long: `A longer description that spans multiple lines and likely contains examples
 	// and usage of using your command. For example:

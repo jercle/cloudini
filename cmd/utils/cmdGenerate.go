@@ -7,7 +7,7 @@ import (
 // utilsCmd represents the util command
 var cmdGenerate = &cobra.Command{
 	Use:     "generate",
-	Short:   "Tools to generate random values",
+	Short:   "Tools to generate random values, such as secure passwords",
 	Aliases: []string{"gen"},
 	// 	Long: `A longer description that spans multiple lines and likely contains examples
 	// and usage of using your command. For example:

@@ -8,7 +8,7 @@ import (
 var sharepointCmd = &cobra.Command{
 	Use:     "sharepoint",
 	Aliases: []string{"sp"},
-	Short:   "Sharepoint Online related commands",
+	Short:   "Sharepoint Online",
 	// 	Long: `A longer description that spans multiple lines and likely contains examples
 	// and usage of using your command. For example:
 

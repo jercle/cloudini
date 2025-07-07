@@ -19,13 +19,13 @@ import (
 var json2structCmd = &cobra.Command{
 	Use:     "json2struct",
 	Aliases: []string{"j2s"},
-	Short:   "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short:   "Converts JSON to a Golang Struct. Input selected using flags",
+	// 	Long: `A longer description that spans multiple lines and likely contains examples
+	// and usage of using your command. For example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	// Cobra is a CLI library for Go that empowers applications.
+	// This application is a tool to generate the needed files
+	// to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// fmt.Println("ado called")
 		// jsonString := `{"age":38,"user_height_m":1.7,"favoriteFoods":["cake"]}`
