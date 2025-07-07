@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 	"runtime/pprof"
@@ -12,7 +13,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cliVersion = "0.1.51"
+var cliVersion = "0.1.52"
 
 var (
 	// The name of our config file, without the file extension because viper supports many different config file languages.
@@ -26,12 +27,16 @@ var (
 	replaceHyphenWithCamelCase = true
 
 	// outJSON flag
-	OutJSON   bool
-	DebugMode bool
+	OutJSON       bool
+	DebugMode     bool
+	ShowChangelog bool
 
 	// // Only used when initially encrypting a previously unencrypted config file
 	// InitialEncryptionOfUnencryptedConfigFile bool
 )
+
+//go:embed CHANGELOG.md
+var ChangelogFile string
 
 // rootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -48,6 +53,11 @@ as well as other functionality. AWS functionality is also being added.`,
 	// Run: func(cmd *cobra.Command, args []string) { },
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// You can bind cobra and viper in a few locations, but PersistencePreRunE on the root command works well
+
+		// if Changelog {
+		// 	fmt.Println(ChangelogFile)
+		// 	os.Exit(0)
+		// }
 
 		if DebugMode {
 			fmt.Println("DEBUG MODE")
@@ -93,6 +103,16 @@ as well as other functionality. AWS functionality is also being added.`,
 			defer trace.Stop()
 		}
 		return InitializeConfig(cmd)
+	},
+
+	Run: func(cmd *cobra.Command, args []string) {
+		if ShowChangelog {
+			ViewChangelog(ChangelogFile)
+		}
+
+		if !ShowChangelog {
+			cmd.Help()
+		}
 	},
 }
 
@@ -153,6 +173,7 @@ func bindFlags(cmd *cobra.Command, v *viper.Viper) {
 			cmd.Flags().Set(f.Name, fmt.Sprintf("%v", val))
 		}
 	})
+
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -167,6 +188,7 @@ func Execute() {
 func init() {
 	RootCmd.PersistentFlags().BoolVarP(&OutJSON, "outJSON", "j", false, "Output formatted to JSON")
 	RootCmd.PersistentFlags().BoolVar(&DebugMode, "debug", false, "Debug mode creates trace logs for Golang pprof")
+	RootCmd.Flags().BoolVar(&ShowChangelog, "changelog", false, "Shows Cloudini Changelog")
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
