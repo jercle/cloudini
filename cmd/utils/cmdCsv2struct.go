@@ -13,14 +13,14 @@ import (
 // csv2structCmd represents the csv2struct command
 var csv2structCmd = &cobra.Command{
 	Use:     "csv2struct",
-	Short:   "A brief description of your command",
 	Aliases: []string{"c2s"},
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short:   "Converts CSV to a Golang Struct. Input selected using flags",
+	// 	Long: `A longer description that spans multiple lines and likely contains examples
+	// and usage of using your command. For example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	// Cobra is a CLI library for Go that empowers applications.
+	// This application is a tool to generate the needed files
+	// to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var opts dt.GenerateOptions
 		jsonData := dt.CsvFileToJson(fileName)

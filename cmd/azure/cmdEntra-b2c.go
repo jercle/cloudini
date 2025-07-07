@@ -14,13 +14,13 @@ import (
 // configCmd represents the subs command
 var entraB2cCmd = &cobra.Command{
 	Use:   "b2c",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Azure B2C Tenant",
+	// 	Long: `A longer description that spans multiple lines and likely contains examples
+	// and usage of using your command. For example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	// Cobra is a CLI library for Go that empowers applications.
+	// This application is a tool to generate the needed files
+	// to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// config := lib.GetCldConfig(lib.CldConfigOptions{})
