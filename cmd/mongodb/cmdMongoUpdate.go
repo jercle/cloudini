@@ -24,6 +24,7 @@ var (
 	updateADUsers                                   bool
 	updateB2CUsers                                  bool
 	updateWebsiteCertInfo                           bool
+	updateSupportAlerts                             bool
 
 // tenantId       string
 // subscriptionId string
@@ -82,7 +83,9 @@ var cmdMongoUpdate = &cobra.Command{
 		envOptCostingSubsColl := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptCostingSubs)
 		envOptCostingTenantsColl := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptCostingTenants)
 
-		m365MialboxStatisticsColl := c.Database(mongoConf.DbM365).Collection(mongoConf.CollM365MailboxStatistics)
+		genSupportalertsColl := c.Database(mongoConf.DbGeneral).Collection(mongoConf.CollGenSupportAlerts)
+
+		m365MailboxStatisticsColl := c.Database(mongoConf.DbM365).Collection(mongoConf.CollM365MailboxStatistics)
 
 		tokenReq, err := azure.GetAllTenantSPTokens(lib.AzureMultiAuthTokenRequestOptions{}, nil)
 		lib.CheckFatalError(err)
@@ -151,11 +154,15 @@ var cmdMongoUpdate = &cobra.Command{
 		}
 
 		if updateO365Data {
-			UpdateM365Data(m365MialboxStatisticsColl)
+			UpdateM365Data(m365MailboxStatisticsColl)
 		}
 
 		if updateWebsiteCertInfo {
 			UpdateWebsiteCertsPullingFromDatabase(c)
+		}
+
+		if updateSupportAlerts {
+			UpdateSupportAlerts(genSupportalertsColl)
 		}
 
 		elapsed := time.Since(startTime)
@@ -180,6 +187,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateO365Data, "updateM365Data", "o", false, "Updates O365 data")
 	cmdMongoUpdate.Flags().BoolVarP(&updateB2CUsers, "updateB2CUsers", "b", false, "Updates B2C users")
 	cmdMongoUpdate.Flags().BoolVarP(&updateWebsiteCertInfo, "updateWebsiteCertInfo", "w", false, "Updates Website Cert info from configured URLs in database")
+	cmdMongoUpdate.Flags().BoolVarP(&updateSupportAlerts, "updateSupportAlerts", "s", false, "Updates Support alerts")
 
 	// cmdMongo.PersistentFlags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")
 	// cmdMongo.PersistentFlags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")
