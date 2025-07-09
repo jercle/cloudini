@@ -133,7 +133,8 @@ type MongoDBConfig struct {
 	CollEnvOptCostingSubs      string `json:"collEnvOptCostingSubs,omitempty"`
 	CollEnvOptCostingTenants   string `json:"collEnvOptCostingTenants,omitempty"`
 
-	CollGenEolTracking string `json:"collGenEolTracking,omitempty"`
+	CollGenEolTracking   string `json:"collGenEolTracking,omitempty"`
+	CollGenSupportAlerts string `json:"collGenSupportAlerts,omitempty"`
 
 	CollM365MailboxStatistics string `json:"collM365MailboxStatistics,omitempty"`
 }
@@ -174,6 +175,7 @@ type CldConfigTenantAuth struct {
 	CostExportsLocation string                      `json:"costExportsLocation,omitempty"`
 	CheckExchange       bool                        `json:"checkExchange"`
 	IsB2C               bool                        `json:"isB2C"`
+	GetWorkbookAlerts   bool                        `json:"getWorkbookAlerts"`
 }
 
 type CldConfigClientAuthDetails struct {

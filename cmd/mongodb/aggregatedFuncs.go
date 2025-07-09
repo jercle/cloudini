@@ -544,3 +544,41 @@ func UpdateWebsiteCertsPullingFromDatabase(c *mongo.Client) {
 	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
 	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
 }
+
+func UpdateSupportAlerts(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	config := lib.GetCldConfig(nil)
+	tenants := config.Azure.MultiTenantAuth.Tenants
+
+	fmt.Println("Getting support alert data")
+	s.Start()
+	var allAlerts []azure.AzureAlertProcessed
+	for tName, tData := range tenants {
+		if tData.GetWorkbookAlerts {
+			token, err := azure.GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
+				TenantName: tName,
+			}, nil)
+			lib.CheckFatalError(err)
+			data := azure.GetAzureWorkbookAlerts(token)
+			allAlerts = append(allAlerts, data...)
+		}
+	}
+	s.Stop()
+
+	fmt.Println("Upserting support alert data")
+	s.Start()
+	coll.Drop(context.TODO())
+	UpsertSupportAlerts(allAlerts, coll)
+	s.Stop()
+
+	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// lib.MarshalAndPrintJson(caCertUpdates)
+	// lib.MarshalAndPrintJson(serverCertUpdates)
+	// os.RemoveAll(cachePath + "/cert-sync")
+	// os.RemoveAll(cachePath + "/cert-sync-processed")
+	// ado.DownloadPackerHostLogs(&dlPath)
+	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
+	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
+}
