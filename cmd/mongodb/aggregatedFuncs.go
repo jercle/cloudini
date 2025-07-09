@@ -13,7 +13,9 @@ import (
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
 	"github.com/jercle/cloudini/cmd/m365"
+	"github.com/jercle/cloudini/cmd/web"
 	"github.com/jercle/cloudini/lib"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -481,6 +483,56 @@ func UpdateM365Data(coll *mongo.Collection) {
 	s.Start()
 	UpsertMailboxStatistics(data, coll)
 	s.Stop()
+
+	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// lib.MarshalAndPrintJson(caCertUpdates)
+	// lib.MarshalAndPrintJson(serverCertUpdates)
+	// os.RemoveAll(cachePath + "/cert-sync")
+	// os.RemoveAll(cachePath + "/cert-sync-processed")
+	// ado.DownloadPackerHostLogs(&dlPath)
+	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
+	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
+}
+
+func UpdateWebsiteCertsPullingFromDatabase(c *mongo.Client) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+	fmt.Println("Getting configuration")
+
+	s.Start()
+
+	coll := c.Database("appConfig").Collection("adminSettings")
+
+	filter := bson.D{
+		{"_id", "certManagement"},
+	}
+
+	config := coll.FindOne(context.TODO(), filter)
+	s.Stop()
+
+	var cfg CertManagementConfig
+	err := config.Decode(&cfg)
+	lib.CheckFatalError(err)
+	// lib.JsonMarshalAndPrint(cfg)
+
+	for _, cert := range cfg.UrlsToWatch {
+		// fmt.Println(cert.URL)
+
+		cert := web.GetWebsiteCertificate(cert.URL, nil)
+		lib.JsonMarshalAndPrint(cert)
+	}
+	// fmt.Println(config)
+	// lib.JsonMarshalAndPrint(config)
+
+	// fmt.Println("Getting mailbox stats")
+	// s.Start()
+	// data := m365.GetMailboxStorageUsedAllConfiguredTenants()
+	// s.Stop()
+
+	// fmt.Println("Upserting mailbox stats")
+	// s.Start()
+	// UpsertMailboxStatistics(data, coll)
+	// s.Stop()
 
 	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
 	// fmt.Println(string(jsonStr))

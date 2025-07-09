@@ -23,6 +23,7 @@ var (
 	showExecutionTime                               bool
 	updateADUsers                                   bool
 	updateB2CUsers                                  bool
+	updateWebsiteCertInfo                           bool
 
 // tenantId       string
 // subscriptionId string
@@ -153,6 +154,10 @@ var cmdMongoUpdate = &cobra.Command{
 			UpdateM365Data(m365MialboxStatisticsColl)
 		}
 
+		if updateWebsiteCertInfo {
+			UpdateWebsiteCertsPullingFromDatabase(c)
+		}
+
 		elapsed := time.Since(startTime)
 		if showExecutionTime {
 			fmt.Println("Execution time: " + elapsed.String())
@@ -174,6 +179,7 @@ func init() {
 	// cmdMongoUpdate.Flags().BoolVarP(&updateADUsers, "updateADUsers", "a", false, "Get AD users and update database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateO365Data, "updateM365Data", "o", false, "Updates O365 data")
 	cmdMongoUpdate.Flags().BoolVarP(&updateB2CUsers, "updateB2CUsers", "b", false, "Updates B2C users")
+	cmdMongoUpdate.Flags().BoolVarP(&updateWebsiteCertInfo, "updateWebsiteCertInfo", "w", false, "Updates Website Cert info from configured URLs in database")
 
 	// cmdMongo.PersistentFlags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")
 	// cmdMongo.PersistentFlags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")

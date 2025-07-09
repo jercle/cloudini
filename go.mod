@@ -1,6 +1,6 @@
 module github.com/jercle/cloudini
 
-go 1.24.4
+go 1.25rc1
 
 require (
 	github.com/3th1nk/cidr v0.2.0
@@ -89,10 +89,12 @@ require (
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-asn1-ber/asn1-ber v1.5.8-0.20250403174932-29230038a667 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
+	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.3.0 // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.2 // indirect
 	github.com/golang/snappy v1.0.0 // indirect
+	github.com/google/certificate-transparency-go v1.3.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
@@ -124,6 +126,7 @@ require (
 	github.com/muesli/roff v0.1.0 // indirect
 	github.com/muesli/sasquatch v0.0.0-20200811221207-66979d92330a // indirect
 	github.com/muesli/termenv v0.16.0 // indirect
+	github.com/nwidger/jsoncolor v0.3.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
 	github.com/richardlehane/mscfb v1.0.4 // indirect
@@ -134,6 +137,7 @@ require (
 	github.com/sagikazarmark/locafero v0.9.0 // indirect
 	github.com/sahilm/fuzzy v0.1.1 // indirect
 	github.com/segmentio/ksuid v1.0.4 // indirect
+	github.com/smallstep/certinfo v1.14.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.14.0 // indirect
 	github.com/spf13/cast v1.9.2 // indirect
@@ -155,4 +159,5 @@ require (
 	golang.org/x/mobile v0.0.0-20250606033058-a2a15c67f36f // indirect
 	golang.org/x/sync v0.15.0 // indirect
 	golang.org/x/term v0.32.0 // indirect
+	k8s.io/klog/v2 v2.130.1 // indirect
 )
