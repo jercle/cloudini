@@ -4,6 +4,7 @@
 * Update command descriptions
 * Add charmbracelet/fang wrapper
 * Add Changelog viewer
+* Colourize JSON ouput when showing config
 
 ## [0.1.51]
 * Add UpdateB2CUsers function to mongo update
