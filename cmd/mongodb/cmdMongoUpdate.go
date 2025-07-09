@@ -83,7 +83,7 @@ var cmdMongoUpdate = &cobra.Command{
 		envOptCostingSubsColl := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptCostingSubs)
 		envOptCostingTenantsColl := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptCostingTenants)
 
-		genSupportalertsColl := c.Database(mongoConf.DbGeneral).Collection(mongoConf.CollGenSupportAlerts)
+		genSupportAlertsColl := c.Database(mongoConf.DbGeneral).Collection(mongoConf.CollGenSupportAlerts)
 
 		m365MailboxStatisticsColl := c.Database(mongoConf.DbM365).Collection(mongoConf.CollM365MailboxStatistics)
 
@@ -162,7 +162,7 @@ var cmdMongoUpdate = &cobra.Command{
 		}
 
 		if updateSupportAlerts {
-			UpdateSupportAlerts(genSupportalertsColl)
+			UpdateSupportAlerts(genSupportAlertsColl)
 		}
 
 		elapsed := time.Since(startTime)
