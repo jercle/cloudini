@@ -4,12 +4,13 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/jercle/cloudini/cmd"
 	"github.com/jercle/cloudini/lib"
 	"github.com/spf13/cobra"
+
+	jsonc "github.com/nwidger/jsoncolor"
 )
 
 var SetConfigItem string
@@ -42,7 +43,7 @@ var configCmd = &cobra.Command{
 
 		if showConfig {
 			config := lib.GetCldConfig(nil)
-			jsonStr, _ := json.MarshalIndent(config, "", "  ")
+			jsonStr, _ := jsonc.MarshalIndent(config, "", "  ")
 			fmt.Println(string(jsonStr))
 		}
 
