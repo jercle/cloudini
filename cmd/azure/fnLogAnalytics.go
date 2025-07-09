@@ -9,12 +9,14 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"log"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/fatih/color"
+	"github.com/jercle/cloudini/lib"
 	"github.com/rodaine/table"
 )
 
@@ -169,4 +171,97 @@ func getAllWorkspaceTables(cred *azidentity.DefaultAzureCredential, subscription
 	})
 
 	return responseUnmarshalled.Value, err
+}
+
+func GetAzureWorkbookAlerts(token *lib.AzureMultiAuthToken) (alerts []AzureAlertProcessed) {
+	logAnalyticsToken, err := GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
+		TenantName: token.TenantName,
+		Scope:      "loganalytics",
+	}, nil)
+	lib.CheckFatalError(err)
+
+	urlString := "https://management.azure.com/providers/Microsoft.ResourceGraph/resources?api-version=2021-03-01"
+
+	graphQuery := `alertsmanagementresources
+	| where type == 'microsoft.alertsmanagement/alerts'
+	| extend AlertCreated = todatetime(properties[\"essentials\"].[\"startDateTime\"])
+	| where AlertCreated > ago(7d)
+	| extend Severity = tostring(properties[\"essentials\"][\"severity\"])
+	| extend Results = tostring(properties.[\"context\"].[\"context\"].[\"condition\"].[\"allOf\"].[0].linkToFilteredSearchResultsUI)
+	| extend ResourceID1 = tostring(properties.[\"context\"].[\"linkedResourceId\"])
+	| extend ResourceID2 = tostring(properties.[\"context\"].[\"context\"].[\"resourceId\"])
+	| extend AffectedResource = coalesce(ResourceID1, ResourceID2)
+	| extend AffectedResource = iff(AffectedResource contains \"la-\", \"\", AffectedResource)
+	| extend Description =  tostring(properties[\"essentials\"].[\"description\"])
+	| extend AlertLastModified = todatetime(properties[\"essentials\"].[\"lastModifiedDateTime\"])
+	| extend AlertLastModifiedBy = tostring(properties[\"essentials\"].[\"lastModifiedUserName\"])
+	| extend AlertState = tostring(properties[\"essentials\"].[\"alertState\"])
+	| extend AlertLastModifiedBy = iff(AlertLastModifiedBy == \"System\", \"Not triaged\", AlertLastModifiedBy)
+	| where properties[\"essentials\"][\"monitorCondition\"] in~ ('Fired')
+	| extend TriageAlert = \"Acknowledge\"
+	| project AlertCreated, Severity, Name = name, AffectedResource, Description, Results, AlertState, TriageAlert, AlertLastModifiedBy, AlertLastModified, properties, id
+	| extend AlertCreated1 = todatetime(AlertCreated)
+	| order by AlertCreated1 desc
+	| extend AlertCreated = datetime_utc_to_local(AlertCreated, 'Australia/Canberra')
+	| extend AlertLastModified = datetime_utc_to_local(AlertLastModified, 'Australia/Canberra')
+	| extend AlertCreated =  format_datetime( AlertCreated, \"HH:mm tt dd-MM-yy\")
+	| extend AlertLastModified = format_datetime( AlertLastModified, \"HH:mm tt dd-MM-yy\")
+	| order by AlertCreated1 desc
+	| project-away AlertCreated1`
+
+	jsonBody := `{"query": "` + graphQuery + `"}`
+
+	res, _, err := HttpPost(urlString, jsonBody, *token)
+	lib.CheckFatalError(err)
+
+	var alertsResponse GetAzureAlertsResponse
+	err = json.Unmarshal(res, &alertsResponse)
+
+	currentTime := time.Now()
+
+	for _, alert := range alertsResponse.Data {
+		jsonStr, _ := json.Marshal(alert)
+		var curr AzureAlertProcessed
+		err = json.Unmarshal(jsonStr, &curr)
+		// lib.CheckFatalError(err)
+		curr.TenantName = token.TenantName
+		alertCreated, err := time.Parse("15:04 PM 01-02-06", alert.AlertCreated)
+		lib.CheckFatalError(err)
+		curr.AlertCreated = alertCreated
+		alertLastModified, err := time.Parse("15:04 PM 01-02-06", alert.AlertLastModified)
+		lib.CheckFatalError(err)
+		curr.AlertLastModified = alertLastModified
+
+		// 15:57 PM 07-07-25
+
+		curr.LastAzureSync = currentTime
+		if alert.Properties.Context.Context != nil {
+			curr.LinkToFilteredSearchResultsAPI = alert.Properties.Context.Context.Condition.AllOf[0].LinkToFilteredSearchResultsAPI
+			curr.AlertData = GetAlertDataFromSearchResultsLink(curr.LinkToFilteredSearchResultsAPI, logAnalyticsToken)
+		}
+		alerts = append(alerts, curr)
+	}
+
+	return
+}
+
+func GetAlertDataFromSearchResultsLink(linkToFilteredSearchResultsAPI string, token *lib.AzureMultiAuthToken) (alertData []map[string]any) {
+	res, err := HttpGet(linkToFilteredSearchResultsAPI, *token)
+	lib.CheckFatalError(err)
+
+	var resData GetAlertDataFromSearchResultsLinkResult
+	err = json.Unmarshal(res, &resData)
+
+	columns := resData.Tables[0].Columns
+	rows := resData.Tables[0].Rows
+
+	for _, rowData := range rows {
+		rowProcessed := make(map[string]any)
+		for i, prop := range rowData {
+			rowProcessed[columns[i].Name] = prop
+		}
+		alertData = append(alertData, rowProcessed)
+	}
+
+	return
 }
