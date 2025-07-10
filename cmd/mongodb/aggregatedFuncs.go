@@ -466,15 +466,6 @@ func UpdateB2CUsers(coll *mongo.Collection) {
 	coll.DeleteMany(context.TODO(), bson.D{{}})
 	UpsertB2CUsers(users, coll)
 	s.Stop()
-	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
-	// fmt.Println(string(jsonStr))
-	// lib.MarshalAndPrintJson(caCertUpdates)
-	// lib.MarshalAndPrintJson(serverCertUpdates)
-	// os.RemoveAll(cachePath + "/cert-sync")
-	// os.RemoveAll(cachePath + "/cert-sync-processed")
-	// ado.DownloadPackerHostLogs(&dlPath)
-	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
-	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
 }
 
 //
