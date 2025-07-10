@@ -196,10 +196,12 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 		err = json.Unmarshal(jsonStr, &curr)
 		// lib.CheckFatalError(err)
 		curr.TenantName = token.TenantName
-		alertCreated, err := time.Parse("15:04 PM 01-02-06", alert.AlertCreated)
+		// lib.JsonMarshalAndPrint(curr)
+		// os.Exit(0)
+		alertCreated, err := time.Parse("15:04 PM 02-01-06", alert.AlertCreated)
 		lib.CheckFatalError(err)
 		curr.AlertCreated = alertCreated
-		alertLastModified, err := time.Parse("15:04 PM 01-02-06", alert.AlertLastModified)
+		alertLastModified, err := time.Parse("15:04 PM 02-01-06", alert.AlertLastModified)
 		lib.CheckFatalError(err)
 		curr.AlertLastModified = alertLastModified
 
