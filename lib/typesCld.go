@@ -157,6 +157,7 @@ type AzureConfig struct {
 	SkuListAuthTenant          string              `json:"skuListAuthTenant,omitempty"`
 	ResourceLocation           string              `json:"resourceLocation,omitempty"`
 	VirtualMachines            map[string]string   `json:"virtualMachines,omitempty"`
+	SupportAlerts              SupportAlertsConfig `json:"supportAlerts,omitempty"`
 }
 
 type CldConfigOptions struct {
@@ -194,3 +195,8 @@ type TokenCache map[string]string
 // type TokenCacheTypes interface {
 // 	AzureMultiAuthToken | AzureTokenData | CitrixTokenData
 // }
+
+type SupportAlertsConfig struct {
+	TenantName string `json:"tenantName,omitempty"`
+	WorkbookId string `json:"workbookId,omitempty"`
+}
