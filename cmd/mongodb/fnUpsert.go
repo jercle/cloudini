@@ -1199,6 +1199,7 @@ func UpsertB2CUsers(users []azure.B2CUserMinimal, coll *mongo.Collection) (resul
 
 		timeNow := time.Now()
 		curr.LastDBSync = timeNow
+
 		filter := bson.D{{"_id", curr.B2CTenant + "-" + curr.ID}}
 		update := bson.D{{"$set", curr}}
 
