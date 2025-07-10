@@ -5,6 +5,7 @@
 * Add charmbracelet/fang wrapper
 * Add Changelog viewer
 * Colourize JSON ouput when showing config
+* Add functionality to get alerts from Azure Resource Graph, added config option for query
 
 ## [0.1.51]
 * Add UpdateB2CUsers function to mongo update
