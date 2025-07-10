@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -453,10 +454,18 @@ func UpdateADUsers(coll *mongo.Collection) {
 //
 
 func UpdateB2CUsers(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+	fmt.Println("Getting users from all configured B2C tenants")
 
+	s.Start()
 	users := azure.GetAllB2CTenantUsers()
+	s.Stop()
 
+	fmt.Println("Updating " + strconv.Itoa(len(users)) + " B2C users in database")
+	s.Start()
+	coll.DeleteMany(context.TODO(), bson.D{{}})
 	UpsertB2CUsers(users, coll)
+	s.Stop()
 	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
 	// fmt.Println(string(jsonStr))
 	// lib.MarshalAndPrintJson(caCertUpdates)
