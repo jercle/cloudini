@@ -135,6 +135,7 @@ func ListEntraRoleDefinitions(mat lib.AzureMultiAuthToken) ([]EntraRoleDefinitio
 //
 
 func GetAllB2CTenantUsers() (users []B2CUserMinimal) {
+
 	tokenReq, err := GetAllTenantSPTokens(lib.AzureMultiAuthTokenRequestOptions{
 		Scope:         "graph",
 		GetWriteToken: true,
@@ -145,16 +146,21 @@ func GetAllB2CTenantUsers() (users []B2CUserMinimal) {
 	tenants := config.Azure.MultiTenantAuth.Tenants
 
 	for tName, tConfig := range tenants {
-		_ = tName
 		if tConfig.IsB2C {
+			var nextLink string
+			// if tName != "VCMSCANDIDATESDTQ" {
+			// 	continue
+			// }
 			token, err := tokenReq.SelectTenant(tName)
 			lib.CheckFatalError(err)
 			urlString := "https://graph.microsoft.com/beta/users/"
 			res, err := HttpGet(urlString, *token)
 			lib.CheckFatalError(err)
+
 			var resData GetAllB2CTenantUsersResponse
 			err = json.Unmarshal(res, &resData)
 			lib.CheckFatalError(err)
+			nextLink = resData.NextLink
 
 			for _, user := range resData.Value {
 				jsonStr, _ := json.Marshal(user)
@@ -165,12 +171,38 @@ func GetAllB2CTenantUsers() (users []B2CUserMinimal) {
 				domain := strings.Split(upn, "@")
 				tenant := strings.Split(domain[1], ".")[0]
 				userData.B2CTenant = tenant
+				// userData.TenantName = tName
 				users = append(users, userData)
+			}
+
+			for nextLink != "" {
+				// count++
+				var currentSet GetAllB2CTenantUsersResponse
+				response, _ := HttpGet(nextLink, *token)
+				// os.WriteFile("outputs/entraApps-"+strconv.Itoa(count)+".json", response, 0644)
+				json.Unmarshal(response, &currentSet)
+				nextLink = currentSet.NextLink
+				// entraApps = append(entraApps, currentSet.Value...)
+				for _, user := range currentSet.Value {
+					jsonStr, _ := json.Marshal(user)
+					var currUser B2CUserMinimal
+					err := json.Unmarshal(jsonStr, &currUser)
+					lib.CheckFatalError(err)
+					upn := currUser.UserPrincipalName
+					domain := strings.Split(upn, "@")
+					tenant := strings.Split(domain[1], ".")[0]
+					currUser.B2CTenant = tenant
+					// currUser.TenantName = tName
+					users = append(users, currUser)
+				}
 			}
 		}
 	}
 	return
 }
+
+//
+//
 
 func GetB2CUserByUPN(upn string, token *lib.AzureMultiAuthToken) (user interface{}) {
 	urlString := "https://graph.microsoft.com/beta/users/" + upn

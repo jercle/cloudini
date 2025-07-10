@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.53]
+* Bugfix: GetAllB2CTenantUsers not handling paged results
+
 ## [0.1.52]
 * Update command descriptions
 * Add charmbracelet/fang wrapper
