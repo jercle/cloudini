@@ -133,7 +133,8 @@ type MongoDBConfig struct {
 	CollEnvOptCostingSubs      string `json:"collEnvOptCostingSubs,omitempty"`
 	CollEnvOptCostingTenants   string `json:"collEnvOptCostingTenants,omitempty"`
 
-	CollGenEolTracking string `json:"collGenEolTracking,omitempty"`
+	CollGenEolTracking   string `json:"collGenEolTracking,omitempty"`
+	CollGenSupportAlerts string `json:"collGenSupportAlerts,omitempty"`
 
 	CollM365MailboxStatistics string `json:"collM365MailboxStatistics,omitempty"`
 }
@@ -156,6 +157,7 @@ type AzureConfig struct {
 	SkuListAuthTenant          string              `json:"skuListAuthTenant,omitempty"`
 	ResourceLocation           string              `json:"resourceLocation,omitempty"`
 	VirtualMachines            map[string]string   `json:"virtualMachines,omitempty"`
+	SupportAlerts              SupportAlertsConfig `json:"supportAlerts,omitempty"`
 }
 
 type CldConfigOptions struct {
@@ -174,6 +176,7 @@ type CldConfigTenantAuth struct {
 	CostExportsLocation string                      `json:"costExportsLocation,omitempty"`
 	CheckExchange       bool                        `json:"checkExchange"`
 	IsB2C               bool                        `json:"isB2C"`
+	GetWorkbookAlerts   bool                        `json:"getWorkbookAlerts"`
 }
 
 type CldConfigClientAuthDetails struct {
@@ -192,3 +195,8 @@ type TokenCache map[string]string
 // type TokenCacheTypes interface {
 // 	AzureMultiAuthToken | AzureTokenData | CitrixTokenData
 // }
+
+type SupportAlertsConfig struct {
+	TenantName string `json:"tenantName,omitempty"`
+	WorkbookId string `json:"workbookId,omitempty"`
+}

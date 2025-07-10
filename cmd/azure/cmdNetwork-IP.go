@@ -6,11 +6,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	ipAddresses bool
+)
+
 // networkCmd represents the network command
-var networkCmd = &cobra.Command{
-	Use:     "network",
-	Aliases: []string{"nw"},
-	Short:   "Network related commands",
+var networkIPCmd = &cobra.Command{
+	Use:   "ip",
+	Short: "List IP addresses for selected tenant",
 	// 	Long: `A longer description that spans multiple lines and likely contains examples
 	// and usage of using your command. For example:
 
@@ -23,6 +26,6 @@ var networkCmd = &cobra.Command{
 }
 
 func init() {
-	azCmd.AddCommand(networkCmd)
-	// networkCmd.Flags().
+	networkCmd.AddCommand(networkIPCmd)
+	networkIPCmd.Flags().BoolVarP(&ipAddresses, "ipAddresses", "i", false, "List IP Addresses for selected tenant")
 }

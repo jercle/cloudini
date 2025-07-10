@@ -1,6 +1,8 @@
 package lib
 
 import (
+	"net"
+	"net/url"
 	"time"
 )
 
@@ -142,6 +144,10 @@ type ServerCertInfo struct {
 	RelatedCertAuthData      *CertAuthorityCertInfo            `json:"relatedCertAuthData,omitempty" bson:"relatedCertAuthData,omitempty"`
 	Archived                 bool                              `json:"archived,omitempty" bson:"archived,omitempty"`
 	DnsNameList              *[]string                         `json:"dnsNameList,omitempty" bson:"dnsNameList,omitempty"`
+	DNSNames                 []string                          `json:"dnsNames,omitempty,omitzero" bson:"dnsNameList,omitempty,omitzero"`
+	EmailAddresses           []string                          `json:"emailAddresses,omitempty,omitzero" bson:"emailAddresses,omitempty,omitzero"`
+	IPAddresses              []net.IP                          `json:"ipAddresses,omitempty,omitzero" bson:"ipAddresses,omitempty,omitzero"`
+	URIs                     []*url.URL                        `json:"uris,omitempty,omitzero" bson:"uris,omitempty,omitzero"`
 	EnhancedKeyUsageList     *[]string                         `json:"enhancedKeyUsageList,omitempty" bson:"enhancedKeyUsageList,omitempty"`
 	EnrollmentPolicyEndPoint *struct {
 		AuthenticationType float64 `json:"authenticationType,omitempty" bson:"authenticationType,omitempty"`
@@ -151,12 +157,13 @@ type ServerCertInfo struct {
 		AuthenticationType float64 `json:"authenticationType,omitempty" bson:"authenticationType,omitempty"`
 		URL                *string `json:"url,omitempty" bson:"url,omitempty"`
 	} `json:"enrollmentServerEndPoint,omitempty" bson:"enrollmentServerEndPoint,omitempty"`
-	Extensions    *[]string `json:"extensions,omitempty" bson:"extensions,omitempty"`
-	FriendlyName  string    `json:"friendlyName,omitempty" bson:"friendlyName,omitempty"`
-	Handle        float64   `json:"handle,omitempty" bson:"handle,omitempty"`
-	HasPrivateKey bool      `json:"hasPrivateKey,omitempty" bson:"hasPrivateKey,omitempty"`
-	Issuer        string    `json:"issuer,omitempty" bson:"issuer,omitempty"`
-	IssuerName    *struct {
+	Extensions            *[]string `json:"extensions,omitempty" bson:"extensions,omitempty"`
+	FriendlyName          string    `json:"friendlyName,omitempty" bson:"friendlyName,omitempty"`
+	Handle                float64   `json:"handle,omitempty" bson:"handle,omitempty"`
+	HasPrivateKey         bool      `json:"hasPrivateKey,omitempty" bson:"hasPrivateKey,omitempty"`
+	Issuer                string    `json:"issuer,omitempty" bson:"issuer,omitempty"`
+	IssuingCertificateURL []string  `json:"issuingCertificateURL,omitempty" bson:"issuingCertificateURL,omitempty"`
+	IssuerName            *struct {
 		Name    string  `json:"name,omitempty" bson:"name,omitempty"`
 		Oid     string  `json:"oid,omitempty" bson:"oid,omitempty"`
 		RawData *string `json:"rawData,omitempty" bson:"rawData,omitempty"`
