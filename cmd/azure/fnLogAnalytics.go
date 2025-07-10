@@ -155,8 +155,6 @@ func getAllWorkspaceTables(cred *azidentity.DefaultAzureCredential, subscription
 		log.Fatal("Error fetching LA Workspace Tables: ", string(responseBody))
 	}
 
-	// fmt.Println(string(responseBody))
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -173,7 +171,7 @@ func getAllWorkspaceTables(cred *azidentity.DefaultAzureCredential, subscription
 	return responseUnmarshalled.Value, err
 }
 
-func GetAzureWorkbookAlerts(token *lib.AzureMultiAuthToken) (alerts []AzureAlertProcessed) {
+func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (alerts []AzureAlertProcessed) {
 	logAnalyticsToken, err := GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
 		TenantName: token.TenantName,
 		Scope:      "loganalytics",
@@ -181,33 +179,6 @@ func GetAzureWorkbookAlerts(token *lib.AzureMultiAuthToken) (alerts []AzureAlert
 	lib.CheckFatalError(err)
 
 	urlString := "https://management.azure.com/providers/Microsoft.ResourceGraph/resources?api-version=2021-03-01"
-
-	graphQuery := `alertsmanagementresources
-	| where type == 'microsoft.alertsmanagement/alerts'
-	| extend AlertCreated = todatetime(properties[\"essentials\"].[\"startDateTime\"])
-	| where AlertCreated > ago(7d)
-	| extend Severity = tostring(properties[\"essentials\"][\"severity\"])
-	| extend Results = tostring(properties.[\"context\"].[\"context\"].[\"condition\"].[\"allOf\"].[0].linkToFilteredSearchResultsUI)
-	| extend ResourceID1 = tostring(properties.[\"context\"].[\"linkedResourceId\"])
-	| extend ResourceID2 = tostring(properties.[\"context\"].[\"context\"].[\"resourceId\"])
-	| extend AffectedResource = coalesce(ResourceID1, ResourceID2)
-	| extend AffectedResource = iff(AffectedResource contains \"la-\", \"\", AffectedResource)
-	| extend Description =  tostring(properties[\"essentials\"].[\"description\"])
-	| extend AlertLastModified = todatetime(properties[\"essentials\"].[\"lastModifiedDateTime\"])
-	| extend AlertLastModifiedBy = tostring(properties[\"essentials\"].[\"lastModifiedUserName\"])
-	| extend AlertState = tostring(properties[\"essentials\"].[\"alertState\"])
-	| extend AlertLastModifiedBy = iff(AlertLastModifiedBy == \"System\", \"Not triaged\", AlertLastModifiedBy)
-	| where properties[\"essentials\"][\"monitorCondition\"] in~ ('Fired')
-	| extend TriageAlert = \"Acknowledge\"
-	| project AlertCreated, Severity, Name = name, AffectedResource, Description, Results, AlertState, TriageAlert, AlertLastModifiedBy, AlertLastModified, properties, id
-	| extend AlertCreated1 = todatetime(AlertCreated)
-	| order by AlertCreated1 desc
-	| extend AlertCreated = datetime_utc_to_local(AlertCreated, 'Australia/Canberra')
-	| extend AlertLastModified = datetime_utc_to_local(AlertLastModified, 'Australia/Canberra')
-	| extend AlertCreated =  format_datetime( AlertCreated, \"HH:mm tt dd-MM-yy\")
-	| extend AlertLastModified = format_datetime( AlertLastModified, \"HH:mm tt dd-MM-yy\")
-	| order by AlertCreated1 desc
-	| project-away AlertCreated1`
 
 	jsonBody := `{"query": "` + graphQuery + `"}`
 
@@ -231,8 +202,6 @@ func GetAzureWorkbookAlerts(token *lib.AzureMultiAuthToken) (alerts []AzureAlert
 		alertLastModified, err := time.Parse("15:04 PM 01-02-06", alert.AlertLastModified)
 		lib.CheckFatalError(err)
 		curr.AlertLastModified = alertLastModified
-
-		// 15:57 PM 07-07-25
 
 		curr.LastAzureSync = currentTime
 		if alert.Properties.Context.Context != nil {
@@ -264,4 +233,25 @@ func GetAlertDataFromSearchResultsLink(linkToFilteredSearchResultsAPI string, to
 	}
 
 	return
+}
+
+func GetLogAnalyticsWorkbookQuery(resourceId string, token *lib.AzureMultiAuthToken) string {
+	urlString := "https://management.azure.com" + resourceId + "?api-version=2021-08-01&canFetchContent=true"
+	res, err := HttpGet(urlString, *token)
+	lib.CheckFatalError(err)
+
+	var resData LogAnalyticsWorkbook
+	err = json.Unmarshal(res, &resData)
+	lib.CheckFatalError(err)
+
+	var serializedData LogAnalyticsWorkbookSerializedData
+	err = json.Unmarshal([]byte(resData.Properties.SerializedData), &serializedData)
+	lib.CheckFatalError(err)
+	query := serializedData.Items[0].Content.Query
+
+	jsonStr, _ := json.Marshal(query)
+	queryString := strings.TrimSuffix(string(jsonStr), "\"")
+	queryString = strings.TrimPrefix(queryString, "\"")
+
+	return queryString
 }

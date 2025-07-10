@@ -201,3 +201,81 @@ type GetAlertDataFromSearchResultsLinkResult struct {
 		Rows [][]any `json:"rows"`
 	} `json:"tables"`
 }
+
+type LogAnalyticsWorkbook struct {
+	Etag     string `json:"etag"`
+	ID       string `json:"id"`
+	Identity struct {
+		Type string `json:"type"`
+	} `json:"identity"`
+	Kind       string `json:"kind"`
+	Location   string `json:"location"`
+	Name       string `json:"name"`
+	Properties struct {
+		Category       string    `json:"category"`
+		DisplayName    string    `json:"displayName"`
+		Revision       string    `json:"revision"`
+		SerializedData string    `json:"serializedData"`
+		SourceID       string    `json:"sourceId"`
+		StorageURI     any       `json:"storageUri"`
+		Tags           any       `json:"tags"`
+		TimeModified   time.Time `json:"timeModified"`
+		UserID         string    `json:"userId"`
+		Version        string    `json:"version"`
+	} `json:"properties"`
+	Tags struct {
+		HiddenTitle string `json:"hidden-title"`
+	} `json:"tags"`
+	Type string `json:"type"`
+}
+
+type LogAnalyticsWorkbookSerializedData struct {
+	FallbackResourceIds []string `json:"fallbackResourceIds"`
+	IsLocked            bool     `json:"isLocked"`
+	Items               []struct {
+		Content struct {
+			CrossComponentResources []string `json:"crossComponentResources"`
+			GridSettings            struct {
+				Formatters []struct {
+					ColumnMatch   string `json:"columnMatch"`
+					FormatOptions *struct {
+						ArmActionContext *struct {
+							Description string `json:"description"`
+							Headers     []any  `json:"headers"`
+							HTTPMethod  string `json:"httpMethod"`
+							Params      []any  `json:"params"`
+							Path        string `json:"path"`
+							RunLabel    string `json:"runLabel"`
+							Title       string `json:"title"`
+						} `json:"armActionContext,omitempty"`
+						CustomColumnWidthSetting string  `json:"customColumnWidthSetting,omitempty"`
+						LinkIsContextBlade       bool    `json:"linkIsContextBlade"`
+						LinkLabel                string  `json:"linkLabel,omitempty"`
+						LinkTarget               *string `json:"linkTarget"`
+						ShowIcon                 bool    `json:"showIcon,omitempty"`
+						ThresholdsGrid           []struct {
+							Operator       string  `json:"operator"`
+							Representation string  `json:"representation"`
+							Text           string  `json:"text"`
+							ThresholdValue *string `json:"thresholdValue"`
+						} `json:"thresholdsGrid,omitempty"`
+						ThresholdsOptions string `json:"thresholdsOptions,omitempty"`
+					} `json:"formatOptions,omitempty"`
+					Formatter float64 `json:"formatter"`
+				} `json:"formatters"`
+			} `json:"gridSettings"`
+			NoDataMessage      string  `json:"noDataMessage"`
+			NoDataMessageStyle float64 `json:"noDataMessageStyle"`
+			Query              string  `json:"query"`
+			QueryType          float64 `json:"queryType"`
+			ResourceType       string  `json:"resourceType"`
+			ShowRefreshButton  bool    `json:"showRefreshButton"`
+			Size               float64 `json:"size"`
+			SortBy             []any   `json:"sortBy"`
+			Version            string  `json:"version"`
+		} `json:"content"`
+		Name string  `json:"name"`
+		Type float64 `json:"type"`
+	} `json:"items"`
+	Version string `json:"version"`
+}
