@@ -16,7 +16,7 @@ import (
 var m365Cmd = &cobra.Command{
 	Use:     "m365",
 	Aliases: []string{"m"},
-	Short:   "M365 related commands",
+	Short:   "Office/Microsoft 365",
 	Long:    `These commands are related to automation and administration of Microsoft 365`,
 	// Run: func(cmd *cobra.Command, args []string) {
 	// 	fmt.Println("az called")
