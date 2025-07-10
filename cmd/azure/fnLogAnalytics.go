@@ -9,12 +9,14 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"log"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/fatih/color"
+	"github.com/jercle/cloudini/lib"
 	"github.com/rodaine/table"
 )
 
@@ -153,8 +155,6 @@ func getAllWorkspaceTables(cred *azidentity.DefaultAzureCredential, subscription
 		log.Fatal("Error fetching LA Workspace Tables: ", string(responseBody))
 	}
 
-	// fmt.Println(string(responseBody))
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -169,4 +169,89 @@ func getAllWorkspaceTables(cred *azidentity.DefaultAzureCredential, subscription
 	})
 
 	return responseUnmarshalled.Value, err
+}
+
+func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (alerts []AzureAlertProcessed) {
+	logAnalyticsToken, err := GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
+		TenantName: token.TenantName,
+		Scope:      "loganalytics",
+	}, nil)
+	lib.CheckFatalError(err)
+
+	urlString := "https://management.azure.com/providers/Microsoft.ResourceGraph/resources?api-version=2021-03-01"
+
+	jsonBody := `{"query": "` + graphQuery + `"}`
+
+	res, _, err := HttpPost(urlString, jsonBody, *token)
+	lib.CheckFatalError(err)
+
+	var alertsResponse GetAzureAlertsResponse
+	err = json.Unmarshal(res, &alertsResponse)
+
+	currentTime := time.Now()
+
+	for _, alert := range alertsResponse.Data {
+		jsonStr, _ := json.Marshal(alert)
+		var curr AzureAlertProcessed
+		err = json.Unmarshal(jsonStr, &curr)
+		// lib.CheckFatalError(err)
+		curr.TenantName = token.TenantName
+		alertCreated, err := time.Parse("15:04 PM 01-02-06", alert.AlertCreated)
+		lib.CheckFatalError(err)
+		curr.AlertCreated = alertCreated
+		alertLastModified, err := time.Parse("15:04 PM 01-02-06", alert.AlertLastModified)
+		lib.CheckFatalError(err)
+		curr.AlertLastModified = alertLastModified
+
+		curr.LastAzureSync = currentTime
+		if alert.Properties.Context.Context != nil {
+			curr.LinkToFilteredSearchResultsAPI = alert.Properties.Context.Context.Condition.AllOf[0].LinkToFilteredSearchResultsAPI
+			curr.AlertData = GetAlertDataFromSearchResultsLink(curr.LinkToFilteredSearchResultsAPI, logAnalyticsToken)
+		}
+		alerts = append(alerts, curr)
+	}
+
+	return
+}
+
+func GetAlertDataFromSearchResultsLink(linkToFilteredSearchResultsAPI string, token *lib.AzureMultiAuthToken) (alertData []map[string]any) {
+	res, err := HttpGet(linkToFilteredSearchResultsAPI, *token)
+	lib.CheckFatalError(err)
+
+	var resData GetAlertDataFromSearchResultsLinkResult
+	err = json.Unmarshal(res, &resData)
+
+	columns := resData.Tables[0].Columns
+	rows := resData.Tables[0].Rows
+
+	for _, rowData := range rows {
+		rowProcessed := make(map[string]any)
+		for i, prop := range rowData {
+			rowProcessed[columns[i].Name] = prop
+		}
+		alertData = append(alertData, rowProcessed)
+	}
+
+	return
+}
+
+func GetLogAnalyticsWorkbookQuery(resourceId string, token *lib.AzureMultiAuthToken) string {
+	urlString := "https://management.azure.com" + resourceId + "?api-version=2021-08-01&canFetchContent=true"
+	res, err := HttpGet(urlString, *token)
+	lib.CheckFatalError(err)
+
+	var resData LogAnalyticsWorkbook
+	err = json.Unmarshal(res, &resData)
+	lib.CheckFatalError(err)
+
+	var serializedData LogAnalyticsWorkbookSerializedData
+	err = json.Unmarshal([]byte(resData.Properties.SerializedData), &serializedData)
+	lib.CheckFatalError(err)
+	query := serializedData.Items[0].Content.Query
+
+	jsonStr, _ := json.Marshal(query)
+	queryString := strings.TrimSuffix(string(jsonStr), "\"")
+	queryString = strings.TrimPrefix(queryString, "\"")
+
+	return queryString
 }

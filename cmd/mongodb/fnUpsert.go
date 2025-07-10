@@ -1277,3 +1277,35 @@ func UpsertMailboxStatistics(mailboxStats []m365.MailboxUsageDetail, coll *mongo
 
 	return
 }
+
+//
+//
+
+func UpsertSupportAlerts(alerts []azure.AzureAlertProcessed, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
+	if len(alerts) == 0 {
+		fmt.Println("No data in slice")
+		return nil
+	}
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+
+	// fmt.Println(len(serverCertInfo))
+
+	for _, alert := range alerts {
+		curr := alert
+
+		filter := bson.D{{"_id", curr.ID}}
+		update := bson.D{{"$set", curr}}
+
+		// .SetUpsert(true)
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+	}
+
+	res, err := coll.BulkWrite(ctx, updates, nil)
+	lib.CheckFatalError(err)
+
+	results = res
+
+	return
+}

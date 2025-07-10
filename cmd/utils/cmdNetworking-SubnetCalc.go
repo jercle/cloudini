@@ -23,7 +23,7 @@ var (
 // utilsCmd represents the util command
 var cmdSubnetCalc = &cobra.Command{
 	Use:     "subnetCalc",
-	Short:   "Collection of subnet utility commands",
+	Short:   "Subnet related functions",
 	Aliases: []string{"snet"},
 	// 	Long: `A longer description that spans multiple lines and likely contains examples
 	// and usage of using your command. For example:
