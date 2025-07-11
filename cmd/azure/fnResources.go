@@ -2,7 +2,10 @@ package azure
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json/jsontext"
+	"encoding/json/v2"
+
+	// "encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -15,6 +18,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v6"
+
 	"github.com/jercle/cloudini/lib"
 )
 
@@ -49,7 +53,7 @@ func GetAllResGrpsForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfigu
 	outputFilePath := options.OutputFilePath
 
 	if outputFilePath != "" {
-		jsonListStr, _ := json.MarshalIndent(allResGrps, "", "  ")
+		jsonListStr, _ := json.Marshal(allResGrps, jsontext.WithIndent("  "))
 
 		currentDate := time.Now().Format("20060102")
 
