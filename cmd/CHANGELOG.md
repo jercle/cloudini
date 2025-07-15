@@ -1,7 +1,8 @@
 # Change Log
 
 ## [0.1.55]
-*
+* Begin updating funcs to use json/v2 package
+* Update deps
 
 ## [0.1.54]
 * Bugfix: Update GetAzureWorkbookAlerts with correct date parsing

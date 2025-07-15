@@ -1,6 +1,10 @@
 package lib
 
-import "time"
+import (
+	"time"
+
+	"encoding/json/jsontext"
+)
 
 type AzureResourceUserAssignedIdentity struct {
 	ClientID    string `json:"clientId,omitempty" bson:"clientId,omitempty"`
@@ -2438,14 +2442,9 @@ type AzureResourceVirtualNetworkPeering struct {
 		RemoteVirtualNetworkAddressSpace struct {
 			AddressPrefixes []string `json:"addressPrefixes,omitempty" bson:"addressPrefixes,omitempty"`
 		} `json:"remoteVirtualNetworkAddressSpace,omitempty" bson:"remoteVirtualNetworkAddressSpace,omitempty"`
-		ResourceGuid     string `json:"resourceGuid,omitempty" bson:"resourceGuid,omitempty"`
-		RouteServiceVips struct {
-			_2b198fbc9f554459Bd493327c5c8e668 string `json:"2b198fbc-9f55-4459-bd49-3327c5c8e668,omitempty" bson:"2b198fbc-9f55-4459-bd49-3327c5c8e668,omitempty"`
-			Af36ba888c9943f4A5e38fa90652cc96  string `json:"af36ba88-8c99-43f4-a5e3-8fa90652cc96,omitempty" bson:"af36ba88-8c99-43f4-a5e3-8fa90652cc96,omitempty"`
-			De628389Ed414f298ed7871f0baf99dc  string `json:"de628389-ed41-4f29-8ed7-871f0baf99dc,omitempty" bson:"de628389-ed41-4f29-8ed7-871f0baf99dc,omitempty"`
-			E24cf3f1Cfc3476593d195d40e236207  string `json:"e24cf3f1-cfc3-4765-93d1-95d40e236207,omitempty" bson:"e24cf3f1-cfc3-4765-93d1-95d40e236207,omitempty"`
-		} `json:"routeServiceVips,omitempty" bson:"routeServiceVips,omitempty"`
-		UseRemoteGateways bool `json:"useRemoteGateways,omitempty" bson:"useRemoteGateways,omitempty"`
+		ResourceGuid      string            `json:"resourceGuid,omitempty" bson:"resourceGuid,omitempty"`
+		RouteServiceVips  map[string]string `json:"routeServiceVips,omitempty" bson:"routeServiceVips,omitempty"`
+		UseRemoteGateways bool              `json:"useRemoteGateways,omitempty" bson:"useRemoteGateways,omitempty"`
 	} `json:"properties,omitempty" bson:"properties,omitempty"`
 	Type string `json:"type,omitempty" bson:"type,omitempty"`
 }
@@ -2619,1064 +2618,1065 @@ type AzureResourceWorkspaceCapping struct {
 }
 
 type AzureResourceProperties struct {
-	AccountURL                      string `json:"AccountURL,omitempty" bson:"AccountURL,omitempty"`
-	AppID                           string `json:"AppId,omitempty" bson:"AppId,omitempty"`
-	ApplicationID                   string `json:"ApplicationId,omitempty" bson:"ApplicationId,omitempty"`
-	ApplicationType                 string `json:"Application_Type,omitempty" bson:"Application_Type,omitempty"`
-	ConnectionString                string `json:"ConnectionString,omitempty" bson:"ConnectionString,omitempty"`
-	CreationDateOther               string `json:"CreationDate,omitempty" bson:"CreationDate,omitempty"`
-	DisableIpMasking                bool   `json:"DisableIpMasking,omitempty" bson:"DisableIpMasking,omitempty"`
-	DisableLocalAuthOther           bool   `json:"DisableLocalAuth,omitempty" bson:"DisableLocalAuth,omitempty"`
-	EnabledAPITypes                 string `json:"EnabledApiTypes,omitempty" bson:"EnabledApiTypes,omitempty"`
-	FlowType                        string `json:"Flow_Type,omitempty" bson:"Flow_Type,omitempty"`
-	ForceCustomerStorageForProfiler bool   `json:"ForceCustomerStorageForProfiler,omitempty" bson:"ForceCustomerStorageForProfiler,omitempty"`
-	IngestionMode                   string `json:"IngestionMode,omitempty" bson:"IngestionMode,omitempty"`
-	InstrumentationKey              string `json:"InstrumentationKey,omitempty" bson:"InstrumentationKey,omitempty"`
-	LastOwnershipUpdateTime         string `json:"LastOwnershipUpdateTime,omitempty" bson:"LastOwnershipUpdateTime,omitempty"`
-	LinkedStorages                  *struct {
-		ServiceProfilerLinkedStorage string `json:"ServiceProfilerLinkedStorage,omitempty" bson:"ServiceProfilerLinkedStorage,omitempty"`
-	} `json:"LinkedStorages,omitempty" bson:"LinkedStorages,omitempty"`
-	NameOther                       string                                    `json:"Name,omitempty" bson:"Name,omitempty"`
-	PrivateLinkScopedResourcesOther []*AzureResourcePrivateLinkScopedResource `json:"PrivateLinkScopedResources,omitempty" bson:"PrivateLinkScopedResources,omitempty"`
-	RegistrationURL                 string                                    `json:"RegistrationUrl,omitempty" bson:"RegistrationUrl,omitempty"`
-	RequestSource                   string                                    `json:"Request_Source,omitempty" bson:"Request_Source,omitempty"`
-	Retention                       string                                    `json:"Retention,omitempty" bson:"Retention,omitempty"`
-	RetentionInDaysOther            float64                                   `json:"RetentionInDays,omitempty" bson:"RetentionInDays,omitempty"`
-	RuntimeConfiguration            *AzureResourceRuntimeConfiguration        `json:"RuntimeConfiguration,omitempty" bson:"RuntimeConfiguration,omitempty"`
-	SamplingPercentage              *float64                                  `json:"SamplingPercentage,omitempty" bson:"SamplingPercentage,omitempty"`
-	TenantID                        string                                    `json:"TenantId,omitempty" bson:"TenantId,omitempty"`
-	Ver                             string                                    `json:"Ver,omitempty" bson:"Ver,omitempty"`
-	WorkspaceResourceID             string                                    `json:"WorkspaceResourceId,omitempty" bson:"WorkspaceResourceId,omitempty"`
-	AadAuthenticationParameters     *AzureResourceAadAuthenticationParameters `json:"aadAuthenticationParameters,omitempty" bson:"aadAuthenticationParameters,omitempty"`
-	AadProfile                      *AzureResourceAadProfile                  `json:"aadProfile,omitempty" bson:"aadProfile,omitempty"`
-	AccessEndpoint                  string                                    `json:"accessEndpoint,omitempty" bson:"accessEndpoint,omitempty"`
-	AccessModeSettings              *AzureResourceAccessModeSettings          `json:"accessModeSettings,omitempty" bson:"accessModeSettings,omitempty"`
-	AccessPolicies                  []*AzureResourceAccessPolicy              `json:"accessPolicies,omitempty" bson:"accessPolicies,omitempty"`
-	AccessTier                      string                                    `json:"accessTier,omitempty" bson:"accessTier,omitempty"`
-	AccountEndpoint                 string                                    `json:"accountEndpoint,omitempty" bson:"accountEndpoint,omitempty"`
-	Actions                         any                                       `json:"actions,omitempty" bson:"actions,omitempty"`
-	ActiveActive                    bool                                      `json:"activeActive,omitempty" bson:"activeActive,omitempty"`
-	ActiveDirectories               []*AzureResourceActiveDirectory           `json:"activeDirectories,omitempty" bson:"activeDirectories,omitempty"`
-	ActiveJobAndJobScheduleQuota    float64                                   `json:"activeJobAndJobScheduleQuota,omitempty" bson:"activeJobAndJobScheduleQuota,omitempty"`
-	AdditionalCapabilities          map[string]bool                           `json:"additionalCapabilities,omitempty" bson:"additionalCapabilities,omitempty"`
-	AdditionalProperties            map[string]string                         `json:"additionalProperties,omitempty" bson:"additionalProperties,omitempty"`
-	AddonProfiles                   *AzureResourceAddonProfiles               `json:"addonProfiles,omitempty" bson:"addonProfiles,omitempty"`
-	AddressPrefix                   string                                    `json:"addressPrefix,omitempty" bson:"addressPrefix,omitempty"`
-	AddressSpace                    *struct {
-		AddressPrefixes []string `json:"addressPrefixes,omitempty" bson:"addressPrefixes,omitempty"`
-	} `json:"addressSpace,omitempty" bson:"addressSpace,omitempty"`
-	AdminEnabled                   bool                             `json:"adminEnabled,omitempty" bson:"adminEnabled,omitempty"`
-	AdminRuntimeSiteName           any                              `json:"adminRuntimeSiteName,omitempty" bson:"adminRuntimeSiteName,omitempty"`
-	AdminSiteName                  any                              `json:"adminSiteName,omitempty" bson:"adminSiteName,omitempty"`
-	AdminUserEnabled               bool                             `json:"adminUserEnabled,omitempty" bson:"adminUserEnabled,omitempty"`
-	AdministratorLogin             string                           `json:"administratorLogin,omitempty" bson:"administratorLogin,omitempty"`
-	Administrators                 *AzureResourceAdministrators     `json:"administrators,omitempty" bson:"administrators,omitempty"`
-	AfdEnabled                     bool                             `json:"afdEnabled,omitempty" bson:"afdEnabled,omitempty"`
-	AgentPoolProfiles              []*AzureResourceAgentPoolProfile `json:"agentPoolProfiles,omitempty" bson:"agentPoolProfiles,omitempty"`
-	AllocationDate                 string                           `json:"allocationDate,omitempty" bson:"allocationDate,omitempty"`
-	AllowBlobPublicAccess          bool                             `json:"allowBlobPublicAccess,omitempty" bson:"allowBlobPublicAccess,omitempty"`
-	AllowBranchToBranchTraffic     bool                             `json:"allowBranchToBranchTraffic,omitempty" bson:"allowBranchToBranchTraffic,omitempty"`
-	AllowClassicOperations         bool                             `json:"allowClassicOperations,omitempty" bson:"allowClassicOperations,omitempty"`
-	AllowCrossTenantReplication    bool                             `json:"allowCrossTenantReplication,omitempty" bson:"allowCrossTenantReplication,omitempty"`
-	AllowGlobalReach               bool                             `json:"allowGlobalReach,omitempty" bson:"allowGlobalReach,omitempty"`
-	AllowNonVirtualWanTraffic      bool                             `json:"allowNonVirtualWanTraffic,omitempty" bson:"allowNonVirtualWanTraffic,omitempty"`
-	AllowPort25Out                 bool                             `json:"allowPort25Out,omitempty" bson:"allowPort25Out,omitempty"`
-	AllowRemoteVnetTraffic         bool                             `json:"allowRemoteVnetTraffic,omitempty" bson:"allowRemoteVnetTraffic,omitempty"`
-	AllowSharedKeyAccess           bool                             `json:"allowSharedKeyAccess,omitempty" bson:"allowSharedKeyAccess,omitempty"`
-	AllowVirtualWanTraffic         bool                             `json:"allowVirtualWanTraffic,omitempty" bson:"allowVirtualWanTraffic,omitempty"`
-	AllowVnetToVnetTraffic         bool                             `json:"allowVnetToVnetTraffic,omitempty" bson:"allowVnetToVnetTraffic,omitempty"`
-	AllowedAuthenticationModes     []string                         `json:"allowedAuthenticationModes,omitempty" bson:"allowedAuthenticationModes,omitempty"`
-	AllowedCopyScope               string                           `json:"allowedCopyScope,omitempty" bson:"allowedCopyScope,omitempty"`
-	AlternativeParameterValues     *map[string]string               `json:"alternativeParameterValues,omitempty" bson:"alternativeParameterValues,omitempty"`
-	AnalyticalStorageConfiguration *struct {
-		SchemaType string `json:"schemaType,omitempty" bson:"schemaType,omitempty"`
-	} `json:"analyticalStorageConfiguration,omitempty" bson:"analyticalStorageConfiguration,omitempty"`
-	AnonymousPullEnabled       bool                                 `json:"anonymousPullEnabled,omitempty" bson:"anonymousPullEnabled,omitempty"`
-	API                        *AzureResourceAPI                    `json:"api,omitempty" bson:"api,omitempty"`
-	APIServerAccessProfile     *AzureResourceAPIServerAccessProfile `json:"apiServerAccessProfile,omitempty" bson:"apiServerAccessProfile,omitempty"`
-	AppInsightsConfiguration   any                                  `json:"appInsightsConfiguration,omitempty" bson:"appInsightsConfiguration,omitempty"`
-	AppLogsConfiguration       *AzureResourceAppLogsConfiguration   `json:"appLogsConfiguration,omitempty" bson:"appLogsConfiguration,omitempty"`
-	ApplicationRuleCollections []any                                `json:"applicationRuleCollections,omitempty" bson:"applicationRuleCollections,omitempty"`
-	Architecture               string                               `json:"architecture,omitempty" bson:"architecture,omitempty"`
-	ArmRoleReceivers           []struct {
-		Name                 string `json:"name,omitempty" bson:"name,omitempty"`
-		RoleID               string `json:"roleId,omitempty" bson:"roleId,omitempty"`
-		UseCommonAlertSchema bool   `json:"useCommonAlertSchema,omitempty" bson:"useCommonAlertSchema,omitempty"`
-	} `json:"armRoleReceivers,omitempty" bson:"armRoleReceivers,omitempty"`
-	AuthConfig *struct {
-		ActiveDirectoryAuth string `json:"activeDirectoryAuth,omitempty" bson:"activeDirectoryAuth,omitempty"`
-		PasswordAuth        string `json:"passwordAuth,omitempty" bson:"passwordAuth,omitempty"`
-	} `json:"authConfig,omitempty" bson:"authConfig,omitempty"`
-	AuthenticatedUser *struct {
-		Name string `json:"name,omitempty" bson:"name,omitempty"`
-	} `json:"authenticatedUser,omitempty" bson:"authenticatedUser,omitempty"`
-	AuthenticationType                   string                               `json:"authenticationType,omitempty" bson:"authenticationType,omitempty"`
-	Authorizations                       []*AzureResourceAuthorization        `json:"authorizations,omitempty" bson:"authorizations,omitempty"`
-	AutoCreateTopicWithFirstSubscription bool                                 `json:"autoCreateTopicWithFirstSubscription,omitempty" bson:"autoCreateTopicWithFirstSubscription,omitempty"`
-	AutoDeleteTopicWithLastSubscription  bool                                 `json:"autoDeleteTopicWithLastSubscription,omitempty" bson:"autoDeleteTopicWithLastSubscription,omitempty"`
-	AutoGeneratedDomainNameLabelScope    any                                  `json:"autoGeneratedDomainNameLabelScope,omitempty" bson:"autoGeneratedDomainNameLabelScope,omitempty"`
-	AutoMitigate                         bool                                 `json:"autoMitigate,omitempty" bson:"autoMitigate,omitempty"`
-	AutoPauseDelay                       float64                              `json:"autoPauseDelay,omitempty" bson:"autoPauseDelay,omitempty"`
-	AutoScaleConfiguration               *AzureResourceAutoScaleConfiguration `json:"autoScaleConfiguration,omitempty" bson:"autoScaleConfiguration,omitempty"`
-	AutoScalerProfile                    *AzureResourceAutoScalerProfile      `json:"autoScalerProfile,omitempty" bson:"autoScalerProfile,omitempty"`
-	AutoUpgradeMinorVersion              bool                                 `json:"autoUpgradeMinorVersion,omitempty" bson:"autoUpgradeMinorVersion,omitempty"`
-	AutoUpgradeProfile                   *struct {
-		UpgradeChannel string `json:"upgradeChannel,omitempty" bson:"upgradeChannel,omitempty"`
-	} `json:"autoUpgradeProfile,omitempty" bson:"autoUpgradeProfile,omitempty"`
-	AutomationHybridServiceURL string `json:"automationHybridServiceUrl,omitempty" bson:"automationHybridServiceUrl,omitempty"`
-	AutomationRunbookReceivers []any  `json:"automationRunbookReceivers,omitempty" bson:"automationRunbookReceivers,omitempty"`
-	AuxiliaryMode              string `json:"auxiliaryMode,omitempty" bson:"auxiliaryMode,omitempty"`
-	AuxiliarySku               string `json:"auxiliarySku,omitempty" bson:"auxiliarySku,omitempty"`
-	AvailabilitySet            *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"availabilitySet,omitempty" bson:"availabilitySet,omitempty"`
-	AvailabilityState                     string `json:"availabilityState,omitempty" bson:"availabilityState,omitempty"`
-	AvailabilityZone                      string `json:"availabilityZone,omitempty" bson:"availabilityZone,omitempty"`
-	AvsDataStore                          string `json:"avsDataStore,omitempty" bson:"avsDataStore,omitempty"`
-	AzureAppPushReceivers                 []any  `json:"azureAppPushReceivers,omitempty" bson:"azureAppPushReceivers,omitempty"`
-	AzureFilesIdentityBasedAuthentication *struct {
-		DirectoryServiceOptions string `json:"directoryServiceOptions,omitempty" bson:"directoryServiceOptions,omitempty"`
-	} `json:"azureFilesIdentityBasedAuthentication,omitempty" bson:"azureFilesIdentityBasedAuthentication,omitempty"`
-	AzureFirewall *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"azureFirewall,omitempty" bson:"azureFirewall,omitempty"`
-	AzureFunctionReceivers []any                              `json:"azureFunctionReceivers,omitempty" bson:"azureFunctionReceivers,omitempty"`
-	AzureMonitorProfile    *AzureResourceAzureMonitorProfile  `json:"azureMonitorProfile,omitempty" bson:"azureMonitorProfile,omitempty"`
-	AzurePortalFqdn        string                             `json:"azurePortalFQDN,omitempty" bson:"azurePortalFQDN,omitempty"`
-	BackendAddressPools    []*AzureResourceBackendAddressPool `json:"backendAddressPools,omitempty" bson:"backendAddressPools,omitempty"`
-	Backup                 *AzureResourceBackup               `json:"backup,omitempty" bson:"backup,omitempty"`
-	BackupPolicy           *AzureResourceBackupPolicy         `json:"backupPolicy,omitempty" bson:"backupPolicy,omitempty"`
-	BackupPolicyID         string                             `json:"backupPolicyId,omitempty" bson:"backupPolicyId,omitempty"`
-	BackupStorageVersion   string                             `json:"backupStorageVersion,omitempty" bson:"backupStorageVersion,omitempty"`
-	BandwidthInGbps        float64                            `json:"bandwidthInGbps,omitempty" bson:"bandwidthInGbps,omitempty"`
-	BareMetalServer        *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"bareMetalServer,omitempty" bson:"bareMetalServer,omitempty"`
-	BaremetalTenantID string `json:"baremetalTenantId,omitempty" bson:"baremetalTenantId,omitempty"`
-	BcdrSecurityLevel string `json:"bcdrSecurityLevel,omitempty" bson:"bcdrSecurityLevel,omitempty"`
-	BillingConfig     *struct {
-		BillingType           string `json:"billingType,omitempty" bson:"billingType,omitempty"`
-		EffectiveStartDateUtc string `json:"effectiveStartDateUtc,omitempty" bson:"effectiveStartDateUtc,omitempty"`
-	} `json:"billingConfig,omitempty" bson:"billingConfig,omitempty"`
-	BillingModel   string `json:"billingModel,omitempty" bson:"billingModel,omitempty"`
-	BillingProfile *struct {
-		MaxPrice float64 `json:"maxPrice,omitempty" bson:"maxPrice,omitempty"`
-	} `json:"billingProfile,omitempty" bson:"billingProfile,omitempty"`
-	BlockPathTraversal    bool                        `json:"blockPathTraversal,omitempty" bson:"blockPathTraversal,omitempty"`
-	BuildTimeoutInMinutes float64                     `json:"buildTimeoutInMinutes,omitempty" bson:"buildTimeoutInMinutes,omitempty"`
-	BuildVersion          any                         `json:"buildVersion,omitempty" bson:"buildVersion,omitempty"`
-	CallRateLimit         *AzureResourceCallRateLimit `json:"callRateLimit,omitempty" bson:"callRateLimit,omitempty"`
-	Capabilities          []struct {
-		Name  string `json:"name,omitempty" bson:"name,omitempty"`
-		Value string `json:"value,omitempty" bson:"value,omitempty"`
-	} `json:"capabilities,omitempty" bson:"capabilities,omitempty"`
-	CatalogCollation         string `json:"catalogCollation,omitempty" bson:"catalogCollation,omitempty"`
-	Category                 string `json:"category,omitempty" bson:"category,omitempty"`
-	Cers                     any    `json:"cers,omitempty" bson:"cers,omitempty"`
-	ChangedTime              string `json:"changedTime,omitempty" bson:"changedTime,omitempty"`
-	ChildPolicies            []any  `json:"childPolicies,omitempty" bson:"childPolicies,omitempty"`
-	CircuitProvisioningState string `json:"circuitProvisioningState,omitempty" bson:"circuitProvisioningState,omitempty"`
-	Circuits                 []struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"circuits,omitempty" bson:"circuits,omitempty"`
-	ClientAffinityEnabled      bool   `json:"clientAffinityEnabled,omitempty" bson:"clientAffinityEnabled,omitempty"`
-	ClientAffinityProxyEnabled bool   `json:"clientAffinityProxyEnabled,omitempty" bson:"clientAffinityProxyEnabled,omitempty"`
-	ClientCertEnabled          bool   `json:"clientCertEnabled,omitempty" bson:"clientCertEnabled,omitempty"`
-	ClientCertExclusionPaths   any    `json:"clientCertExclusionPaths,omitempty" bson:"clientCertExclusionPaths,omitempty"`
-	ClientCertMode             string `json:"clientCertMode,omitempty" bson:"clientCertMode,omitempty"`
-	ClientID                   string `json:"clientId,omitempty" bson:"clientId,omitempty"`
-	CloningInfo                any    `json:"cloningInfo,omitempty" bson:"cloningInfo,omitempty"`
-	CloudConnectors            *struct {
-		AwsExternalID string `json:"awsExternalId,omitempty" bson:"awsExternalId,omitempty"`
-	} `json:"cloudConnectors,omitempty" bson:"cloudConnectors,omitempty"`
-	CloudID       string `json:"cloudId,omitempty" bson:"cloudId,omitempty"`
-	CloudServices []struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"cloudServices,omitempty" bson:"cloudServices,omitempty"`
-	Collation           string                      `json:"collation,omitempty" bson:"collation,omitempty"`
-	ComputeMode         *string                     `json:"computeMode,omitempty" bson:"computeMode,omitempty"`
-	Condition           *AzureResourceCondition     `json:"condition,omitempty" bson:"condition,omitempty"`
-	Configuration       *AzureResourceConfiguration `json:"configuration,omitempty" bson:"configuration,omitempty"`
-	ConfigurationAccess *struct {
-		Endpoint string `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
-	} `json:"configurationAccess,omitempty" bson:"configurationAccess,omitempty"`
-	ConfigurationOverrides    *struct{} `json:"configurationOverrides,omitempty" bson:"configurationOverrides,omitempty"`
-	ConfigurationPolicyGroups []any     `json:"configurationPolicyGroups,omitempty" bson:"configurationPolicyGroups,omitempty"`
-	ConfigurationType         string    `json:"configurationType,omitempty" bson:"configurationType,omitempty"`
-	Configurations            []struct {
-		Name  string `json:"name,omitempty" bson:"name,omitempty"`
-		Value string `json:"value,omitempty" bson:"value,omitempty"`
-	} `json:"configurations,omitempty" bson:"configurations,omitempty"`
-	ConnectionMode        string `json:"connectionMode,omitempty" bson:"connectionMode,omitempty"`
-	ConnectionMonitorType string `json:"connectionMonitorType,omitempty" bson:"connectionMonitorType,omitempty"`
-	ConnectionState       string `json:"connectionState,omitempty" bson:"connectionState,omitempty"`
-	ConnectionType        string `json:"connectionType,omitempty" bson:"connectionType,omitempty"`
-	ConsistencyPolicy     *struct {
-		DefaultConsistencyLevel string  `json:"defaultConsistencyLevel,omitempty" bson:"defaultConsistencyLevel,omitempty"`
-		MaxIntervalInSeconds    float64 `json:"maxIntervalInSeconds,omitempty" bson:"maxIntervalInSeconds,omitempty"`
-		MaxStalenessPrefix      float64 `json:"maxStalenessPrefix,omitempty" bson:"maxStalenessPrefix,omitempty"`
-	} `json:"consistencyPolicy,omitempty" bson:"consistencyPolicy,omitempty"`
-	ContainedResources        []string `json:"containedResources,omitempty" bson:"containedResources,omitempty"`
-	ContainerAllocationSubnet any      `json:"containerAllocationSubnet,omitempty" bson:"containerAllocationSubnet,omitempty"`
-	ContainerSize             float64  `json:"containerSize,omitempty" bson:"containerSize,omitempty"`
-	ContentAvailabilityState  string   `json:"contentAvailabilityState,omitempty" bson:"contentAvailabilityState,omitempty"`
-	CoolAccess                bool     `json:"coolAccess,omitempty" bson:"coolAccess,omitempty"`
-	Cors                      []any    `json:"cors,omitempty" bson:"cors,omitempty"`
-	CreateTenantProperties    *struct {
-		CountryCode string `json:"countryCode,omitempty" bson:"countryCode,omitempty"`
-		DisplayName string `json:"displayName,omitempty" bson:"displayName,omitempty"`
-	} `json:"createTenantProperties,omitempty" bson:"createTenantProperties,omitempty"`
-	CreateTime                     string                     `json:"createTime,omitempty" bson:"createTime,omitempty"`
-	CreatedAt                      string                     `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
-	CreatedBy                      string                     `json:"createdBy,omitempty" bson:"createdBy,omitempty"`
-	CreatedByObjectID              string                     `json:"createdByObjectId,omitempty" bson:"createdByObjectId,omitempty"`
-	CreatedDate                    string                     `json:"createdDate,omitempty" bson:"createdDate,omitempty"`
-	CreatedTime                    string                     `json:"createdTime,omitempty" bson:"createdTime,omitempty"`
-	CreatedWithAPIVersion          string                     `json:"createdWithApiVersion,omitempty" bson:"createdWithApiVersion,omitempty"`
-	CreationData                   *AzureResourceCreationData `json:"creationData,omitempty" bson:"creationData,omitempty"`
-	CreationDate                   string                     `json:"creationDate,omitempty" bson:"creationDate,omitempty"`
-	CreationTime                   string                     `json:"creationTime,omitempty" bson:"creationTime,omitempty"`
-	CreationToken                  string                     `json:"creationToken,omitempty" bson:"creationToken,omitempty"`
-	Criteria                       *AzureResourceCriteria     `json:"criteria,omitempty" bson:"criteria,omitempty"`
-	Csrs                           []any                      `json:"csrs,omitempty" bson:"csrs,omitempty"`
-	CurrentBackupStorageRedundancy string                     `json:"currentBackupStorageRedundancy,omitempty" bson:"currentBackupStorageRedundancy,omitempty"`
-	CurrentKubernetesVersion       string                     `json:"currentKubernetesVersion,omitempty" bson:"currentKubernetesVersion,omitempty"`
-	CurrentNumberOfWorkers         float64                    `json:"currentNumberOfWorkers,omitempty" bson:"currentNumberOfWorkers,omitempty"`
-	CurrentServiceObjectiveName    string                     `json:"currentServiceObjectiveName,omitempty" bson:"currentServiceObjectiveName,omitempty"`
-	CurrentSku                     *struct {
-		Capacity float64 `json:"capacity,omitempty" bson:"capacity,omitempty"`
-		Family   string  `json:"family,omitempty" bson:"family,omitempty"`
-		Name     string  `json:"name,omitempty" bson:"name,omitempty"`
-		Tier     string  `json:"tier,omitempty" bson:"tier,omitempty"`
-	} `json:"currentSku,omitempty" bson:"currentSku,omitempty"`
-	CurrentWorkerSize   string  `json:"currentWorkerSize,omitempty" bson:"currentWorkerSize,omitempty"`
-	CurrentWorkerSizeID float64 `json:"currentWorkerSizeId,omitempty" bson:"currentWorkerSizeId,omitempty"`
-	CustomDnsConfigs    []struct {
-		Fqdn        string   `json:"fqdn,omitempty" bson:"fqdn,omitempty"`
-		IpAddresses []string `json:"ipAddresses,omitempty" bson:"ipAddresses,omitempty"`
-	} `json:"customDnsConfigs,omitempty" bson:"customDnsConfigs,omitempty"`
-	CustomDnsServers           []string                                `json:"customDnsServers,omitempty" bson:"customDnsServers,omitempty"`
-	CustomDomainConfiguration  *AzureResourceCustomDomainConfiguration `json:"customDomainConfiguration,omitempty" bson:"customDomainConfiguration,omitempty"`
-	CustomDomainVerificationID string                                  `json:"customDomainVerificationId,omitempty" bson:"customDomainVerificationId,omitempty"`
-	CustomNetworkInterfaceName string                                  `json:"customNetworkInterfaceName,omitempty" bson:"customNetworkInterfaceName,omitempty"`
-	CustomParameterValues      *struct{}                               `json:"customParameterValues,omitempty" bson:"customParameterValues,omitempty"`
-	CustomSubDomainName        string                                  `json:"customSubDomainName,omitempty" bson:"customSubDomainName,omitempty"`
-	CustomerID                 string                                  `json:"customerId,omitempty" bson:"customerId,omitempty"`
-	Customize                  []*AzureResourceCustomize               `json:"customize,omitempty" bson:"customize,omitempty"`
-	DailyBackupsToKeep         float64                                 `json:"dailyBackupsToKeep,omitempty" bson:"dailyBackupsToKeep,omitempty"`
-	DailyMemoryTimeQuota       float64                                 `json:"dailyMemoryTimeQuota,omitempty" bson:"dailyMemoryTimeQuota,omitempty"`
-	DailyRecurrence            *struct {
-		Time string `json:"time,omitempty" bson:"time,omitempty"`
-	} `json:"dailyRecurrence,omitempty" bson:"dailyRecurrence,omitempty"`
-	DailySchedule *struct {
-		Hour            float64 `json:"hour,omitempty" bson:"hour,omitempty"`
-		Minute          float64 `json:"minute,omitempty" bson:"minute,omitempty"`
-		SnapshotsToKeep float64 `json:"snapshotsToKeep,omitempty" bson:"snapshotsToKeep,omitempty"`
-	} `json:"dailySchedule,omitempty" bson:"dailySchedule,omitempty"`
-	DaprAiConnectionString   any `json:"daprAIConnectionString,omitempty" bson:"daprAIConnectionString,omitempty"`
-	DaprAiInstrumentationKey any `json:"daprAIInstrumentationKey,omitempty" bson:"daprAIInstrumentationKey,omitempty"`
-	DaprConfig               any `json:"daprConfig,omitempty" bson:"daprConfig,omitempty"`
-	DaprConfiguration        *struct {
-		Version string `json:"version,omitempty" bson:"version,omitempty"`
-	} `json:"daprConfiguration,omitempty" bson:"daprConfiguration,omitempty"`
-	DataAccessAuthMode       string `json:"dataAccessAuthMode,omitempty" bson:"dataAccessAuthMode,omitempty"`
-	DataCollectionEndpointID string `json:"dataCollectionEndpointId,omitempty" bson:"dataCollectionEndpointId,omitempty"`
-	DataEncryption           *struct {
-		Type string `json:"type,omitempty" bson:"type,omitempty"`
-	} `json:"dataEncryption,omitempty" bson:"dataEncryption,omitempty"`
-	DataEndpointEnabled      bool                         `json:"dataEndpointEnabled,omitempty" bson:"dataEndpointEnabled,omitempty"`
-	DataEndpointHostNames    []string                     `json:"dataEndpointHostNames,omitempty" bson:"dataEndpointHostNames,omitempty"`
-	DataFlows                []AzureResourceDataFlows     `json:"dataFlows,omitempty" bson:"dataFlows,omitempty"`
-	DataLocation             string                       `json:"dataLocation,omitempty" bson:"dataLocation,omitempty"`
-	DataProtection           *AzureResourceDataProtection `json:"dataProtection,omitempty" bson:"dataProtection,omitempty"`
-	DataResidencyBoundary    string                       `json:"dataResidencyBoundary,omitempty" bson:"dataResidencyBoundary,omitempty"`
-	DataSources              *AzureResourceDataSources    `json:"dataSources,omitempty" bson:"dataSources,omitempty"`
-	DatabaseAccountOfferType string                       `json:"databaseAccountOfferType,omitempty" bson:"databaseAccountOfferType,omitempty"`
-	DatabaseID               string                       `json:"databaseId,omitempty" bson:"databaseId,omitempty"`
-	DateCreated              string                       `json:"dateCreated,omitempty" bson:"dateCreated,omitempty"`
-	DdosSettings             *struct {
-		ProtectionMode string `json:"protectionMode,omitempty" bson:"protectionMode,omitempty"`
-	} `json:"ddosSettings,omitempty" bson:"ddosSettings,omitempty"`
-	DedicatedCoreQuota            float64 `json:"dedicatedCoreQuota,omitempty" bson:"dedicatedCoreQuota,omitempty"`
-	DedicatedCoreQuotaPerVmFamily []*struct {
-		CoreQuota float64 `json:"coreQuota,omitempty" bson:"coreQuota,omitempty"`
-		Name      string  `json:"name,omitempty" bson:"name,omitempty"`
-	} `json:"dedicatedCoreQuotaPerVMFamily,omitempty" bson:"dedicatedCoreQuotaPerVMFamily,omitempty"`
-	DedicatedCoreQuotaPerVmFamilyEnforced bool                                 `json:"dedicatedCoreQuotaPerVMFamilyEnforced,omitempty" bson:"dedicatedCoreQuotaPerVMFamilyEnforced,omitempty"`
-	DefaultDomain                         string                               `json:"defaultDomain,omitempty" bson:"defaultDomain,omitempty"`
-	DefaultGroupQuotaInKiBs               float64                              `json:"defaultGroupQuotaInKiBs,omitempty" bson:"defaultGroupQuotaInKiBs,omitempty"`
-	DefaultHostName                       string                               `json:"defaultHostName,omitempty" bson:"defaultHostName,omitempty"`
-	DefaultHostNameScope                  string                               `json:"defaultHostNameScope,omitempty" bson:"defaultHostNameScope,omitempty"`
-	DefaultIdentity                       string                               `json:"defaultIdentity,omitempty" bson:"defaultIdentity,omitempty"`
-	DefaultSecondaryLocation              string                               `json:"defaultSecondaryLocation,omitempty" bson:"defaultSecondaryLocation,omitempty"`
-	DefaultSecurityRules                  []*AzureResourceDefaultSecurityRules `json:"defaultSecurityRules,omitempty" bson:"defaultSecurityRules,omitempty"`
-	DefaultToOAuthAuthentication          bool                                 `json:"defaultToOAuthAuthentication,omitempty" bson:"defaultToOAuthAuthentication,omitempty"`
-	DefaultUserQuotaInKiBs                float64                              `json:"defaultUserQuotaInKiBs,omitempty" bson:"defaultUserQuotaInKiBs,omitempty"`
-	Definition                            *AzureResourceDefinition             `json:"definition,omitempty" bson:"definition,omitempty"`
-	DeploymentID                          string                               `json:"deploymentId,omitempty" bson:"deploymentId,omitempty"`
-	Description                           *string                              `json:"description,omitempty" bson:"description,omitempty"`
-	Destinations                          *AzureResourceDestinations           `json:"destinations,omitempty" bson:"destinations,omitempty"`
-	DhcpOptions                           *struct {
-		DnsServers []string `json:"dnsServers,omitempty" bson:"dnsServers,omitempty"`
-	} `json:"dhcpOptions,omitempty" bson:"dhcpOptions,omitempty"`
-	DiagnosticsProfile                 *AzureResourceDiagnosticsProfile `json:"diagnosticsProfile,omitempty" bson:"diagnosticsProfile,omitempty"`
-	DisableBgpRoutePropagation         bool                             `json:"disableBgpRoutePropagation,omitempty" bson:"disableBgpRoutePropagation,omitempty"`
-	DisableCopyPaste                   bool                             `json:"disableCopyPaste,omitempty" bson:"disableCopyPaste,omitempty"`
-	DisableIpSecReplayProtection       bool                             `json:"disableIPSecReplayProtection,omitempty" bson:"disableIPSecReplayProtection,omitempty"`
-	DisableKeyBasedMetadataWriteAccess bool                             `json:"disableKeyBasedMetadataWriteAccess,omitempty" bson:"disableKeyBasedMetadataWriteAccess,omitempty"`
-	DisableLocalAuth                   bool                             `json:"disableLocalAuth,omitempty" bson:"disableLocalAuth,omitempty"`
-	DisableTcpStateTracking            bool                             `json:"disableTcpStateTracking,omitempty" bson:"disableTcpStateTracking,omitempty"`
-	DisableVpnEncryption               bool                             `json:"disableVpnEncryption,omitempty" bson:"disableVpnEncryption,omitempty"`
-	Disallowed                         *struct {
-		DiskTypes []any `json:"diskTypes,omitempty" bson:"diskTypes,omitempty"`
-	} `json:"disallowed,omitempty" bson:"disallowed,omitempty"`
-	DiskIopsReadWrite float64                    `json:"diskIOPSReadWrite,omitempty" bson:"diskIOPSReadWrite,omitempty"`
-	DiskMBpsReadWrite float64                    `json:"diskMBpsReadWrite,omitempty" bson:"diskMBpsReadWrite,omitempty"`
-	DiskSizeBytes     float64                    `json:"diskSizeBytes,omitempty" bson:"diskSizeBytes,omitempty"`
-	DiskSizeGb        float64                    `json:"diskSizeGB,omitempty" bson:"diskSizeGB,omitempty"`
-	DiskState         string                     `json:"diskState,omitempty" bson:"diskState,omitempty"`
-	DisplayName       string                     `json:"displayName,omitempty" bson:"displayName,omitempty"`
-	Distribute        []*AzureResourceDistribute `json:"distribute,omitempty" bson:"distribute,omitempty"`
-	DnsConfiguration  *struct {
-		DnsLegacySortOrder bool `json:"dnsLegacySortOrder,omitempty" bson:"dnsLegacySortOrder,omitempty"`
-	} `json:"dnsConfiguration,omitempty" bson:"dnsConfiguration,omitempty"`
-	DnsEndpointType                        string                                     `json:"dnsEndpointType,omitempty" bson:"dnsEndpointType,omitempty"`
-	DnsName                                string                                     `json:"dnsName,omitempty" bson:"dnsName,omitempty"`
-	DnsPrefix                              string                                     `json:"dnsPrefix,omitempty" bson:"dnsPrefix,omitempty"`
-	DnsSettings                            *AzureResourceDnsSettings                  `json:"dnsSettings,omitempty" bson:"dnsSettings,omitempty"`
-	DoNotRunExtensionsOnOverprovisionedVMs bool                                       `json:"doNotRunExtensionsOnOverprovisionedVMs,omitempty" bson:"doNotRunExtensionsOnOverprovisionedVMs,omitempty"`
-	DocumentEndpoint                       string                                     `json:"documentEndpoint,omitempty" bson:"documentEndpoint,omitempty"`
-	DomainManagement                       string                                     `json:"domainManagement,omitempty" bson:"domainManagement,omitempty"`
-	DomainName                             string                                     `json:"domainName,omitempty" bson:"domainName,omitempty"`
-	DomainVerificationIdentifiers          any                                        `json:"domainVerificationIdentifiers,omitempty" bson:"domainVerificationIdentifiers,omitempty"`
-	DpdTimeoutSeconds                      float64                                    `json:"dpdTimeoutSeconds,omitempty" bson:"dpdTimeoutSeconds,omitempty"`
-	EarliestRestoreDate                    string                                     `json:"earliestRestoreDate,omitempty" bson:"earliestRestoreDate,omitempty"`
-	EgressBytesTransferred                 float64                                    `json:"egressBytesTransferred,omitempty" bson:"egressBytesTransferred,omitempty"`
-	ElasticScaleEnabled                    bool                                       `json:"elasticScaleEnabled,omitempty" bson:"elasticScaleEnabled,omitempty"`
-	EligibleLogCategories                  string                                     `json:"eligibleLogCategories,omitempty" bson:"eligibleLogCategories,omitempty"`
-	EmailReceivers                         []*AzureResourceEmailReceivers             `json:"emailReceivers,omitempty" bson:"emailReceivers,omitempty"`
-	EnableAcceleratedNetworking            bool                                       `json:"enableAcceleratedNetworking,omitempty" bson:"enableAcceleratedNetworking,omitempty"`
-	EnableAnalyticalStorage                bool                                       `json:"enableAnalyticalStorage,omitempty" bson:"enableAnalyticalStorage,omitempty"`
-	EnableAutomaticFailover                bool                                       `json:"enableAutomaticFailover,omitempty" bson:"enableAutomaticFailover,omitempty"`
-	EnableAutomaticUpgrade                 bool                                       `json:"enableAutomaticUpgrade,omitempty" bson:"enableAutomaticUpgrade,omitempty"`
-	EnableBgp                              bool                                       `json:"enableBgp,omitempty" bson:"enableBgp,omitempty"`
-	EnableBgpRouteTranslationForNat        bool                                       `json:"enableBgpRouteTranslationForNat,omitempty" bson:"enableBgpRouteTranslationForNat,omitempty"`
-	EnableBurstCapacity                    bool                                       `json:"enableBurstCapacity,omitempty" bson:"enableBurstCapacity,omitempty"`
-	EnableClientTelemetry                  bool                                       `json:"enableClientTelemetry,omitempty" bson:"enableClientTelemetry,omitempty"`
-	EnableDdosProtection                   bool                                       `json:"enableDdosProtection,omitempty" bson:"enableDdosProtection,omitempty"`
-	EnableDirectPortRateLimit              bool                                       `json:"enableDirectPortRateLimit,omitempty" bson:"enableDirectPortRateLimit,omitempty"`
-	EnableFileCopy                         bool                                       `json:"enableFileCopy,omitempty" bson:"enableFileCopy,omitempty"`
-	EnableFreeTier                         bool                                       `json:"enableFreeTier,omitempty" bson:"enableFreeTier,omitempty"`
-	EnableIpForwarding                     bool                                       `json:"enableIPForwarding,omitempty" bson:"enableIPForwarding,omitempty"`
-	EnableIpConnect                        bool                                       `json:"enableIpConnect,omitempty" bson:"enableIpConnect,omitempty"`
-	EnableKerberos                         bool                                       `json:"enableKerberos,omitempty" bson:"enableKerberos,omitempty"`
-	EnableMultipleWriteLocations           bool                                       `json:"enableMultipleWriteLocations,omitempty" bson:"enableMultipleWriteLocations,omitempty"`
-	EnablePartitionKeyMonitor              bool                                       `json:"enablePartitionKeyMonitor,omitempty" bson:"enablePartitionKeyMonitor,omitempty"`
-	EnablePartitionMerge                   bool                                       `json:"enablePartitionMerge,omitempty" bson:"enablePartitionMerge,omitempty"`
-	EnablePrivateIpAddress                 bool                                       `json:"enablePrivateIpAddress,omitempty" bson:"enablePrivateIpAddress,omitempty"`
-	EnablePrivateLinkFastPath              bool                                       `json:"enablePrivateLinkFastPath,omitempty" bson:"enablePrivateLinkFastPath,omitempty"`
-	EnablePurgeProtection                  bool                                       `json:"enablePurgeProtection,omitempty" bson:"enablePurgeProtection,omitempty"`
-	EnableRbac                             bool                                       `json:"enableRBAC,omitempty" bson:"enableRBAC,omitempty"`
-	EnableRbacAuthorization                bool                                       `json:"enableRbacAuthorization,omitempty" bson:"enableRbacAuthorization,omitempty"`
-	EnableShareableLink                    bool                                       `json:"enableShareableLink,omitempty" bson:"enableShareableLink,omitempty"`
-	EnableSoftDelete                       bool                                       `json:"enableSoftDelete,omitempty" bson:"enableSoftDelete,omitempty"`
-	EnableSubvolumes                       string                                     `json:"enableSubvolumes,omitempty" bson:"enableSubvolumes,omitempty"`
-	EnableTunneling                        bool                                       `json:"enableTunneling,omitempty" bson:"enableTunneling,omitempty"`
-	Enabled                                bool                                       `json:"enabled,omitempty" bson:"enabled,omitempty"`
-	EnabledForDeployment                   bool                                       `json:"enabledForDeployment,omitempty" bson:"enabledForDeployment,omitempty"`
-	EnabledForDiskEncryption               bool                                       `json:"enabledForDiskEncryption,omitempty" bson:"enabledForDiskEncryption,omitempty"`
-	EnabledForTemplateDeployment           bool                                       `json:"enabledForTemplateDeployment,omitempty" bson:"enabledForTemplateDeployment,omitempty"`
-	EnabledHostNames                       []string                                   `json:"enabledHostNames,omitempty" bson:"enabledHostNames,omitempty"`
-	Encapsulation                          string                                     `json:"encapsulation,omitempty" bson:"encapsulation,omitempty"`
-	ResourceEncryption                     *AzureResourceEncryption                   `json:"encryption,omitempty" bson:"encryption,omitempty"`
-	EncryptionKeySource                    string                                     `json:"encryptionKeySource,omitempty" bson:"encryptionKeySource,omitempty"`
-	EncryptionSettingsCollection           *AzureResourceEncryptionSettingsCollection `json:"encryptionSettingsCollection,omitempty" bson:"encryptionSettingsCollection,omitempty"`
-	EncryptionType                         string                                     `json:"encryptionType,omitempty" bson:"encryptionType,omitempty"`
-	EndToEndEncryptionEnabled              bool                                       `json:"endToEndEncryptionEnabled,omitempty" bson:"endToEndEncryptionEnabled,omitempty"`
-	Endpoint                               string                                     `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
-	Endpoints                              any                                        `json:"endpoints,omitempty" bson:"endpoints,omitempty"`
-	EndpointsConfiguration                 *AzureResourceEndpointsConfiguration       `json:"endpointsConfiguration,omitempty" bson:"endpointsConfiguration,omitempty"`
-	EnvironmentID                          string                                     `json:"environmentId,omitempty" bson:"environmentId,omitempty"`
-	EtherType                              string                                     `json:"etherType,omitempty" bson:"etherType,omitempty"`
-	EvaluationFrequency                    string                                     `json:"evaluationFrequency,omitempty" bson:"evaluationFrequency,omitempty"`
-	EventHubReceivers                      []any                                      `json:"eventHubReceivers,omitempty" bson:"eventHubReceivers,omitempty"`
-	EventStreamEndpoint                    string                                     `json:"eventStreamEndpoint,omitempty" bson:"eventStreamEndpoint,omitempty"`
-	EvictionPolicy                         string                                     `json:"evictionPolicy,omitempty" bson:"evictionPolicy,omitempty"`
-	ExactStagingResourceGroup              string                                     `json:"exactStagingResourceGroup,omitempty" bson:"exactStagingResourceGroup,omitempty"`
-	ExistingServerFarmIds                  any                                        `json:"existingServerFarmIds,omitempty" bson:"existingServerFarmIds,omitempty"`
-	ExportPolicy                           *struct {
-		Rules []any `json:"rules,omitempty" bson:"rules,omitempty"`
-	} `json:"exportPolicy,omitempty" bson:"exportPolicy,omitempty"`
-	ExpressRouteConnections []*AzureResourceExpressRouteConnections `json:"expressRouteConnections,omitempty" bson:"expressRouteConnections,omitempty"`
-	ExpressRouteGateway     *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"expressRouteGateway,omitempty" bson:"expressRouteGateway,omitempty"`
-	ExpressRouteGatewayBypass bool `json:"expressRouteGatewayBypass,omitempty" bson:"expressRouteGatewayBypass,omitempty"`
-	ExpressRoutePort          *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"expressRoutePort,omitempty" bson:"expressRoutePort,omitempty"`
-	Extended            *AzureResourceExtended `json:"extended,omitempty" bson:"extended,omitempty"`
-	ExtensionProperties *struct {
-		InGuestPatchMode string `json:"InGuestPatchMode,omitempty" bson:"InGuestPatchMode,omitempty"`
-	} `json:"extensionProperties,omitempty" bson:"extensionProperties,omitempty"`
-	ExtensionsTimeBudget     string                          `json:"extensionsTimeBudget,omitempty" bson:"extensionsTimeBudget,omitempty"`
-	ExternalGovernanceStatus string                          `json:"externalGovernanceStatus,omitempty" bson:"externalGovernanceStatus,omitempty"`
-	FactoryStatistics        *AzureResourceFactoryStatistics `json:"factoryStatistics,omitempty" bson:"factoryStatistics,omitempty"`
-	FailoverPolicies         []*AzureResourceFailoverPolicy  `json:"failoverPolicies,omitempty" bson:"failoverPolicies,omitempty"`
-	FeatureSettings          *AzureResourceFeatureSettings   `json:"featureSettings,omitempty" bson:"featureSettings,omitempty"`
-	Features                 any                             `json:"features,omitempty" bson:"features,omitempty"`
-	FileSystemID             string                          `json:"fileSystemId,omitempty" bson:"fileSystemId,omitempty"`
-	FirewallPolicies         []struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"firewallPolicies,omitempty" bson:"firewallPolicies,omitempty"`
-	FirewallPolicy *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"firewallPolicy,omitempty" bson:"firewallPolicy,omitempty"`
-	Firewalls []struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"firewalls,omitempty" bson:"firewalls,omitempty"`
-	FlowAnalyticsConfiguration *AzureResourceFlowAnalyticsConfiguration `json:"flowAnalyticsConfiguration,omitempty" bson:"flowAnalyticsConfiguration,omitempty"`
-	FlowLogs                   []struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"flowLogs,omitempty" bson:"flowLogs,omitempty"`
-	ForceCmkForQuery bool   `json:"forceCmkForQuery,omitempty" bson:"forceCmkForQuery,omitempty"`
-	ForceUpdateTag   string `json:"forceUpdateTag,omitempty" bson:"forceUpdateTag,omitempty"`
-	Format           *struct {
-		Type    string  `json:"type,omitempty" bson:"type,omitempty"`
-		Version float64 `json:"version,omitempty" bson:"version,omitempty"`
-	} `json:"format,omitempty" bson:"format,omitempty"`
-	Fqdn                                  string                                  `json:"fqdn,omitempty" bson:"fqdn,omitempty"`
-	FreeOfferExpirationTime               any                                     `json:"freeOfferExpirationTime,omitempty" bson:"freeOfferExpirationTime,omitempty"`
-	FriendlyName                          string                                  `json:"friendlyName,omitempty" bson:"friendlyName,omitempty"`
-	FromSenderDomain                      string                                  `json:"fromSenderDomain,omitempty" bson:"fromSenderDomain,omitempty"`
-	FrontendIpConfigurations              []*AzureResourceFrontendIpConfiguration `json:"frontendIPConfigurations,omitempty" bson:"frontendIPConfigurations,omitempty"`
-	FtpUsername                           string                                  `json:"ftpUsername,omitempty" bson:"ftpUsername,omitempty"`
-	FtpsHostName                          string                                  `json:"ftpsHostName,omitempty" bson:"ftpsHostName,omitempty"`
-	FullyQualifiedDomainName              string                                  `json:"fullyQualifiedDomainName,omitempty" bson:"fullyQualifiedDomainName,omitempty"`
-	FunctionAppConfig                     any                                     `json:"functionAppConfig,omitempty" bson:"functionAppConfig,omitempty"`
-	FunctionExecutionUnitsCache           any                                     `json:"functionExecutionUnitsCache,omitempty" bson:"functionExecutionUnitsCache,omitempty"`
-	FunctionsRuntimeAdminIsolationEnabled bool                                    `json:"functionsRuntimeAdminIsolationEnabled,omitempty" bson:"functionsRuntimeAdminIsolationEnabled,omitempty"`
-	GatewayCustomBgpIpAddresses           []any                                   `json:"gatewayCustomBgpIpAddresses,omitempty" bson:"gatewayCustomBgpIpAddresses,omitempty"`
-	GatewayManagerEtag                    string                                  `json:"gatewayManagerEtag,omitempty" bson:"gatewayManagerEtag,omitempty"`
-	GatewayType                           string                                  `json:"gatewayType,omitempty" bson:"gatewayType,omitempty"`
-	GeoDataReplication                    *AzureResourceGeoDataReplication        `json:"geoDataReplication,omitempty" bson:"geoDataReplication,omitempty"`
-	GeoDistributions                      any                                     `json:"geoDistributions,omitempty" bson:"geoDistributions,omitempty"`
-	GeoRegion                             string                                  `json:"geoRegion,omitempty" bson:"geoRegion,omitempty"`
-	GlobalParameters                      *struct {
-		Owner struct {
-			Type  string `json:"type,omitempty" bson:"type,omitempty"`
-			Value string `json:"value,omitempty" bson:"value,omitempty"`
-		} `json:"Owner,omitempty" bson:"Owner,omitempty"`
-	} `json:"globalParameters,omitempty" bson:"globalParameters,omitempty"`
-	GlobalReachEnabled bool   `json:"globalReachEnabled,omitempty" bson:"globalReachEnabled,omitempty"`
-	GroupShortName     string `json:"groupShortName,omitempty" bson:"groupShortName,omitempty"`
-	HardwareProfile    *struct {
+	Other jsontext.Value `json:",unknown" bson:",unknown"`
+	// AccountURL                      string         `json:"AccountURL,omitempty" bson:"AccountURL,omitempty"`
+	AppID         string `json:"AppId,omitempty" bson:"AppId,omitempty"`
+	ApplicationID string `json:"ApplicationId,omitempty" bson:"ApplicationId,omitempty"`
+	// ApplicationType                 string         `json:"Application_Type,omitempty" bson:"Application_Type,omitempty"`
+	// ConnectionString                string         `json:"ConnectionString,omitempty" bson:"ConnectionString,omitempty"`
+	// CreationDateOther               string         `json:"CreationDate,omitempty" bson:"CreationDate,omitempty"`
+	// DisableIpMasking                bool           `json:"DisableIpMasking,omitempty" bson:"DisableIpMasking,omitempty"`
+	// DisableLocalAuthOther           bool           `json:"DisableLocalAuth,omitempty" bson:"DisableLocalAuth,omitempty"`
+	// EnabledAPITypes                 string         `json:"EnabledApiTypes,omitempty" bson:"EnabledApiTypes,omitempty"`
+	// FlowType                        string         `json:"Flow_Type,omitempty" bson:"Flow_Type,omitempty"`
+	// ForceCustomerStorageForProfiler bool           `json:"ForceCustomerStorageForProfiler,omitempty" bson:"ForceCustomerStorageForProfiler,omitempty"`
+	// IngestionMode                   string         `json:"IngestionMode,omitempty" bson:"IngestionMode,omitempty"`
+	// InstrumentationKey              string         `json:"InstrumentationKey,omitempty" bson:"InstrumentationKey,omitempty"`
+	// LastOwnershipUpdateTime         string         `json:"LastOwnershipUpdateTime,omitempty" bson:"LastOwnershipUpdateTime,omitempty"`
+	// LinkedStorages                  *struct {
+	// 	ServiceProfilerLinkedStorage string `json:"ServiceProfilerLinkedStorage,omitempty" bson:"ServiceProfilerLinkedStorage,omitempty"`
+	// } `json:"LinkedStorages,omitempty" bson:"LinkedStorages,omitempty"`
+	// NameOther                       string                                    `json:"Name,omitempty" bson:"Name,omitempty"`
+	// PrivateLinkScopedResourcesOther []*AzureResourcePrivateLinkScopedResource `json:"PrivateLinkScopedResources,omitempty" bson:"PrivateLinkScopedResources,omitempty"`
+	// RegistrationURL                 string                                    `json:"RegistrationUrl,omitempty" bson:"RegistrationUrl,omitempty"`
+	// RequestSource                   string                                    `json:"Request_Source,omitempty" bson:"Request_Source,omitempty"`
+	// Retention                       string                                    `json:"Retention,omitempty" bson:"Retention,omitempty"`
+	// RetentionInDaysOther            float64                                   `json:"RetentionInDays,omitempty" bson:"RetentionInDays,omitempty"`
+	// RuntimeConfiguration            *AzureResourceRuntimeConfiguration        `json:"RuntimeConfiguration,omitempty" bson:"RuntimeConfiguration,omitempty"`
+	// SamplingPercentage              *float64                                  `json:"SamplingPercentage,omitempty" bson:"SamplingPercentage,omitempty"`
+	// TenantID                        string                                    `json:"TenantId,omitempty" bson:"TenantId,omitempty"`
+	// Ver                             string                                    `json:"Ver,omitempty" bson:"Ver,omitempty"`
+	// WorkspaceResourceID             string                                    `json:"WorkspaceResourceId,omitempty" bson:"WorkspaceResourceId,omitempty"`
+	// AadAuthenticationParameters     *AzureResourceAadAuthenticationParameters `json:"aadAuthenticationParameters,omitempty" bson:"aadAuthenticationParameters,omitempty"`
+	// AadProfile                      *AzureResourceAadProfile                  `json:"aadProfile,omitempty" bson:"aadProfile,omitempty"`
+	// AccessEndpoint                  string                                    `json:"accessEndpoint,omitempty" bson:"accessEndpoint,omitempty"`
+	// AccessModeSettings              *AzureResourceAccessModeSettings          `json:"accessModeSettings,omitempty" bson:"accessModeSettings,omitempty"`
+	// AccessPolicies                  []*AzureResourceAccessPolicy              `json:"accessPolicies,omitempty" bson:"accessPolicies,omitempty"`
+	// AccessTier                      string                                    `json:"accessTier,omitempty" bson:"accessTier,omitempty"`
+	// AccountEndpoint                 string                                    `json:"accountEndpoint,omitempty" bson:"accountEndpoint,omitempty"`
+	// Actions                         any                                       `json:"actions,omitempty" bson:"actions,omitempty"`
+	// ActiveActive                    bool                                      `json:"activeActive,omitempty" bson:"activeActive,omitempty"`
+	// ActiveDirectories               []*AzureResourceActiveDirectory           `json:"activeDirectories,omitempty" bson:"activeDirectories,omitempty"`
+	// ActiveJobAndJobScheduleQuota    float64                                   `json:"activeJobAndJobScheduleQuota,omitempty" bson:"activeJobAndJobScheduleQuota,omitempty"`
+	// AdditionalCapabilities          map[string]bool                           `json:"additionalCapabilities,omitempty" bson:"additionalCapabilities,omitempty"`
+	// AdditionalProperties            map[string]string                         `json:"additionalProperties,omitempty" bson:"additionalProperties,omitempty"`
+	// AddonProfiles                   *AzureResourceAddonProfiles               `json:"addonProfiles,omitempty" bson:"addonProfiles,omitempty"`
+	// AddressPrefix                   string                                    `json:"addressPrefix,omitempty" bson:"addressPrefix,omitempty"`
+	// AddressSpace                    *struct {
+	// 	AddressPrefixes []string `json:"addressPrefixes,omitempty" bson:"addressPrefixes,omitempty"`
+	// } `json:"addressSpace,omitempty" bson:"addressSpace,omitempty"`
+	// AdminEnabled                   bool                             `json:"adminEnabled,omitempty" bson:"adminEnabled,omitempty"`
+	// AdminRuntimeSiteName           any                              `json:"adminRuntimeSiteName,omitempty" bson:"adminRuntimeSiteName,omitempty"`
+	// AdminSiteName                  any                              `json:"adminSiteName,omitempty" bson:"adminSiteName,omitempty"`
+	// AdminUserEnabled               bool                             `json:"adminUserEnabled,omitempty" bson:"adminUserEnabled,omitempty"`
+	// AdministratorLogin             string                           `json:"administratorLogin,omitempty" bson:"administratorLogin,omitempty"`
+	// Administrators                 *AzureResourceAdministrators     `json:"administrators,omitempty" bson:"administrators,omitempty"`
+	// AfdEnabled                     bool                             `json:"afdEnabled,omitempty" bson:"afdEnabled,omitempty"`
+	// AgentPoolProfiles              []*AzureResourceAgentPoolProfile `json:"agentPoolProfiles,omitempty" bson:"agentPoolProfiles,omitempty"`
+	// AllocationDate                 string                           `json:"allocationDate,omitempty" bson:"allocationDate,omitempty"`
+	// AllowBlobPublicAccess          bool                             `json:"allowBlobPublicAccess,omitempty" bson:"allowBlobPublicAccess,omitempty"`
+	// AllowBranchToBranchTraffic     bool                             `json:"allowBranchToBranchTraffic,omitempty" bson:"allowBranchToBranchTraffic,omitempty"`
+	// AllowClassicOperations         bool                             `json:"allowClassicOperations,omitempty" bson:"allowClassicOperations,omitempty"`
+	// AllowCrossTenantReplication    bool                             `json:"allowCrossTenantReplication,omitempty" bson:"allowCrossTenantReplication,omitempty"`
+	// AllowGlobalReach               bool                             `json:"allowGlobalReach,omitempty" bson:"allowGlobalReach,omitempty"`
+	// AllowNonVirtualWanTraffic      bool                             `json:"allowNonVirtualWanTraffic,omitempty" bson:"allowNonVirtualWanTraffic,omitempty"`
+	// AllowPort25Out                 bool                             `json:"allowPort25Out,omitempty" bson:"allowPort25Out,omitempty"`
+	// AllowRemoteVnetTraffic         bool                             `json:"allowRemoteVnetTraffic,omitempty" bson:"allowRemoteVnetTraffic,omitempty"`
+	// AllowSharedKeyAccess           bool                             `json:"allowSharedKeyAccess,omitempty" bson:"allowSharedKeyAccess,omitempty"`
+	// AllowVirtualWanTraffic         bool                             `json:"allowVirtualWanTraffic,omitempty" bson:"allowVirtualWanTraffic,omitempty"`
+	// AllowVnetToVnetTraffic         bool                             `json:"allowVnetToVnetTraffic,omitempty" bson:"allowVnetToVnetTraffic,omitempty"`
+	// AllowedAuthenticationModes     []string                         `json:"allowedAuthenticationModes,omitempty" bson:"allowedAuthenticationModes,omitempty"`
+	// AllowedCopyScope               string                           `json:"allowedCopyScope,omitempty" bson:"allowedCopyScope,omitempty"`
+	// AlternativeParameterValues     *map[string]string               `json:"alternativeParameterValues,omitempty" bson:"alternativeParameterValues,omitempty"`
+	// AnalyticalStorageConfiguration *struct {
+	// 	SchemaType string `json:"schemaType,omitempty" bson:"schemaType,omitempty"`
+	// } `json:"analyticalStorageConfiguration,omitempty" bson:"analyticalStorageConfiguration,omitempty"`
+	// AnonymousPullEnabled       bool                                 `json:"anonymousPullEnabled,omitempty" bson:"anonymousPullEnabled,omitempty"`
+	// API                        *AzureResourceAPI                    `json:"api,omitempty" bson:"api,omitempty"`
+	// APIServerAccessProfile     *AzureResourceAPIServerAccessProfile `json:"apiServerAccessProfile,omitempty" bson:"apiServerAccessProfile,omitempty"`
+	// AppInsightsConfiguration   any                                  `json:"appInsightsConfiguration,omitempty" bson:"appInsightsConfiguration,omitempty"`
+	// AppLogsConfiguration       *AzureResourceAppLogsConfiguration   `json:"appLogsConfiguration,omitempty" bson:"appLogsConfiguration,omitempty"`
+	// ApplicationRuleCollections []any                                `json:"applicationRuleCollections,omitempty" bson:"applicationRuleCollections,omitempty"`
+	// Architecture               string                               `json:"architecture,omitempty" bson:"architecture,omitempty"`
+	// ArmRoleReceivers           []struct {
+	// 	Name                 string `json:"name,omitempty" bson:"name,omitempty"`
+	// 	RoleID               string `json:"roleId,omitempty" bson:"roleId,omitempty"`
+	// 	UseCommonAlertSchema bool   `json:"useCommonAlertSchema,omitempty" bson:"useCommonAlertSchema,omitempty"`
+	// } `json:"armRoleReceivers,omitempty" bson:"armRoleReceivers,omitempty"`
+	// AuthConfig *struct {
+	// 	ActiveDirectoryAuth string `json:"activeDirectoryAuth,omitempty" bson:"activeDirectoryAuth,omitempty"`
+	// 	PasswordAuth        string `json:"passwordAuth,omitempty" bson:"passwordAuth,omitempty"`
+	// } `json:"authConfig,omitempty" bson:"authConfig,omitempty"`
+	// AuthenticatedUser *struct {
+	// 	Name string `json:"name,omitempty" bson:"name,omitempty"`
+	// } `json:"authenticatedUser,omitempty" bson:"authenticatedUser,omitempty"`
+	// AuthenticationType                   string                               `json:"authenticationType,omitempty" bson:"authenticationType,omitempty"`
+	// Authorizations                       []*AzureResourceAuthorization        `json:"authorizations,omitempty" bson:"authorizations,omitempty"`
+	// AutoCreateTopicWithFirstSubscription bool                                 `json:"autoCreateTopicWithFirstSubscription,omitempty" bson:"autoCreateTopicWithFirstSubscription,omitempty"`
+	// AutoDeleteTopicWithLastSubscription  bool                                 `json:"autoDeleteTopicWithLastSubscription,omitempty" bson:"autoDeleteTopicWithLastSubscription,omitempty"`
+	// AutoGeneratedDomainNameLabelScope    any                                  `json:"autoGeneratedDomainNameLabelScope,omitempty" bson:"autoGeneratedDomainNameLabelScope,omitempty"`
+	// AutoMitigate                         bool                                 `json:"autoMitigate,omitempty" bson:"autoMitigate,omitempty"`
+	// AutoPauseDelay                       float64                              `json:"autoPauseDelay,omitempty" bson:"autoPauseDelay,omitempty"`
+	// AutoScaleConfiguration               *AzureResourceAutoScaleConfiguration `json:"autoScaleConfiguration,omitempty" bson:"autoScaleConfiguration,omitempty"`
+	// AutoScalerProfile                    *AzureResourceAutoScalerProfile      `json:"autoScalerProfile,omitempty" bson:"autoScalerProfile,omitempty"`
+	// AutoUpgradeMinorVersion              bool                                 `json:"autoUpgradeMinorVersion,omitempty" bson:"autoUpgradeMinorVersion,omitempty"`
+	// AutoUpgradeProfile                   *struct {
+	// 	UpgradeChannel string `json:"upgradeChannel,omitempty" bson:"upgradeChannel,omitempty"`
+	// } `json:"autoUpgradeProfile,omitempty" bson:"autoUpgradeProfile,omitempty"`
+	// AutomationHybridServiceURL string `json:"automationHybridServiceUrl,omitempty" bson:"automationHybridServiceUrl,omitempty"`
+	// AutomationRunbookReceivers []any  `json:"automationRunbookReceivers,omitempty" bson:"automationRunbookReceivers,omitempty"`
+	// AuxiliaryMode              string `json:"auxiliaryMode,omitempty" bson:"auxiliaryMode,omitempty"`
+	// AuxiliarySku               string `json:"auxiliarySku,omitempty" bson:"auxiliarySku,omitempty"`
+	// AvailabilitySet            *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"availabilitySet,omitempty" bson:"availabilitySet,omitempty"`
+	// AvailabilityState                     string `json:"availabilityState,omitempty" bson:"availabilityState,omitempty"`
+	// AvailabilityZone                      string `json:"availabilityZone,omitempty" bson:"availabilityZone,omitempty"`
+	// AvsDataStore                          string `json:"avsDataStore,omitempty" bson:"avsDataStore,omitempty"`
+	// AzureAppPushReceivers                 []any  `json:"azureAppPushReceivers,omitempty" bson:"azureAppPushReceivers,omitempty"`
+	// AzureFilesIdentityBasedAuthentication *struct {
+	// 	DirectoryServiceOptions string `json:"directoryServiceOptions,omitempty" bson:"directoryServiceOptions,omitempty"`
+	// } `json:"azureFilesIdentityBasedAuthentication,omitempty" bson:"azureFilesIdentityBasedAuthentication,omitempty"`
+	// AzureFirewall *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"azureFirewall,omitempty" bson:"azureFirewall,omitempty"`
+	// AzureFunctionReceivers []any                              `json:"azureFunctionReceivers,omitempty" bson:"azureFunctionReceivers,omitempty"`
+	// AzureMonitorProfile    *AzureResourceAzureMonitorProfile  `json:"azureMonitorProfile,omitempty" bson:"azureMonitorProfile,omitempty"`
+	// AzurePortalFqdn        string                             `json:"azurePortalFQDN,omitempty" bson:"azurePortalFQDN,omitempty"`
+	// BackendAddressPools    []*AzureResourceBackendAddressPool `json:"backendAddressPools,omitempty" bson:"backendAddressPools,omitempty"`
+	// Backup                 *AzureResourceBackup               `json:"backup,omitempty" bson:"backup,omitempty"`
+	// BackupPolicy           *AzureResourceBackupPolicy         `json:"backupPolicy,omitempty" bson:"backupPolicy,omitempty"`
+	// BackupPolicyID         string                             `json:"backupPolicyId,omitempty" bson:"backupPolicyId,omitempty"`
+	// BackupStorageVersion   string                             `json:"backupStorageVersion,omitempty" bson:"backupStorageVersion,omitempty"`
+	// BandwidthInGbps        float64                            `json:"bandwidthInGbps,omitempty" bson:"bandwidthInGbps,omitempty"`
+	// BareMetalServer        *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"bareMetalServer,omitempty" bson:"bareMetalServer,omitempty"`
+	// BaremetalTenantID string `json:"baremetalTenantId,omitempty" bson:"baremetalTenantId,omitempty"`
+	// BcdrSecurityLevel string `json:"bcdrSecurityLevel,omitempty" bson:"bcdrSecurityLevel,omitempty"`
+	// BillingConfig     *struct {
+	// 	BillingType           string `json:"billingType,omitempty" bson:"billingType,omitempty"`
+	// 	EffectiveStartDateUtc string `json:"effectiveStartDateUtc,omitempty" bson:"effectiveStartDateUtc,omitempty"`
+	// } `json:"billingConfig,omitempty" bson:"billingConfig,omitempty"`
+	// BillingModel   string `json:"billingModel,omitempty" bson:"billingModel,omitempty"`
+	// BillingProfile *struct {
+	// 	MaxPrice float64 `json:"maxPrice,omitempty" bson:"maxPrice,omitempty"`
+	// } `json:"billingProfile,omitempty" bson:"billingProfile,omitempty"`
+	// BlockPathTraversal    bool                        `json:"blockPathTraversal,omitempty" bson:"blockPathTraversal,omitempty"`
+	// BuildTimeoutInMinutes float64                     `json:"buildTimeoutInMinutes,omitempty" bson:"buildTimeoutInMinutes,omitempty"`
+	// BuildVersion          any                         `json:"buildVersion,omitempty" bson:"buildVersion,omitempty"`
+	// CallRateLimit         *AzureResourceCallRateLimit `json:"callRateLimit,omitempty" bson:"callRateLimit,omitempty"`
+	// Capabilities          []struct {
+	// 	Name  string `json:"name,omitempty" bson:"name,omitempty"`
+	// 	Value string `json:"value,omitempty" bson:"value,omitempty"`
+	// } `json:"capabilities,omitempty" bson:"capabilities,omitempty"`
+	// CatalogCollation         string `json:"catalogCollation,omitempty" bson:"catalogCollation,omitempty"`
+	// Category                 string `json:"category,omitempty" bson:"category,omitempty"`
+	// Cers                     any    `json:"cers,omitempty" bson:"cers,omitempty"`
+	// ChangedTime              string `json:"changedTime,omitempty" bson:"changedTime,omitempty"`
+	// ChildPolicies            []any  `json:"childPolicies,omitempty" bson:"childPolicies,omitempty"`
+	// CircuitProvisioningState string `json:"circuitProvisioningState,omitempty" bson:"circuitProvisioningState,omitempty"`
+	// Circuits                 []struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"circuits,omitempty" bson:"circuits,omitempty"`
+	// ClientAffinityEnabled      bool   `json:"clientAffinityEnabled,omitempty" bson:"clientAffinityEnabled,omitempty"`
+	// ClientAffinityProxyEnabled bool   `json:"clientAffinityProxyEnabled,omitempty" bson:"clientAffinityProxyEnabled,omitempty"`
+	// ClientCertEnabled          bool   `json:"clientCertEnabled,omitempty" bson:"clientCertEnabled,omitempty"`
+	// ClientCertExclusionPaths   any    `json:"clientCertExclusionPaths,omitempty" bson:"clientCertExclusionPaths,omitempty"`
+	// ClientCertMode             string `json:"clientCertMode,omitempty" bson:"clientCertMode,omitempty"`
+	// ClientID                   string `json:"clientId,omitempty" bson:"clientId,omitempty"`
+	// CloningInfo                any    `json:"cloningInfo,omitempty" bson:"cloningInfo,omitempty"`
+	// CloudConnectors            *struct {
+	// 	AwsExternalID string `json:"awsExternalId,omitempty" bson:"awsExternalId,omitempty"`
+	// } `json:"cloudConnectors,omitempty" bson:"cloudConnectors,omitempty"`
+	// CloudID       string `json:"cloudId,omitempty" bson:"cloudId,omitempty"`
+	// CloudServices []struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"cloudServices,omitempty" bson:"cloudServices,omitempty"`
+	// Collation           string                      `json:"collation,omitempty" bson:"collation,omitempty"`
+	// ComputeMode         *string                     `json:"computeMode,omitempty" bson:"computeMode,omitempty"`
+	// Condition           *AzureResourceCondition     `json:"condition,omitempty" bson:"condition,omitempty"`
+	// Configuration       *AzureResourceConfiguration `json:"configuration,omitempty" bson:"configuration,omitempty"`
+	// ConfigurationAccess *struct {
+	// 	Endpoint string `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
+	// } `json:"configurationAccess,omitempty" bson:"configurationAccess,omitempty"`
+	// ConfigurationOverrides    *struct{} `json:"configurationOverrides,omitempty" bson:"configurationOverrides,omitempty"`
+	// ConfigurationPolicyGroups []any     `json:"configurationPolicyGroups,omitempty" bson:"configurationPolicyGroups,omitempty"`
+	// ConfigurationType         string    `json:"configurationType,omitempty" bson:"configurationType,omitempty"`
+	// Configurations            []struct {
+	// 	Name  string `json:"name,omitempty" bson:"name,omitempty"`
+	// 	Value string `json:"value,omitempty" bson:"value,omitempty"`
+	// } `json:"configurations,omitempty" bson:"configurations,omitempty"`
+	// ConnectionMode        string `json:"connectionMode,omitempty" bson:"connectionMode,omitempty"`
+	// ConnectionMonitorType string `json:"connectionMonitorType,omitempty" bson:"connectionMonitorType,omitempty"`
+	// ConnectionState       string `json:"connectionState,omitempty" bson:"connectionState,omitempty"`
+	// ConnectionType        string `json:"connectionType,omitempty" bson:"connectionType,omitempty"`
+	// ConsistencyPolicy     *struct {
+	// 	DefaultConsistencyLevel string  `json:"defaultConsistencyLevel,omitempty" bson:"defaultConsistencyLevel,omitempty"`
+	// 	MaxIntervalInSeconds    float64 `json:"maxIntervalInSeconds,omitempty" bson:"maxIntervalInSeconds,omitempty"`
+	// 	MaxStalenessPrefix      float64 `json:"maxStalenessPrefix,omitempty" bson:"maxStalenessPrefix,omitempty"`
+	// } `json:"consistencyPolicy,omitempty" bson:"consistencyPolicy,omitempty"`
+	// ContainedResources        []string `json:"containedResources,omitempty" bson:"containedResources,omitempty"`
+	// ContainerAllocationSubnet any      `json:"containerAllocationSubnet,omitempty" bson:"containerAllocationSubnet,omitempty"`
+	// ContainerSize             float64  `json:"containerSize,omitempty" bson:"containerSize,omitempty"`
+	// ContentAvailabilityState  string   `json:"contentAvailabilityState,omitempty" bson:"contentAvailabilityState,omitempty"`
+	// CoolAccess                bool     `json:"coolAccess,omitempty" bson:"coolAccess,omitempty"`
+	// Cors                      []any    `json:"cors,omitempty" bson:"cors,omitempty"`
+	// CreateTenantProperties    *struct {
+	// 	CountryCode string `json:"countryCode,omitempty" bson:"countryCode,omitempty"`
+	// 	DisplayName string `json:"displayName,omitempty" bson:"displayName,omitempty"`
+	// } `json:"createTenantProperties,omitempty" bson:"createTenantProperties,omitempty"`
+	// CreateTime                     string                     `json:"createTime,omitempty" bson:"createTime,omitempty"`
+	// CreatedAt                      string                     `json:"createdAt,omitempty" bson:"createdAt,omitempty"`
+	// CreatedBy                      string                     `json:"createdBy,omitempty" bson:"createdBy,omitempty"`
+	// CreatedByObjectID              string                     `json:"createdByObjectId,omitempty" bson:"createdByObjectId,omitempty"`
+	// CreatedDate                    string                     `json:"createdDate,omitempty" bson:"createdDate,omitempty"`
+	// CreatedTime                    string                     `json:"createdTime,omitempty" bson:"createdTime,omitempty"`
+	// CreatedWithAPIVersion          string                     `json:"createdWithApiVersion,omitempty" bson:"createdWithApiVersion,omitempty"`
+	// CreationData                   *AzureResourceCreationData `json:"creationData,omitempty" bson:"creationData,omitempty"`
+	// CreationDate                   string                     `json:"creationDate,omitempty" bson:"creationDate,omitempty"`
+	// CreationTime                   string                     `json:"creationTime,omitempty" bson:"creationTime,omitempty"`
+	// CreationToken                  string                     `json:"creationToken,omitempty" bson:"creationToken,omitempty"`
+	// Criteria                       *AzureResourceCriteria     `json:"criteria,omitempty" bson:"criteria,omitempty"`
+	// Csrs                           []any                      `json:"csrs,omitempty" bson:"csrs,omitempty"`
+	// CurrentBackupStorageRedundancy string                     `json:"currentBackupStorageRedundancy,omitempty" bson:"currentBackupStorageRedundancy,omitempty"`
+	// CurrentKubernetesVersion       string                     `json:"currentKubernetesVersion,omitempty" bson:"currentKubernetesVersion,omitempty"`
+	// CurrentNumberOfWorkers         float64                    `json:"currentNumberOfWorkers,omitempty" bson:"currentNumberOfWorkers,omitempty"`
+	// CurrentServiceObjectiveName    string                     `json:"currentServiceObjectiveName,omitempty" bson:"currentServiceObjectiveName,omitempty"`
+	// CurrentSku                     *struct {
+	// 	Capacity float64 `json:"capacity,omitempty" bson:"capacity,omitempty"`
+	// 	Family   string  `json:"family,omitempty" bson:"family,omitempty"`
+	// 	Name     string  `json:"name,omitempty" bson:"name,omitempty"`
+	// 	Tier     string  `json:"tier,omitempty" bson:"tier,omitempty"`
+	// } `json:"currentSku,omitempty" bson:"currentSku,omitempty"`
+	// CurrentWorkerSize   string  `json:"currentWorkerSize,omitempty" bson:"currentWorkerSize,omitempty"`
+	// CurrentWorkerSizeID float64 `json:"currentWorkerSizeId,omitempty" bson:"currentWorkerSizeId,omitempty"`
+	// CustomDnsConfigs    []struct {
+	// 	Fqdn        string   `json:"fqdn,omitempty" bson:"fqdn,omitempty"`
+	// 	IpAddresses []string `json:"ipAddresses,omitempty" bson:"ipAddresses,omitempty"`
+	// } `json:"customDnsConfigs,omitempty" bson:"customDnsConfigs,omitempty"`
+	// CustomDnsServers           []string                                `json:"customDnsServers,omitempty" bson:"customDnsServers,omitempty"`
+	// CustomDomainConfiguration  *AzureResourceCustomDomainConfiguration `json:"customDomainConfiguration,omitempty" bson:"customDomainConfiguration,omitempty"`
+	// CustomDomainVerificationID string                                  `json:"customDomainVerificationId,omitempty" bson:"customDomainVerificationId,omitempty"`
+	// CustomNetworkInterfaceName string                                  `json:"customNetworkInterfaceName,omitempty" bson:"customNetworkInterfaceName,omitempty"`
+	// CustomParameterValues      *struct{}                               `json:"customParameterValues,omitempty" bson:"customParameterValues,omitempty"`
+	// CustomSubDomainName        string                                  `json:"customSubDomainName,omitempty" bson:"customSubDomainName,omitempty"`
+	// CustomerID                 string                                  `json:"customerId,omitempty" bson:"customerId,omitempty"`
+	// Customize                  []*AzureResourceCustomize               `json:"customize,omitempty" bson:"customize,omitempty"`
+	// DailyBackupsToKeep         float64                                 `json:"dailyBackupsToKeep,omitempty" bson:"dailyBackupsToKeep,omitempty"`
+	// DailyMemoryTimeQuota       float64                                 `json:"dailyMemoryTimeQuota,omitempty" bson:"dailyMemoryTimeQuota,omitempty"`
+	// DailyRecurrence            *struct {
+	// 	Time string `json:"time,omitempty" bson:"time,omitempty"`
+	// } `json:"dailyRecurrence,omitempty" bson:"dailyRecurrence,omitempty"`
+	// DailySchedule *struct {
+	// 	Hour            float64 `json:"hour,omitempty" bson:"hour,omitempty"`
+	// 	Minute          float64 `json:"minute,omitempty" bson:"minute,omitempty"`
+	// 	SnapshotsToKeep float64 `json:"snapshotsToKeep,omitempty" bson:"snapshotsToKeep,omitempty"`
+	// } `json:"dailySchedule,omitempty" bson:"dailySchedule,omitempty"`
+	// DaprAiConnectionString   any `json:"daprAIConnectionString,omitempty" bson:"daprAIConnectionString,omitempty"`
+	// DaprAiInstrumentationKey any `json:"daprAIInstrumentationKey,omitempty" bson:"daprAIInstrumentationKey,omitempty"`
+	// DaprConfig               any `json:"daprConfig,omitempty" bson:"daprConfig,omitempty"`
+	// DaprConfiguration        *struct {
+	// 	Version string `json:"version,omitempty" bson:"version,omitempty"`
+	// } `json:"daprConfiguration,omitempty" bson:"daprConfiguration,omitempty"`
+	// DataAccessAuthMode       string `json:"dataAccessAuthMode,omitempty" bson:"dataAccessAuthMode,omitempty"`
+	// DataCollectionEndpointID string `json:"dataCollectionEndpointId,omitempty" bson:"dataCollectionEndpointId,omitempty"`
+	// DataEncryption           *struct {
+	// 	Type string `json:"type,omitempty" bson:"type,omitempty"`
+	// } `json:"dataEncryption,omitempty" bson:"dataEncryption,omitempty"`
+	// DataEndpointEnabled      bool                         `json:"dataEndpointEnabled,omitempty" bson:"dataEndpointEnabled,omitempty"`
+	// DataEndpointHostNames    []string                     `json:"dataEndpointHostNames,omitempty" bson:"dataEndpointHostNames,omitempty"`
+	// DataFlows                []AzureResourceDataFlows     `json:"dataFlows,omitempty" bson:"dataFlows,omitempty"`
+	// DataLocation             string                       `json:"dataLocation,omitempty" bson:"dataLocation,omitempty"`
+	// DataProtection           *AzureResourceDataProtection `json:"dataProtection,omitempty" bson:"dataProtection,omitempty"`
+	// DataResidencyBoundary    string                       `json:"dataResidencyBoundary,omitempty" bson:"dataResidencyBoundary,omitempty"`
+	// DataSources              *AzureResourceDataSources    `json:"dataSources,omitempty" bson:"dataSources,omitempty"`
+	// DatabaseAccountOfferType string                       `json:"databaseAccountOfferType,omitempty" bson:"databaseAccountOfferType,omitempty"`
+	// DatabaseID               string                       `json:"databaseId,omitempty" bson:"databaseId,omitempty"`
+	// DateCreated              string                       `json:"dateCreated,omitempty" bson:"dateCreated,omitempty"`
+	// DdosSettings             *struct {
+	// 	ProtectionMode string `json:"protectionMode,omitempty" bson:"protectionMode,omitempty"`
+	// } `json:"ddosSettings,omitempty" bson:"ddosSettings,omitempty"`
+	// DedicatedCoreQuota            float64 `json:"dedicatedCoreQuota,omitempty" bson:"dedicatedCoreQuota,omitempty"`
+	// DedicatedCoreQuotaPerVmFamily []*struct {
+	// 	CoreQuota float64 `json:"coreQuota,omitempty" bson:"coreQuota,omitempty"`
+	// 	Name      string  `json:"name,omitempty" bson:"name,omitempty"`
+	// } `json:"dedicatedCoreQuotaPerVMFamily,omitempty" bson:"dedicatedCoreQuotaPerVMFamily,omitempty"`
+	// DedicatedCoreQuotaPerVmFamilyEnforced bool                                 `json:"dedicatedCoreQuotaPerVMFamilyEnforced,omitempty" bson:"dedicatedCoreQuotaPerVMFamilyEnforced,omitempty"`
+	// DefaultDomain                         string                               `json:"defaultDomain,omitempty" bson:"defaultDomain,omitempty"`
+	// DefaultGroupQuotaInKiBs               float64                              `json:"defaultGroupQuotaInKiBs,omitempty" bson:"defaultGroupQuotaInKiBs,omitempty"`
+	// DefaultHostName                       string                               `json:"defaultHostName,omitempty" bson:"defaultHostName,omitempty"`
+	// DefaultHostNameScope                  string                               `json:"defaultHostNameScope,omitempty" bson:"defaultHostNameScope,omitempty"`
+	// DefaultIdentity                       string                               `json:"defaultIdentity,omitempty" bson:"defaultIdentity,omitempty"`
+	// DefaultSecondaryLocation              string                               `json:"defaultSecondaryLocation,omitempty" bson:"defaultSecondaryLocation,omitempty"`
+	// DefaultSecurityRules                  []*AzureResourceDefaultSecurityRules `json:"defaultSecurityRules,omitempty" bson:"defaultSecurityRules,omitempty"`
+	// DefaultToOAuthAuthentication          bool                                 `json:"defaultToOAuthAuthentication,omitempty" bson:"defaultToOAuthAuthentication,omitempty"`
+	// DefaultUserQuotaInKiBs                float64                              `json:"defaultUserQuotaInKiBs,omitempty" bson:"defaultUserQuotaInKiBs,omitempty"`
+	// Definition                            *AzureResourceDefinition             `json:"definition,omitempty" bson:"definition,omitempty"`
+	// DeploymentID                          string                               `json:"deploymentId,omitempty" bson:"deploymentId,omitempty"`
+	// Description                           *string                              `json:"description,omitempty" bson:"description,omitempty"`
+	// Destinations                          *AzureResourceDestinations           `json:"destinations,omitempty" bson:"destinations,omitempty"`
+	// DhcpOptions                           *struct {
+	// 	DnsServers []string `json:"dnsServers,omitempty" bson:"dnsServers,omitempty"`
+	// } `json:"dhcpOptions,omitempty" bson:"dhcpOptions,omitempty"`
+	// DiagnosticsProfile                 *AzureResourceDiagnosticsProfile `json:"diagnosticsProfile,omitempty" bson:"diagnosticsProfile,omitempty"`
+	// DisableBgpRoutePropagation         bool                             `json:"disableBgpRoutePropagation,omitempty" bson:"disableBgpRoutePropagation,omitempty"`
+	// DisableCopyPaste                   bool                             `json:"disableCopyPaste,omitempty" bson:"disableCopyPaste,omitempty"`
+	// DisableIpSecReplayProtection       bool                             `json:"disableIPSecReplayProtection,omitempty" bson:"disableIPSecReplayProtection,omitempty"`
+	// DisableKeyBasedMetadataWriteAccess bool                             `json:"disableKeyBasedMetadataWriteAccess,omitempty" bson:"disableKeyBasedMetadataWriteAccess,omitempty"`
+	// DisableLocalAuth                   bool                             `json:"disableLocalAuth,omitempty" bson:"disableLocalAuth,omitempty"`
+	// DisableTcpStateTracking            bool                             `json:"disableTcpStateTracking,omitempty" bson:"disableTcpStateTracking,omitempty"`
+	// DisableVpnEncryption               bool                             `json:"disableVpnEncryption,omitempty" bson:"disableVpnEncryption,omitempty"`
+	// Disallowed                         *struct {
+	// 	DiskTypes []any `json:"diskTypes,omitempty" bson:"diskTypes,omitempty"`
+	// } `json:"disallowed,omitempty" bson:"disallowed,omitempty"`
+	// DiskIopsReadWrite float64                    `json:"diskIOPSReadWrite,omitempty" bson:"diskIOPSReadWrite,omitempty"`
+	// DiskMBpsReadWrite float64                    `json:"diskMBpsReadWrite,omitempty" bson:"diskMBpsReadWrite,omitempty"`
+	// DiskSizeBytes     float64                    `json:"diskSizeBytes,omitempty" bson:"diskSizeBytes,omitempty"`
+	// DiskSizeGb        float64                    `json:"diskSizeGB,omitempty" bson:"diskSizeGB,omitempty"`
+	// DiskState         string                     `json:"diskState,omitempty" bson:"diskState,omitempty"`
+	// DisplayName       string                     `json:"displayName,omitempty" bson:"displayName,omitempty"`
+	// Distribute        []*AzureResourceDistribute `json:"distribute,omitempty" bson:"distribute,omitempty"`
+	// DnsConfiguration  *struct {
+	// 	DnsLegacySortOrder bool `json:"dnsLegacySortOrder,omitempty" bson:"dnsLegacySortOrder,omitempty"`
+	// } `json:"dnsConfiguration,omitempty" bson:"dnsConfiguration,omitempty"`
+	// DnsEndpointType                        string                                     `json:"dnsEndpointType,omitempty" bson:"dnsEndpointType,omitempty"`
+	// DnsName                                string                                     `json:"dnsName,omitempty" bson:"dnsName,omitempty"`
+	// DnsPrefix                              string                                     `json:"dnsPrefix,omitempty" bson:"dnsPrefix,omitempty"`
+	// DnsSettings                            *AzureResourceDnsSettings                  `json:"dnsSettings,omitempty" bson:"dnsSettings,omitempty"`
+	// DoNotRunExtensionsOnOverprovisionedVMs bool                                       `json:"doNotRunExtensionsOnOverprovisionedVMs,omitempty" bson:"doNotRunExtensionsOnOverprovisionedVMs,omitempty"`
+	// DocumentEndpoint                       string                                     `json:"documentEndpoint,omitempty" bson:"documentEndpoint,omitempty"`
+	// DomainManagement                       string                                     `json:"domainManagement,omitempty" bson:"domainManagement,omitempty"`
+	// DomainName                             string                                     `json:"domainName,omitempty" bson:"domainName,omitempty"`
+	// DomainVerificationIdentifiers          any                                        `json:"domainVerificationIdentifiers,omitempty" bson:"domainVerificationIdentifiers,omitempty"`
+	// DpdTimeoutSeconds                      float64                                    `json:"dpdTimeoutSeconds,omitempty" bson:"dpdTimeoutSeconds,omitempty"`
+	// EarliestRestoreDate                    string                                     `json:"earliestRestoreDate,omitempty" bson:"earliestRestoreDate,omitempty"`
+	// EgressBytesTransferred                 float64                                    `json:"egressBytesTransferred,omitempty" bson:"egressBytesTransferred,omitempty"`
+	// ElasticScaleEnabled                    bool                                       `json:"elasticScaleEnabled,omitempty" bson:"elasticScaleEnabled,omitempty"`
+	// EligibleLogCategories                  string                                     `json:"eligibleLogCategories,omitempty" bson:"eligibleLogCategories,omitempty"`
+	// EmailReceivers                         []*AzureResourceEmailReceivers             `json:"emailReceivers,omitempty" bson:"emailReceivers,omitempty"`
+	// EnableAcceleratedNetworking            bool                                       `json:"enableAcceleratedNetworking,omitempty" bson:"enableAcceleratedNetworking,omitempty"`
+	// EnableAnalyticalStorage                bool                                       `json:"enableAnalyticalStorage,omitempty" bson:"enableAnalyticalStorage,omitempty"`
+	// EnableAutomaticFailover                bool                                       `json:"enableAutomaticFailover,omitempty" bson:"enableAutomaticFailover,omitempty"`
+	// EnableAutomaticUpgrade                 bool                                       `json:"enableAutomaticUpgrade,omitempty" bson:"enableAutomaticUpgrade,omitempty"`
+	// EnableBgp                              bool                                       `json:"enableBgp,omitempty" bson:"enableBgp,omitempty"`
+	// EnableBgpRouteTranslationForNat        bool                                       `json:"enableBgpRouteTranslationForNat,omitempty" bson:"enableBgpRouteTranslationForNat,omitempty"`
+	// EnableBurstCapacity                    bool                                       `json:"enableBurstCapacity,omitempty" bson:"enableBurstCapacity,omitempty"`
+	// EnableClientTelemetry                  bool                                       `json:"enableClientTelemetry,omitempty" bson:"enableClientTelemetry,omitempty"`
+	// EnableDdosProtection                   bool                                       `json:"enableDdosProtection,omitempty" bson:"enableDdosProtection,omitempty"`
+	// EnableDirectPortRateLimit              bool                                       `json:"enableDirectPortRateLimit,omitempty" bson:"enableDirectPortRateLimit,omitempty"`
+	// EnableFileCopy                         bool                                       `json:"enableFileCopy,omitempty" bson:"enableFileCopy,omitempty"`
+	// EnableFreeTier                         bool                                       `json:"enableFreeTier,omitempty" bson:"enableFreeTier,omitempty"`
+	// EnableIpForwarding                     bool                                       `json:"enableIPForwarding,omitempty" bson:"enableIPForwarding,omitempty"`
+	// EnableIpConnect                        bool                                       `json:"enableIpConnect,omitempty" bson:"enableIpConnect,omitempty"`
+	// EnableKerberos                         bool                                       `json:"enableKerberos,omitempty" bson:"enableKerberos,omitempty"`
+	// EnableMultipleWriteLocations           bool                                       `json:"enableMultipleWriteLocations,omitempty" bson:"enableMultipleWriteLocations,omitempty"`
+	// EnablePartitionKeyMonitor              bool                                       `json:"enablePartitionKeyMonitor,omitempty" bson:"enablePartitionKeyMonitor,omitempty"`
+	// EnablePartitionMerge                   bool                                       `json:"enablePartitionMerge,omitempty" bson:"enablePartitionMerge,omitempty"`
+	// EnablePrivateIpAddress                 bool                                       `json:"enablePrivateIpAddress,omitempty" bson:"enablePrivateIpAddress,omitempty"`
+	// EnablePrivateLinkFastPath              bool                                       `json:"enablePrivateLinkFastPath,omitempty" bson:"enablePrivateLinkFastPath,omitempty"`
+	// EnablePurgeProtection                  bool                                       `json:"enablePurgeProtection,omitempty" bson:"enablePurgeProtection,omitempty"`
+	// EnableRbac                             bool                                       `json:"enableRBAC,omitempty" bson:"enableRBAC,omitempty"`
+	// EnableRbacAuthorization                bool                                       `json:"enableRbacAuthorization,omitempty" bson:"enableRbacAuthorization,omitempty"`
+	// EnableShareableLink                    bool                                       `json:"enableShareableLink,omitempty" bson:"enableShareableLink,omitempty"`
+	// EnableSoftDelete                       bool                                       `json:"enableSoftDelete,omitempty" bson:"enableSoftDelete,omitempty"`
+	// EnableSubvolumes                       string                                     `json:"enableSubvolumes,omitempty" bson:"enableSubvolumes,omitempty"`
+	// EnableTunneling                        bool                                       `json:"enableTunneling,omitempty" bson:"enableTunneling,omitempty"`
+	// Enabled                                bool                                       `json:"enabled,omitempty" bson:"enabled,omitempty"`
+	// EnabledForDeployment                   bool                                       `json:"enabledForDeployment,omitempty" bson:"enabledForDeployment,omitempty"`
+	// EnabledForDiskEncryption               bool                                       `json:"enabledForDiskEncryption,omitempty" bson:"enabledForDiskEncryption,omitempty"`
+	// EnabledForTemplateDeployment           bool                                       `json:"enabledForTemplateDeployment,omitempty" bson:"enabledForTemplateDeployment,omitempty"`
+	// EnabledHostNames                       []string                                   `json:"enabledHostNames,omitempty" bson:"enabledHostNames,omitempty"`
+	// Encapsulation                          string                                     `json:"encapsulation,omitempty" bson:"encapsulation,omitempty"`
+	// ResourceEncryption                     *AzureResourceEncryption                   `json:"encryption,omitempty" bson:"encryption,omitempty"`
+	// EncryptionKeySource                    string                                     `json:"encryptionKeySource,omitempty" bson:"encryptionKeySource,omitempty"`
+	// EncryptionSettingsCollection           *AzureResourceEncryptionSettingsCollection `json:"encryptionSettingsCollection,omitempty" bson:"encryptionSettingsCollection,omitempty"`
+	// EncryptionType                         string                                     `json:"encryptionType,omitempty" bson:"encryptionType,omitempty"`
+	// EndToEndEncryptionEnabled              bool                                       `json:"endToEndEncryptionEnabled,omitempty" bson:"endToEndEncryptionEnabled,omitempty"`
+	// Endpoint                               string                                     `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
+	// Endpoints                              any                                        `json:"endpoints,omitempty" bson:"endpoints,omitempty"`
+	// EndpointsConfiguration                 *AzureResourceEndpointsConfiguration       `json:"endpointsConfiguration,omitempty" bson:"endpointsConfiguration,omitempty"`
+	// EnvironmentID                          string                                     `json:"environmentId,omitempty" bson:"environmentId,omitempty"`
+	// EtherType                              string                                     `json:"etherType,omitempty" bson:"etherType,omitempty"`
+	// EvaluationFrequency                    string                                     `json:"evaluationFrequency,omitempty" bson:"evaluationFrequency,omitempty"`
+	// EventHubReceivers                      []any                                      `json:"eventHubReceivers,omitempty" bson:"eventHubReceivers,omitempty"`
+	// EventStreamEndpoint                    string                                     `json:"eventStreamEndpoint,omitempty" bson:"eventStreamEndpoint,omitempty"`
+	// EvictionPolicy                         string                                     `json:"evictionPolicy,omitempty" bson:"evictionPolicy,omitempty"`
+	// ExactStagingResourceGroup              string                                     `json:"exactStagingResourceGroup,omitempty" bson:"exactStagingResourceGroup,omitempty"`
+	// ExistingServerFarmIds                  any                                        `json:"existingServerFarmIds,omitempty" bson:"existingServerFarmIds,omitempty"`
+	// ExportPolicy                           *struct {
+	// 	Rules []any `json:"rules,omitempty" bson:"rules,omitempty"`
+	// } `json:"exportPolicy,omitempty" bson:"exportPolicy,omitempty"`
+	// ExpressRouteConnections []*AzureResourceExpressRouteConnections `json:"expressRouteConnections,omitempty" bson:"expressRouteConnections,omitempty"`
+	// ExpressRouteGateway     *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"expressRouteGateway,omitempty" bson:"expressRouteGateway,omitempty"`
+	// ExpressRouteGatewayBypass bool `json:"expressRouteGatewayBypass,omitempty" bson:"expressRouteGatewayBypass,omitempty"`
+	// ExpressRoutePort          *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"expressRoutePort,omitempty" bson:"expressRoutePort,omitempty"`
+	Extended *AzureResourceExtended `json:"extended,omitempty" bson:"extended,omitempty"`
+	// ExtensionProperties *struct {
+	// 	InGuestPatchMode string `json:"InGuestPatchMode,omitempty" bson:"InGuestPatchMode,omitempty"`
+	// } `json:"extensionProperties,omitempty" bson:"extensionProperties,omitempty"`
+	// ExtensionsTimeBudget     string                          `json:"extensionsTimeBudget,omitempty" bson:"extensionsTimeBudget,omitempty"`
+	// ExternalGovernanceStatus string                          `json:"externalGovernanceStatus,omitempty" bson:"externalGovernanceStatus,omitempty"`
+	// FactoryStatistics        *AzureResourceFactoryStatistics `json:"factoryStatistics,omitempty" bson:"factoryStatistics,omitempty"`
+	// FailoverPolicies         []*AzureResourceFailoverPolicy  `json:"failoverPolicies,omitempty" bson:"failoverPolicies,omitempty"`
+	// FeatureSettings          *AzureResourceFeatureSettings   `json:"featureSettings,omitempty" bson:"featureSettings,omitempty"`
+	// Features                 any                             `json:"features,omitempty" bson:"features,omitempty"`
+	// FileSystemID             string                          `json:"fileSystemId,omitempty" bson:"fileSystemId,omitempty"`
+	// FirewallPolicies         []struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"firewallPolicies,omitempty" bson:"firewallPolicies,omitempty"`
+	// FirewallPolicy *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"firewallPolicy,omitempty" bson:"firewallPolicy,omitempty"`
+	// Firewalls []struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"firewalls,omitempty" bson:"firewalls,omitempty"`
+	// FlowAnalyticsConfiguration *AzureResourceFlowAnalyticsConfiguration `json:"flowAnalyticsConfiguration,omitempty" bson:"flowAnalyticsConfiguration,omitempty"`
+	// FlowLogs                   []struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"flowLogs,omitempty" bson:"flowLogs,omitempty"`
+	// ForceCmkForQuery bool   `json:"forceCmkForQuery,omitempty" bson:"forceCmkForQuery,omitempty"`
+	// ForceUpdateTag   string `json:"forceUpdateTag,omitempty" bson:"forceUpdateTag,omitempty"`
+	// Format           *struct {
+	// 	Type    string  `json:"type,omitempty" bson:"type,omitempty"`
+	// 	Version float64 `json:"version,omitempty" bson:"version,omitempty"`
+	// } `json:"format,omitempty" bson:"format,omitempty"`
+	// Fqdn                                  string                                  `json:"fqdn,omitempty" bson:"fqdn,omitempty"`
+	// FreeOfferExpirationTime               any                                     `json:"freeOfferExpirationTime,omitempty" bson:"freeOfferExpirationTime,omitempty"`
+	// FriendlyName                          string                                  `json:"friendlyName,omitempty" bson:"friendlyName,omitempty"`
+	// FromSenderDomain                      string                                  `json:"fromSenderDomain,omitempty" bson:"fromSenderDomain,omitempty"`
+	// FrontendIpConfigurations              []*AzureResourceFrontendIpConfiguration `json:"frontendIPConfigurations,omitempty" bson:"frontendIPConfigurations,omitempty"`
+	// FtpUsername                           string                                  `json:"ftpUsername,omitempty" bson:"ftpUsername,omitempty"`
+	// FtpsHostName                          string                                  `json:"ftpsHostName,omitempty" bson:"ftpsHostName,omitempty"`
+	// FullyQualifiedDomainName              string                                  `json:"fullyQualifiedDomainName,omitempty" bson:"fullyQualifiedDomainName,omitempty"`
+	// FunctionAppConfig                     any                                     `json:"functionAppConfig,omitempty" bson:"functionAppConfig,omitempty"`
+	// FunctionExecutionUnitsCache           any                                     `json:"functionExecutionUnitsCache,omitempty" bson:"functionExecutionUnitsCache,omitempty"`
+	// FunctionsRuntimeAdminIsolationEnabled bool                                    `json:"functionsRuntimeAdminIsolationEnabled,omitempty" bson:"functionsRuntimeAdminIsolationEnabled,omitempty"`
+	// GatewayCustomBgpIpAddresses           []any                                   `json:"gatewayCustomBgpIpAddresses,omitempty" bson:"gatewayCustomBgpIpAddresses,omitempty"`
+	// GatewayManagerEtag                    string                                  `json:"gatewayManagerEtag,omitempty" bson:"gatewayManagerEtag,omitempty"`
+	// GatewayType                           string                                  `json:"gatewayType,omitempty" bson:"gatewayType,omitempty"`
+	// GeoDataReplication                    *AzureResourceGeoDataReplication        `json:"geoDataReplication,omitempty" bson:"geoDataReplication,omitempty"`
+	// GeoDistributions                      any                                     `json:"geoDistributions,omitempty" bson:"geoDistributions,omitempty"`
+	// GeoRegion                             string                                  `json:"geoRegion,omitempty" bson:"geoRegion,omitempty"`
+	// GlobalParameters                      *struct {
+	// 	Owner struct {
+	// 		Type  string `json:"type,omitempty" bson:"type,omitempty"`
+	// 		Value string `json:"value,omitempty" bson:"value,omitempty"`
+	// 	} `json:"Owner,omitempty" bson:"Owner,omitempty"`
+	// } `json:"globalParameters,omitempty" bson:"globalParameters,omitempty"`
+	// GlobalReachEnabled bool   `json:"globalReachEnabled,omitempty" bson:"globalReachEnabled,omitempty"`
+	// GroupShortName     string `json:"groupShortName,omitempty" bson:"groupShortName,omitempty"`
+	HardwareProfile *struct {
 		VmSize    string                  `json:"vmSize,omitempty" bson:"vmSize,omitempty"`
 		VmSizeSku *AzureVirtualMachineSku `json:"vmSizeSku,omitempty" bson:"vmSizeSku,omitempty"`
 	} `json:"hardwareProfile,omitempty" bson:"hardwareProfile,omitempty"`
-	HighAvailability *struct {
-		Mode  string `json:"mode,omitempty" bson:"mode,omitempty"`
-		State string `json:"state,omitempty" bson:"state,omitempty"`
-	} `json:"highAvailability,omitempty" bson:"highAvailability,omitempty"`
-	HnsOnMigrationInProgress    bool                              `json:"hnsOnMigrationInProgress,omitempty" bson:"hnsOnMigrationInProgress,omitempty"`
-	HomeStamp                   string                            `json:"homeStamp,omitempty" bson:"homeStamp,omitempty"`
-	HostName                    string                            `json:"hostName,omitempty" bson:"hostName,omitempty"`
-	HostNameSslStates           []*AzureResourceHostNameSslStates `json:"hostNameSslStates,omitempty" bson:"hostNameSslStates,omitempty"`
-	HostNames                   []string                          `json:"hostNames,omitempty" bson:"hostNames,omitempty"`
-	HostNamesDisabled           bool                              `json:"hostNamesDisabled,omitempty" bson:"hostNamesDisabled,omitempty"`
-	HostedWorkloads             []string                          `json:"hostedWorkloads,omitempty" bson:"hostedWorkloads,omitempty"`
-	HostingEnvironment          any                               `json:"hostingEnvironment,omitempty" bson:"hostingEnvironment,omitempty"`
-	HostingEnvironmentID        any                               `json:"hostingEnvironmentId,omitempty" bson:"hostingEnvironmentId,omitempty"`
-	HostingEnvironmentProfile   any                               `json:"hostingEnvironmentProfile,omitempty" bson:"hostingEnvironmentProfile,omitempty"`
-	HourlySchedule              *struct{}                         `json:"hourlySchedule,omitempty" bson:"hourlySchedule,omitempty"`
-	HTTPSOnly                   bool                              `json:"httpsOnly,omitempty" bson:"httpsOnly,omitempty"`
-	HubIpAddresses              *AzureResourceHubIpAddresses      `json:"hubIPAddresses,omitempty" bson:"hubIPAddresses,omitempty"`
-	HubRoutingPreference        string                            `json:"hubRoutingPreference,omitempty" bson:"hubRoutingPreference,omitempty"`
-	HyperV                      bool                              `json:"hyperV,omitempty" bson:"hyperV,omitempty"`
-	HyperVGeneration            string                            `json:"hyperVGeneration,omitempty" bson:"hyperVGeneration,omitempty"`
-	Identifier                  *AzureResourceIdentifier          `json:"identifier,omitempty" bson:"identifier,omitempty"`
-	IdentityProfile             *AzureResourceIdentityProfile     `json:"identityProfile,omitempty" bson:"identityProfile,omitempty"`
-	IdleTimeoutInMinutes        float64                           `json:"idleTimeoutInMinutes,omitempty" bson:"idleTimeoutInMinutes,omitempty"`
-	ImmutableID                 string                            `json:"immutableId,omitempty" bson:"immutableId,omitempty"`
-	ImmutableResourceID         string                            `json:"immutableResourceId,omitempty" bson:"immutableResourceId,omitempty"`
-	InFlightFeatures            []string                          `json:"inFlightFeatures,omitempty" bson:"inFlightFeatures,omitempty"`
-	InProgressOperationID       any                               `json:"inProgressOperationId,omitempty" bson:"inProgressOperationId,omitempty"`
-	InboundIpAddress            string                            `json:"inboundIpAddress,omitempty" bson:"inboundIpAddress,omitempty"`
-	InboundNatPools             []any                             `json:"inboundNatPools,omitempty" bson:"inboundNatPools,omitempty"`
-	InboundNatRules             []*AzureResourceInboundNatRule    `json:"inboundNatRules,omitempty" bson:"inboundNatRules,omitempty"`
-	Incremental                 bool                              `json:"incremental,omitempty" bson:"incremental,omitempty"`
-	IncrementalSnapshotFamilyID string                            `json:"incrementalSnapshotFamilyId,omitempty" bson:"incrementalSnapshotFamilyId,omitempty"`
-	InfrastructureResourceGroup *string                           `json:"infrastructureResourceGroup,omitempty" bson:"infrastructureResourceGroup,omitempty"`
-	IngressBytesTransferred     float64                           `json:"ingressBytesTransferred,omitempty" bson:"ingressBytesTransferred,omitempty"`
-	InputSchema                 string                            `json:"inputSchema,omitempty" bson:"inputSchema,omitempty"`
-	InstallPatches              *AzureResourceInstallPatches      `json:"installPatches,omitempty" bson:"installPatches,omitempty"`
-	InstanceID                  string                            `json:"instanceId,omitempty" bson:"instanceId,omitempty"`
-	InternalID                  string                            `json:"internalId,omitempty" bson:"internalId,omitempty"`
-	IntrusionDetection          *AzureResourceIntrusionDetection  `json:"intrusionDetection,omitempty" bson:"intrusionDetection,omitempty"`
-	IpAddress                   string                            `json:"ipAddress,omitempty" bson:"ipAddress,omitempty"`
-	IpAddresses                 []string                          `json:"ipAddresses,omitempty" bson:"ipAddresses,omitempty"`
-	IpConfiguration             *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"ipConfiguration,omitempty" bson:"ipConfiguration,omitempty"`
-	IpConfigurations []*AzureResourceIpConfiguration `json:"ipConfigurations,omitempty" bson:"ipConfigurations,omitempty"`
-	IpMode           string                          `json:"ipMode,omitempty" bson:"ipMode,omitempty"`
-	IpRules          []struct {
-		IpAddressOrRange string `json:"ipAddressOrRange,omitempty" bson:"ipAddressOrRange,omitempty"`
-	} `json:"ipRules,omitempty" bson:"ipRules,omitempty"`
-	IpTags                          []any   `json:"ipTags,omitempty" bson:"ipTags,omitempty"`
-	IpsecPolicies                   []any   `json:"ipsecPolicies,omitempty" bson:"ipsecPolicies,omitempty"`
-	IsAutoInflateEnabled            bool    `json:"isAutoInflateEnabled,omitempty" bson:"isAutoInflateEnabled,omitempty"`
-	IsDefaultQuotaEnabled           bool    `json:"isDefaultQuotaEnabled,omitempty" bson:"isDefaultQuotaEnabled,omitempty"`
-	IsEnabled                       bool    `json:"isEnabled,omitempty" bson:"isEnabled,omitempty"`
-	IsHnsEnabled                    bool    `json:"isHnsEnabled,omitempty" bson:"isHnsEnabled,omitempty"`
-	IsIPv6EnabledPrivateEndpoint    bool    `json:"isIPv6EnabledPrivateEndpoint,omitempty" bson:"isIPv6EnabledPrivateEndpoint,omitempty"`
-	IsInfraEncryptionEnabled        bool    `json:"isInfraEncryptionEnabled,omitempty" bson:"isInfraEncryptionEnabled,omitempty"`
-	IsLedgerOn                      bool    `json:"isLedgerOn,omitempty" bson:"isLedgerOn,omitempty"`
-	IsLocalUserEnabled              bool    `json:"isLocalUserEnabled,omitempty" bson:"isLocalUserEnabled,omitempty"`
-	IsMigrateToCses                 bool    `json:"isMigrateToCSES,omitempty" bson:"isMigrateToCSES,omitempty"`
-	IsNfsV3Enabled                  bool    `json:"isNfsV3Enabled,omitempty" bson:"isNfsV3Enabled,omitempty"`
-	IsRestoring                     bool    `json:"isRestoring,omitempty" bson:"isRestoring,omitempty"`
-	IsRoutingPreferenceInternet     bool    `json:"isRoutingPreferenceInternet,omitempty" bson:"isRoutingPreferenceInternet,omitempty"`
-	IsSftpEnabled                   bool    `json:"isSftpEnabled,omitempty" bson:"isSftpEnabled,omitempty"`
-	IsSpot                          bool    `json:"isSpot,omitempty" bson:"isSpot,omitempty"`
-	IsVaultProtectedByResourceGuard bool    `json:"isVaultProtectedByResourceGuard,omitempty" bson:"isVaultProtectedByResourceGuard,omitempty"`
-	IsVirtualNetworkFilterEnabled   bool    `json:"isVirtualNetworkFilterEnabled,omitempty" bson:"isVirtualNetworkFilterEnabled,omitempty"`
-	IsXenon                         bool    `json:"isXenon,omitempty" bson:"isXenon,omitempty"`
-	ItsmReceivers                   []any   `json:"itsmReceivers,omitempty" bson:"itsmReceivers,omitempty"`
-	JobCount                        float64 `json:"jobCount,omitempty" bson:"jobCount,omitempty"`
-	KafkaEnabled                    bool    `json:"kafkaEnabled,omitempty" bson:"kafkaEnabled,omitempty"`
-	KedaConfiguration               *struct {
-		Version string `json:"version,omitempty" bson:"version,omitempty"`
-	} `json:"kedaConfiguration,omitempty" bson:"kedaConfiguration,omitempty"`
-	KerberosEnabled bool `json:"kerberosEnabled,omitempty" bson:"kerberosEnabled,omitempty"`
-	KeyCreationTime *struct {
-		Key1 *string `json:"key1,omitempty" bson:"key1,omitempty"`
-		Key2 *string `json:"key2,omitempty" bson:"key2,omitempty"`
-	} `json:"keyCreationTime,omitempty" bson:"keyCreationTime,omitempty"`
-	KeyVaultReferenceIdentity string                            `json:"keyVaultReferenceIdentity,omitempty" bson:"keyVaultReferenceIdentity,omitempty"`
-	KeysMetadata              *AzureResourceKeysMetadata        `json:"keysMetadata,omitempty" bson:"keysMetadata,omitempty"`
-	Kind                      string                            `json:"kind,omitempty" bson:"kind,omitempty"`
-	KubeEnvironmentProfile    any                               `json:"kubeEnvironmentProfile,omitempty" bson:"kubeEnvironmentProfile,omitempty"`
-	KubernetesVersion         string                            `json:"kubernetesVersion,omitempty" bson:"kubernetesVersion,omitempty"`
-	LargeFileSharesState      string                            `json:"largeFileSharesState,omitempty" bson:"largeFileSharesState,omitempty"`
-	LastModifiedBy            any                               `json:"lastModifiedBy,omitempty" bson:"lastModifiedBy,omitempty"`
-	LastModifiedTime          string                            `json:"lastModifiedTime,omitempty" bson:"lastModifiedTime,omitempty"`
-	LastModifiedTimeUtc       string                            `json:"lastModifiedTimeUtc,omitempty" bson:"lastModifiedTimeUtc,omitempty"`
-	LastRunStatus             *AzureResourceLastRunStatus       `json:"lastRunStatus,omitempty" bson:"lastRunStatus,omitempty"`
-	LdapEnabled               bool                              `json:"ldapEnabled,omitempty" bson:"ldapEnabled,omitempty"`
-	LeastPrivilegeMode        string                            `json:"leastPrivilegeMode,omitempty" bson:"leastPrivilegeMode,omitempty"`
-	Lenses                    []*AzureResourceLense             `json:"lenses,omitempty" bson:"lenses,omitempty"`
-	LicenseType               string                            `json:"licenseType,omitempty" bson:"licenseType,omitempty"`
-	LinkedDomains             []string                          `json:"linkedDomains,omitempty" bson:"linkedDomains,omitempty"`
-	LinkedResourceType        string                            `json:"linkedResourceType,omitempty" bson:"linkedResourceType,omitempty"`
-	Links                     []*AzureResourceLink              `json:"links,omitempty" bson:"links,omitempty"`
-	LinuxProfile              *AzureResourceLinuxProfile        `json:"linuxProfile,omitempty" bson:"linuxProfile,omitempty"`
-	LoadBalancingRules        []*AzureResourceLoadBalancingRule `json:"loadBalancingRules,omitempty" bson:"loadBalancingRules,omitempty"`
-	Locations                 []*AzureResourceLocation          `json:"locations,omitempty" bson:"locations,omitempty"`
-	LogActivityTrace          float64                           `json:"logActivityTrace,omitempty" bson:"logActivityTrace,omitempty"`
-	LogProgress               bool                              `json:"logProgress,omitempty" bson:"logProgress,omitempty"`
-	LogVerbose                bool                              `json:"logVerbose,omitempty" bson:"logVerbose,omitempty"`
-	LogicAppReceivers         []any                             `json:"logicAppReceivers,omitempty" bson:"logicAppReceivers,omitempty"`
-	LoginServer               string                            `json:"loginServer,omitempty" bson:"loginServer,omitempty"`
-	LogsIngestion             *struct {
-		Endpoint string `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
-	} `json:"logsIngestion,omitempty" bson:"logsIngestion,omitempty"`
-	LowPriorityCoreQuota       float64                         `json:"lowPriorityCoreQuota,omitempty" bson:"lowPriorityCoreQuota,omitempty"`
-	MacAddress                 string                          `json:"macAddress,omitempty" bson:"macAddress,omitempty"`
-	MailFromSenderDomain       string                          `json:"mailFromSenderDomain,omitempty" bson:"mailFromSenderDomain,omitempty"`
-	MaintenanceConfigurationID string                          `json:"maintenanceConfigurationId,omitempty" bson:"maintenanceConfigurationId,omitempty"`
-	MaintenanceScope           string                          `json:"maintenanceScope,omitempty" bson:"maintenanceScope,omitempty"`
-	MaintenanceWindow          *AzureResourceMaintenanceWindow `json:"maintenanceWindow,omitempty" bson:"maintenanceWindow,omitempty"`
-	ManagedEnvironmentID       any                             `json:"managedEnvironmentId,omitempty" bson:"managedEnvironmentId,omitempty"`
-	ManagedResourceGroupName   string                          `json:"managedResourceGroupName,omitempty" bson:"managedResourceGroupName,omitempty"`
-	ManagedResources           *struct {
-		ResourceGroup  string `json:"resourceGroup,omitempty" bson:"resourceGroup,omitempty"`
-		StorageAccount string `json:"storageAccount,omitempty" bson:"storageAccount,omitempty"`
-	} `json:"managedResources,omitempty" bson:"managedResources,omitempty"`
-	ManualPrivateLinkServiceConnections            []any                  `json:"manualPrivateLinkServiceConnections,omitempty" bson:"manualPrivateLinkServiceConnections,omitempty"`
-	MaxAgentPools                                  float64                `json:"maxAgentPools,omitempty" bson:"maxAgentPools,omitempty"`
-	MaxLogSizeBytes                                float64                `json:"maxLogSizeBytes,omitempty" bson:"maxLogSizeBytes,omitempty"`
-	MaxNumberOfRecordSets                          float64                `json:"maxNumberOfRecordSets,omitempty" bson:"maxNumberOfRecordSets,omitempty"`
-	MaxNumberOfRecordsPerRecordSet                 any                    `json:"maxNumberOfRecordsPerRecordSet,omitempty" bson:"maxNumberOfRecordsPerRecordSet,omitempty"`
-	MaxNumberOfVirtualNetworkLinks                 float64                `json:"maxNumberOfVirtualNetworkLinks,omitempty" bson:"maxNumberOfVirtualNetworkLinks,omitempty"`
-	MaxNumberOfVirtualNetworkLinksWithRegistration float64                `json:"maxNumberOfVirtualNetworkLinksWithRegistration,omitempty" bson:"maxNumberOfVirtualNetworkLinksWithRegistration,omitempty"`
-	MaxNumberOfWorkers                             any                    `json:"maxNumberOfWorkers,omitempty" bson:"maxNumberOfWorkers,omitempty"`
-	MaxShares                                      float64                `json:"maxShares,omitempty" bson:"maxShares,omitempty"`
-	MaxSizeBytes                                   float64                `json:"maxSizeBytes,omitempty" bson:"maxSizeBytes,omitempty"`
-	MaximumElasticWorkerCount                      float64                `json:"maximumElasticWorkerCount,omitempty" bson:"maximumElasticWorkerCount,omitempty"`
-	MaximumNumberOfFiles                           float64                `json:"maximumNumberOfFiles,omitempty" bson:"maximumNumberOfFiles,omitempty"`
-	MaximumNumberOfWorkers                         float64                `json:"maximumNumberOfWorkers,omitempty" bson:"maximumNumberOfWorkers,omitempty"`
-	MaximumThroughputUnits                         float64                `json:"maximumThroughputUnits,omitempty" bson:"maximumThroughputUnits,omitempty"`
-	MdmID                                          string                 `json:"mdmId,omitempty" bson:"mdmId,omitempty"`
-	Metadata                                       *AzureResourceMetadata `json:"metadata,omitempty" bson:"metadata,omitempty"`
-	MetadataSearch                                 string                 `json:"metadataSearch,omitempty" bson:"metadataSearch,omitempty"`
-	MetricID                                       string                 `json:"metricId,omitempty" bson:"metricId,omitempty"`
-	MetricResourceID                               string                 `json:"metricResourceId,omitempty" bson:"metricResourceId,omitempty"`
-	MetricsIngestion                               *struct {
-		Endpoint string `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
-	} `json:"metricsIngestion,omitempty" bson:"metricsIngestion,omitempty"`
-	MigrateToVmss        any     `json:"migrateToVMSS,omitempty" bson:"migrateToVMSS,omitempty"`
-	MigrationPhase       string  `json:"migrationPhase,omitempty" bson:"migrationPhase,omitempty"`
-	MigrationState       any     `json:"migrationState,omitempty" bson:"migrationState,omitempty"`
-	MinCapacity          float64 `json:"minCapacity,omitempty" bson:"minCapacity,omitempty"`
-	MinimalTlsVersion    string  `json:"minimalTlsVersion,omitempty" bson:"minimalTlsVersion,omitempty"`
-	MinimumTlsVersion    string  `json:"minimumTlsVersion,omitempty" bson:"minimumTlsVersion,omitempty"`
-	MinorVersion         string  `json:"minorVersion,omitempty" bson:"minorVersion,omitempty"`
-	ModifiedDate         string  `json:"modifiedDate,omitempty" bson:"modifiedDate,omitempty"`
-	MonitoringStatus     string  `json:"monitoringStatus,omitempty" bson:"monitoringStatus,omitempty"`
-	MonthlyBackupsToKeep float64 `json:"monthlyBackupsToKeep,omitempty" bson:"monthlyBackupsToKeep,omitempty"`
-	MonthlySchedule      *struct {
-		DaysOfMonth string `json:"daysOfMonth,omitempty" bson:"daysOfMonth,omitempty"`
-	} `json:"monthlySchedule,omitempty" bson:"monthlySchedule,omitempty"`
-	MountTargets                []*AzureResourceMountTargets `json:"mountTargets,omitempty" bson:"mountTargets,omitempty"`
-	Mtu                         string                       `json:"mtu,omitempty" bson:"mtu,omitempty"`
-	MuteActionsDuration         string                       `json:"muteActionsDuration,omitempty" bson:"muteActionsDuration,omitempty"`
-	Name                        string                       `json:"name,omitempty" bson:"name,omitempty"`
-	NameServers                 []string                     `json:"nameServers,omitempty" bson:"nameServers,omitempty"`
-	NatRuleCollections          []any                        `json:"natRuleCollections,omitempty" bson:"natRuleCollections,omitempty"`
-	NatRules                    []any                        `json:"natRules,omitempty" bson:"natRules,omitempty"`
-	Network                     *AzureResourceNetwork        `json:"network,omitempty" bson:"network,omitempty"`
-	NetworkAccessPolicy         string                       `json:"networkAccessPolicy,omitempty" bson:"networkAccessPolicy,omitempty"`
-	NetworkACLBypass            string                       `json:"networkAclBypass,omitempty" bson:"networkAclBypass,omitempty"`
-	NetworkACLBypassResourceIds []any                        `json:"networkAclBypassResourceIds,omitempty" bson:"networkAclBypassResourceIds,omitempty"`
-	NetworkAcls                 *AzureResourceNetworkAcls    `json:"networkAcls,omitempty" bson:"networkAcls,omitempty"`
-	NetworkFeatures             string                       `json:"networkFeatures,omitempty" bson:"networkFeatures,omitempty"`
-	NetworkInterfaces           []struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"networkInterfaces,omitempty" bson:"networkInterfaces,omitempty"`
-	NetworkProfile           *AzureResourceNetworkProfile `json:"networkProfile,omitempty" bson:"networkProfile,omitempty"`
-	NetworkRuleBypassOptions string                       `json:"networkRuleBypassOptions,omitempty" bson:"networkRuleBypassOptions,omitempty"`
-	NetworkRuleCollections   []any                        `json:"networkRuleCollections,omitempty" bson:"networkRuleCollections,omitempty"`
-	NetworkRuleSet           *AzureResourceNetworkRuleSet `json:"networkRuleSet,omitempty" bson:"networkRuleSet,omitempty"`
-	NetworkSecurityGroup     *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"networkSecurityGroup,omitempty" bson:"networkSecurityGroup,omitempty"`
-	NetworkSiblingSetID                         string                             `json:"networkSiblingSetId,omitempty" bson:"networkSiblingSetId,omitempty"`
-	NetworkVirtualAppliances                    []any                              `json:"networkVirtualAppliances,omitempty" bson:"networkVirtualAppliances,omitempty"`
-	NicType                                     string                             `json:"nicType,omitempty" bson:"nicType,omitempty"`
-	NodeConfigurationCount                      float64                            `json:"nodeConfigurationCount,omitempty" bson:"nodeConfigurationCount,omitempty"`
-	NodeManagementEndpoint                      string                             `json:"nodeManagementEndpoint,omitempty" bson:"nodeManagementEndpoint,omitempty"`
-	NodeResourceGroup                           string                             `json:"nodeResourceGroup,omitempty" bson:"nodeResourceGroup,omitempty"`
-	NotificationSettings                        *AzureResourceNotificationSettings `json:"notificationSettings,omitempty" bson:"notificationSettings,omitempty"`
-	NumberOfRecordSets                          float64                            `json:"numberOfRecordSets,omitempty" bson:"numberOfRecordSets,omitempty"`
-	NumberOfSites                               float64                            `json:"numberOfSites,omitempty" bson:"numberOfSites,omitempty"`
-	NumberOfVirtualNetworkLinks                 float64                            `json:"numberOfVirtualNetworkLinks,omitempty" bson:"numberOfVirtualNetworkLinks,omitempty"`
-	NumberOfVirtualNetworkLinksWithRegistration float64                            `json:"numberOfVirtualNetworkLinksWithRegistration,omitempty" bson:"numberOfVirtualNetworkLinksWithRegistration,omitempty"`
-	NumberOfWorkers                             float64                            `json:"numberOfWorkers,omitempty" bson:"numberOfWorkers,omitempty"`
-	Office365LocalBreakoutCategory              string                             `json:"office365LocalBreakoutCategory,omitempty" bson:"office365LocalBreakoutCategory,omitempty"`
-	OidcIssuerProfile                           *struct {
-		Enabled   bool   `json:"enabled,omitempty" bson:"enabled,omitempty"`
-		IssuerURL string `json:"issuerURL,omitempty" bson:"issuerURL,omitempty"`
-	} `json:"oidcIssuerProfile,omitempty" bson:"oidcIssuerProfile,omitempty"`
-	OpenTelemetryConfiguration  any                                        `json:"openTelemetryConfiguration,omitempty" bson:"openTelemetryConfiguration,omitempty"`
-	OrchestrationMode           string                                     `json:"orchestrationMode,omitempty" bson:"orchestrationMode,omitempty"`
-	OSProfile                   *AzureResourceOSProfile                    `json:"osProfile,omitempty" bson:"osProfile,omitempty"`
-	OSState                     string                                     `json:"osState,omitempty" bson:"osState,omitempty"`
-	OSType                      string                                     `json:"osType,omitempty" bson:"osType,omitempty"`
-	OutboundIpAddresses         string                                     `json:"outboundIpAddresses,omitempty" bson:"outboundIpAddresses,omitempty"`
-	OutboundRules               []*AzureResourceOutboundRules              `json:"outboundRules,omitempty" bson:"outboundRules,omitempty"`
-	OutboundVnetRouting         any                                        `json:"outboundVnetRouting,omitempty" bson:"outboundVnetRouting,omitempty"`
-	OutputTypes                 []any                                      `json:"outputTypes,omitempty" bson:"outputTypes,omitempty"`
-	Outputs                     []any                                      `json:"outputs,omitempty" bson:"outputs,omitempty"`
-	OverallStatus               string                                     `json:"overallStatus,omitempty" bson:"overallStatus,omitempty"`
-	Overprovision               bool                                       `json:"overprovision,omitempty" bson:"overprovision,omitempty"`
-	OverrideQueryTimeRange      string                                     `json:"overrideQueryTimeRange,omitempty" bson:"overrideQueryTimeRange,omitempty"`
-	Owner                       any                                        `json:"owner,omitempty" bson:"owner,omitempty"`
-	P2SConnectionConfigurations []*AzureResourceP2SConnectionConfiguration `json:"p2SConnectionConfigurations,omitempty" bson:"p2SConnectionConfigurations,omitempty"`
-	P2SVpnGateway               *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"p2SVpnGateway,omitempty" bson:"p2SVpnGateway,omitempty"`
-	P2SVpnGateways []struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"p2SVpnGateways,omitempty" bson:"p2SVpnGateways,omitempty"`
-	PacketCaptureDiagnosticState string `json:"packetCaptureDiagnosticState,omitempty" bson:"packetCaptureDiagnosticState,omitempty"`
-	ParameterValueType           string `json:"parameterValueType,omitempty" bson:"parameterValueType,omitempty"`
-	ParameterValues              *struct {
-		Token_TenantID  string `json:"token:TenantId,omitempty" bson:"token:TenantId,omitempty"`
-		Token_GrantType string `json:"token:grantType,omitempty" bson:"token:grantType,omitempty"`
-	} `json:"parameterValues,omitempty" bson:"parameterValues,omitempty"`
-	Parameters *AzureResourceParameters `json:"parameters,omitempty" bson:"parameters,omitempty"`
-	PausedDate string                   `json:"pausedDate,omitempty" bson:"pausedDate,omitempty"`
-	Peer       *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"peer,omitempty" bson:"peer,omitempty"`
-	PeerAuthentication *struct {
-		Mtls struct {
-			Enabled bool `json:"enabled,omitempty" bson:"enabled,omitempty"`
-		} `json:"mtls,omitempty" bson:"mtls,omitempty"`
-	} `json:"peerAuthentication,omitempty" bson:"peerAuthentication,omitempty"`
-	PeerTrafficConfiguration *struct {
-		Encryption struct {
-			Enabled bool `json:"enabled,omitempty" bson:"enabled,omitempty"`
-		} `json:"encryption,omitempty" bson:"encryption,omitempty"`
-	} `json:"peerTrafficConfiguration,omitempty" bson:"peerTrafficConfiguration,omitempty"`
-	PeeringLocation             string                   `json:"peeringLocation,omitempty" bson:"peeringLocation,omitempty"`
-	Peerings                    []*AzureResourcePeerings `json:"peerings,omitempty" bson:"peerings,omitempty"`
-	PerSiteScaling              bool                     `json:"perSiteScaling,omitempty" bson:"perSiteScaling,omitempty"`
-	PlanName                    string                   `json:"planName,omitempty" bson:"planName,omitempty"`
-	PlatformFaultDomainCount    float64                  `json:"platformFaultDomainCount,omitempty" bson:"platformFaultDomainCount,omitempty"`
-	PlatformUpdateDomainCount   float64                  `json:"platformUpdateDomainCount,omitempty" bson:"platformUpdateDomainCount,omitempty"`
-	Policies                    *AzureResourcePolicies   `json:"policies,omitempty" bson:"policies,omitempty"`
-	PoolAllocationMode          string                   `json:"poolAllocationMode,omitempty" bson:"poolAllocationMode,omitempty"`
-	PoolID                      string                   `json:"poolId,omitempty" bson:"poolId,omitempty"`
-	PoolQuota                   float64                  `json:"poolQuota,omitempty" bson:"poolQuota,omitempty"`
-	PossibleInboundIpAddresses  string                   `json:"possibleInboundIpAddresses,omitempty" bson:"possibleInboundIpAddresses,omitempty"`
-	PossibleOutboundIpAddresses string                   `json:"possibleOutboundIpAddresses,omitempty" bson:"possibleOutboundIpAddresses,omitempty"`
-	PowerState                  *struct {
-		Code string `json:"code,omitempty" bson:"code,omitempty"`
-	} `json:"powerState,omitempty" bson:"powerState,omitempty"`
-	Primary          bool                           `json:"primary,omitempty" bson:"primary,omitempty"`
-	PrimaryEndpoints *AzureResourcePrimaryEndpoints `json:"primaryEndpoints,omitempty" bson:"primaryEndpoints,omitempty"`
-	PrimaryLocation  string                         `json:"primaryLocation,omitempty" bson:"primaryLocation,omitempty"`
-	PrincipalID      string                         `json:"principalId,omitempty" bson:"principalId,omitempty"`
-	Priority         string                         `json:"priority,omitempty" bson:"priority,omitempty"`
-	PrivateEndpoint  *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"privateEndpoint,omitempty" bson:"privateEndpoint,omitempty"`
-	PrivateEndpointConnections          []*AzureResourcePrivateEndpointConnections   `json:"privateEndpointConnections,omitempty" bson:"privateEndpointConnections,omitempty"`
-	PrivateEndpointStateForBackup       string                                       `json:"privateEndpointStateForBackup,omitempty" bson:"privateEndpointStateForBackup,omitempty"`
-	PrivateEndpointStateForSiteRecovery string                                       `json:"privateEndpointStateForSiteRecovery,omitempty" bson:"privateEndpointStateForSiteRecovery,omitempty"`
-	PrivateEndpointVNetPolicies         string                                       `json:"privateEndpointVNetPolicies,omitempty" bson:"privateEndpointVNetPolicies,omitempty"`
-	PrivateFqdn                         string                                       `json:"privateFQDN,omitempty" bson:"privateFQDN,omitempty"`
-	PrivateLinkIdentifiers              *string                                      `json:"privateLinkIdentifiers,omitempty" bson:"privateLinkIdentifiers,omitempty"`
-	PrivateLinkResources                []*AzureResourcePrivateLinkResources         `json:"privateLinkResources,omitempty" bson:"privateLinkResources,omitempty"`
-	PrivateLinkScopedResources          []*AzureResourcePrivateLinkScopedResource    `json:"privateLinkScopedResources,omitempty" bson:"privateLinkScopedResources,omitempty"`
-	PrivateLinkServiceConnections       []*AzureResourcePrivateLinkServiceConnection `json:"privateLinkServiceConnections,omitempty" bson:"privateLinkServiceConnections,omitempty"`
-	Probes                              []*AzureResourceProbe                        `json:"probes,omitempty" bson:"probes,omitempty"`
-	ProtocolTypes                       []string                                     `json:"protocolTypes,omitempty" bson:"protocolTypes,omitempty"`
-	ProvisionedBandwidthInGbps          float64                                      `json:"provisionedBandwidthInGbps,omitempty" bson:"provisionedBandwidthInGbps,omitempty"`
-	ProvisioningState                   string                                       `json:"provisioningState,omitempty" bson:"provisioningState,omitempty"`
-	PublicIpAddressVersion              string                                       `json:"publicIPAddressVersion,omitempty" bson:"publicIPAddressVersion,omitempty"`
-	PublicIpAllocationMethod            string                                       `json:"publicIPAllocationMethod,omitempty" bson:"publicIPAllocationMethod,omitempty"`
-	PublicKey                           string                                       `json:"publicKey,omitempty" bson:"publicKey,omitempty"`
-	PublicNetworkAccess                 any                                          `json:"publicNetworkAccess,omitempty" bson:"publicNetworkAccess,omitempty"`
-	PublicNetworkAccessForIngestion     string                                       `json:"publicNetworkAccessForIngestion,omitempty" bson:"publicNetworkAccessForIngestion,omitempty"`
-	PublicNetworkAccessForQuery         string                                       `json:"publicNetworkAccessForQuery,omitempty" bson:"publicNetworkAccessForQuery,omitempty"`
-	Publisher                           string                                       `json:"publisher,omitempty" bson:"publisher,omitempty"`
-	PublishingProfile                   *AzureResourcePublishingProfile              `json:"publishingProfile,omitempty" bson:"publishingProfile,omitempty"`
-	PurchasePlan                        *AzureResourcePurchasePlan                   `json:"purchasePlan,omitempty" bson:"purchasePlan,omitempty"`
-	QosType                             string                                       `json:"qosType,omitempty" bson:"qosType,omitempty"`
-	QueryPackID                         string                                       `json:"queryPackId,omitempty" bson:"queryPackId,omitempty"`
-	RadiusClientRootCertificates        []any                                        `json:"radiusClientRootCertificates,omitempty" bson:"radiusClientRootCertificates,omitempty"`
-	RadiusProxyIPs                      []any                                        `json:"radiusProxyIPs,omitempty" bson:"radiusProxyIPs,omitempty"`
-	RadiusServerAddress                 string                                       `json:"radiusServerAddress,omitempty" bson:"radiusServerAddress,omitempty"`
-	RadiusServerRootCertificates        []any                                        `json:"radiusServerRootCertificates,omitempty" bson:"radiusServerRootCertificates,omitempty"`
-	RadiusServerSecret                  string                                       `json:"radiusServerSecret,omitempty" bson:"radiusServerSecret,omitempty"`
-	RadiusServers                       []any                                        `json:"radiusServers,omitempty" bson:"radiusServers,omitempty"`
-	RawTags                             any                                          `json:"rawTags,omitempty" bson:"rawTags,omitempty"`
-	ReadLocations                       []*AzureResourceReadLocation                 `json:"readLocations,omitempty" bson:"readLocations,omitempty"`
-	ReadScale                           string                                       `json:"readScale,omitempty" bson:"readScale,omitempty"`
-	Recommended                         *AzureResourceRecommended                    `json:"recommended,omitempty" bson:"recommended,omitempty"`
-	RedundancyMode                      string                                       `json:"redundancyMode,omitempty" bson:"redundancyMode,omitempty"`
-	RedundancySettings                  *struct {
-		CrossRegionRestore            string `json:"crossRegionRestore,omitempty" bson:"crossRegionRestore,omitempty"`
-		StandardTierStorageRedundancy string `json:"standardTierStorageRedundancy,omitempty" bson:"standardTierStorageRedundancy,omitempty"`
-	} `json:"redundancySettings,omitempty" bson:"redundancySettings,omitempty"`
-	RegistrationEnabled bool `json:"registrationEnabled,omitempty" bson:"registrationEnabled,omitempty"`
-	Replica             *struct {
-		Capacity float64 `json:"capacity,omitempty" bson:"capacity,omitempty"`
-		Role     string  `json:"role,omitempty" bson:"role,omitempty"`
-	} `json:"replica,omitempty" bson:"replica,omitempty"`
-	ReplicaCapacity                  float64 `json:"replicaCapacity,omitempty" bson:"replicaCapacity,omitempty"`
-	ReplicatedRegions                []any   `json:"replicatedRegions,omitempty" bson:"replicatedRegions,omitempty"`
-	ReplicationRole                  string  `json:"replicationRole,omitempty" bson:"replicationRole,omitempty"`
-	RepositorySiteName               string  `json:"repositorySiteName,omitempty" bson:"repositorySiteName,omitempty"`
-	RequestedBackupStorageRedundancy string  `json:"requestedBackupStorageRedundancy,omitempty" bson:"requestedBackupStorageRedundancy,omitempty"`
-	RequestedServiceObjectiveName    string  `json:"requestedServiceObjectiveName,omitempty" bson:"requestedServiceObjectiveName,omitempty"`
-	Reserved                         bool    `json:"reserved,omitempty" bson:"reserved,omitempty"`
-	ResolutionPolicy                 string  `json:"resolutionPolicy,omitempty" bson:"resolutionPolicy,omitempty"`
-	ResourceConfig                   any     `json:"resourceConfig,omitempty" bson:"resourceConfig,omitempty"`
-	ResourceGroup                    string  `json:"resourceGroup,omitempty" bson:"resourceGroup,omitempty"`
-	ResourceGuid                     string  `json:"resourceGuid,omitempty" bson:"resourceGuid,omitempty"`
-	ResourceUid                      string  `json:"resourceUID,omitempty" bson:"resourceUID,omitempty"`
-	RestorePointCollectionID         string  `json:"restorePointCollectionId,omitempty" bson:"restorePointCollectionId,omitempty"`
-	RestoreSettings                  *struct {
-		CrossSubscriptionRestoreSettings struct {
-			CrossSubscriptionRestoreState string `json:"crossSubscriptionRestoreState,omitempty" bson:"crossSubscriptionRestoreState,omitempty"`
-		} `json:"crossSubscriptionRestoreSettings,omitempty" bson:"crossSubscriptionRestoreSettings,omitempty"`
-	} `json:"restoreSettings,omitempty" bson:"restoreSettings,omitempty"`
-	RestrictOutboundNetworkAccess string  `json:"restrictOutboundNetworkAccess,omitempty" bson:"restrictOutboundNetworkAccess,omitempty"`
-	RetentionInDays               float64 `json:"retentionInDays,omitempty" bson:"retentionInDays,omitempty"`
-	RetentionPolicy               *struct {
-		Days    float64 `json:"days,omitempty" bson:"days,omitempty"`
-		Enabled bool    `json:"enabled,omitempty" bson:"enabled,omitempty"`
-	} `json:"retentionPolicy,omitempty" bson:"retentionPolicy,omitempty"`
-	Revision   string `json:"revision,omitempty" bson:"revision,omitempty"`
-	RouteTable *struct {
-		Routes []any `json:"routes,omitempty" bson:"routes,omitempty"`
-	} `json:"routeTable,omitempty" bson:"routeTable,omitempty"`
-	Routes               []*AzureResourceRoute           `json:"routes,omitempty" bson:"routes,omitempty"`
-	RoutingPreference    *AzureResourceRoutingPreference `json:"routingPreference,omitempty" bson:"routingPreference,omitempty"`
-	RoutingState         string                          `json:"routingState,omitempty" bson:"routingState,omitempty"`
-	RoutingWeight        float64                         `json:"routingWeight,omitempty" bson:"routingWeight,omitempty"`
-	RuleCollectionGroups []struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"ruleCollectionGroups,omitempty" bson:"ruleCollectionGroups,omitempty"`
-	RunbookType              string                           `json:"runbookType,omitempty" bson:"runbookType,omitempty"`
-	RunningOperationIds      []any                            `json:"runningOperationIds,omitempty" bson:"runningOperationIds,omitempty"`
-	RuntimeAvailabilityState string                           `json:"runtimeAvailabilityState,omitempty" bson:"runtimeAvailabilityState,omitempty"`
-	ScaleUnits               float64                          `json:"scaleUnits,omitempty" bson:"scaleUnits,omitempty"`
-	ScmSiteAlsoStopped       bool                             `json:"scmSiteAlsoStopped,omitempty" bson:"scmSiteAlsoStopped,omitempty"`
-	ScopeID                  string                           `json:"scopeId,omitempty" bson:"scopeId,omitempty"`
-	Scopes                   []any                            `json:"scopes,omitempty" bson:"scopes,omitempty"`
-	SecondaryEndpoints       *AzureResourceSecondaryEndpoints `json:"secondaryEndpoints,omitempty" bson:"secondaryEndpoints,omitempty"`
-	SecondaryLocation        string                           `json:"secondaryLocation,omitempty" bson:"secondaryLocation,omitempty"`
-	SecureScore              string                           `json:"secureScore,omitempty" bson:"secureScore,omitempty"`
-	SecurityProfile          *AzureResourceSecurityProfile    `json:"securityProfile,omitempty" bson:"securityProfile,omitempty"`
-	SecurityRules            []*AzureResourceSecurityRule     `json:"securityRules,omitempty" bson:"securityRules,omitempty"`
-	SecuritySettings         *AzureResourceSecuritySettings   `json:"securitySettings,omitempty" bson:"securitySettings,omitempty"`
-	SecurityStyle            string                           `json:"securityStyle,omitempty" bson:"securityStyle,omitempty"`
-	SelfLink                 string                           `json:"selfLink,omitempty" bson:"selfLink,omitempty"`
-	SerializedData           any                              `json:"serializedData,omitempty" bson:"serializedData,omitempty"`
-	ServerFarm               any                              `json:"serverFarm,omitempty" bson:"serverFarm,omitempty"`
-	ServerFarmID             any                              `json:"serverFarmId,omitempty" bson:"serverFarmId,omitempty"`
-	ServiceBusEndpoint       string                           `json:"serviceBusEndpoint,omitempty" bson:"serviceBusEndpoint,omitempty"`
-	ServiceKey               string                           `json:"serviceKey,omitempty" bson:"serviceKey,omitempty"`
-	ServiceLevel             string                           `json:"serviceLevel,omitempty" bson:"serviceLevel,omitempty"`
-	ServiceManagementTags    any                              `json:"serviceManagementTags,omitempty" bson:"serviceManagementTags,omitempty"`
-	ServicePrincipalProfile  *struct {
-		ClientID string `json:"clientId,omitempty" bson:"clientId,omitempty"`
-	} `json:"servicePrincipalProfile,omitempty" bson:"servicePrincipalProfile,omitempty"`
-	ServiceProviderProperties        *AzureResourceServiceProviderProperties `json:"serviceProviderProperties,omitempty" bson:"serviceProviderProperties,omitempty"`
-	ServiceProviderProvisioningState string                                  `json:"serviceProviderProvisioningState,omitempty" bson:"serviceProviderProvisioningState,omitempty"`
-	Settings                         *AzureResourceSettings                  `json:"settings,omitempty" bson:"settings,omitempty"`
-	Severity                         float64                                 `json:"severity,omitempty" bson:"severity,omitempty"`
-	SinglePlacementGroup             bool                                    `json:"singlePlacementGroup,omitempty" bson:"singlePlacementGroup,omitempty"`
-	SiteConfig                       *AzureResourceSiteConfig                `json:"siteConfig,omitempty" bson:"siteConfig,omitempty"`
-	SiteDisabledReason               float64                                 `json:"siteDisabledReason,omitempty" bson:"siteDisabledReason,omitempty"`
-	SiteMode                         any                                     `json:"siteMode,omitempty" bson:"siteMode,omitempty"`
-	SiteProperties                   *AzureResourceSiteProperties            `json:"siteProperties,omitempty" bson:"siteProperties,omitempty"`
-	SiteScopedCertificatesEnabled    bool                                    `json:"siteScopedCertificatesEnabled,omitempty" bson:"siteScopedCertificatesEnabled,omitempty"`
-	Size                             any                                     `json:"size,omitempty" bson:"size,omitempty"`
-	Sku                              any                                     `json:"sku,omitempty" bson:"sku,omitempty"`
-	SlotName                         any                                     `json:"slotName,omitempty" bson:"slotName,omitempty"`
-	SlotSwapStatus                   any                                     `json:"slotSwapStatus,omitempty" bson:"slotSwapStatus,omitempty"`
-	SmbAccessBasedEnumeration        string                                  `json:"smbAccessBasedEnumeration,omitempty" bson:"smbAccessBasedEnumeration,omitempty"`
-	SmbContinuouslyAvailable         bool                                    `json:"smbContinuouslyAvailable,omitempty" bson:"smbContinuouslyAvailable,omitempty"`
-	SmbEncryption                    bool                                    `json:"smbEncryption,omitempty" bson:"smbEncryption,omitempty"`
-	SmbNonBrowsable                  string                                  `json:"smbNonBrowsable,omitempty" bson:"smbNonBrowsable,omitempty"`
-	SmsReceivers                     []any                                   `json:"smsReceivers,omitempty" bson:"smsReceivers,omitempty"`
-	SnapshotDirectoryVisible         bool                                    `json:"snapshotDirectoryVisible,omitempty" bson:"snapshotDirectoryVisible,omitempty"`
-	Snat                             *struct {
-		PrivateRanges []string `json:"privateRanges,omitempty" bson:"privateRanges,omitempty"`
-	} `json:"snat,omitempty" bson:"snat,omitempty"`
-	SoftDeletePolicy *struct {
-		IsSoftDeleteEnabled bool `json:"isSoftDeleteEnabled,omitempty" bson:"isSoftDeleteEnabled,omitempty"`
-	} `json:"softDeletePolicy,omitempty" bson:"softDeletePolicy,omitempty"`
-	SoftDeleteRetentionInDays float64     `json:"softDeleteRetentionInDays,omitempty" bson:"softDeleteRetentionInDays,omitempty"`
-	Source                    interface{} `json:"source,omitempty" bson:"source,omitempty"`
-	SourceID                  string      `json:"sourceId,omitempty" bson:"sourceId,omitempty"`
-	SourceVirtualMachine      *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"sourceVirtualMachine,omitempty" bson:"sourceVirtualMachine,omitempty"`
-	Sources                     []*AzureResourceSources      `json:"sources,omitempty" bson:"sources,omitempty"`
-	SpotExpirationTime          any                          `json:"spotExpirationTime,omitempty" bson:"spotExpirationTime,omitempty"`
-	SQLEndpoint                 string                       `json:"sqlEndpoint,omitempty" bson:"sqlEndpoint,omitempty"`
-	SQLImageOffer               string                       `json:"sqlImageOffer,omitempty" bson:"sqlImageOffer,omitempty"`
-	SQLImageSku                 string                       `json:"sqlImageSku,omitempty" bson:"sqlImageSku,omitempty"`
-	SQLManagement               string                       `json:"sqlManagement,omitempty" bson:"sqlManagement,omitempty"`
-	SQLServerLicenseType        string                       `json:"sqlServerLicenseType,omitempty" bson:"sqlServerLicenseType,omitempty"`
-	SSHEnabled                  any                          `json:"sshEnabled,omitempty" bson:"sshEnabled,omitempty"`
-	SslCertificates             any                          `json:"sslCertificates,omitempty" bson:"sslCertificates,omitempty"`
-	Stag                        float64                      `json:"stag,omitempty" bson:"stag,omitempty"`
-	StagingResourceGroup        string                       `json:"stagingResourceGroup,omitempty" bson:"stagingResourceGroup,omitempty"`
-	StartTime                   string                       `json:"startTime,omitempty" bson:"startTime,omitempty"`
-	State                       string                       `json:"state,omitempty" bson:"state,omitempty"`
-	StaticIp                    string                       `json:"staticIp,omitempty" bson:"staticIp,omitempty"`
-	Status                      string                       `json:"status,omitempty" bson:"status,omitempty"`
-	StatusOfPrimary             string                       `json:"statusOfPrimary,omitempty" bson:"statusOfPrimary,omitempty"`
-	StatusOfSecondary           string                       `json:"statusOfSecondary,omitempty" bson:"statusOfSecondary,omitempty"`
-	Statuses                    []*AzureResourceStatus       `json:"statuses,omitempty" bson:"statuses,omitempty"`
-	Storage                     *AzureResourceStorage        `json:"storage,omitempty" bson:"storage,omitempty"`
-	StorageAccountRequired      bool                         `json:"storageAccountRequired,omitempty" bson:"storageAccountRequired,omitempty"`
-	StorageID                   string                       `json:"storageId,omitempty" bson:"storageId,omitempty"`
-	StorageProfile              *AzureResourceStorageProfile `json:"storageProfile,omitempty" bson:"storageProfile,omitempty"`
-	StorageRecoveryDefaultState string                       `json:"storageRecoveryDefaultState,omitempty" bson:"storageRecoveryDefaultState,omitempty"`
-	StorageSettings             []struct {
-		DatastoreType string `json:"datastoreType,omitempty" bson:"datastoreType,omitempty"`
-		Type          string `json:"type,omitempty" bson:"type,omitempty"`
-	} `json:"storageSettings,omitempty" bson:"storageSettings,omitempty"`
-	StorageToNetworkProximity string                           `json:"storageToNetworkProximity,omitempty" bson:"storageToNetworkProximity,omitempty"`
-	StorageURI                any                              `json:"storageUri,omitempty" bson:"storageUri,omitempty"`
-	StreamDeclarations        *AzureResourceStreamDeclarations `json:"streamDeclarations,omitempty" bson:"streamDeclarations,omitempty"`
-	Subnet                    *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"subnet,omitempty" bson:"subnet,omitempty"`
-	SubnetID              string                 `json:"subnetId,omitempty" bson:"subnetId,omitempty"`
-	Subnets               []AzureResourceSubnets `json:"subnets,omitempty" bson:"subnets,omitempty"`
-	Subscription          string                 `json:"subscription,omitempty" bson:"subscription,omitempty"`
-	SupportPlan           string                 `json:"supportPlan,omitempty" bson:"supportPlan,omitempty"`
-	SupportedCapabilities *struct {
-		AcceleratedNetwork  bool   `json:"acceleratedNetwork,omitempty" bson:"acceleratedNetwork,omitempty"`
-		Architecture        string `json:"architecture,omitempty" bson:"architecture,omitempty"`
-		DiskControllerTypes string `json:"diskControllerTypes,omitempty" bson:"diskControllerTypes,omitempty"`
-	} `json:"supportedCapabilities,omitempty" bson:"supportedCapabilities,omitempty"`
-	SupportsHibernation      bool                               `json:"supportsHibernation,omitempty" bson:"supportsHibernation,omitempty"`
-	SupportsHTTPSTrafficOnly bool                               `json:"supportsHttpsTrafficOnly,omitempty" bson:"supportsHttpsTrafficOnly,omitempty"`
-	SuppressFailures         bool                               `json:"suppressFailures,omitempty" bson:"suppressFailures,omitempty"`
-	SuspendedTill            any                                `json:"suspendedTill,omitempty" bson:"suspendedTill,omitempty"`
-	SystemData               *AzureResourceSystemData           `json:"systemData,omitempty" bson:"systemData,omitempty"`
-	Tags                     any                                `json:"tags,omitempty" bson:"tags,omitempty"`
-	TapConfigurations        []any                              `json:"tapConfigurations,omitempty" bson:"tapConfigurations,omitempty"`
-	TargetBuildVersion       any                                `json:"targetBuildVersion,omitempty" bson:"targetBuildVersion,omitempty"`
-	TargetResourceGuid       string                             `json:"targetResourceGuid,omitempty" bson:"targetResourceGuid,omitempty"`
-	TargetResourceID         string                             `json:"targetResourceId,omitempty" bson:"targetResourceId,omitempty"`
-	TargetResourceRegion     string                             `json:"targetResourceRegion,omitempty" bson:"targetResourceRegion,omitempty"`
-	TargetResourceType       string                             `json:"targetResourceType,omitempty" bson:"targetResourceType,omitempty"`
-	TargetResourceTypes      []string                           `json:"targetResourceTypes,omitempty" bson:"targetResourceTypes,omitempty"`
-	TargetSwapSlot           any                                `json:"targetSwapSlot,omitempty" bson:"targetSwapSlot,omitempty"`
-	TargetWorkerCount        float64                            `json:"targetWorkerCount,omitempty" bson:"targetWorkerCount,omitempty"`
-	TargetWorkerSizeID       float64                            `json:"targetWorkerSizeId,omitempty" bson:"targetWorkerSizeId,omitempty"`
-	TaskType                 string                             `json:"taskType,omitempty" bson:"taskType,omitempty"`
-	Template                 *AzureResourceTemplate             `json:"template,omitempty" bson:"template,omitempty"`
-	TenantIDOther            string                             `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
-	TestConfigurations       []*AzureResourceTestConfigurations `json:"testConfigurations,omitempty" bson:"testConfigurations,omitempty"`
-	TestGroups               []*AzureResourceTestGroups         `json:"testGroups,omitempty" bson:"testGroups,omitempty"`
-	TestLinks                []*struct {
-		Method     string `json:"method,omitempty" bson:"method,omitempty"`
-		RequestURI string `json:"requestUri,omitempty" bson:"requestUri,omitempty"`
-	} `json:"testLinks,omitempty" bson:"testLinks,omitempty"`
-	TestRequests            []*AzureResourceTestRequests    `json:"testRequests,omitempty" bson:"testRequests,omitempty"`
-	ThreatIntelMode         string                          `json:"threatIntelMode,omitempty" bson:"threatIntelMode,omitempty"`
-	ThroughputMibps         float64                         `json:"throughputMibps,omitempty" bson:"throughputMibps,omitempty"`
-	Tier                    string                          `json:"tier,omitempty" bson:"tier,omitempty"`
-	TimeCreated             string                          `json:"timeCreated,omitempty" bson:"timeCreated,omitempty"`
-	TimeModified            string                          `json:"timeModified,omitempty" bson:"timeModified,omitempty"`
-	TimeZoneID              string                          `json:"timeZoneId,omitempty" bson:"timeZoneId,omitempty"`
-	TopicType               string                          `json:"topicType,omitempty" bson:"topicType,omitempty"`
-	TotalThroughputMibps    float64                         `json:"totalThroughputMibps,omitempty" bson:"totalThroughputMibps,omitempty"`
-	TrafficManagerHostNames any                             `json:"trafficManagerHostNames,omitempty" bson:"trafficManagerHostNames,omitempty"`
-	TrafficSelectorPolicies []any                           `json:"trafficSelectorPolicies,omitempty" bson:"trafficSelectorPolicies,omitempty"`
-	TransportSecurity       *AzureResourceTransportSecurity `json:"transportSecurity,omitempty" bson:"transportSecurity,omitempty"`
-	Type                    string                          `json:"type,omitempty" bson:"type,omitempty"`
-	TypeHandlerVersion      string                          `json:"typeHandlerVersion,omitempty" bson:"typeHandlerVersion,omitempty"`
-	UniqueID                string                          `json:"uniqueId,omitempty" bson:"uniqueId,omitempty"`
-	UniqueIdentifier        string                          `json:"uniqueIdentifier,omitempty" bson:"uniqueIdentifier,omitempty"`
-	UpdatedAt               string                          `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
-	UpgradePolicy           *struct {
-		Mode string `json:"mode,omitempty" bson:"mode,omitempty"`
-	} `json:"upgradePolicy,omitempty" bson:"upgradePolicy,omitempty"`
-	UpgradeSettings *struct {
-		OverrideSettings struct {
-			ForceUpgrade bool `json:"forceUpgrade,omitempty" bson:"forceUpgrade,omitempty"`
-		} `json:"overrideSettings,omitempty" bson:"overrideSettings,omitempty"`
-	} `json:"upgradeSettings,omitempty" bson:"upgradeSettings,omitempty"`
-	UsageState                     string                            `json:"usageState,omitempty" bson:"usageState,omitempty"`
-	UsageThreshold                 float64                           `json:"usageThreshold,omitempty" bson:"usageThreshold,omitempty"`
-	UseContainerLocalhostBindings  any                               `json:"useContainerLocalhostBindings,omitempty" bson:"useContainerLocalhostBindings,omitempty"`
-	UseLocalAzureIpAddress         bool                              `json:"useLocalAzureIpAddress,omitempty" bson:"useLocalAzureIpAddress,omitempty"`
-	UsePolicyBasedTrafficSelectors bool                              `json:"usePolicyBasedTrafficSelectors,omitempty" bson:"usePolicyBasedTrafficSelectors,omitempty"`
-	UseRadiusProxyIPs              bool                              `json:"useRadiusProxyIPs,omitempty" bson:"useRadiusProxyIPs,omitempty"`
-	UserEngagementTracking         string                            `json:"userEngagementTracking,omitempty" bson:"userEngagementTracking,omitempty"`
-	UserID                         string                            `json:"userId,omitempty" bson:"userId,omitempty"`
-	UtilizedThroughputMibps        float64                           `json:"utilizedThroughputMibps,omitempty" bson:"utilizedThroughputMibps,omitempty"`
-	VaultURI                       string                            `json:"vaultUri,omitempty" bson:"vaultUri,omitempty"`
-	VerificationRecords            *AzureResourceVerificationRecords `json:"verificationRecords,omitempty" bson:"verificationRecords,omitempty"`
-	VerificationStates             *AzureResourceVerificationStates  `json:"verificationStates,omitempty" bson:"verificationStates,omitempty"`
-	Version                        string                            `json:"version,omitempty" bson:"version,omitempty"`
-	VirtualHub                     *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"virtualHub,omitempty" bson:"virtualHub,omitempty"`
-	VirtualHubRouteTableV2S []any `json:"virtualHubRouteTableV2s,omitempty" bson:"virtualHubRouteTableV2s,omitempty"`
-	VirtualHubs             []struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"virtualHubs,omitempty" bson:"virtualHubs,omitempty"`
+	// HighAvailability *struct {
+	// 	Mode  string `json:"mode,omitempty" bson:"mode,omitempty"`
+	// 	State string `json:"state,omitempty" bson:"state,omitempty"`
+	// } `json:"highAvailability,omitempty" bson:"highAvailability,omitempty"`
+	// HnsOnMigrationInProgress    bool                              `json:"hnsOnMigrationInProgress,omitempty" bson:"hnsOnMigrationInProgress,omitempty"`
+	// HomeStamp                   string                            `json:"homeStamp,omitempty" bson:"homeStamp,omitempty"`
+	// HostName                    string                            `json:"hostName,omitempty" bson:"hostName,omitempty"`
+	// HostNameSslStates           []*AzureResourceHostNameSslStates `json:"hostNameSslStates,omitempty" bson:"hostNameSslStates,omitempty"`
+	// HostNames                   []string                          `json:"hostNames,omitempty" bson:"hostNames,omitempty"`
+	// HostNamesDisabled           bool                              `json:"hostNamesDisabled,omitempty" bson:"hostNamesDisabled,omitempty"`
+	// HostedWorkloads             []string                          `json:"hostedWorkloads,omitempty" bson:"hostedWorkloads,omitempty"`
+	// HostingEnvironment          any                               `json:"hostingEnvironment,omitempty" bson:"hostingEnvironment,omitempty"`
+	// HostingEnvironmentID        any                               `json:"hostingEnvironmentId,omitempty" bson:"hostingEnvironmentId,omitempty"`
+	// HostingEnvironmentProfile   any                               `json:"hostingEnvironmentProfile,omitempty" bson:"hostingEnvironmentProfile,omitempty"`
+	// HourlySchedule              *struct{}                         `json:"hourlySchedule,omitempty" bson:"hourlySchedule,omitempty"`
+	// HTTPSOnly                   bool                              `json:"httpsOnly,omitempty" bson:"httpsOnly,omitempty"`
+	// HubIpAddresses              *AzureResourceHubIpAddresses      `json:"hubIPAddresses,omitempty" bson:"hubIPAddresses,omitempty"`
+	// HubRoutingPreference        string                            `json:"hubRoutingPreference,omitempty" bson:"hubRoutingPreference,omitempty"`
+	// HyperV                      bool                              `json:"hyperV,omitempty" bson:"hyperV,omitempty"`
+	// HyperVGeneration            string                            `json:"hyperVGeneration,omitempty" bson:"hyperVGeneration,omitempty"`
+	// Identifier                  *AzureResourceIdentifier          `json:"identifier,omitempty" bson:"identifier,omitempty"`
+	// IdentityProfile             *AzureResourceIdentityProfile     `json:"identityProfile,omitempty" bson:"identityProfile,omitempty"`
+	// IdleTimeoutInMinutes        float64                           `json:"idleTimeoutInMinutes,omitempty" bson:"idleTimeoutInMinutes,omitempty"`
+	// ImmutableID                 string                            `json:"immutableId,omitempty" bson:"immutableId,omitempty"`
+	// ImmutableResourceID         string                            `json:"immutableResourceId,omitempty" bson:"immutableResourceId,omitempty"`
+	// InFlightFeatures            []string                          `json:"inFlightFeatures,omitempty" bson:"inFlightFeatures,omitempty"`
+	// InProgressOperationID       any                               `json:"inProgressOperationId,omitempty" bson:"inProgressOperationId,omitempty"`
+	// InboundIpAddress            string                            `json:"inboundIpAddress,omitempty" bson:"inboundIpAddress,omitempty"`
+	// InboundNatPools             []any                             `json:"inboundNatPools,omitempty" bson:"inboundNatPools,omitempty"`
+	// InboundNatRules             []*AzureResourceInboundNatRule    `json:"inboundNatRules,omitempty" bson:"inboundNatRules,omitempty"`
+	// Incremental                 bool                              `json:"incremental,omitempty" bson:"incremental,omitempty"`
+	// IncrementalSnapshotFamilyID string                            `json:"incrementalSnapshotFamilyId,omitempty" bson:"incrementalSnapshotFamilyId,omitempty"`
+	// InfrastructureResourceGroup *string                           `json:"infrastructureResourceGroup,omitempty" bson:"infrastructureResourceGroup,omitempty"`
+	// IngressBytesTransferred     float64                           `json:"ingressBytesTransferred,omitempty" bson:"ingressBytesTransferred,omitempty"`
+	// InputSchema                 string                            `json:"inputSchema,omitempty" bson:"inputSchema,omitempty"`
+	// InstallPatches              *AzureResourceInstallPatches      `json:"installPatches,omitempty" bson:"installPatches,omitempty"`
+	// InstanceID                  string                            `json:"instanceId,omitempty" bson:"instanceId,omitempty"`
+	// InternalID                  string                            `json:"internalId,omitempty" bson:"internalId,omitempty"`
+	// IntrusionDetection          *AzureResourceIntrusionDetection  `json:"intrusionDetection,omitempty" bson:"intrusionDetection,omitempty"`
+	// IpAddress                   string                            `json:"ipAddress,omitempty" bson:"ipAddress,omitempty"`
+	// IpAddresses                 []string                          `json:"ipAddresses,omitempty" bson:"ipAddresses,omitempty"`
+	// IpConfiguration             *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"ipConfiguration,omitempty" bson:"ipConfiguration,omitempty"`
+	// IpConfigurations []*AzureResourceIpConfiguration `json:"ipConfigurations,omitempty" bson:"ipConfigurations,omitempty"`
+	// IpMode           string                          `json:"ipMode,omitempty" bson:"ipMode,omitempty"`
+	// IpRules          []struct {
+	// 	IpAddressOrRange string `json:"ipAddressOrRange,omitempty" bson:"ipAddressOrRange,omitempty"`
+	// } `json:"ipRules,omitempty" bson:"ipRules,omitempty"`
+	// IpTags                          []any   `json:"ipTags,omitempty" bson:"ipTags,omitempty"`
+	// IpsecPolicies                   []any   `json:"ipsecPolicies,omitempty" bson:"ipsecPolicies,omitempty"`
+	// IsAutoInflateEnabled            bool    `json:"isAutoInflateEnabled,omitempty" bson:"isAutoInflateEnabled,omitempty"`
+	// IsDefaultQuotaEnabled           bool    `json:"isDefaultQuotaEnabled,omitempty" bson:"isDefaultQuotaEnabled,omitempty"`
+	// IsEnabled                       bool    `json:"isEnabled,omitempty" bson:"isEnabled,omitempty"`
+	// IsHnsEnabled                    bool    `json:"isHnsEnabled,omitempty" bson:"isHnsEnabled,omitempty"`
+	// IsIPv6EnabledPrivateEndpoint    bool    `json:"isIPv6EnabledPrivateEndpoint,omitempty" bson:"isIPv6EnabledPrivateEndpoint,omitempty"`
+	// IsInfraEncryptionEnabled        bool    `json:"isInfraEncryptionEnabled,omitempty" bson:"isInfraEncryptionEnabled,omitempty"`
+	// IsLedgerOn                      bool    `json:"isLedgerOn,omitempty" bson:"isLedgerOn,omitempty"`
+	// IsLocalUserEnabled              bool    `json:"isLocalUserEnabled,omitempty" bson:"isLocalUserEnabled,omitempty"`
+	// IsMigrateToCses                 bool    `json:"isMigrateToCSES,omitempty" bson:"isMigrateToCSES,omitempty"`
+	// IsNfsV3Enabled                  bool    `json:"isNfsV3Enabled,omitempty" bson:"isNfsV3Enabled,omitempty"`
+	// IsRestoring                     bool    `json:"isRestoring,omitempty" bson:"isRestoring,omitempty"`
+	// IsRoutingPreferenceInternet     bool    `json:"isRoutingPreferenceInternet,omitempty" bson:"isRoutingPreferenceInternet,omitempty"`
+	// IsSftpEnabled                   bool    `json:"isSftpEnabled,omitempty" bson:"isSftpEnabled,omitempty"`
+	// IsSpot                          bool    `json:"isSpot,omitempty" bson:"isSpot,omitempty"`
+	// IsVaultProtectedByResourceGuard bool    `json:"isVaultProtectedByResourceGuard,omitempty" bson:"isVaultProtectedByResourceGuard,omitempty"`
+	// IsVirtualNetworkFilterEnabled   bool    `json:"isVirtualNetworkFilterEnabled,omitempty" bson:"isVirtualNetworkFilterEnabled,omitempty"`
+	// IsXenon                         bool    `json:"isXenon,omitempty" bson:"isXenon,omitempty"`
+	// ItsmReceivers                   []any   `json:"itsmReceivers,omitempty" bson:"itsmReceivers,omitempty"`
+	// JobCount                        float64 `json:"jobCount,omitempty" bson:"jobCount,omitempty"`
+	// KafkaEnabled                    bool    `json:"kafkaEnabled,omitempty" bson:"kafkaEnabled,omitempty"`
+	// KedaConfiguration               *struct {
+	// 	Version string `json:"version,omitempty" bson:"version,omitempty"`
+	// } `json:"kedaConfiguration,omitempty" bson:"kedaConfiguration,omitempty"`
+	// KerberosEnabled bool `json:"kerberosEnabled,omitempty" bson:"kerberosEnabled,omitempty"`
+	// KeyCreationTime *struct {
+	// 	Key1 *string `json:"key1,omitempty" bson:"key1,omitempty"`
+	// 	Key2 *string `json:"key2,omitempty" bson:"key2,omitempty"`
+	// } `json:"keyCreationTime,omitempty" bson:"keyCreationTime,omitempty"`
+	// KeyVaultReferenceIdentity string                            `json:"keyVaultReferenceIdentity,omitempty" bson:"keyVaultReferenceIdentity,omitempty"`
+	// KeysMetadata              *AzureResourceKeysMetadata        `json:"keysMetadata,omitempty" bson:"keysMetadata,omitempty"`
+	// Kind                      string                            `json:"kind,omitempty" bson:"kind,omitempty"`
+	// KubeEnvironmentProfile    any                               `json:"kubeEnvironmentProfile,omitempty" bson:"kubeEnvironmentProfile,omitempty"`
+	// KubernetesVersion         string                            `json:"kubernetesVersion,omitempty" bson:"kubernetesVersion,omitempty"`
+	// LargeFileSharesState      string                            `json:"largeFileSharesState,omitempty" bson:"largeFileSharesState,omitempty"`
+	// LastModifiedBy            any                               `json:"lastModifiedBy,omitempty" bson:"lastModifiedBy,omitempty"`
+	// LastModifiedTime          string                            `json:"lastModifiedTime,omitempty" bson:"lastModifiedTime,omitempty"`
+	// LastModifiedTimeUtc       string                            `json:"lastModifiedTimeUtc,omitempty" bson:"lastModifiedTimeUtc,omitempty"`
+	// LastRunStatus             *AzureResourceLastRunStatus       `json:"lastRunStatus,omitempty" bson:"lastRunStatus,omitempty"`
+	// LdapEnabled               bool                              `json:"ldapEnabled,omitempty" bson:"ldapEnabled,omitempty"`
+	// LeastPrivilegeMode        string                            `json:"leastPrivilegeMode,omitempty" bson:"leastPrivilegeMode,omitempty"`
+	// Lenses                    []*AzureResourceLense             `json:"lenses,omitempty" bson:"lenses,omitempty"`
+	// LicenseType               string                            `json:"licenseType,omitempty" bson:"licenseType,omitempty"`
+	// LinkedDomains             []string                          `json:"linkedDomains,omitempty" bson:"linkedDomains,omitempty"`
+	// LinkedResourceType        string                            `json:"linkedResourceType,omitempty" bson:"linkedResourceType,omitempty"`
+	// Links                     []*AzureResourceLink              `json:"links,omitempty" bson:"links,omitempty"`
+	// LinuxProfile              *AzureResourceLinuxProfile        `json:"linuxProfile,omitempty" bson:"linuxProfile,omitempty"`
+	// LoadBalancingRules        []*AzureResourceLoadBalancingRule `json:"loadBalancingRules,omitempty" bson:"loadBalancingRules,omitempty"`
+	// Locations                 []*AzureResourceLocation          `json:"locations,omitempty" bson:"locations,omitempty"`
+	// LogActivityTrace          float64                           `json:"logActivityTrace,omitempty" bson:"logActivityTrace,omitempty"`
+	// LogProgress               bool                              `json:"logProgress,omitempty" bson:"logProgress,omitempty"`
+	// LogVerbose                bool                              `json:"logVerbose,omitempty" bson:"logVerbose,omitempty"`
+	// LogicAppReceivers         []any                             `json:"logicAppReceivers,omitempty" bson:"logicAppReceivers,omitempty"`
+	// LoginServer               string                            `json:"loginServer,omitempty" bson:"loginServer,omitempty"`
+	// LogsIngestion             *struct {
+	// 	Endpoint string `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
+	// } `json:"logsIngestion,omitempty" bson:"logsIngestion,omitempty"`
+	// LowPriorityCoreQuota       float64                         `json:"lowPriorityCoreQuota,omitempty" bson:"lowPriorityCoreQuota,omitempty"`
+	// MacAddress                 string                          `json:"macAddress,omitempty" bson:"macAddress,omitempty"`
+	// MailFromSenderDomain       string                          `json:"mailFromSenderDomain,omitempty" bson:"mailFromSenderDomain,omitempty"`
+	// MaintenanceConfigurationID string                          `json:"maintenanceConfigurationId,omitempty" bson:"maintenanceConfigurationId,omitempty"`
+	// MaintenanceScope           string                          `json:"maintenanceScope,omitempty" bson:"maintenanceScope,omitempty"`
+	// MaintenanceWindow          *AzureResourceMaintenanceWindow `json:"maintenanceWindow,omitempty" bson:"maintenanceWindow,omitempty"`
+	// ManagedEnvironmentID       any                             `json:"managedEnvironmentId,omitempty" bson:"managedEnvironmentId,omitempty"`
+	// ManagedResourceGroupName   string                          `json:"managedResourceGroupName,omitempty" bson:"managedResourceGroupName,omitempty"`
+	// ManagedResources           *struct {
+	// 	ResourceGroup  string `json:"resourceGroup,omitempty" bson:"resourceGroup,omitempty"`
+	// 	StorageAccount string `json:"storageAccount,omitempty" bson:"storageAccount,omitempty"`
+	// } `json:"managedResources,omitempty" bson:"managedResources,omitempty"`
+	// ManualPrivateLinkServiceConnections            []any                  `json:"manualPrivateLinkServiceConnections,omitempty" bson:"manualPrivateLinkServiceConnections,omitempty"`
+	// MaxAgentPools                                  float64                `json:"maxAgentPools,omitempty" bson:"maxAgentPools,omitempty"`
+	// MaxLogSizeBytes                                float64                `json:"maxLogSizeBytes,omitempty" bson:"maxLogSizeBytes,omitempty"`
+	// MaxNumberOfRecordSets                          float64                `json:"maxNumberOfRecordSets,omitempty" bson:"maxNumberOfRecordSets,omitempty"`
+	// MaxNumberOfRecordsPerRecordSet                 any                    `json:"maxNumberOfRecordsPerRecordSet,omitempty" bson:"maxNumberOfRecordsPerRecordSet,omitempty"`
+	// MaxNumberOfVirtualNetworkLinks                 float64                `json:"maxNumberOfVirtualNetworkLinks,omitempty" bson:"maxNumberOfVirtualNetworkLinks,omitempty"`
+	// MaxNumberOfVirtualNetworkLinksWithRegistration float64                `json:"maxNumberOfVirtualNetworkLinksWithRegistration,omitempty" bson:"maxNumberOfVirtualNetworkLinksWithRegistration,omitempty"`
+	// MaxNumberOfWorkers                             any                    `json:"maxNumberOfWorkers,omitempty" bson:"maxNumberOfWorkers,omitempty"`
+	// MaxShares                                      float64                `json:"maxShares,omitempty" bson:"maxShares,omitempty"`
+	// MaxSizeBytes                                   float64                `json:"maxSizeBytes,omitempty" bson:"maxSizeBytes,omitempty"`
+	// MaximumElasticWorkerCount                      float64                `json:"maximumElasticWorkerCount,omitempty" bson:"maximumElasticWorkerCount,omitempty"`
+	// MaximumNumberOfFiles                           float64                `json:"maximumNumberOfFiles,omitempty" bson:"maximumNumberOfFiles,omitempty"`
+	// MaximumNumberOfWorkers                         float64                `json:"maximumNumberOfWorkers,omitempty" bson:"maximumNumberOfWorkers,omitempty"`
+	// MaximumThroughputUnits                         float64                `json:"maximumThroughputUnits,omitempty" bson:"maximumThroughputUnits,omitempty"`
+	// MdmID                                          string                 `json:"mdmId,omitempty" bson:"mdmId,omitempty"`
+	// Metadata                                       *AzureResourceMetadata `json:"metadata,omitempty" bson:"metadata,omitempty"`
+	// MetadataSearch                                 string                 `json:"metadataSearch,omitempty" bson:"metadataSearch,omitempty"`
+	// MetricID                                       string                 `json:"metricId,omitempty" bson:"metricId,omitempty"`
+	// MetricResourceID                               string                 `json:"metricResourceId,omitempty" bson:"metricResourceId,omitempty"`
+	// MetricsIngestion                               *struct {
+	// 	Endpoint string `json:"endpoint,omitempty" bson:"endpoint,omitempty"`
+	// } `json:"metricsIngestion,omitempty" bson:"metricsIngestion,omitempty"`
+	// MigrateToVmss        any     `json:"migrateToVMSS,omitempty" bson:"migrateToVMSS,omitempty"`
+	// MigrationPhase       string  `json:"migrationPhase,omitempty" bson:"migrationPhase,omitempty"`
+	// MigrationState       any     `json:"migrationState,omitempty" bson:"migrationState,omitempty"`
+	// MinCapacity          float64 `json:"minCapacity,omitempty" bson:"minCapacity,omitempty"`
+	// MinimalTlsVersion    string  `json:"minimalTlsVersion,omitempty" bson:"minimalTlsVersion,omitempty"`
+	// MinimumTlsVersion    string  `json:"minimumTlsVersion,omitempty" bson:"minimumTlsVersion,omitempty"`
+	// MinorVersion         string  `json:"minorVersion,omitempty" bson:"minorVersion,omitempty"`
+	// ModifiedDate         string  `json:"modifiedDate,omitempty" bson:"modifiedDate,omitempty"`
+	// MonitoringStatus     string  `json:"monitoringStatus,omitempty" bson:"monitoringStatus,omitempty"`
+	// MonthlyBackupsToKeep float64 `json:"monthlyBackupsToKeep,omitempty" bson:"monthlyBackupsToKeep,omitempty"`
+	// MonthlySchedule      *struct {
+	// 	DaysOfMonth string `json:"daysOfMonth,omitempty" bson:"daysOfMonth,omitempty"`
+	// } `json:"monthlySchedule,omitempty" bson:"monthlySchedule,omitempty"`
+	// MountTargets                []*AzureResourceMountTargets `json:"mountTargets,omitempty" bson:"mountTargets,omitempty"`
+	// Mtu                         string                       `json:"mtu,omitempty" bson:"mtu,omitempty"`
+	// MuteActionsDuration         string                       `json:"muteActionsDuration,omitempty" bson:"muteActionsDuration,omitempty"`
+	// Name                        string                       `json:"name,omitempty" bson:"name,omitempty"`
+	// NameServers                 []string                     `json:"nameServers,omitempty" bson:"nameServers,omitempty"`
+	// NatRuleCollections          []any                        `json:"natRuleCollections,omitempty" bson:"natRuleCollections,omitempty"`
+	// NatRules                    []any                        `json:"natRules,omitempty" bson:"natRules,omitempty"`
+	// Network                     *AzureResourceNetwork        `json:"network,omitempty" bson:"network,omitempty"`
+	// NetworkAccessPolicy         string                       `json:"networkAccessPolicy,omitempty" bson:"networkAccessPolicy,omitempty"`
+	// NetworkACLBypass            string                       `json:"networkAclBypass,omitempty" bson:"networkAclBypass,omitempty"`
+	// NetworkACLBypassResourceIds []any                        `json:"networkAclBypassResourceIds,omitempty" bson:"networkAclBypassResourceIds,omitempty"`
+	// NetworkAcls                 *AzureResourceNetworkAcls    `json:"networkAcls,omitempty" bson:"networkAcls,omitempty"`
+	// NetworkFeatures             string                       `json:"networkFeatures,omitempty" bson:"networkFeatures,omitempty"`
+	// NetworkInterfaces           []struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"networkInterfaces,omitempty" bson:"networkInterfaces,omitempty"`
+	// NetworkProfile           *AzureResourceNetworkProfile `json:"networkProfile,omitempty" bson:"networkProfile,omitempty"`
+	// NetworkRuleBypassOptions string                       `json:"networkRuleBypassOptions,omitempty" bson:"networkRuleBypassOptions,omitempty"`
+	// NetworkRuleCollections   []any                        `json:"networkRuleCollections,omitempty" bson:"networkRuleCollections,omitempty"`
+	// NetworkRuleSet           *AzureResourceNetworkRuleSet `json:"networkRuleSet,omitempty" bson:"networkRuleSet,omitempty"`
+	// NetworkSecurityGroup     *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"networkSecurityGroup,omitempty" bson:"networkSecurityGroup,omitempty"`
+	// NetworkSiblingSetID                         string                             `json:"networkSiblingSetId,omitempty" bson:"networkSiblingSetId,omitempty"`
+	// NetworkVirtualAppliances                    []any                              `json:"networkVirtualAppliances,omitempty" bson:"networkVirtualAppliances,omitempty"`
+	// NicType                                     string                             `json:"nicType,omitempty" bson:"nicType,omitempty"`
+	// NodeConfigurationCount                      float64                            `json:"nodeConfigurationCount,omitempty" bson:"nodeConfigurationCount,omitempty"`
+	// NodeManagementEndpoint                      string                             `json:"nodeManagementEndpoint,omitempty" bson:"nodeManagementEndpoint,omitempty"`
+	// NodeResourceGroup                           string                             `json:"nodeResourceGroup,omitempty" bson:"nodeResourceGroup,omitempty"`
+	// NotificationSettings                        *AzureResourceNotificationSettings `json:"notificationSettings,omitempty" bson:"notificationSettings,omitempty"`
+	// NumberOfRecordSets                          float64                            `json:"numberOfRecordSets,omitempty" bson:"numberOfRecordSets,omitempty"`
+	// NumberOfSites                               float64                            `json:"numberOfSites,omitempty" bson:"numberOfSites,omitempty"`
+	// NumberOfVirtualNetworkLinks                 float64                            `json:"numberOfVirtualNetworkLinks,omitempty" bson:"numberOfVirtualNetworkLinks,omitempty"`
+	// NumberOfVirtualNetworkLinksWithRegistration float64                            `json:"numberOfVirtualNetworkLinksWithRegistration,omitempty" bson:"numberOfVirtualNetworkLinksWithRegistration,omitempty"`
+	// NumberOfWorkers                             float64                            `json:"numberOfWorkers,omitempty" bson:"numberOfWorkers,omitempty"`
+	// Office365LocalBreakoutCategory              string                             `json:"office365LocalBreakoutCategory,omitempty" bson:"office365LocalBreakoutCategory,omitempty"`
+	// OidcIssuerProfile                           *struct {
+	// 	Enabled   bool   `json:"enabled,omitempty" bson:"enabled,omitempty"`
+	// 	IssuerURL string `json:"issuerURL,omitempty" bson:"issuerURL,omitempty"`
+	// } `json:"oidcIssuerProfile,omitempty" bson:"oidcIssuerProfile,omitempty"`
+	// OpenTelemetryConfiguration  any                                        `json:"openTelemetryConfiguration,omitempty" bson:"openTelemetryConfiguration,omitempty"`
+	// OrchestrationMode           string                                     `json:"orchestrationMode,omitempty" bson:"orchestrationMode,omitempty"`
+	// OSProfile                   *AzureResourceOSProfile                    `json:"osProfile,omitempty" bson:"osProfile,omitempty"`
+	// OSState                     string                                     `json:"osState,omitempty" bson:"osState,omitempty"`
+	// OSType                      string                                     `json:"osType,omitempty" bson:"osType,omitempty"`
+	// OutboundIpAddresses         string                                     `json:"outboundIpAddresses,omitempty" bson:"outboundIpAddresses,omitempty"`
+	// OutboundRules               []*AzureResourceOutboundRules              `json:"outboundRules,omitempty" bson:"outboundRules,omitempty"`
+	// OutboundVnetRouting         any                                        `json:"outboundVnetRouting,omitempty" bson:"outboundVnetRouting,omitempty"`
+	// OutputTypes                 []any                                      `json:"outputTypes,omitempty" bson:"outputTypes,omitempty"`
+	// Outputs                     []any                                      `json:"outputs,omitempty" bson:"outputs,omitempty"`
+	// OverallStatus               string                                     `json:"overallStatus,omitempty" bson:"overallStatus,omitempty"`
+	// Overprovision               bool                                       `json:"overprovision,omitempty" bson:"overprovision,omitempty"`
+	// OverrideQueryTimeRange      string                                     `json:"overrideQueryTimeRange,omitempty" bson:"overrideQueryTimeRange,omitempty"`
+	// Owner                       any                                        `json:"owner,omitempty" bson:"owner,omitempty"`
+	// P2SConnectionConfigurations []*AzureResourceP2SConnectionConfiguration `json:"p2SConnectionConfigurations,omitempty" bson:"p2SConnectionConfigurations,omitempty"`
+	// P2SVpnGateway               *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"p2SVpnGateway,omitempty" bson:"p2SVpnGateway,omitempty"`
+	// P2SVpnGateways []struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"p2SVpnGateways,omitempty" bson:"p2SVpnGateways,omitempty"`
+	// PacketCaptureDiagnosticState string `json:"packetCaptureDiagnosticState,omitempty" bson:"packetCaptureDiagnosticState,omitempty"`
+	// ParameterValueType           string `json:"parameterValueType,omitempty" bson:"parameterValueType,omitempty"`
+	// ParameterValues              *struct {
+	// 	Token_TenantID  string `json:"token:TenantId,omitempty" bson:"token:TenantId,omitempty"`
+	// 	Token_GrantType string `json:"token:grantType,omitempty" bson:"token:grantType,omitempty"`
+	// } `json:"parameterValues,omitempty" bson:"parameterValues,omitempty"`
+	// Parameters *AzureResourceParameters `json:"parameters,omitempty" bson:"parameters,omitempty"`
+	// PausedDate string                   `json:"pausedDate,omitempty" bson:"pausedDate,omitempty"`
+	// Peer       *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"peer,omitempty" bson:"peer,omitempty"`
+	// PeerAuthentication *struct {
+	// 	Mtls struct {
+	// 		Enabled bool `json:"enabled,omitempty" bson:"enabled,omitempty"`
+	// 	} `json:"mtls,omitempty" bson:"mtls,omitempty"`
+	// } `json:"peerAuthentication,omitempty" bson:"peerAuthentication,omitempty"`
+	// PeerTrafficConfiguration *struct {
+	// 	Encryption struct {
+	// 		Enabled bool `json:"enabled,omitempty" bson:"enabled,omitempty"`
+	// 	} `json:"encryption,omitempty" bson:"encryption,omitempty"`
+	// } `json:"peerTrafficConfiguration,omitempty" bson:"peerTrafficConfiguration,omitempty"`
+	// PeeringLocation             string                   `json:"peeringLocation,omitempty" bson:"peeringLocation,omitempty"`
+	// Peerings                    []*AzureResourcePeerings `json:"peerings,omitempty" bson:"peerings,omitempty"`
+	// PerSiteScaling              bool                     `json:"perSiteScaling,omitempty" bson:"perSiteScaling,omitempty"`
+	// PlanName                    string                   `json:"planName,omitempty" bson:"planName,omitempty"`
+	// PlatformFaultDomainCount    float64                  `json:"platformFaultDomainCount,omitempty" bson:"platformFaultDomainCount,omitempty"`
+	// PlatformUpdateDomainCount   float64                  `json:"platformUpdateDomainCount,omitempty" bson:"platformUpdateDomainCount,omitempty"`
+	// Policies                    *AzureResourcePolicies   `json:"policies,omitempty" bson:"policies,omitempty"`
+	// PoolAllocationMode          string                   `json:"poolAllocationMode,omitempty" bson:"poolAllocationMode,omitempty"`
+	// PoolID                      string                   `json:"poolId,omitempty" bson:"poolId,omitempty"`
+	// PoolQuota                   float64                  `json:"poolQuota,omitempty" bson:"poolQuota,omitempty"`
+	// PossibleInboundIpAddresses  string                   `json:"possibleInboundIpAddresses,omitempty" bson:"possibleInboundIpAddresses,omitempty"`
+	// PossibleOutboundIpAddresses string                   `json:"possibleOutboundIpAddresses,omitempty" bson:"possibleOutboundIpAddresses,omitempty"`
+	// PowerState                  *struct {
+	// 	Code string `json:"code,omitempty" bson:"code,omitempty"`
+	// } `json:"powerState,omitempty" bson:"powerState,omitempty"`
+	// Primary          bool                           `json:"primary,omitempty" bson:"primary,omitempty"`
+	// PrimaryEndpoints *AzureResourcePrimaryEndpoints `json:"primaryEndpoints,omitempty" bson:"primaryEndpoints,omitempty"`
+	// PrimaryLocation  string                         `json:"primaryLocation,omitempty" bson:"primaryLocation,omitempty"`
+	// PrincipalID      string                         `json:"principalId,omitempty" bson:"principalId,omitempty"`
+	// Priority         string                         `json:"priority,omitempty" bson:"priority,omitempty"`
+	// PrivateEndpoint  *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"privateEndpoint,omitempty" bson:"privateEndpoint,omitempty"`
+	// PrivateEndpointConnections          []*AzureResourcePrivateEndpointConnections   `json:"privateEndpointConnections,omitempty" bson:"privateEndpointConnections,omitempty"`
+	// PrivateEndpointStateForBackup       string                                       `json:"privateEndpointStateForBackup,omitempty" bson:"privateEndpointStateForBackup,omitempty"`
+	// PrivateEndpointStateForSiteRecovery string                                       `json:"privateEndpointStateForSiteRecovery,omitempty" bson:"privateEndpointStateForSiteRecovery,omitempty"`
+	// PrivateEndpointVNetPolicies         string                                       `json:"privateEndpointVNetPolicies,omitempty" bson:"privateEndpointVNetPolicies,omitempty"`
+	// PrivateFqdn                         string                                       `json:"privateFQDN,omitempty" bson:"privateFQDN,omitempty"`
+	// PrivateLinkIdentifiers              *string                                      `json:"privateLinkIdentifiers,omitempty" bson:"privateLinkIdentifiers,omitempty"`
+	// PrivateLinkResources                []*AzureResourcePrivateLinkResources         `json:"privateLinkResources,omitempty" bson:"privateLinkResources,omitempty"`
+	// PrivateLinkScopedResources          []*AzureResourcePrivateLinkScopedResource    `json:"privateLinkScopedResources,omitempty" bson:"privateLinkScopedResources,omitempty"`
+	// PrivateLinkServiceConnections       []*AzureResourcePrivateLinkServiceConnection `json:"privateLinkServiceConnections,omitempty" bson:"privateLinkServiceConnections,omitempty"`
+	// Probes                              []*AzureResourceProbe                        `json:"probes,omitempty" bson:"probes,omitempty"`
+	// ProtocolTypes                       []string                                     `json:"protocolTypes,omitempty" bson:"protocolTypes,omitempty"`
+	// ProvisionedBandwidthInGbps          float64                                      `json:"provisionedBandwidthInGbps,omitempty" bson:"provisionedBandwidthInGbps,omitempty"`
+	// ProvisioningState                   string                                       `json:"provisioningState,omitempty" bson:"provisioningState,omitempty"`
+	// PublicIpAddressVersion              string                                       `json:"publicIPAddressVersion,omitempty" bson:"publicIPAddressVersion,omitempty"`
+	// PublicIpAllocationMethod            string                                       `json:"publicIPAllocationMethod,omitempty" bson:"publicIPAllocationMethod,omitempty"`
+	// PublicKey                           string                                       `json:"publicKey,omitempty" bson:"publicKey,omitempty"`
+	// PublicNetworkAccess                 any                                          `json:"publicNetworkAccess,omitempty" bson:"publicNetworkAccess,omitempty"`
+	// PublicNetworkAccessForIngestion     string                                       `json:"publicNetworkAccessForIngestion,omitempty" bson:"publicNetworkAccessForIngestion,omitempty"`
+	// PublicNetworkAccessForQuery         string                                       `json:"publicNetworkAccessForQuery,omitempty" bson:"publicNetworkAccessForQuery,omitempty"`
+	// Publisher                           string                                       `json:"publisher,omitempty" bson:"publisher,omitempty"`
+	// PublishingProfile                   *AzureResourcePublishingProfile              `json:"publishingProfile,omitempty" bson:"publishingProfile,omitempty"`
+	// PurchasePlan                        *AzureResourcePurchasePlan                   `json:"purchasePlan,omitempty" bson:"purchasePlan,omitempty"`
+	// QosType                             string                                       `json:"qosType,omitempty" bson:"qosType,omitempty"`
+	// QueryPackID                         string                                       `json:"queryPackId,omitempty" bson:"queryPackId,omitempty"`
+	// RadiusClientRootCertificates        []any                                        `json:"radiusClientRootCertificates,omitempty" bson:"radiusClientRootCertificates,omitempty"`
+	// RadiusProxyIPs                      []any                                        `json:"radiusProxyIPs,omitempty" bson:"radiusProxyIPs,omitempty"`
+	// RadiusServerAddress                 string                                       `json:"radiusServerAddress,omitempty" bson:"radiusServerAddress,omitempty"`
+	// RadiusServerRootCertificates        []any                                        `json:"radiusServerRootCertificates,omitempty" bson:"radiusServerRootCertificates,omitempty"`
+	// RadiusServerSecret                  string                                       `json:"radiusServerSecret,omitempty" bson:"radiusServerSecret,omitempty"`
+	// RadiusServers                       []any                                        `json:"radiusServers,omitempty" bson:"radiusServers,omitempty"`
+	// RawTags                             any                                          `json:"rawTags,omitempty" bson:"rawTags,omitempty"`
+	// ReadLocations                       []*AzureResourceReadLocation                 `json:"readLocations,omitempty" bson:"readLocations,omitempty"`
+	// ReadScale                           string                                       `json:"readScale,omitempty" bson:"readScale,omitempty"`
+	// Recommended                         *AzureResourceRecommended                    `json:"recommended,omitempty" bson:"recommended,omitempty"`
+	// RedundancyMode                      string                                       `json:"redundancyMode,omitempty" bson:"redundancyMode,omitempty"`
+	// RedundancySettings                  *struct {
+	// 	CrossRegionRestore            string `json:"crossRegionRestore,omitempty" bson:"crossRegionRestore,omitempty"`
+	// 	StandardTierStorageRedundancy string `json:"standardTierStorageRedundancy,omitempty" bson:"standardTierStorageRedundancy,omitempty"`
+	// } `json:"redundancySettings,omitempty" bson:"redundancySettings,omitempty"`
+	// RegistrationEnabled bool `json:"registrationEnabled,omitempty" bson:"registrationEnabled,omitempty"`
+	// Replica             *struct {
+	// 	Capacity float64 `json:"capacity,omitempty" bson:"capacity,omitempty"`
+	// 	Role     string  `json:"role,omitempty" bson:"role,omitempty"`
+	// } `json:"replica,omitempty" bson:"replica,omitempty"`
+	// ReplicaCapacity                  float64 `json:"replicaCapacity,omitempty" bson:"replicaCapacity,omitempty"`
+	// ReplicatedRegions                []any   `json:"replicatedRegions,omitempty" bson:"replicatedRegions,omitempty"`
+	// ReplicationRole                  string  `json:"replicationRole,omitempty" bson:"replicationRole,omitempty"`
+	// RepositorySiteName               string  `json:"repositorySiteName,omitempty" bson:"repositorySiteName,omitempty"`
+	// RequestedBackupStorageRedundancy string  `json:"requestedBackupStorageRedundancy,omitempty" bson:"requestedBackupStorageRedundancy,omitempty"`
+	// RequestedServiceObjectiveName    string  `json:"requestedServiceObjectiveName,omitempty" bson:"requestedServiceObjectiveName,omitempty"`
+	// Reserved                         bool    `json:"reserved,omitempty" bson:"reserved,omitempty"`
+	// ResolutionPolicy                 string  `json:"resolutionPolicy,omitempty" bson:"resolutionPolicy,omitempty"`
+	// ResourceConfig                   any     `json:"resourceConfig,omitempty" bson:"resourceConfig,omitempty"`
+	// ResourceGroup                    string  `json:"resourceGroup,omitempty" bson:"resourceGroup,omitempty"`
+	// ResourceGuid                     string  `json:"resourceGuid,omitempty" bson:"resourceGuid,omitempty"`
+	// ResourceUid                      string  `json:"resourceUID,omitempty" bson:"resourceUID,omitempty"`
+	// RestorePointCollectionID         string  `json:"restorePointCollectionId,omitempty" bson:"restorePointCollectionId,omitempty"`
+	// RestoreSettings                  *struct {
+	// 	CrossSubscriptionRestoreSettings struct {
+	// 		CrossSubscriptionRestoreState string `json:"crossSubscriptionRestoreState,omitempty" bson:"crossSubscriptionRestoreState,omitempty"`
+	// 	} `json:"crossSubscriptionRestoreSettings,omitempty" bson:"crossSubscriptionRestoreSettings,omitempty"`
+	// } `json:"restoreSettings,omitempty" bson:"restoreSettings,omitempty"`
+	// RestrictOutboundNetworkAccess string  `json:"restrictOutboundNetworkAccess,omitempty" bson:"restrictOutboundNetworkAccess,omitempty"`
+	// RetentionInDays               float64 `json:"retentionInDays,omitempty" bson:"retentionInDays,omitempty"`
+	// RetentionPolicy               *struct {
+	// 	Days    float64 `json:"days,omitempty" bson:"days,omitempty"`
+	// 	Enabled bool    `json:"enabled,omitempty" bson:"enabled,omitempty"`
+	// } `json:"retentionPolicy,omitempty" bson:"retentionPolicy,omitempty"`
+	// Revision   string `json:"revision,omitempty" bson:"revision,omitempty"`
+	// RouteTable *struct {
+	// 	Routes []any `json:"routes,omitempty" bson:"routes,omitempty"`
+	// } `json:"routeTable,omitempty" bson:"routeTable,omitempty"`
+	// Routes               []*AzureResourceRoute           `json:"routes,omitempty" bson:"routes,omitempty"`
+	// RoutingPreference    *AzureResourceRoutingPreference `json:"routingPreference,omitempty" bson:"routingPreference,omitempty"`
+	// RoutingState         string                          `json:"routingState,omitempty" bson:"routingState,omitempty"`
+	// RoutingWeight        float64                         `json:"routingWeight,omitempty" bson:"routingWeight,omitempty"`
+	// RuleCollectionGroups []struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"ruleCollectionGroups,omitempty" bson:"ruleCollectionGroups,omitempty"`
+	// RunbookType              string                           `json:"runbookType,omitempty" bson:"runbookType,omitempty"`
+	// RunningOperationIds      []any                            `json:"runningOperationIds,omitempty" bson:"runningOperationIds,omitempty"`
+	// RuntimeAvailabilityState string                           `json:"runtimeAvailabilityState,omitempty" bson:"runtimeAvailabilityState,omitempty"`
+	// ScaleUnits               float64                          `json:"scaleUnits,omitempty" bson:"scaleUnits,omitempty"`
+	// ScmSiteAlsoStopped       bool                             `json:"scmSiteAlsoStopped,omitempty" bson:"scmSiteAlsoStopped,omitempty"`
+	// ScopeID                  string                           `json:"scopeId,omitempty" bson:"scopeId,omitempty"`
+	// Scopes                   []any                            `json:"scopes,omitempty" bson:"scopes,omitempty"`
+	// SecondaryEndpoints       *AzureResourceSecondaryEndpoints `json:"secondaryEndpoints,omitempty" bson:"secondaryEndpoints,omitempty"`
+	// SecondaryLocation        string                           `json:"secondaryLocation,omitempty" bson:"secondaryLocation,omitempty"`
+	// SecureScore              string                           `json:"secureScore,omitempty" bson:"secureScore,omitempty"`
+	// SecurityProfile          *AzureResourceSecurityProfile    `json:"securityProfile,omitempty" bson:"securityProfile,omitempty"`
+	// SecurityRules            []*AzureResourceSecurityRule     `json:"securityRules,omitempty" bson:"securityRules,omitempty"`
+	// SecuritySettings         *AzureResourceSecuritySettings   `json:"securitySettings,omitempty" bson:"securitySettings,omitempty"`
+	// SecurityStyle            string                           `json:"securityStyle,omitempty" bson:"securityStyle,omitempty"`
+	// SelfLink                 string                           `json:"selfLink,omitempty" bson:"selfLink,omitempty"`
+	// SerializedData           any                              `json:"serializedData,omitempty" bson:"serializedData,omitempty"`
+	// ServerFarm               any                              `json:"serverFarm,omitempty" bson:"serverFarm,omitempty"`
+	// ServerFarmID             any                              `json:"serverFarmId,omitempty" bson:"serverFarmId,omitempty"`
+	// ServiceBusEndpoint       string                           `json:"serviceBusEndpoint,omitempty" bson:"serviceBusEndpoint,omitempty"`
+	// ServiceKey               string                           `json:"serviceKey,omitempty" bson:"serviceKey,omitempty"`
+	// ServiceLevel             string                           `json:"serviceLevel,omitempty" bson:"serviceLevel,omitempty"`
+	// ServiceManagementTags    any                              `json:"serviceManagementTags,omitempty" bson:"serviceManagementTags,omitempty"`
+	// ServicePrincipalProfile  *struct {
+	// 	ClientID string `json:"clientId,omitempty" bson:"clientId,omitempty"`
+	// } `json:"servicePrincipalProfile,omitempty" bson:"servicePrincipalProfile,omitempty"`
+	// ServiceProviderProperties        *AzureResourceServiceProviderProperties `json:"serviceProviderProperties,omitempty" bson:"serviceProviderProperties,omitempty"`
+	// ServiceProviderProvisioningState string                                  `json:"serviceProviderProvisioningState,omitempty" bson:"serviceProviderProvisioningState,omitempty"`
+	// Settings                         *AzureResourceSettings                  `json:"settings,omitempty" bson:"settings,omitempty"`
+	// Severity                         float64                                 `json:"severity,omitempty" bson:"severity,omitempty"`
+	// SinglePlacementGroup             bool                                    `json:"singlePlacementGroup,omitempty" bson:"singlePlacementGroup,omitempty"`
+	// SiteConfig                       *AzureResourceSiteConfig                `json:"siteConfig,omitempty" bson:"siteConfig,omitempty"`
+	// SiteDisabledReason               float64                                 `json:"siteDisabledReason,omitempty" bson:"siteDisabledReason,omitempty"`
+	// SiteMode                         any                                     `json:"siteMode,omitempty" bson:"siteMode,omitempty"`
+	// SiteProperties                   *AzureResourceSiteProperties            `json:"siteProperties,omitempty" bson:"siteProperties,omitempty"`
+	// SiteScopedCertificatesEnabled    bool                                    `json:"siteScopedCertificatesEnabled,omitempty" bson:"siteScopedCertificatesEnabled,omitempty"`
+	// Size                             any                                     `json:"size,omitempty" bson:"size,omitempty"`
+	Sku any `json:"sku,omitempty" bson:"sku,omitempty"`
+	// SlotName                         any                                     `json:"slotName,omitempty" bson:"slotName,omitempty"`
+	// SlotSwapStatus                   any                                     `json:"slotSwapStatus,omitempty" bson:"slotSwapStatus,omitempty"`
+	// SmbAccessBasedEnumeration        string                                  `json:"smbAccessBasedEnumeration,omitempty" bson:"smbAccessBasedEnumeration,omitempty"`
+	// SmbContinuouslyAvailable         bool                                    `json:"smbContinuouslyAvailable,omitempty" bson:"smbContinuouslyAvailable,omitempty"`
+	// SmbEncryption                    bool                                    `json:"smbEncryption,omitempty" bson:"smbEncryption,omitempty"`
+	// SmbNonBrowsable                  string                                  `json:"smbNonBrowsable,omitempty" bson:"smbNonBrowsable,omitempty"`
+	// SmsReceivers                     []any                                   `json:"smsReceivers,omitempty" bson:"smsReceivers,omitempty"`
+	// SnapshotDirectoryVisible         bool                                    `json:"snapshotDirectoryVisible,omitempty" bson:"snapshotDirectoryVisible,omitempty"`
+	// Snat                             *struct {
+	// 	PrivateRanges []string `json:"privateRanges,omitempty" bson:"privateRanges,omitempty"`
+	// } `json:"snat,omitempty" bson:"snat,omitempty"`
+	// SoftDeletePolicy *struct {
+	// 	IsSoftDeleteEnabled bool `json:"isSoftDeleteEnabled,omitempty" bson:"isSoftDeleteEnabled,omitempty"`
+	// } `json:"softDeletePolicy,omitempty" bson:"softDeletePolicy,omitempty"`
+	// SoftDeleteRetentionInDays float64     `json:"softDeleteRetentionInDays,omitempty" bson:"softDeleteRetentionInDays,omitempty"`
+	Source interface{} `json:"source,omitempty" bson:"source,omitempty"`
+	// SourceID                  string      `json:"sourceId,omitempty" bson:"sourceId,omitempty"`
+	// SourceVirtualMachine      *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"sourceVirtualMachine,omitempty" bson:"sourceVirtualMachine,omitempty"`
+	// Sources                     []*AzureResourceSources      `json:"sources,omitempty" bson:"sources,omitempty"`
+	// SpotExpirationTime          any                          `json:"spotExpirationTime,omitempty" bson:"spotExpirationTime,omitempty"`
+	// SQLEndpoint                 string                       `json:"sqlEndpoint,omitempty" bson:"sqlEndpoint,omitempty"`
+	// SQLImageOffer               string                       `json:"sqlImageOffer,omitempty" bson:"sqlImageOffer,omitempty"`
+	// SQLImageSku                 string                       `json:"sqlImageSku,omitempty" bson:"sqlImageSku,omitempty"`
+	// SQLManagement               string                       `json:"sqlManagement,omitempty" bson:"sqlManagement,omitempty"`
+	// SQLServerLicenseType        string                       `json:"sqlServerLicenseType,omitempty" bson:"sqlServerLicenseType,omitempty"`
+	// SSHEnabled                  any                          `json:"sshEnabled,omitempty" bson:"sshEnabled,omitempty"`
+	// SslCertificates             any                          `json:"sslCertificates,omitempty" bson:"sslCertificates,omitempty"`
+	// Stag                        float64                      `json:"stag,omitempty" bson:"stag,omitempty"`
+	// StagingResourceGroup        string                       `json:"stagingResourceGroup,omitempty" bson:"stagingResourceGroup,omitempty"`
+	// StartTime                   string                       `json:"startTime,omitempty" bson:"startTime,omitempty"`
+	// State                       string                       `json:"state,omitempty" bson:"state,omitempty"`
+	// StaticIp                    string                       `json:"staticIp,omitempty" bson:"staticIp,omitempty"`
+	// Status                      string                       `json:"status,omitempty" bson:"status,omitempty"`
+	// StatusOfPrimary             string                       `json:"statusOfPrimary,omitempty" bson:"statusOfPrimary,omitempty"`
+	// StatusOfSecondary           string                       `json:"statusOfSecondary,omitempty" bson:"statusOfSecondary,omitempty"`
+	// Statuses                    []*AzureResourceStatus       `json:"statuses,omitempty" bson:"statuses,omitempty"`
+	// Storage                     *AzureResourceStorage        `json:"storage,omitempty" bson:"storage,omitempty"`
+	// StorageAccountRequired      bool                         `json:"storageAccountRequired,omitempty" bson:"storageAccountRequired,omitempty"`
+	// StorageID                   string                       `json:"storageId,omitempty" bson:"storageId,omitempty"`
+	StorageProfile *AzureResourceStorageProfile `json:"storageProfile,omitempty" bson:"storageProfile,omitempty"`
+	// StorageRecoveryDefaultState string                       `json:"storageRecoveryDefaultState,omitempty" bson:"storageRecoveryDefaultState,omitempty"`
+	// StorageSettings             []struct {
+	// 	DatastoreType string `json:"datastoreType,omitempty" bson:"datastoreType,omitempty"`
+	// 	Type          string `json:"type,omitempty" bson:"type,omitempty"`
+	// } `json:"storageSettings,omitempty" bson:"storageSettings,omitempty"`
+	// StorageToNetworkProximity string                           `json:"storageToNetworkProximity,omitempty" bson:"storageToNetworkProximity,omitempty"`
+	// StorageURI                any                              `json:"storageUri,omitempty" bson:"storageUri,omitempty"`
+	// StreamDeclarations        *AzureResourceStreamDeclarations `json:"streamDeclarations,omitempty" bson:"streamDeclarations,omitempty"`
+	// Subnet                    *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"subnet,omitempty" bson:"subnet,omitempty"`
+	// SubnetID              string                 `json:"subnetId,omitempty" bson:"subnetId,omitempty"`
+	// Subnets               []AzureResourceSubnets `json:"subnets,omitempty" bson:"subnets,omitempty"`
+	// Subscription          string                 `json:"subscription,omitempty" bson:"subscription,omitempty"`
+	// SupportPlan           string                 `json:"supportPlan,omitempty" bson:"supportPlan,omitempty"`
+	// SupportedCapabilities *struct {
+	// 	AcceleratedNetwork  bool   `json:"acceleratedNetwork,omitempty" bson:"acceleratedNetwork,omitempty"`
+	// 	Architecture        string `json:"architecture,omitempty" bson:"architecture,omitempty"`
+	// 	DiskControllerTypes string `json:"diskControllerTypes,omitempty" bson:"diskControllerTypes,omitempty"`
+	// } `json:"supportedCapabilities,omitempty" bson:"supportedCapabilities,omitempty"`
+	// SupportsHibernation      bool                               `json:"supportsHibernation,omitempty" bson:"supportsHibernation,omitempty"`
+	// SupportsHTTPSTrafficOnly bool                               `json:"supportsHttpsTrafficOnly,omitempty" bson:"supportsHttpsTrafficOnly,omitempty"`
+	// SuppressFailures         bool                               `json:"suppressFailures,omitempty" bson:"suppressFailures,omitempty"`
+	// SuspendedTill            any                                `json:"suspendedTill,omitempty" bson:"suspendedTill,omitempty"`
+	// SystemData               *AzureResourceSystemData           `json:"systemData,omitempty" bson:"systemData,omitempty"`
+	// Tags                     any                                `json:"tags,omitempty" bson:"tags,omitempty"`
+	// TapConfigurations        []any                              `json:"tapConfigurations,omitempty" bson:"tapConfigurations,omitempty"`
+	// TargetBuildVersion       any                                `json:"targetBuildVersion,omitempty" bson:"targetBuildVersion,omitempty"`
+	// TargetResourceGuid       string                             `json:"targetResourceGuid,omitempty" bson:"targetResourceGuid,omitempty"`
+	// TargetResourceID         string                             `json:"targetResourceId,omitempty" bson:"targetResourceId,omitempty"`
+	// TargetResourceRegion     string                             `json:"targetResourceRegion,omitempty" bson:"targetResourceRegion,omitempty"`
+	// TargetResourceType       string                             `json:"targetResourceType,omitempty" bson:"targetResourceType,omitempty"`
+	// TargetResourceTypes      []string                           `json:"targetResourceTypes,omitempty" bson:"targetResourceTypes,omitempty"`
+	// TargetSwapSlot           any                                `json:"targetSwapSlot,omitempty" bson:"targetSwapSlot,omitempty"`
+	// TargetWorkerCount        float64                            `json:"targetWorkerCount,omitempty" bson:"targetWorkerCount,omitempty"`
+	// TargetWorkerSizeID       float64                            `json:"targetWorkerSizeId,omitempty" bson:"targetWorkerSizeId,omitempty"`
+	// TaskType                 string                             `json:"taskType,omitempty" bson:"taskType,omitempty"`
+	// Template                 *AzureResourceTemplate             `json:"template,omitempty" bson:"template,omitempty"`
+	// TenantIDOther            string                             `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
+	// TestConfigurations       []*AzureResourceTestConfigurations `json:"testConfigurations,omitempty" bson:"testConfigurations,omitempty"`
+	// TestGroups               []*AzureResourceTestGroups         `json:"testGroups,omitempty" bson:"testGroups,omitempty"`
+	// TestLinks                []*struct {
+	// 	Method     string `json:"method,omitempty" bson:"method,omitempty"`
+	// 	RequestURI string `json:"requestUri,omitempty" bson:"requestUri,omitempty"`
+	// } `json:"testLinks,omitempty" bson:"testLinks,omitempty"`
+	// TestRequests            []*AzureResourceTestRequests    `json:"testRequests,omitempty" bson:"testRequests,omitempty"`
+	// ThreatIntelMode         string                          `json:"threatIntelMode,omitempty" bson:"threatIntelMode,omitempty"`
+	// ThroughputMibps         float64                         `json:"throughputMibps,omitempty" bson:"throughputMibps,omitempty"`
+	// Tier                    string                          `json:"tier,omitempty" bson:"tier,omitempty"`
+	// TimeCreated             string                          `json:"timeCreated,omitempty" bson:"timeCreated,omitempty"`
+	// TimeModified            string                          `json:"timeModified,omitempty" bson:"timeModified,omitempty"`
+	// TimeZoneID              string                          `json:"timeZoneId,omitempty" bson:"timeZoneId,omitempty"`
+	// TopicType               string                          `json:"topicType,omitempty" bson:"topicType,omitempty"`
+	// TotalThroughputMibps    float64                         `json:"totalThroughputMibps,omitempty" bson:"totalThroughputMibps,omitempty"`
+	// TrafficManagerHostNames any                             `json:"trafficManagerHostNames,omitempty" bson:"trafficManagerHostNames,omitempty"`
+	// TrafficSelectorPolicies []any                           `json:"trafficSelectorPolicies,omitempty" bson:"trafficSelectorPolicies,omitempty"`
+	// TransportSecurity       *AzureResourceTransportSecurity `json:"transportSecurity,omitempty" bson:"transportSecurity,omitempty"`
+	// Type                    string                          `json:"type,omitempty" bson:"type,omitempty"`
+	// TypeHandlerVersion      string                          `json:"typeHandlerVersion,omitempty" bson:"typeHandlerVersion,omitempty"`
+	// UniqueID                string                          `json:"uniqueId,omitempty" bson:"uniqueId,omitempty"`
+	// UniqueIdentifier        string                          `json:"uniqueIdentifier,omitempty" bson:"uniqueIdentifier,omitempty"`
+	// UpdatedAt               string                          `json:"updatedAt,omitempty" bson:"updatedAt,omitempty"`
+	// UpgradePolicy           *struct {
+	// 	Mode string `json:"mode,omitempty" bson:"mode,omitempty"`
+	// } `json:"upgradePolicy,omitempty" bson:"upgradePolicy,omitempty"`
+	// UpgradeSettings *struct {
+	// 	OverrideSettings struct {
+	// 		ForceUpgrade bool `json:"forceUpgrade,omitempty" bson:"forceUpgrade,omitempty"`
+	// 	} `json:"overrideSettings,omitempty" bson:"overrideSettings,omitempty"`
+	// } `json:"upgradeSettings,omitempty" bson:"upgradeSettings,omitempty"`
+	// UsageState                     string                            `json:"usageState,omitempty" bson:"usageState,omitempty"`
+	// UsageThreshold                 float64                           `json:"usageThreshold,omitempty" bson:"usageThreshold,omitempty"`
+	// UseContainerLocalhostBindings  any                               `json:"useContainerLocalhostBindings,omitempty" bson:"useContainerLocalhostBindings,omitempty"`
+	// UseLocalAzureIpAddress         bool                              `json:"useLocalAzureIpAddress,omitempty" bson:"useLocalAzureIpAddress,omitempty"`
+	// UsePolicyBasedTrafficSelectors bool                              `json:"usePolicyBasedTrafficSelectors,omitempty" bson:"usePolicyBasedTrafficSelectors,omitempty"`
+	// UseRadiusProxyIPs              bool                              `json:"useRadiusProxyIPs,omitempty" bson:"useRadiusProxyIPs,omitempty"`
+	// UserEngagementTracking         string                            `json:"userEngagementTracking,omitempty" bson:"userEngagementTracking,omitempty"`
+	// UserID                         string                            `json:"userId,omitempty" bson:"userId,omitempty"`
+	// UtilizedThroughputMibps        float64                           `json:"utilizedThroughputMibps,omitempty" bson:"utilizedThroughputMibps,omitempty"`
+	// VaultURI                       string                            `json:"vaultUri,omitempty" bson:"vaultUri,omitempty"`
+	// VerificationRecords            *AzureResourceVerificationRecords `json:"verificationRecords,omitempty" bson:"verificationRecords,omitempty"`
+	// VerificationStates             *AzureResourceVerificationStates  `json:"verificationStates,omitempty" bson:"verificationStates,omitempty"`
+	// Version                        string                            `json:"version,omitempty" bson:"version,omitempty"`
+	// VirtualHub                     *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"virtualHub,omitempty" bson:"virtualHub,omitempty"`
+	// VirtualHubRouteTableV2S []any `json:"virtualHubRouteTableV2s,omitempty" bson:"virtualHubRouteTableV2s,omitempty"`
+	// VirtualHubs             []struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"virtualHubs,omitempty" bson:"virtualHubs,omitempty"`
 	VirtualMachine *struct {
 		ID string `json:"id,omitempty" bson:"id,omitempty"`
 	} `json:"virtualMachine,omitempty" bson:"virtualMachine,omitempty"`
 	VirtualMachineProfile    *AzureResourceVirtualMachineProfile `json:"virtualMachineProfile,omitempty" bson:"virtualMachineProfile,omitempty"`
 	VirtualMachineResourceID string                              `json:"virtualMachineResourceId,omitempty" bson:"virtualMachineResourceId,omitempty"`
-	VirtualMachines          []struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"virtualMachines,omitempty" bson:"virtualMachines,omitempty"`
-	VirtualNetwork *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"virtualNetwork,omitempty" bson:"virtualNetwork,omitempty"`
-	VirtualNetworkGateway1 *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"virtualNetworkGateway1,omitempty" bson:"virtualNetworkGateway1,omitempty"`
-	VirtualNetworkGatewayMigrationStatus *struct {
-		ErrorMessage string `json:"errorMessage,omitempty" bson:"errorMessage,omitempty"`
-		Phase        string `json:"phase,omitempty" bson:"phase,omitempty"`
-		State        string `json:"state,omitempty" bson:"state,omitempty"`
-	} `json:"virtualNetworkGatewayMigrationStatus,omitempty" bson:"virtualNetworkGatewayMigrationStatus,omitempty"`
-	VirtualNetworkGatewayPolicyGroups []any                                 `json:"virtualNetworkGatewayPolicyGroups,omitempty" bson:"virtualNetworkGatewayPolicyGroups,omitempty"`
-	VirtualNetworkLinkState           string                                `json:"virtualNetworkLinkState,omitempty" bson:"virtualNetworkLinkState,omitempty"`
-	VirtualNetworkPeerings            []*AzureResourceVirtualNetworkPeering `json:"virtualNetworkPeerings,omitempty" bson:"virtualNetworkPeerings,omitempty"`
-	VirtualNetworkRules               []struct {
-		ID                               string `json:"id,omitempty" bson:"id,omitempty"`
-		IgnoreMissingVNetServiceEndpoint bool   `json:"ignoreMissingVNetServiceEndpoint,omitempty" bson:"ignoreMissingVNetServiceEndpoint,omitempty"`
-	} `json:"virtualNetworkRules,omitempty" bson:"virtualNetworkRules,omitempty"`
-	VirtualNetworkSubnetID              *string `json:"virtualNetworkSubnetId,omitempty" bson:"virtualNetworkSubnetId,omitempty"`
-	VirtualRouterAsn                    float64 `json:"virtualRouterAsn,omitempty" bson:"virtualRouterAsn,omitempty"`
-	VirtualRouterAutoScaleConfiguration *struct {
-		MinCapacity float64 `json:"minCapacity,omitempty" bson:"minCapacity,omitempty"`
-	} `json:"virtualRouterAutoScaleConfiguration,omitempty" bson:"virtualRouterAutoScaleConfiguration,omitempty"`
-	VirtualRouterIps []string `json:"virtualRouterIps,omitempty" bson:"virtualRouterIps,omitempty"`
-	VirtualWan       *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"virtualWan,omitempty" bson:"virtualWan,omitempty"`
-	Visibility any    `json:"visibility,omitempty" bson:"visibility,omitempty"`
-	VmID       string `json:"vmId,omitempty" bson:"vmId,omitempty"`
-	VmProfile  *struct {
-		OSDiskSizeGb float64 `json:"osDiskSizeGB,omitempty" bson:"osDiskSizeGB,omitempty"`
-		VmSize       string  `json:"vmSize,omitempty" bson:"vmSize,omitempty"`
-	} `json:"vmProfile,omitempty" bson:"vmProfile,omitempty"`
-	VnetBackupRestoreEnabled     bool                                `json:"vnetBackupRestoreEnabled,omitempty" bson:"vnetBackupRestoreEnabled,omitempty"`
-	VnetConfiguration            *AzureResourceVnetConfiguration     `json:"vnetConfiguration,omitempty" bson:"vnetConfiguration,omitempty"`
-	VnetConnectionsMax           float64                             `json:"vnetConnectionsMax,omitempty" bson:"vnetConnectionsMax,omitempty"`
-	VnetConnectionsUsed          float64                             `json:"vnetConnectionsUsed,omitempty" bson:"vnetConnectionsUsed,omitempty"`
-	VnetContentShareEnabled      bool                                `json:"vnetContentShareEnabled,omitempty" bson:"vnetContentShareEnabled,omitempty"`
-	VnetEncryptionSupported      bool                                `json:"vnetEncryptionSupported,omitempty" bson:"vnetEncryptionSupported,omitempty"`
-	VnetImagePullEnabled         bool                                `json:"vnetImagePullEnabled,omitempty" bson:"vnetImagePullEnabled,omitempty"`
-	VnetRouteAllEnabled          bool                                `json:"vnetRouteAllEnabled,omitempty" bson:"vnetRouteAllEnabled,omitempty"`
-	VoiceReceivers               []any                               `json:"voiceReceivers,omitempty" bson:"voiceReceivers,omitempty"`
-	VolumeBackups                []AzureResourceVolumeBackups        `json:"volumeBackups,omitempty" bson:"volumeBackups,omitempty"`
-	VolumeSpecName               string                              `json:"volumeSpecName,omitempty" bson:"volumeSpecName,omitempty"`
-	VolumeType                   string                              `json:"volumeType,omitempty" bson:"volumeType,omitempty"`
-	VolumesAssigned              float64                             `json:"volumesAssigned,omitempty" bson:"volumesAssigned,omitempty"`
-	VpnAuthenticationTypes       []string                            `json:"vpnAuthenticationTypes,omitempty" bson:"vpnAuthenticationTypes,omitempty"`
-	VpnClientIpsecPolicies       []AzureResourceVpnClientIpsecPolicy `json:"vpnClientIpsecPolicies,omitempty" bson:"vpnClientIpsecPolicies,omitempty"`
-	VpnClientRevokedCertificates []any                               `json:"vpnClientRevokedCertificates,omitempty" bson:"vpnClientRevokedCertificates,omitempty"`
-	VpnClientRootCertificates    []struct {
-		Name           string `json:"name,omitempty" bson:"name,omitempty"`
-		PublicCertData string `json:"publicCertData,omitempty" bson:"publicCertData,omitempty"`
-	} `json:"vpnClientRootCertificates,omitempty" bson:"vpnClientRootCertificates,omitempty"`
-	VpnGatewayDetachStatus string   `json:"vpnGatewayDetachStatus,omitempty" bson:"vpnGatewayDetachStatus,omitempty"`
-	VpnGatewayGeneration   string   `json:"vpnGatewayGeneration,omitempty" bson:"vpnGatewayGeneration,omitempty"`
-	VpnGatewayScaleUnit    float64  `json:"vpnGatewayScaleUnit,omitempty" bson:"vpnGatewayScaleUnit,omitempty"`
-	VpnProtocols           []string `json:"vpnProtocols,omitempty" bson:"vpnProtocols,omitempty"`
-	VpnServerConfiguration *struct {
-		ID string `json:"id,omitempty" bson:"id,omitempty"`
-	} `json:"vpnServerConfiguration,omitempty" bson:"vpnServerConfiguration,omitempty"`
-	VpnServerConfigurationLocation string                          `json:"vpnServerConfigurationLocation,omitempty" bson:"vpnServerConfigurationLocation,omitempty"`
-	VpnType                        string                          `json:"vpnType,omitempty" bson:"vpnType,omitempty"`
-	WebSiteID                      any                             `json:"webSiteId,omitempty" bson:"webSiteId,omitempty"`
-	WebSpace                       string                          `json:"webSpace,omitempty" bson:"webSpace,omitempty"`
-	WebhookReceivers               []AzureResourceWebhookReceivers `json:"webhookReceivers,omitempty" bson:"webhookReceivers,omitempty"`
-	WeeklyBackupsToKeep            float64                         `json:"weeklyBackupsToKeep,omitempty" bson:"weeklyBackupsToKeep,omitempty"`
-	WeeklySchedule                 *AzureResourceWeeklySchedule    `json:"weeklySchedule,omitempty" bson:"weeklySchedule,omitempty"`
-	WindowSize                     string                          `json:"windowSize,omitempty" bson:"windowSize,omitempty"`
-	WindowsProfile                 *struct {
-		AdminUsername  string `json:"adminUsername,omitempty" bson:"adminUsername,omitempty"`
-		EnableCsiProxy bool   `json:"enableCSIProxy,omitempty" bson:"enableCSIProxy,omitempty"`
-	} `json:"windowsProfile,omitempty" bson:"windowsProfile,omitempty"`
-	WorkbookTemplates         []AzureResourceWorkbookTemplate `json:"workbookTemplates,omitempty" bson:"workbookTemplates,omitempty"`
-	WorkerSize                string                          `json:"workerSize,omitempty" bson:"workerSize,omitempty"`
-	WorkerSizeID              float64                         `json:"workerSizeId,omitempty" bson:"workerSizeId,omitempty"`
-	WorkerTierName            any                             `json:"workerTierName,omitempty" bson:"workerTierName,omitempty"`
-	WorkloadAutoScalerProfile *struct{}                       `json:"workloadAutoScalerProfile,omitempty" bson:"workloadAutoScalerProfile,omitempty"`
-	WorkloadProfileName       *string                         `json:"workloadProfileName,omitempty" bson:"workloadProfileName,omitempty"`
-	WorkloadProfiles          []struct {
-		Name                string `json:"name,omitempty" bson:"name,omitempty"`
-		WorkloadProfileType string `json:"workloadProfileType,omitempty" bson:"workloadProfileType,omitempty"`
-	} `json:"workloadProfiles,omitempty" bson:"workloadProfiles,omitempty"`
-	WorkspaceCapping         *AzureResourceWorkspaceCapping `json:"workspaceCapping,omitempty" bson:"workspaceCapping,omitempty"`
-	WorkspaceResourceIDOther string                         `json:"workspaceResourceId,omitempty" bson:"workspaceResourceId,omitempty"`
-	WriteLocations           []*AzureResourceWriteLocations `json:"writeLocations,omitempty" bson:"writeLocations,omitempty"`
-	ZoneRedundancy           string                         `json:"zoneRedundancy,omitempty" bson:"zoneRedundancy,omitempty"`
-	ZoneRedundant            bool                           `json:"zoneRedundant,omitempty" bson:"zoneRedundant,omitempty"`
-	ZoneType                 string                         `json:"zoneType,omitempty" bson:"zoneType,omitempty"`
+	// VirtualMachines          []struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"virtualMachines,omitempty" bson:"virtualMachines,omitempty"`
+	// VirtualNetwork *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"virtualNetwork,omitempty" bson:"virtualNetwork,omitempty"`
+	// VirtualNetworkGateway1 *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"virtualNetworkGateway1,omitempty" bson:"virtualNetworkGateway1,omitempty"`
+	// VirtualNetworkGatewayMigrationStatus *struct {
+	// 	ErrorMessage string `json:"errorMessage,omitempty" bson:"errorMessage,omitempty"`
+	// 	Phase        string `json:"phase,omitempty" bson:"phase,omitempty"`
+	// 	State        string `json:"state,omitempty" bson:"state,omitempty"`
+	// } `json:"virtualNetworkGatewayMigrationStatus,omitempty" bson:"virtualNetworkGatewayMigrationStatus,omitempty"`
+	// VirtualNetworkGatewayPolicyGroups []any                                 `json:"virtualNetworkGatewayPolicyGroups,omitempty" bson:"virtualNetworkGatewayPolicyGroups,omitempty"`
+	// VirtualNetworkLinkState           string                                `json:"virtualNetworkLinkState,omitempty" bson:"virtualNetworkLinkState,omitempty"`
+	// VirtualNetworkPeerings            []*AzureResourceVirtualNetworkPeering `json:"virtualNetworkPeerings,omitempty" bson:"virtualNetworkPeerings,omitempty"`
+	// VirtualNetworkRules               []struct {
+	// 	ID                               string `json:"id,omitempty" bson:"id,omitempty"`
+	// 	IgnoreMissingVNetServiceEndpoint bool   `json:"ignoreMissingVNetServiceEndpoint,omitempty" bson:"ignoreMissingVNetServiceEndpoint,omitempty"`
+	// } `json:"virtualNetworkRules,omitempty" bson:"virtualNetworkRules,omitempty"`
+	// VirtualNetworkSubnetID              *string `json:"virtualNetworkSubnetId,omitempty" bson:"virtualNetworkSubnetId,omitempty"`
+	// VirtualRouterAsn                    float64 `json:"virtualRouterAsn,omitempty" bson:"virtualRouterAsn,omitempty"`
+	// VirtualRouterAutoScaleConfiguration *struct {
+	// 	MinCapacity float64 `json:"minCapacity,omitempty" bson:"minCapacity,omitempty"`
+	// } `json:"virtualRouterAutoScaleConfiguration,omitempty" bson:"virtualRouterAutoScaleConfiguration,omitempty"`
+	// VirtualRouterIps []string `json:"virtualRouterIps,omitempty" bson:"virtualRouterIps,omitempty"`
+	// VirtualWan       *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"virtualWan,omitempty" bson:"virtualWan,omitempty"`
+	// Visibility any    `json:"visibility,omitempty" bson:"visibility,omitempty"`
+	// VmID       string `json:"vmId,omitempty" bson:"vmId,omitempty"`
+	// VmProfile  *struct {
+	// 	OSDiskSizeGb float64 `json:"osDiskSizeGB,omitempty" bson:"osDiskSizeGB,omitempty"`
+	// 	VmSize       string  `json:"vmSize,omitempty" bson:"vmSize,omitempty"`
+	// } `json:"vmProfile,omitempty" bson:"vmProfile,omitempty"`
+	// VnetBackupRestoreEnabled     bool                                `json:"vnetBackupRestoreEnabled,omitempty" bson:"vnetBackupRestoreEnabled,omitempty"`
+	// VnetConfiguration            *AzureResourceVnetConfiguration     `json:"vnetConfiguration,omitempty" bson:"vnetConfiguration,omitempty"`
+	// VnetConnectionsMax           float64                             `json:"vnetConnectionsMax,omitempty" bson:"vnetConnectionsMax,omitempty"`
+	// VnetConnectionsUsed          float64                             `json:"vnetConnectionsUsed,omitempty" bson:"vnetConnectionsUsed,omitempty"`
+	// VnetContentShareEnabled      bool                                `json:"vnetContentShareEnabled,omitempty" bson:"vnetContentShareEnabled,omitempty"`
+	// VnetEncryptionSupported      bool                                `json:"vnetEncryptionSupported,omitempty" bson:"vnetEncryptionSupported,omitempty"`
+	// VnetImagePullEnabled         bool                                `json:"vnetImagePullEnabled,omitempty" bson:"vnetImagePullEnabled,omitempty"`
+	// VnetRouteAllEnabled          bool                                `json:"vnetRouteAllEnabled,omitempty" bson:"vnetRouteAllEnabled,omitempty"`
+	// VoiceReceivers               []any                               `json:"voiceReceivers,omitempty" bson:"voiceReceivers,omitempty"`
+	// VolumeBackups                []AzureResourceVolumeBackups        `json:"volumeBackups,omitempty" bson:"volumeBackups,omitempty"`
+	// VolumeSpecName               string                              `json:"volumeSpecName,omitempty" bson:"volumeSpecName,omitempty"`
+	// VolumeType                   string                              `json:"volumeType,omitempty" bson:"volumeType,omitempty"`
+	// VolumesAssigned              float64                             `json:"volumesAssigned,omitempty" bson:"volumesAssigned,omitempty"`
+	// VpnAuthenticationTypes       []string                            `json:"vpnAuthenticationTypes,omitempty" bson:"vpnAuthenticationTypes,omitempty"`
+	// VpnClientIpsecPolicies       []AzureResourceVpnClientIpsecPolicy `json:"vpnClientIpsecPolicies,omitempty" bson:"vpnClientIpsecPolicies,omitempty"`
+	// VpnClientRevokedCertificates []any                               `json:"vpnClientRevokedCertificates,omitempty" bson:"vpnClientRevokedCertificates,omitempty"`
+	// VpnClientRootCertificates    []struct {
+	// 	Name           string `json:"name,omitempty" bson:"name,omitempty"`
+	// 	PublicCertData string `json:"publicCertData,omitempty" bson:"publicCertData,omitempty"`
+	// } `json:"vpnClientRootCertificates,omitempty" bson:"vpnClientRootCertificates,omitempty"`
+	// VpnGatewayDetachStatus string   `json:"vpnGatewayDetachStatus,omitempty" bson:"vpnGatewayDetachStatus,omitempty"`
+	// VpnGatewayGeneration   string   `json:"vpnGatewayGeneration,omitempty" bson:"vpnGatewayGeneration,omitempty"`
+	// VpnGatewayScaleUnit    float64  `json:"vpnGatewayScaleUnit,omitempty" bson:"vpnGatewayScaleUnit,omitempty"`
+	// VpnProtocols           []string `json:"vpnProtocols,omitempty" bson:"vpnProtocols,omitempty"`
+	// VpnServerConfiguration *struct {
+	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
+	// } `json:"vpnServerConfiguration,omitempty" bson:"vpnServerConfiguration,omitempty"`
+	// VpnServerConfigurationLocation string                          `json:"vpnServerConfigurationLocation,omitempty" bson:"vpnServerConfigurationLocation,omitempty"`
+	// VpnType                        string                          `json:"vpnType,omitempty" bson:"vpnType,omitempty"`
+	// WebSiteID                      any                             `json:"webSiteId,omitempty" bson:"webSiteId,omitempty"`
+	// WebSpace                       string                          `json:"webSpace,omitempty" bson:"webSpace,omitempty"`
+	// WebhookReceivers               []AzureResourceWebhookReceivers `json:"webhookReceivers,omitempty" bson:"webhookReceivers,omitempty"`
+	// WeeklyBackupsToKeep            float64                         `json:"weeklyBackupsToKeep,omitempty" bson:"weeklyBackupsToKeep,omitempty"`
+	// WeeklySchedule                 *AzureResourceWeeklySchedule    `json:"weeklySchedule,omitempty" bson:"weeklySchedule,omitempty"`
+	// WindowSize                     string                          `json:"windowSize,omitempty" bson:"windowSize,omitempty"`
+	// WindowsProfile                 *struct {
+	// 	AdminUsername  string `json:"adminUsername,omitempty" bson:"adminUsername,omitempty"`
+	// 	EnableCsiProxy bool   `json:"enableCSIProxy,omitempty" bson:"enableCSIProxy,omitempty"`
+	// } `json:"windowsProfile,omitempty" bson:"windowsProfile,omitempty"`
+	// WorkbookTemplates         []AzureResourceWorkbookTemplate `json:"workbookTemplates,omitempty" bson:"workbookTemplates,omitempty"`
+	// WorkerSize                string                          `json:"workerSize,omitempty" bson:"workerSize,omitempty"`
+	// WorkerSizeID              float64                         `json:"workerSizeId,omitempty" bson:"workerSizeId,omitempty"`
+	// WorkerTierName            any                             `json:"workerTierName,omitempty" bson:"workerTierName,omitempty"`
+	// WorkloadAutoScalerProfile *struct{}                       `json:"workloadAutoScalerProfile,omitempty" bson:"workloadAutoScalerProfile,omitempty"`
+	// WorkloadProfileName       *string                         `json:"workloadProfileName,omitempty" bson:"workloadProfileName,omitempty"`
+	// WorkloadProfiles          []struct {
+	// 	Name                string `json:"name,omitempty" bson:"name,omitempty"`
+	// 	WorkloadProfileType string `json:"workloadProfileType,omitempty" bson:"workloadProfileType,omitempty"`
+	// } `json:"workloadProfiles,omitempty" bson:"workloadProfiles,omitempty"`
+	// WorkspaceCapping         *AzureResourceWorkspaceCapping `json:"workspaceCapping,omitempty" bson:"workspaceCapping,omitempty"`
+	// WorkspaceResourceIDOther string                         `json:"workspaceResourceId,omitempty" bson:"workspaceResourceId,omitempty"`
+	// WriteLocations           []*AzureResourceWriteLocations `json:"writeLocations,omitempty" bson:"writeLocations,omitempty"`
+	// ZoneRedundancy           string                         `json:"zoneRedundancy,omitempty" bson:"zoneRedundancy,omitempty"`
+	// ZoneRedundant            bool                           `json:"zoneRedundant,omitempty" bson:"zoneRedundant,omitempty"`
+	// ZoneType                 string                         `json:"zoneType,omitempty" bson:"zoneType,omitempty"`
 }
 
 type AzureVirtualMachineSku struct {
