@@ -339,12 +339,12 @@ func GetDataFromPackerLogfile(path string) *PackerLogBuildData {
 			err = json.Unmarshal([]byte(bodyStr), &bodyData)
 			CheckFatalError(err)
 
-			props := *bodyData.Properties
+			// props := *bodyData.Properties
 
-			// imgRef = bodyData.Properties["StorageProfile"]["ImageReference"]
+			imgRef = bodyData.Properties.StorageProfile.ImageReference
 
-			JsonMarshalAndPrint(props)
-			os.Exit(0)
+			// JsonMarshalAndPrint(props)
+			// os.Exit(0)
 			// imgRef = props["StorageProfile"]["ImageReference"]
 
 			if strings.HasSuffix(imgRef.ID, "latest") {
