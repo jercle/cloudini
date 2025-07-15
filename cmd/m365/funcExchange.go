@@ -2,6 +2,7 @@ package m365
 
 import (
 	"bytes"
+	"os"
 	"time"
 
 	"github.com/gocarina/gocsv"
@@ -18,7 +19,12 @@ func GetMailboxStorageUsed(token lib.AzureMultiAuthToken) (mbDetails []MailboxUs
 	bytesReader := bytes.NewReader(res)
 	var csvData []MailboxUsageDetail
 	err = gocsv.Unmarshal(bytesReader, &csvData)
-	lib.CheckFatalError(err)
+	if err != nil {
+		_, _, cachePath := lib.InitConfig(nil)
+
+		os.WriteFile(cachePath+"/GetMailboxStorageUsed-error.csv", res, 0644)
+		lib.CheckFatalError(err)
+	}
 
 	for _, mb := range csvData {
 		curr := mb
