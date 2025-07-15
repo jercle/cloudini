@@ -32,8 +32,8 @@ brews:
       owner: jercle
       name: homebrew-tap
     homepage: "https://github.com/jercle/cloudini"
-    # alternative_names:
-    #   - "cloudini@{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
+    alternative_names:
+      - "cloudini@{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
     description: "Cloud CLI providing functionality Azure CLI doesn't. Soon to add GCP and AWS features."
     test: |
       system "#{bin}/cld", "--version"
