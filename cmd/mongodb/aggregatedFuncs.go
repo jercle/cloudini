@@ -158,6 +158,7 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
 
+	fmt.Println("")
 	fmt.Println("Updating 'existsInAzure' value for all resources in database...")
 	s.Start()
 	startTime = time.Now()
