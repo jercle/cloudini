@@ -58,7 +58,10 @@ func UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(imageGalleryImagesColl *mon
 		s.Stop()
 	}
 
+	fmt.Println("Updating build and image version data in database...")
+	s.Start()
 	GetBuildDataAndUpdateImageVesionData(imageGalleryImagesColl)
+	s.Stop()
 }
 
 //

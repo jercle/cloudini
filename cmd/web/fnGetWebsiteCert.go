@@ -38,6 +38,9 @@ func GetWebsiteCertificate(siteUrl string, proxy *string) (certMinimal WebsiteCe
 	}
 
 	cert := resp.TLS.PeerCertificates[0]
+	// certs := resp.TLS.PeerCertificates
+
+	// lib.JsonMarshalAndPrint(certs)
 
 	jsonStr, _ := json.Marshal(cert)
 	err = json.Unmarshal(jsonStr, &certMinimal)
