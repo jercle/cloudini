@@ -25,6 +25,7 @@ func GetMailboxStorageUsed(token lib.AzureMultiAuthToken) (mbDetails []MailboxUs
 
 		os.WriteFile(cachePath+"/GetMailboxStorageUsed-error.csv", res, 0644)
 		fmt.Println("Saved " + cachePath + "/GetMailboxStorageUsed-error.csv")
+		fmt.Println("tenant: " + token.TenantName)
 		lib.CheckFatalError(err)
 	}
 
