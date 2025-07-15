@@ -38,6 +38,15 @@ type ResourceGraphResponse struct {
 	TotalRecords    float64                    `json:"totalRecords"`
 }
 
+type ResourceGraphResponseDataInterface struct {
+	Count           float64       `json:"count"`
+	Data            []interface{} `json:"data"`
+	Facets          []interface{} `json:"facets"`
+	ResultTruncated string        `json:"resultTruncated"`
+	SkipToken       string        `json:"$skipToken"`
+	TotalRecords    float64       `json:"totalRecords"`
+}
+
 //
 //
 

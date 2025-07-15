@@ -3,7 +3,7 @@ package azure
 import (
 	"context"
 	"encoding/json/jsontext"
-	"encoding/json/v2"
+	json "encoding/json/v2"
 
 	// "encoding/json"
 	"fmt"
@@ -130,8 +130,8 @@ func GetAllResourcesForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfi
 	outputFilePath := options.OutputFilePath
 
 	if outputFilePath != "" {
-		jsonStr, _ := json.MarshalIndent(allResources, "", "  ")
-		jsonListStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
+		jsonStr, _ := json.Marshal(allResources, jsontext.WithIndent("  "))
+		jsonListStr, _ := json.Marshal(allResourcesSlice, jsontext.WithIndent("  "))
 
 		currentDate := time.Now().Format("20060102")
 
@@ -295,7 +295,17 @@ func GetAllTenantResources(outputFile string, token *lib.AzureMultiAuthToken) Te
 
 	if err != nil {
 		_, _, cachePath := lib.InitConfig(nil)
-		os.WriteFile(cachePath+"/allResResponse-Errored.json", res, 0644)
+		errSplit := strings.Split(err.Error(), "/")
+		lib.PrintSliceStringsWithIndexes(errSplit)
+		errIndex, subErr := strconv.Atoi(errSplit[2])
+		lib.CheckFatalError(subErr)
+		var resourcesInterface ResourceGraphResponseDataInterface
+		subErr = json.Unmarshal(res, &resourcesInterface)
+		errObjStr, _ := json.Marshal(resourcesInterface.Data[errIndex], jsontext.WithIndent("  "))
+
+		os.WriteFile(cachePath+"/allResResponse-ErroredObj.json", errObjStr, 0644)
+
+		// fmt.Println(err)
 		lib.CheckFatalError(err)
 	}
 
@@ -367,7 +377,7 @@ func GetAllTenantResources(outputFile string, token *lib.AzureMultiAuthToken) Te
 	}
 
 	if outputFile != "" {
-		jsonStr, _ := json.MarshalIndent(allTenantResources, "", "  ")
+		jsonStr, _ := json.Marshal(allTenantResources, jsontext.WithIndent("  "))
 
 		err = os.WriteFile(outputFile, jsonStr, 0644)
 		lib.CheckFatalError(err)
@@ -451,7 +461,7 @@ func GetAllTenantResourceGroups(outputFile string, token *lib.AzureMultiAuthToke
 	}
 
 	if outputFile != "" {
-		jsonStr, _ := json.MarshalIndent(allResGrps, "", "  ")
+		jsonStr, _ := json.Marshal(allResGrps, jsontext.WithIndent("  "))
 
 		err = os.WriteFile(outputFile, jsonStr, 0644)
 		lib.CheckFatalError(err)
@@ -733,7 +743,7 @@ func GetAllVMIpAddrForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfig
 	outputFilePath := options.OutputFilePath
 
 	if outputFilePath != "" {
-		jsonStr, _ := json.MarshalIndent(allResourceIPs, "", "  ")
+		jsonStr, _ := json.Marshal(allResourceIPs, jsontext.WithIndent("  "))
 
 		currentDate := time.Now().Format("20060102")
 
@@ -878,7 +888,7 @@ func GetAllTenantIpAddresses(outputFile string, token *lib.AzureMultiAuthToken) 
 	}
 
 	if outputFile != "" {
-		jsonStr, _ := json.MarshalIndent(allTenantResourceIPs, "", "  ")
+		jsonStr, _ := json.Marshal(allTenantResourceIPs, jsontext.WithIndent("  "))
 
 		err = os.WriteFile(outputFile, jsonStr, 0644)
 		lib.CheckFatalError(err)
