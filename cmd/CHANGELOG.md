@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.56]
+* Bugfix: Remove os.Exit and print statement from GetDataFromPackerLogfile which was used for testing json/v2
+
 ## [0.1.55]
 * Begin updating funcs to use json/v2 package
 * Update deps
