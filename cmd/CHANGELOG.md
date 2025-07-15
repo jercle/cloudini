@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.2.0]
+* Switched to using Homebrew Casks instead of formulae
+
 ## [0.1.56]
 * Bugfix: Remove os.Exit and print statement from GetDataFromPackerLogfile which was used for testing json/v2
 
