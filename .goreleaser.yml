@@ -38,14 +38,16 @@ brews:
     test: |
       system "#{bin}/cld", "--version"
 
-# homebrew_casks:
-#   - name: cloudini
-#     binary: cld
-#     repository:
-#       owner: jercle
-#       name: homebrew-tap
-#     alternative_names:
-#       - "cloudini@{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
+homebrew_casks:
+  - name: cloudini
+    binary: cld
+    repository:
+      owner: jercle
+      name: homebrew-tap
+    homepage: "https://github.com/jercle/cloudini"
+    description: "Cloud CLI providing functionality Azure CLI doesn't. Soon to add GCP and AWS features."
+    alternative_names:
+      - "cloudini@{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
 
 archives:
   - formats: [ 'tar.gz' ]
