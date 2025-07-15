@@ -144,7 +144,7 @@ type ServerCertInfo struct {
 	RelatedCertAuthData      *CertAuthorityCertInfo            `json:"relatedCertAuthData,omitempty" bson:"relatedCertAuthData,omitempty"`
 	Archived                 bool                              `json:"archived,omitempty" bson:"archived,omitempty"`
 	DnsNameList              *[]string                         `json:"dnsNameList,omitempty" bson:"dnsNameList,omitempty"`
-	DNSNames                 []string                          `json:"dnsNames,omitempty,omitzero" bson:"dnsNameList,omitempty,omitzero"`
+	DNSNames                 []string                          `json:"dnsNames,omitempty,omitzero" bson:"dnsNames,omitempty,omitzero"`
 	EmailAddresses           []string                          `json:"emailAddresses,omitempty,omitzero" bson:"emailAddresses,omitempty,omitzero"`
 	IPAddresses              []net.IP                          `json:"ipAddresses,omitempty,omitzero" bson:"ipAddresses,omitempty,omitzero"`
 	URIs                     []*url.URL                        `json:"uris,omitempty,omitzero" bson:"uris,omitempty,omitzero"`
