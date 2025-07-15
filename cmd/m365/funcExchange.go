@@ -2,6 +2,7 @@ package m365
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"time"
 
@@ -23,6 +24,7 @@ func GetMailboxStorageUsed(token lib.AzureMultiAuthToken) (mbDetails []MailboxUs
 		_, _, cachePath := lib.InitConfig(nil)
 
 		os.WriteFile(cachePath+"/GetMailboxStorageUsed-error.csv", res, 0644)
+		fmt.Println("Saved " + cachePath + "/GetMailboxStorageUsed-error.csv")
 		lib.CheckFatalError(err)
 	}
 
