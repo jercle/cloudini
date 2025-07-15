@@ -11,6 +11,7 @@ builds:
   - binary: cld
     env:
       - CGO_ENABLED=0
+      - GOEXPERIMENT=jsonv2
     goarch:
       - amd64
       - arm64
@@ -27,15 +28,27 @@ signs:
     # stdin: "{{ .Env.GPG_PASSWORD }}"
     stdin_file: ./gpg_pwd
 
-brews:
-  -
+# brews:
+#   - repository:
+#       owner: jercle
+#       name: homebrew-tap
+#     homepage: "https://github.com/jercle/cloudini"
+#     alternative_names:
+#       - "cloudini@{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
+#     description: "Cloud CLI providing functionality Azure CLI doesn't. Soon to add GCP and AWS features."
+#     test: |
+#       system "#{bin}/cld", "--version"
+
+homebrew_casks:
+  - name: cloudini
+    binary: cld
     repository:
       owner: jercle
       name: homebrew-tap
     homepage: "https://github.com/jercle/cloudini"
     description: "Cloud CLI providing functionality Azure CLI doesn't. Soon to add GCP and AWS features."
-    test: |
-      system "#{bin}/cld", "--version"
+    alternative_names:
+      - "cloudini@{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
 
 archives:
   - formats: [ 'tar.gz' ]
