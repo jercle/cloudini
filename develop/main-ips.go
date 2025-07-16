@@ -28,7 +28,7 @@ func main() {
 		// GetWriteToken: true,
 	}, nil)
 	lib.CheckFatalError(err)
-	token, err := tokenReq.SelectTenant("")
+	token, err := tokenReq.SelectTenant("RED")
 	lib.CheckFatalError(err)
 	// _ = tokens
 	_ = token
@@ -62,15 +62,15 @@ func GetIPAddressesAll(token *lib.AzureMultiAuthToken) (allIpAddresses []IPAddre
 	// 	mutex sync.Mutex
 	// )
 	queries := []string{
-		// GetIPAddressesQueryNetworkInterfaces,
-		// GetIPAddressesQueryVirtualMachines,
-		// GetIPAddressesQueryLoadBalancers,
-		// GetIPAddressesQueryManagedEnvironments,
-		// GetIPAddressesQueryBastionHosts,
-		// GetIPAddressesQueryPrivateEndpoints,
-		// GetIPAddressesQueryPublicIPs,
-		// GetIPAddressesQueryWebSites,
-		// GetIPAddressesQueryManagedClusters,
+		GetIPAddressesQueryNetworkInterfaces,
+		GetIPAddressesQueryVirtualMachines,
+		GetIPAddressesQueryLoadBalancers,
+		GetIPAddressesQueryManagedEnvironments,
+		GetIPAddressesQueryBastionHosts,
+		GetIPAddressesQueryPrivateEndpoints,
+		GetIPAddressesQueryPublicIPs,
+		GetIPAddressesQueryWebSites,
+		GetIPAddressesQueryManagedClusters,
 		GetIPAddressesQueryFirewalls,
 	}
 
@@ -80,7 +80,10 @@ func GetIPAddressesAll(token *lib.AzureMultiAuthToken) (allIpAddresses []IPAddre
 		var resource IPAddressesAllTypes
 		jsonStr, _ := json.Marshal(r)
 		err := json.Unmarshal(jsonStr, &resource)
-		lib.CheckFatalError(err)
+		if err != nil {
+			lib.JsonMarshalAndPrint(r)
+			lib.CheckFatalError(err)
+		}
 
 		typeLower := strings.ToLower(resource.Type)
 
@@ -93,14 +96,14 @@ func GetIPAddressesAll(token *lib.AzureMultiAuthToken) (allIpAddresses []IPAddre
 		}
 	}
 
-	fmt.Println(len(allIpAddresses))
+	// fmt.Println(len(allIpAddresses))
 	// lib.JsonMarshalAndPrint(allIpAddresses)
 	// os.Exit(0)
 
-	// jsonStr, _ := json.Marshal(queryResults)
-	// os.WriteFile("main-ips-all-full.json", jsonStr, 0644)
+	jsonStr, _ := json.Marshal(queryResults)
+	os.WriteFile("../dev/main-ips-all-full.json", jsonStr, 0644)
 	// lib.JsonMarshalAndPrint(queryResults)
-	// fmt.Println(len(queryResults))
+	fmt.Println(len(queryResults))
 	return
 }
 
@@ -266,8 +269,10 @@ func (t *IPAddressesAllTypes) UnmarshalJSON(data []byte) error {
 
 	var tags map[string]string
 
-	if err := json.Unmarshal([]byte(nicJson.Tags), &tags); err != nil {
-		return err
+	if nicJson.Tags != "" {
+		if err := json.Unmarshal([]byte(nicJson.Tags), &tags); err != nil {
+			return err
+		}
 	}
 
 	*t = IPAddressesAllTypes{
@@ -315,7 +320,7 @@ const GetIPAddressesQueryVirtualMachines = `Resources
     | summarize associatedNics = make_list(nicId), privateIps = make_list(privateIp), publicIps = make_list(publicIp) by vmId
     )
     on vmId
-| project id, name = vmName, type, privateIps, publicIps, tenantId, subscriptionId, associatedNics, tags`
+| project id, name = vmName, type, privateIps, publicIps, tenantId, subscriptionId, associatedNics, tags = dynamic_to_json(tags)`
 
 const GetIPAddressesQueryLoadBalancers = `Resources
 | where type =~ 'microsoft.network/loadbalancers'
@@ -328,7 +333,7 @@ const GetIPAddressesQueryLoadBalancers = `Resources
     )
     on publicIpId
 | project-away publicIpId, publicIpId1
-| summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp) by id = lbId, name = lbName, type, tenantId, subscriptionId, tags`
+| summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp) by id = lbId, name = lbName, type, tenantId, subscriptionId, tags = dynamic_to_json(tags)`
 
 const GetIPAddressesQueryManagedEnvironments = `Resources
 | where type =~ 'microsoft.app/managedenvironments'
@@ -357,7 +362,7 @@ const GetIPAddressesQueryPublicIPs = `resources
 | where type =~ 'microsoft.network/publicipaddresses'
 | extend ipConfig = properties.ipConfiguration.id
 | extend isAttached = isnotnull(ipConfig)
-| project id, name, type, tenantId, subscriptionId, resourceGroup, tags, publicIps = pack_array(properties.ipAddress), ipConfig, isAttached`
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), publicIps = pack_array(properties.ipAddress), ipConfig, isAttached`
 
 const GetIPAddressesQueryWebSites = `resources
 | where type =~ 'microsoft.web/sites'
@@ -366,12 +371,12 @@ const GetIPAddressesQueryWebSites = `resources
 | extend inboundIps = split(properties.inboundIpAddress, ',')
 | extend outboundIps = split(properties.outboundIpAddresses, ',')
 | extend privateIps = array_concat(possibleInboundIps, possibleOutboundIps)
-| project id, name, type, tenantId, subscriptionId, resourceGroup, tags, privateIps, possibleInboundIps, possibleOutboundIps, inboundIps, outboundIps`
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), privateIps, possibleInboundIps, possibleOutboundIps, inboundIps, outboundIps`
 
 const GetIPAddressesQueryManagedClusters = `resources
 | where type =~ 'microsoft.containerservice/managedclusters'
 | mv-expand agentPools = properties.agentPoolProfiles
-| project id, name, type, tenantId, subscriptionId, resourceGroup, tags`
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags)`
 
 const GetIPAddressesQueryFirewalls = `resources
 | where type =~ 'microsoft.network/azurefirewalls'
