@@ -25,6 +25,7 @@ var (
 	updateB2CUsers                                  bool
 	updateWebsiteCertInfo                           bool
 	updateSupportAlerts                             bool
+	updateAll                                       bool
 
 // tenantId       string
 // subscriptionId string
@@ -90,19 +91,19 @@ var cmdMongoUpdate = &cobra.Command{
 		tokenReq, err := azure.GetAllTenantSPTokens(lib.AzureMultiAuthTokenRequestOptions{}, nil)
 		lib.CheckFatalError(err)
 
-		if updateIpAddresses {
+		if updateAll || updateIpAddresses {
 			UpdateAllAzureResourceIPAddresses(azResIpAddresses, tokenReq)
 		}
 
-		if updateAllGalleryImagesAndUpdateWithUsedByCitrix {
+		if updateAll || updateAllGalleryImagesAndUpdateWithUsedByCitrix {
 			UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(azResImageGalleryImagesColl, citrixMachineCatalogsColl, tokenReq)
 		}
 
-		if updateAllCertInfo {
+		if updateAll || updateAllCertInfo {
 			UpdateAllCertInfo(certsCaCertInfo, certsServerCertInfo)
 		}
 
-		if updateEntraItems {
+		if updateAll || updateEntraItems {
 			appRegOpts := UpdateEntraItemsOptions{
 				EntraAppRegColl:              entraAppRegColl,
 				EntraAppRegCredsExpiringColl: entraAppRegCredsExpiringColl,
@@ -110,7 +111,7 @@ var cmdMongoUpdate = &cobra.Command{
 			UpdateEntraItems(appRegOpts, tokenReq)
 		}
 
-		if updateEntraPimItems {
+		if updateAll || updateEntraPimItems {
 			opts := UpdateEntraPimItemsOptions{
 				EntraRoleAssignmentScheduleInstancesColl:  entraRoleAssignmentScheduleInstancesColl,
 				EntraRoleEligibilityScheduleInstancesColl: entraRoleEligibilityScheduleInstancesColl,
@@ -119,7 +120,7 @@ var cmdMongoUpdate = &cobra.Command{
 		}
 
 		// Longest running, so keep last
-		if updateAzureResVcpuCountsCostData {
+		if updateAll || updateAzureResVcpuCountsCostData {
 			opts := UpdateAllAzureResourcesAndVcpuCountsOptions{
 				SkuListSubscription:         config.Azure.SkuListSubscription,
 				SkuListAuth:                 config.Azure.MultiTenantAuth.Tenants[config.Azure.SkuListAuthTenant],
@@ -149,11 +150,11 @@ var cmdMongoUpdate = &cobra.Command{
 		// 	UpdateADUsers(adUsers)
 		// }
 
-		if updateB2CUsers {
+		if updateAll || updateB2CUsers {
 			UpdateB2CUsers(entraB2CUsersColl)
 		}
 
-		if updateO365Data {
+		if updateAll || updateO365Data {
 			UpdateM365Data(m365MailboxStatisticsColl)
 		}
 
@@ -161,7 +162,7 @@ var cmdMongoUpdate = &cobra.Command{
 			UpdateWebsiteCertsPullingFromDatabase(c)
 		}
 
-		if updateSupportAlerts {
+		if updateAll || updateSupportAlerts {
 			UpdateSupportAlerts(genSupportAlertsColl)
 		}
 
@@ -188,6 +189,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateB2CUsers, "updateB2CUsers", "b", false, "Updates B2C users")
 	cmdMongoUpdate.Flags().BoolVarP(&updateWebsiteCertInfo, "updateWebsiteCertInfo", "w", false, "Updates Website Cert info from configured URLs in database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateSupportAlerts, "updateSupportAlerts", "s", false, "Updates Support alerts")
+	cmdMongoUpdate.Flags().BoolVar(&updateAll, "updateAll", false, "Updates all data as if providing all available flags. Currently excludes updateAzureResourceRelations and updateWebsiteCertInfo")
 
 	// cmdMongo.PersistentFlags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")
 	// cmdMongo.PersistentFlags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")
