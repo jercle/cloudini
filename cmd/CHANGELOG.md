@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.2.1]
+* Add updateAll flag to mongo update command
+
 ## [0.2.0]
 * Switched to using Homebrew Casks instead of formulae
 
