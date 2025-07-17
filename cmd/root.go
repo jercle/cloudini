@@ -8,6 +8,7 @@ import (
 	"runtime/trace"
 	"strings"
 
+	"github.com/carlmjohnson/versioninfo"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
@@ -37,6 +38,8 @@ var (
 
 //go:embed CHANGELOG.md
 var ChangelogFile string
+
+var cldVersion = versioninfo.Short()
 
 // rootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
