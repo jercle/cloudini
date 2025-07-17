@@ -42,7 +42,7 @@ require (
 	github.com/rodaine/table v1.3.0
 	github.com/schollz/progressbar/v3 v3.18.0
 	github.com/spf13/cobra v1.9.1
-	github.com/spf13/pflag v1.0.6
+	github.com/spf13/pflag v1.0.7
 	github.com/spf13/viper v1.20.1
 	github.com/tidwall/pretty v1.2.1
 	github.com/xuri/excelize/v2 v2.9.1
