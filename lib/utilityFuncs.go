@@ -530,3 +530,18 @@ func PrintSliceIntsWithIndexes(slice []int) {
 func IsSpecificDay(t time.Time, year int, month time.Month, day int) bool {
 	return t.Year() == year && t.Month() == month && t.Day() == day
 }
+
+//
+//
+
+func SelectMapStringFieldsFromArrayOfKeys(dataMap map[string]string, keysToSelect []string) map[string]string {
+	newMap := make(map[string]string)
+	for _, key := range keysToSelect {
+		// Check if the key exists in the map
+		if _, ok := dataMap[key]; ok {
+			// fmt.Printf("Key: %s, Value: %d\n", key, value)
+			newMap[key] = dataMap[key]
+		}
+	}
+	return newMap
+}
