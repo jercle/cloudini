@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.2]
+*
+
 ## [0.3.1]
 * Bugfix: Some resources showing in IP Address list when resource has no ip addresses
 
