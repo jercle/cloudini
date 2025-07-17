@@ -98,6 +98,8 @@ func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthToke
 		tokenRequestOptions.Scopes = []string{"https://monitor.azure.com/.default"}
 	case "loganalytics":
 		tokenRequestOptions.Scopes = []string{"https://api.loganalytics.io/.default"}
+	case "keyvault":
+		tokenRequestOptions.Scopes = []string{"cfa8b339-82a2-471a-a3c9-0fc0be7a4093/.default"}
 	// case "acr":
 	// tokenRequestOptions.Scopes = []string{}
 

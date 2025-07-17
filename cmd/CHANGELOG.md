@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.0]
+* Fixes and major overhaul to IP address retrieval to get from all resources.
+
 ## [0.2.1]
 * Add updateAll flag to mongo update command
 
