@@ -72,12 +72,14 @@ func UpdateAllAzureResourceIPAddresses(resIPAddressesColl *mongo.Collection, tok
 
 	opts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
 		SuppressSteps: true,
+		// SelectedIPAddressQueries: &[]string{"GetIPAddressesQueryVirtualMachines"},
 	}
 
 	fmt.Println("Fetching all resource IPs...")
-	s.Start()
+	// s.Start()
 	resources := azure.GetAllVMIpAddrForAllConfiguredTenants(&opts, tokenReq)
-	s.Stop()
+
+	// s.Stop()
 
 	fmt.Println("Updating all resource IPs in database...")
 	s.Start()
