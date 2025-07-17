@@ -110,3 +110,33 @@ resources
 | join kind=leftouter  (resources | project pubIpId = id, publicIp = properties.ipAddress) on pubIpId
 | extend publicIp = iff(isnull(publicIp), publicIp1, publicIp)
 | summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp) by id, name, resourceGroup, tenantId, subscriptionId, type, tags = dynamic_to_json(tags)
+
+
+// P2S VPN Gateways
+resources
+| where type =~ 'microsoft.network/p2svpngateways'
+| mv-expand p2sConnConfig = properties.p2SConnectionConfigurations
+| mv-expand vpnClientAddressPoolPrefix = p2sConnConfig.properties.vpnClientAddressPool.addressPrefixes
+| summarize cidrs = make_list(vpnClientAddressPoolPrefix) by id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags)
+
+
+// Virtual Hubs
+resources
+| where type =~ 'microsoft.network/virtualhubs'
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), privateIps = properties.virtualRouterIps, cidrs = pack_array(properties.addressPrefix)
+
+
+// Virtual Networks
+Resources
+| where type =~ 'microsoft.network/virtualnetworks'
+| mv-expand subnetObj = properties.subnets
+| extend snetId = subnetObj.id, snetName = subnetObj.name, snetCidrSingle = iff(isnull(subnetObj.properties.addressPrefix), dynamic([]), pack_array(subnetObj.properties.addressPrefix)), snetCidrArr = subnetObj.properties.addressPrefixes, snetType = subnetObj.type
+| extend snetCidrs = array_concat(snetCidrSingle, snetCidrArr)
+| extend subnet = pack_dictionary('id', snetId, 'name', snetName, 'cidrs', snetCidrs, 'type', snetType)
+| summarize cidrs = make_set(properties.addressSpace.addressPrefixes), subnets = make_list(subnet) by id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags)
+
+
+// IP Groups
+resources
+| where type =~ 'microsoft.network/ipgroups'
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), cidrs = properties.ipAddresses

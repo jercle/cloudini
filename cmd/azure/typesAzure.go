@@ -24,35 +24,6 @@ type ListAllResourcesResponse struct {
 //
 //
 
-type ResourceGraphGetIpsResponse struct {
-	Count           float64                 `json:"count,omitempty,omitzero" bson:"count,omitempty,omitzero"`
-	Data            []AzureResourceIPConfig `json:"data,omitempty,omitzero" bson:"data,omitempty,omitzero"`
-	Facets          []interface{}           `json:"facets,omitempty,omitzero" bson:"facets,omitempty,omitzero"`
-	ResultTruncated string                  `json:"resultTruncated,omitempty,omitzero" bson:"resultTruncated,omitempty,omitzero"`
-	SkipToken       string                  `json:"$skipToken,omitempty,omitzero" bson:"$skipToken,omitempty,omitzero"`
-	TotalRecords    float64                 `json:"totalRecords,omitempty,omitzero" bson:"totalRecords,omitempty,omitzero"`
-}
-
-//
-//
-
-type AzureResourceIPConfig struct {
-	ID               string    `json:"id,omitempty" bson:"id,omitempty"`
-	Name             string    `json:"name,omitempty" bson:"name,omitempty"`
-	Type             string    `json:"type,omitempty" bson:"type,omitempty"`
-	TenantName       string    `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
-	TenantId         string    `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
-	SubscriptionName string    `json:"subscriptionName,omitempty" bson:"subscriptionName,omitempty"`
-	SubscriptionId   string    `json:"subscriptionId,omitempty" bson:"subscriptionId,omitempty"`
-	PrivateIPs       []string  `json:"privateIps,omitempty" bson:"privateIps,omitempty"`
-	PublicIPs        []string  `json:"publicIps,omitempty" bson:"publicIps,omitempty"`
-	SubnetIds        []string  `json:"snetIds,omitempty" bson:"snetIds,omitempty"`
-	AttachedVmId     string    `json:"attachedVmId,omitempty" bson:"attachedVmId,omitempty"`
-	AttachedVmName   string    `json:"attachedVmName,omitempty" bson:"attachedVmName,omitempty"`
-	LastAzureSync    time.Time `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty"`
-	LastDBSync       time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
-}
-
 //
 //
 

@@ -2,7 +2,8 @@ package azure
 
 import (
 	"bytes"
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"io"
 	"net/http"
@@ -46,6 +47,9 @@ func HttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 	return responseBody, nil
 }
 
+//
+//
+
 func HttpPost(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byte, []byte, error) {
 	bodyReader := bytes.NewReader([]byte(body))
 
@@ -77,7 +81,7 @@ func HttpPost(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byt
 		lib.CheckFatalError(fmt.Errorf(res.Status))
 	}
 
-	resHeader, _ := json.MarshalIndent(res.Header, "", "  ")
+	resHeader, _ := json.Marshal(res.Header, jsontext.WithIndent("  "))
 
 	// fmt.Println()
 	// if err != nil {
@@ -86,6 +90,9 @@ func HttpPost(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byt
 
 	return responseBody, resHeader, nil
 }
+
+//
+//
 
 func HttpPut(urlString string, mat lib.AzureMultiAuthToken) ([]byte, []byte, error) {
 	req, err := http.NewRequest(http.MethodPost, urlString, nil)
@@ -114,7 +121,7 @@ func HttpPut(urlString string, mat lib.AzureMultiAuthToken) ([]byte, []byte, err
 		lib.CheckFatalError(fmt.Errorf(res.Status))
 	}
 
-	resHeader, _ := json.MarshalIndent(res.Header, "", "  ")
+	resHeader, _ := json.Marshal(res.Header, jsontext.WithIndent("  "))
 
 	// fmt.Println()
 	// if err != nil {
@@ -123,6 +130,9 @@ func HttpPut(urlString string, mat lib.AzureMultiAuthToken) ([]byte, []byte, err
 
 	return responseBody, resHeader, nil
 }
+
+//
+//
 
 func HttpPatch(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byte, []byte, error) {
 	bodyReader := bytes.NewReader([]byte(body))
@@ -155,7 +165,7 @@ func HttpPatch(urlString string, body string, mat lib.AzureMultiAuthToken) ([]by
 		lib.CheckFatalError(fmt.Errorf(res.Status))
 	}
 
-	resHeader, _ := json.MarshalIndent(res.Header, "", "  ")
+	resHeader, _ := json.Marshal(res.Header, jsontext.WithIndent("  "))
 
 	// fmt.Println()
 	// if err != nil {
@@ -163,4 +173,40 @@ func HttpPatch(urlString string, body string, mat lib.AzureMultiAuthToken) ([]by
 	// }
 
 	return responseBody, resHeader, nil
+}
+
+//
+//
+
+func GetAzureResourceTypes(token *lib.AzureMultiAuthToken) (types []string) {
+	graphQuery := "resources | distinct type"
+	jsonBody := `{
+    "query": "` + graphQuery + `"
+}`
+	urlString := "https://management.azure.com/providers/Microsoft.ResourceGraph/resources?api-version=2022-10-01"
+	res, _, err := HttpPost(urlString, jsonBody, *token)
+	lib.CheckFatalError(err)
+
+	var resData ResourceGraphIPAddressesResponse
+	// os.WriteFile("main-ips-0-prewhile.json", res, 0644)
+
+	err = json.Unmarshal(res, &resData)
+	lib.CheckFatalError(err)
+
+	for _, t := range resData.Data {
+		jsonStr, _ := json.Marshal(t)
+		var item struct {
+			Type string `json:"type"`
+		}
+		err := json.Unmarshal(jsonStr, &item)
+		lib.CheckFatalError(err)
+
+		types = append(types, item.Type)
+	}
+
+	// jsonStr, _ := json.Marshal(types, jsontext.WithIndent("  "))
+	// os.WriteFile("main-ips-resourceTypes.json", jsonStr, 0644)
+	// lib.JsonMarshalAndPrint(types)
+	// fmt.Println(len(types))
+	return
 }
