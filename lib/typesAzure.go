@@ -244,6 +244,7 @@ type GetAllResourcesForAllConfiguredTenantsOptions struct {
 	OutputFilePath                  string
 	SuppressSteps                   bool
 	GetAllStorageAccountsInTlsCheck bool
+	SelectedIPAddressQueries        *[]string
 }
 
 type VCpuCountByTenant map[string]struct {
