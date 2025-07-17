@@ -1020,7 +1020,7 @@ func UpsertCertInfo(caCertInfo []lib.CertAuthorityCertInfo, serverCertInfo []lib
 //
 //
 
-func UpsertAzureIPAddresses(resources []azure.AzureResourceIPConfig, resIPAddressesColl *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertAzureIPAddresses(resources []azure.IPAddressesAllResourceTypes, resIPAddressesColl *mongo.Collection) *mongo.BulkWriteResult {
 	ctx := context.TODO()
 
 	DeleteAllDocumentsInCollection(resIPAddressesColl)
