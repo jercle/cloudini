@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.3.6]
+* Bugfix: updateResources not actually getting current resources
+* Temporarily remove updateAzureResourceRelations flag
+
 ## [0.3.5]
 * AzureResourceDetails.ExistsInAzure omitempty removed from json/bson
 * Add AWSIngestCounts.LastDBSync
