@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.3.7]
+* Bugfix: UpdateAzureResourceRelations failing on sources property
+* Bugfix: UpdateResourcesNotExistInAzure not correctly applying ExistsInAzure prop
+* Add back updateAzureResourceRelations flag
+
 ## [0.3.6]
 * Bugfix: updateResources not actually getting current resources
 * Temporarily remove updateAzureResourceRelations flag
