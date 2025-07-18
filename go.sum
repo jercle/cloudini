@@ -330,12 +330,8 @@ golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734/go.mod h1:yigFU9vqHzYiE8U
 golang.org/x/crypto v0.0.0-20210921155107-089bfa567519/go.mod h1:GvvjBRRGRdwPK5ydBHafDWAxML/pGHZbMvKqRZ5+Abc=
 golang.org/x/crypto v0.40.0 h1:r4x+VvoG5Fm+eJcxMaY8CQM7Lb0l1lsmjGBQ6s8BfKM=
 golang.org/x/crypto v0.40.0/go.mod h1:Qr1vMER5WyS2dfPHAlsOj01wgLbsyWtFn/aY+5+ZdxY=
-golang.org/x/exp v0.0.0-20250711185948-6ae5c78190dc h1:TS73t7x3KarrNd5qAipmspBDS1rkMcgVG/fS1aRb4Rc=
-golang.org/x/exp v0.0.0-20250711185948-6ae5c78190dc/go.mod h1:A+z0yzpGtvnG90cToK5n2tu8UJVP2XUATh+r+sfOOOc=
 golang.org/x/exp v0.0.0-20250717185816-542afb5b7346 h1:vuCObX8mQzik1tfEcYxWZBuVsmQtD1IjxCyPKM18Bh4=
 golang.org/x/exp v0.0.0-20250717185816-542afb5b7346/go.mod h1:A+z0yzpGtvnG90cToK5n2tu8UJVP2XUATh+r+sfOOOc=
-golang.org/x/exp/shiny v0.0.0-20250711185948-6ae5c78190dc h1:S4fuoigI+5S10itz/XeV1XmskU912Ahss09uoC3dY8I=
-golang.org/x/exp/shiny v0.0.0-20250711185948-6ae5c78190dc/go.mod h1:DUdAjGCS1V5oj0c1HZTX5UNuMxBjfxuU/NIoy/wuiRw=
 golang.org/x/exp/shiny v0.0.0-20250717185816-542afb5b7346 h1:RDQ333QSu9HPggsvK8brj/jjvLe6aLgFklL/Ek2C/sU=
 golang.org/x/exp/shiny v0.0.0-20250717185816-542afb5b7346/go.mod h1:DUdAjGCS1V5oj0c1HZTX5UNuMxBjfxuU/NIoy/wuiRw=
 golang.org/x/image v0.29.0 h1:HcdsyR4Gsuys/Axh0rDEmlBmB68rW1U9BUdB3UVHsas=
