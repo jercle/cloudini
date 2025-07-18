@@ -10,6 +10,9 @@ type GetAzureAlertsResponse struct {
 	TotalRecords    float64      `json:"totalRecords,omitempty,omitzero" bson:"totalRecords,omitempty,omitzero"`
 }
 
+//
+//
+
 type AzureAlert struct {
 	AffectedResource    string `json:"affectedResource,omitempty,omitzero" bson:"affectedResource,omitempty,omitzero"`
 	AlertCreated        string `json:"alertCreated,omitempty,omitzero" bson:"alertCreated,omitempty,omitzero"`
@@ -112,6 +115,9 @@ type AzureAlert struct {
 	} `json:"properties,omitempty,omitzero" bson:"properties,omitempty,omitzero"`
 }
 
+//
+//
+
 type AzureAlertProcessed struct {
 	AffectedResource               string    `json:"affectedResource,omitempty,omitzero" bson:"affectedResource,omitempty,omitzero"`
 	AlertCreated                   time.Time `json:"alertCreated,omitempty,omitzero" bson:"alertCreated,omitempty,omitzero"`
@@ -191,6 +197,9 @@ type AzureAlertProcessed struct {
 	AlertData        []map[string]any `json:"alertData,omitempty,omitzero" bson:"alertData,omitempty,omitzero"`
 }
 
+//
+//
+
 type GetAlertDataFromSearchResultsLinkResult struct {
 	Tables []struct {
 		Columns []struct {
@@ -201,6 +210,9 @@ type GetAlertDataFromSearchResultsLinkResult struct {
 		Rows [][]any `json:"rows"`
 	} `json:"tables"`
 }
+
+//
+//
 
 type LogAnalyticsWorkbook struct {
 	Etag     string `json:"etag"`
@@ -228,6 +240,9 @@ type LogAnalyticsWorkbook struct {
 	} `json:"tags"`
 	Type string `json:"type"`
 }
+
+//
+//
 
 type LogAnalyticsWorkbookSerializedData struct {
 	FallbackResourceIds []string `json:"fallbackResourceIds"`
@@ -278,4 +293,30 @@ type LogAnalyticsWorkbookSerializedData struct {
 		Type float64 `json:"type"`
 	} `json:"items"`
 	Version string `json:"version"`
+}
+
+//
+//
+
+type RunLogAnalyticsQueryResponseRaw struct {
+	Tables []struct {
+		Columns []struct {
+			Name string `json:"name"`
+			Type string `json:"type"`
+		} `json:"columns"`
+		Name string  `json:"name"`
+		Rows [][]any `json:"rows"`
+	} `json:"tables"`
+}
+
+//
+//
+
+type LogAnalyticsQueryResponse struct {
+	Tables []LogAnalyticsQueryResponseTable `json:"tables"`
+}
+
+type LogAnalyticsQueryResponseTable struct {
+	Rows []map[string]any `json:"rows"`
+	Name string           `json:"name"`
 }

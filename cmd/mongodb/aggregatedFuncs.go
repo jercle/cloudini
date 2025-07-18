@@ -639,3 +639,59 @@ func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, t
 	s.Stop()
 	fmt.Println(elapsed)
 }
+
+//
+//
+
+func UpdateAWSMonitoringData(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	config := lib.GetCldConfig(nil)
+	laQuery := config.AWS.LogIngestCountQuery
+	tenants := config.Azure.MultiTenantAuth.Tenants
+
+	fmt.Println("Getting and upserting AWS monitoring data")
+	startTime := time.Now()
+
+	s.Start()
+	for tName, tData := range tenants {
+		if tData.AWSIngestWorkspaceID != "" {
+			token, err := azure.GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
+				TenantName: tName,
+				Scope:      "loganalytics",
+			}, nil)
+			lib.CheckFatalError(err)
+
+			results := azure.RunLogAnalyticsQuery(tData.AWSIngestWorkspaceID, laQuery, *token)
+			// lib.JsonMarshalAndPrint(results)
+			ingestCounts := ConvertLAResultToAWSIngestCounts(results, tData.AWSIngestRef)
+			// _ = ingestCounts
+			// lib.JsonMarshalAndPrint(ingestCounts)
+			// _ = results
+			// os.Exit(0)
+			// fmt.Println(tName)
+			UpsertAWSMontoringData(ingestCounts, coll)
+		}
+	}
+	s.Stop()
+	elapsed := time.Since(startTime)
+	fmt.Println(elapsed)
+}
+
+func ConvertLAResultToAWSIngestCounts(data azure.LogAnalyticsQueryResponse, awsIngestRef string) (ingestCounts AWSIngestCounts) {
+	ingestCountRows := data.Tables[0].Rows
+	for _, row := range ingestCountRows {
+		count := AWSIngestCount{
+			LogType:               row["LogType"].(string),
+			PercentageOfTotalLogs: row["PercentageOfTotalLogs"].(float64),
+			Count:                 row["Count"].(float64),
+		}
+		ingestCounts.Counts = append(ingestCounts.Counts, count)
+		ingestCounts.TotalLogs = row["TotalLogs"].(float64)
+		ingestCounts.TotalSQSMessages = row["TotalSQSMessages"].(float64)
+		ingestCounts.Environment = awsIngestRef
+		ingestCounts.Monitor = "ingestCountsLast24hr"
+		ingestCounts.ID = "ingestCountsLast24hr" + awsIngestRef
+	}
+	return
+}
