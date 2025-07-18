@@ -623,6 +623,6 @@ type B2CUserMinimal struct {
 	UserPrincipalName               string    `json:"userPrincipalName,omitempty,omitzero" bson:"userPrincipalName,omitempty,omitzero"`
 	UserType                        string    `json:"userType,omitempty,omitzero" bson:"userType,omitempty,omitzero"`
 	B2CTenant                       string    `json:"b2cTenant,omitempty,omitzero" bson:"b2cTenant,omitempty,omitzero"`
-	LastDBSync                      time.Time `json:"lastDBSync,omitempty,omitzero" bson:"lastDBSync,omitempty,omitzero"`
+	LastDBSync                      time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
 	// TenantName                      string    `json:"tenantName" bson:"tenantName"`
 }
