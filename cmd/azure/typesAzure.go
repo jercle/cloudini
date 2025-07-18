@@ -598,6 +598,6 @@ type StorageAccountTlsVersion struct {
 	SubscriptionName  string    `json:"subscriptionName,omitempty,omitzero" bson:"subscriptionName,omitempty,omitzero"`
 	TenantID          string    `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
 	TenantName        string    `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
-	LastDBSync        time.Time `json:"lastDBSync,omitempty,omitzero" bson:"lastDBSync,omitempty,omitzero"`
+	LastDBSync        time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
 	LastAzureSync     time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
 }
