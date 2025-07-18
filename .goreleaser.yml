@@ -66,11 +66,11 @@ archives:
         formats: [ 'zip' ]
 
 
-changelog:
-  disable: true
 # changelog:
-#   sort: asc
-#   filters:
-#     exclude:
-#       - "^docs:"
-#       - "^test:"
+#   disable: true
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
