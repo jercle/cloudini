@@ -332,7 +332,7 @@ func UpdateResourcesNotExistInAzure(azureResources []lib.AzureResourceDetails, c
 	err = rsp.All(ctx, &allDbRes)
 	lib.CheckFatalError(err)
 	currentDbResMap := make(map[string]bool)
-	for _, res := range allDbRes {
+	for _, res := range azureResources {
 		currentDbResMap[res.ID] = true
 	}
 
