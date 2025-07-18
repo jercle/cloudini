@@ -2,6 +2,7 @@
 
 ## [0.3.2]
 * Bugfix: AzureResourceProperties.Other field saving to MongoDB as binary data
+* Add updatupdateResources flag to mongodb.Update command
 
 ## [0.3.1]
 * Bugfix: Some resources showing in IP Address list when resource has no ip addresses
