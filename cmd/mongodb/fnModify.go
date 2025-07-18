@@ -341,8 +341,11 @@ func UpdateResourcesNotExistInAzure(azureResources []lib.AzureResourceDetails, c
 		if _, ok := allDbResMap[res.ID]; !ok {
 			curr.ExistsInAzure = false
 		} else {
+			fmt.Println("found")
 			curr.ExistsInAzure = true
 		}
+
+		// curr.Properties.Other = ""
 
 		filter := bson.D{{"_id", res.ID}}
 		update := bson.D{{"$set", curr}}
@@ -355,13 +358,19 @@ func UpdateResourcesNotExistInAzure(azureResources []lib.AzureResourceDetails, c
 	return results
 }
 
-//
-//
-
 func DeleteAllDocumentsInCollection(collection *mongo.Collection) (results *mongo.DeleteResult) {
 	filter := bson.D{{}}
 	results, err := collection.DeleteMany(context.TODO(), filter)
 	lib.CheckFatalError(err)
 
 	return
+}
+
+func UnsetField(fieldName string, collection *mongo.Collection) *mongo.UpdateResult {
+	filter := bson.D{{}}
+	update := bson.D{{"$unset", bson.D{{fieldName, 1}}}}
+	results, err := collection.UpdateMany(context.TODO(), filter, update)
+	lib.CheckFatalError(err)
+	lib.JsonMarshalAndPrint(results)
+	return results
 }

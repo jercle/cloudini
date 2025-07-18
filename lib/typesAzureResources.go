@@ -2,8 +2,6 @@ package lib
 
 import (
 	"time"
-
-	"encoding/json/jsontext"
 )
 
 type AzureResourceUserAssignedIdentity struct {
@@ -2618,7 +2616,9 @@ type AzureResourceWorkspaceCapping struct {
 }
 
 type AzureResourceProperties struct {
-	Other jsontext.Value `json:",unknown" bson:",unknown"`
+	// Other any `json:",unknown" bson:",unknown"`
+	Other map[string]any `json:",unknown" bson:",unknown"`
+	// Other any `json:"other" bson:"other"`
 	// AccountURL                      string         `json:"AccountURL,omitempty" bson:"AccountURL,omitempty"`
 	AppID         string `json:"AppId,omitempty" bson:"AppId,omitempty"`
 	ApplicationID string `json:"ApplicationId,omitempty" bson:"ApplicationId,omitempty"`

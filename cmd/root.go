@@ -8,12 +8,13 @@ import (
 	"runtime/trace"
 	"strings"
 
+	"github.com/earthboundkid/versioninfo/v2"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
-var cliVersion = "0.3.1"
+var cliVersion = "0.3.2"
 
 var (
 	// The name of our config file, without the file extension because viper supports many different config file languages.
@@ -37,6 +38,8 @@ var (
 
 //go:embed CHANGELOG.md
 var ChangelogFile string
+
+var cldVersion = versioninfo.Short()
 
 // rootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{

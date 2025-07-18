@@ -21,6 +21,7 @@ require (
 	github.com/charmbracelet/glamour v0.10.0
 	github.com/charmbracelet/lipgloss v1.1.1-0.20250404203927-76690c660834
 	github.com/charmbracelet/log v0.4.2
+	github.com/earthboundkid/versioninfo/v2 v2.24.1
 	github.com/fatih/camelcase v1.0.0
 	github.com/fatih/color v1.18.0
 	github.com/fatih/structtag v1.2.0
@@ -49,7 +50,7 @@ require (
 	go.mongodb.org/mongo-driver v1.17.4
 	golang.design/x/clipboard v0.7.1
 	golang.org/x/crypto v0.40.0
-	golang.org/x/exp v0.0.0-20250711185948-6ae5c78190dc
+	golang.org/x/exp v0.0.0-20250717185816-542afb5b7346
 	golang.org/x/mod v0.26.0
 	golang.org/x/sys v0.34.0
 	golang.org/x/text v0.27.0
@@ -132,7 +133,7 @@ require (
 	github.com/yuin/goldmark v1.7.12 // indirect
 	github.com/yuin/goldmark-emoji v1.0.6 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/exp/shiny v0.0.0-20250711185948-6ae5c78190dc // indirect
+	golang.org/x/exp/shiny v0.0.0-20250717185816-542afb5b7346 // indirect
 	golang.org/x/image v0.29.0 // indirect
 	golang.org/x/mobile v0.0.0-20250711185624-d5bb5ecc55c0 // indirect
 	golang.org/x/net v0.42.0 // indirect
