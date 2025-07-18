@@ -25,6 +25,7 @@ var (
 	updateB2CUsers                                  bool
 	updateWebsiteCertInfo                           bool
 	updateSupportAlerts                             bool
+	updateAWSMonitoringData                         bool
 	updateAll                                       bool
 	updateResources                                 bool
 
@@ -57,6 +58,8 @@ var cmdMongoUpdate = &cobra.Command{
 
 		// adUsers := c.Database(mongoConf.DbAD).Collection(mongoConf.CollADUsers)
 		// _ = adUsers
+
+		awsMonitoringColl := c.Database(mongoConf.DbAWSMonitoring).Collection(mongoConf.CollAWSMonLogging)
 
 		azResImageGalleryImagesColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResImageGalleryImages)
 		azResResourceListColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResResourceList)
@@ -177,6 +180,10 @@ var cmdMongoUpdate = &cobra.Command{
 			UpdateSupportAlerts(genSupportAlertsColl)
 		}
 
+		if updateAll || updateAWSMonitoringData {
+			UpdateAWSMonitoringData(awsMonitoringColl)
+		}
+
 		elapsed := time.Since(startTime)
 		if showExecutionTime {
 			fmt.Println("Execution time: " + elapsed.String())
@@ -201,6 +208,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateWebsiteCertInfo, "updateWebsiteCertInfo", "w", false, "Updates Website Cert info from configured URLs in database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateSupportAlerts, "updateSupportAlerts", "s", false, "Updates Support alerts")
 	cmdMongoUpdate.Flags().BoolVarP(&updateResources, "updateResources", "r", false, "Updates Database with current Azure resources")
+	cmdMongoUpdate.Flags().BoolVarP(&updateAWSMonitoringData, "updateAWSMonitoringData", "l", false, "Updates Database with AWS Monitoring data")
 	cmdMongoUpdate.Flags().BoolVar(&updateAll, "updateAll", false, "Updates all data as if providing all available flags. Currently excludes updateAzureResourceRelations and updateWebsiteCertInfo")
 
 	// cmdMongo.PersistentFlags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")

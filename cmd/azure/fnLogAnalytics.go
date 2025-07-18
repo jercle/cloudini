@@ -54,9 +54,15 @@ type LogAnalyticsTables []struct {
 	} `json:"properties"`
 }
 
+//
+//
+
 type ResponseBody struct {
 	Value LogAnalyticsTables `json:"value"`
 }
+
+//
+//
 
 func (tables *LogAnalyticsTables) filterByName(filter string, caseInsensitive bool) {
 	var filteredTables LogAnalyticsTables
@@ -77,6 +83,9 @@ func (tables *LogAnalyticsTables) filterByName(filter string, caseInsensitive bo
 	*tables = filteredTables
 }
 
+//
+//
+
 func (tables *LogAnalyticsTables) filterByRetentionInDaysAsDefault(filter bool) {
 	var filteredTables LogAnalyticsTables
 	for _, table := range *tables {
@@ -87,6 +96,9 @@ func (tables *LogAnalyticsTables) filterByRetentionInDaysAsDefault(filter bool) 
 	*tables = filteredTables
 }
 
+//
+//
+
 func (tables *LogAnalyticsTables) printJSON() {
 	jsonData, err := json.MarshalIndent(tables, "", "  ")
 
@@ -95,6 +107,9 @@ func (tables *LogAnalyticsTables) printJSON() {
 	}
 	fmt.Println(string(jsonData))
 }
+
+//
+//
 
 func (tables *LogAnalyticsTables) printTable() {
 
@@ -116,6 +131,9 @@ func (tables *LogAnalyticsTables) printTable() {
 	}
 	tbl.Print()
 }
+
+//
+//
 
 func getAllWorkspaceTables(cred *azidentity.DefaultAzureCredential, subscriptionId string, resourceGroup string, workspaceName string) (LogAnalyticsTables, error) {
 	ctx := context.Background()
@@ -171,6 +189,9 @@ func getAllWorkspaceTables(cred *azidentity.DefaultAzureCredential, subscription
 	return responseUnmarshalled.Value, err
 }
 
+//
+//
+
 func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (alerts []AzureAlertProcessed) {
 	logAnalyticsToken, err := GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
 		TenantName: token.TenantName,
@@ -216,6 +237,9 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 	return
 }
 
+//
+//
+
 func GetAlertDataFromSearchResultsLink(linkToFilteredSearchResultsAPI string, token *lib.AzureMultiAuthToken) (alertData []map[string]any) {
 	res, err := HttpGet(linkToFilteredSearchResultsAPI, *token)
 	lib.CheckFatalError(err)
@@ -237,6 +261,9 @@ func GetAlertDataFromSearchResultsLink(linkToFilteredSearchResultsAPI string, to
 	return
 }
 
+//
+//
+
 func GetLogAnalyticsWorkbookQuery(resourceId string, token *lib.AzureMultiAuthToken) string {
 	urlString := "https://management.azure.com" + resourceId + "?api-version=2021-08-01&canFetchContent=true"
 	res, err := HttpGet(urlString, *token)
@@ -256,4 +283,39 @@ func GetLogAnalyticsWorkbookQuery(resourceId string, token *lib.AzureMultiAuthTo
 	queryString = strings.TrimPrefix(queryString, "\"")
 
 	return queryString
+}
+
+//
+//
+
+//
+//
+
+func RunLogAnalyticsQuery(workspaceId string, query string, token lib.AzureMultiAuthToken) (results LogAnalyticsQueryResponse) {
+	urlString := "https://api.loganalytics.io/v1/workspaces/" + workspaceId + "/query"
+
+	queryStr, _ := json.Marshal(query)
+	jsonBody := `{"query":` + string(queryStr) + `, "timespan": "PT24H"}`
+
+	res, _, err := HttpPost(urlString, jsonBody, token)
+	lib.CheckFatalError(err)
+
+	var resData RunLogAnalyticsQueryResponseRaw
+	err = json.Unmarshal(res, &resData)
+	lib.CheckFatalError(err)
+
+	for _, tbl := range resData.Tables {
+		var tableData LogAnalyticsQueryResponseTable
+		tableData.Name = tbl.Name
+		for _, row := range tbl.Rows {
+			rowData := make(map[string]any)
+			for ri, rowCol := range row {
+				rowData[tbl.Columns[ri].Name] = rowCol
+			}
+			tableData.Rows = append(tableData.Rows, rowData)
+		}
+		results.Tables = append(results.Tables, tableData)
+	}
+
+	return
 }

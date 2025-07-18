@@ -1310,3 +1310,22 @@ func UpsertSupportAlerts(alerts []azure.AzureAlertProcessed, coll *mongo.Collect
 
 	return
 }
+
+//
+//
+
+func UpsertAWSMontoringData(data interface{}, coll *mongo.Collection) {
+	jsonStr, _ := json.Marshal(data)
+	var props struct {
+		ID          string `json:"id"`
+		Environment string `json:"environment"`
+		Monitor     string `json:"monitor"`
+	}
+	err := json.Unmarshal(jsonStr, &props)
+
+	filter := bson.D{{"_id", props.ID}}
+	update := bson.D{{"$set", data}}
+	mdbOpts := options.Update().SetUpsert(true)
+	_, err = coll.UpdateOne(context.TODO(), filter, update, mdbOpts)
+	lib.CheckFatalError(err)
+}
