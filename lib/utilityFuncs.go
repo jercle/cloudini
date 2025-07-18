@@ -341,7 +341,7 @@ func GetDataFromPackerLogfile(path string) *PackerLogBuildData {
 
 			// props := *bodyData.Properties
 
-			// imgRef = bodyData.Properties.StorageProfile.ImageReference
+			imgRef = bodyData.Properties.StorageProfile.ImageReference
 
 			// JsonMarshalAndPrint(props)
 			// os.Exit(0)
