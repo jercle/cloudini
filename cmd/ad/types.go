@@ -40,5 +40,5 @@ type ADUser struct {
 	MsDSExternalDirectoryObjectId string    `json:"msDS-ExternalDirectoryObjectId,omitempty,omitzero" bson:"msDS-ExternalDirectoryObjectId,omitempty,omitzero"`
 	Mail                          string    `json:"mail,omitempty,omitzero" bson:"mail,omitempty,omitzero"`
 	MailNickname                  string    `json:"mailNickname,omitempty,omitzero" bson:"mailNickname,omitempty,omitzero"`
-	LastDBSync                    time.Time `json:"lastDBSync,omitempty,omitzero" bson:"lastDBSync,omitempty,omitzero"`
+	LastDBSync                    time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
 }
