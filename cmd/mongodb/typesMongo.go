@@ -98,3 +98,24 @@ type WebsiteCertificateMinimal struct {
 	URIs                  []*url.URL `json:"uris,omitempty,omitzero" bson:"uris,omitempty,omitzero"`
 	CRLDistributionPoints []string   `json:"crlDistributionPoints,omitempty,omitzero" bson:"crlDistributionPoints,omitempty,omitzero"`
 }
+
+//
+//
+
+type AWSIngestCounts struct {
+	Counts           []AWSIngestCount `json:"counts" bson:"counts"`
+	TotalLogs        float64          `json:"totalLogs" bson:"totalLogs"`
+	TotalSQSMessages float64          `json:"totalSQSMessages" bson:"totalSQSMessages"`
+	Environment      string           `json:"environment" bson:"environment"`
+	Monitor          string           `json:"monitor" bson:"monitor"`
+	ID               string           `json:"id" bson:"_id"`
+}
+
+//
+//
+
+type AWSIngestCount struct {
+	LogType               string  `json:"logType" bson:"logType"`
+	Count                 float64 `json:"count" bson:"count"`
+	PercentageOfTotalLogs float64 `json:"percentageOfTotalLogs" bson:"percentageOfTotalLogs"`
+}

@@ -108,7 +108,7 @@ type MongoDBConfig struct {
 	// Collections
 	CollADUsers string `json:"collADUsers,omitempty"`
 
-	CollAWSMonIngestCounts string `json:"collAWSMonIngestCounts,omitempty"`
+	CollAWSMonLogging string `json:"collAWSMonLogging,omitempty"`
 
 	CollAzResImageGalleryImages     string `json:"collAzResImageGalleryImages,omitempty"`
 	CollAzResResourceList           string `json:"collAzResResourceList,omitempty"`
@@ -179,16 +179,17 @@ type CldConfigOptions struct {
 type CldConfigTenants map[string]CldConfigTenantAuth
 
 type CldConfigTenantAuth struct {
-	TenantName          string                      `json:"tenantName,omitempty"`
-	Default             bool                        `json:"default,omitempty" fake:"-"`
-	TenantID            string                      `json:"tenantId,omitempty" fake:"{uuid}"`
-	Reader              *CldConfigClientAuthDetails `json:"reader,omitempty"`
-	Writer              *CldConfigClientAuthDetails `json:"writer,omitempty"`
-	CostExportsLocation string                      `json:"costExportsLocation,omitempty"`
-	CheckExchange       bool                        `json:"checkExchange,omitempty"`
-	IsB2C               bool                        `json:"isB2C,omitempty"`
-	GetWorkbookAlerts   bool                        `json:"getWorkbookAlerts,omitempty"`
-	AWSIngestWorkspace  string                      `json:"awsIngestWorkspace,omitempty"`
+	TenantName           string                      `json:"tenantName,omitempty"`
+	Default              bool                        `json:"default,omitempty" fake:"-"`
+	TenantID             string                      `json:"tenantId,omitempty" fake:"{uuid}"`
+	Reader               *CldConfigClientAuthDetails `json:"reader,omitempty"`
+	Writer               *CldConfigClientAuthDetails `json:"writer,omitempty"`
+	CostExportsLocation  string                      `json:"costExportsLocation,omitempty"`
+	CheckExchange        bool                        `json:"checkExchange,omitempty"`
+	IsB2C                bool                        `json:"isB2C,omitempty"`
+	GetWorkbookAlerts    bool                        `json:"getWorkbookAlerts,omitempty"`
+	AWSIngestWorkspaceID string                      `json:"awsIngestWorkspaceID,omitempty"`
+	AWSIngestRef         string                      `json:"awsIngestRef,omitempty"`
 }
 
 type CldConfigClientAuthDetails struct {

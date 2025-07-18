@@ -2,6 +2,8 @@
 
 ## [0.3.3]
 * Add aws log ingest count query config
+* Add azure.RunLogAnalyticsQuery
+* Add mongodb.UpdateAWSMonitoringData
 
 ## [0.3.2]
 * Bugfix: AzureResourceProperties.Other field saving to MongoDB as binary data
