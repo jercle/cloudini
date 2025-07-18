@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.4]
+*
+
 ## [0.3.3]
 * Add aws log ingest count query config
 * Add azure.RunLogAnalyticsQuery
