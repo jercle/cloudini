@@ -586,3 +586,50 @@ func UpdateSupportAlerts(coll *mongo.Collection) {
 	UpsertSupportAlerts(allAlerts, coll)
 	s.Stop()
 }
+
+//
+//
+
+func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, tokenReq lib.AllTenantTokens) {
+	// _, _, cachePath := lib.InitConfig(nil)
+	// s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	// resSkuOpts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
+	// 	SubscriptionId: opts.SkuListSubscription,
+	// 	AzureAuth:      opts.SkuListAuth,
+	// 	Location:       opts.Location,
+	// 	SuppressSteps:  true,
+	// }
+
+	// fmt.Println("Fetching all Azure Resources...")
+	// s.Start()
+	// startTime := time.Now()
+	// allResources, allResourcesSlice := azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
+	// s.Stop()
+	// fmt.Println(strconv.Itoa(len(allResourcesSlice)) + " resources found")
+	// elapsed := time.Since(startTime)
+	// fmt.Println(elapsed)
+	// allResourcesSliceStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
+	// os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
+	// allResourcesStr, _ := json.MarshalIndent(allResources, "", "  ")
+	// os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
+	// // os.Exit(0)
+
+	// fmt.Println("Updating Azure Resources in database...")
+	// s.Start()
+	// startTime = time.Now()
+	// UpsertMultipleResources(allResourcesSlice, opts.AzResResourceListColl)
+	// s.Stop()
+	// elapsed = time.Since(startTime)
+	// fmt.Println(elapsed)
+
+	fmt.Println("Unsetting field")
+	UnsetField("properties.other", opts.AzResResourceListColl)
+	// fmt.Println("Updating 'existsInAzure' value for all resources in database...")
+	// s.Start()
+	// startTime = time.Now()
+	// UpdateResourcesNotExistInAzure(opts.AzResResourceListColl)
+	// elapsed = time.Since(startTime)
+	// s.Stop()
+	// fmt.Println(elapsed)
+}
