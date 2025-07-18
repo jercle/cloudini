@@ -532,7 +532,7 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 	lib.CheckFatalError(err)
 	os.WriteFile(cachePath+"/resById.json", jsonStr, 0644)
 
-	os.Exit(0)
+	// os.Exit(0)
 
 	for _, res := range resources {
 		bar.Add(1)
@@ -594,9 +594,9 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 					currRes.RelatedResources = append(currRes.RelatedResources, rpSource.ID)
 				}
 
-				lib.JsonMarshalAndPrint(currRes)
+				// lib.JsonMarshalAndPrint(currRes)
 
-				os.Exit(0)
+				// os.Exit(0)
 				// }
 				// resNameSplit := strings.Split(res.Name, "_")
 				// if len(resNameSplit) > 1 {
