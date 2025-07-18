@@ -580,7 +580,11 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 			} else if strings.ToLower(res.Type) == "microsoft.compute/restorepointcollections" {
 				// var rpSource lib.AzureRestorePointCollectionSource
 
-				rpSource := res.Properties.Source.(lib.AzureRestorePointCollectionSource)
+				jsonStr, _ := json.Marshal(res.Properties.Source)
+				var rpSource lib.AzureRestorePointCollectionSource
+				err := json.Unmarshal(jsonStr, &rpSource)
+				lib.CheckFatalError(err)
+				// rpSource := res.Properties.Source.(lib.AzureRestorePointCollectionSource)
 				// err = json.Unmarshal([]byte(res.Properties.Source), &rpSource)
 				// rpSourceProc, ok := rpSource.(lib.AzureRestorePointCollectionSource)
 				// rpSourceId := ""
