@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.8]
+* Bugfix: Resources initially fetched from Azure do not have ExistsInAzure set to true
+
 ## [0.3.7]
 * Bugfix: UpdateAzureResourceRelations failing on sources property
 * Bugfix: UpdateResourcesNotExistInAzure not correctly applying ExistsInAzure prop
