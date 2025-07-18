@@ -11,6 +11,7 @@ import (
 var (
 	resetLifetimeCostValues           bool
 	resetRelatedResourcesAndCostItems bool
+	unsetResourceField                string
 
 // updateAllAzureResourcesVcpuCountsCostData       bool
 // costDataMonth                                   string
@@ -74,6 +75,10 @@ var cmdMongoCleanup = &cobra.Command{
 		if resetRelatedResourcesAndCostItems {
 			ResetRelatedResourcesAndCostItems(azResResourceListColl)
 		}
+
+		if unsetResourceField != "" {
+			UnsetField(unsetResourceField, azResResourceListColl)
+		}
 	},
 }
 
@@ -81,6 +86,7 @@ func init() {
 	cmdMongo.AddCommand(cmdMongoCleanup)
 	cmdMongoCleanup.Flags().BoolVarP(&resetLifetimeCostValues, "resetLifetimeCostValues", "c", false, "Gets all cost data, and resets it flowing up from Cost Meters to Tenants")
 	cmdMongoCleanup.Flags().BoolVarP(&resetRelatedResourcesAndCostItems, "resetRelatedResourcesAndCostItems", "r", false, "Gets all resources, then removes duplicates from relatedCostMeters and relatedResources fields")
+	cmdMongo.PersistentFlags().StringVarP(&unsetResourceField, "unsetResourceField", "u", "", "Unsets a field in the allResources collection")
 	// cmdMongoUpdate.Flags().BoolVarP(&updateEntraItems, "updateEntraItems", "e", false, "Gets all App Registrations from configured Azure tenants and finds expiring credentials, then updates database")
 	// cmdMongoUpdate.Flags().StringVarP(&costDataMonth, "costDataMonth", "m", "", "Which month to get cost data from - defaults to whatever month it was yesterday. Use with 'updateAllAzureResourcesVcpuCountsCostData' Format: YYYYMM")
 	// cmdMongo.PersistentFlags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")
