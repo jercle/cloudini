@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.4]
+* Bugfix: GetDataFromPackerLogfile - nil dereference in field selection. Added var declaration back.
+
 ## [0.3.3]
 * Add aws log ingest count query config
 * Add azure.RunLogAnalyticsQuery
