@@ -109,6 +109,7 @@ type AWSIngestCounts struct {
 	Environment      string           `json:"environment" bson:"environment"`
 	Monitor          string           `json:"monitor" bson:"monitor"`
 	ID               string           `json:"id" bson:"_id"`
+	LastDBSync       time.Time        `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
 }
 
 //

@@ -3730,7 +3730,7 @@ type AzureVirtualMachineSku struct {
 
 type AzureResourceDetails struct {
 	CostData                  map[string][]AggregatedCostItem `json:"costData,omitempty" bson:"costData,omitempty" fake:"-"`
-	ExistsInAzure             bool                            `json:"existsInAzure,omitempty" bson:"existsInAzure,omitempty"`
+	ExistsInAzure             bool                            `json:"existsInAzure" bson:"existsInAzure"`
 	ExtendedLocation          any                             `json:"extendedLocation,omitempty" bson:"extendedLocation,omitempty"`
 	ID                        string                          `json:"id,omitempty" bson:"_id,omitempty" fake:"{uuid}"`
 	Identity                  *AzureResourceIdentity          `json:"identity,omitempty" bson:"identity,omitempty" fake:"-"`

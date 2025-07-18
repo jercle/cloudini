@@ -689,9 +689,10 @@ func ConvertLAResultToAWSIngestCounts(data azure.LogAnalyticsQueryResponse, awsI
 		ingestCounts.Counts = append(ingestCounts.Counts, count)
 		ingestCounts.TotalLogs = row["TotalLogs"].(float64)
 		ingestCounts.TotalSQSMessages = row["TotalSQSMessages"].(float64)
-		ingestCounts.Environment = awsIngestRef
-		ingestCounts.Monitor = "ingestCountsLast24hr"
-		ingestCounts.ID = "ingestCountsLast24hr" + awsIngestRef
 	}
+	ingestCounts.Environment = awsIngestRef
+	ingestCounts.Monitor = "ingestCountsLast24hr"
+	ingestCounts.ID = "ingestCountsLast24hr" + awsIngestRef
+	ingestCounts.LastDBSync = time.Now()
 	return
 }
