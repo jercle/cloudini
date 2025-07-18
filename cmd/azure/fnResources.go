@@ -105,6 +105,7 @@ func GetAllResourcesForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfi
 					currRes.TenantName = token.TenantName
 					currRes.SubscriptionName = sub
 					currRes.LastAzureSync = time.Now()
+					currRes.ExistsInAzure = true
 					currSubResources.Resources = append(currSubResources.Resources, currRes)
 					allResourcesSlice = append(allResourcesSlice, currRes)
 				}
