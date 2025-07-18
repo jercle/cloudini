@@ -583,7 +583,11 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 				jsonStr, _ := json.Marshal(res.Properties.Source)
 				var rpSource lib.AzureRestorePointCollectionSource
 				err := json.Unmarshal(jsonStr, &rpSource)
-				lib.CheckFatalError(err)
+				if err != nil {
+					// lib.JsonMarshalAndPrint(res.Properties)
+					rpSource = lib.AzureRestorePointCollectionSource{}
+					// lib.CheckFatalError(err)
+				}
 				// rpSource := res.Properties.Source.(lib.AzureRestorePointCollectionSource)
 				// err = json.Unmarshal([]byte(res.Properties.Source), &rpSource)
 				// rpSourceProc, ok := rpSource.(lib.AzureRestorePointCollectionSource)
