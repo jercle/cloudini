@@ -5,6 +5,7 @@ import "time"
 type CldConfigRoot struct {
 	// Cloudini     *CloudiniConfig         `json:"cloudini,omitempty"`
 	ActiveDirectory *ActiveDirectoryConfig  `json:"activeDirectory,omitempty"`
+	AWS             *AWSConfig              `json:"aws,omitempty"`
 	Azure           *AzureConfig            `json:"azure,omitempty"`
 	AzureDevOps     *AzureDevOpsConfig      `json:"azureDevOps,omitempty"`
 	CitrixCloud     *CitrixCloud            `json:"citrixCloud,omitempty"`
@@ -95,6 +96,7 @@ type MongoDBConfig struct {
 
 	// Databases
 	DbAD                      string `json:"dbAD,omitempty"`
+	DbAWSMonitoring           string `json:"dbAWSMonitoring,omitempty"`
 	DbAzRes                   string `json:"dbAzureResources,omitempty"`
 	DbCertificates            string `json:"dbCertificates,omitempty"`
 	DbCitrix                  string `json:"dbCitrix,omitempty"`
@@ -105,6 +107,8 @@ type MongoDBConfig struct {
 
 	// Collections
 	CollADUsers string `json:"collADUsers,omitempty"`
+
+	CollAWSMonLogging string `json:"collAWSMonLogging,omitempty"`
 
 	CollAzResImageGalleryImages     string `json:"collAzResImageGalleryImages,omitempty"`
 	CollAzResResourceList           string `json:"collAzResResourceList,omitempty"`
@@ -145,6 +149,13 @@ type MongoDBConfig struct {
 // EncryptConfig bool `json:"encryptConfig,omitempty" fake:"{bool}"`
 // }
 
+type AWSConfig struct {
+	LogIngestCountQuery string `json:"logIngestCountQuery,omitempty"`
+}
+
+//
+//
+
 type AzureConfig struct {
 	MultiTenantAuth struct {
 		Tenants CldConfigTenants `json:"tenants,omitempty" fake:"-"`
@@ -168,15 +179,17 @@ type CldConfigOptions struct {
 type CldConfigTenants map[string]CldConfigTenantAuth
 
 type CldConfigTenantAuth struct {
-	TenantName          string                      `json:"tenantName,omitempty"`
-	Default             bool                        `json:"default,omitempty" fake:"-"`
-	TenantID            string                      `json:"tenantId,omitempty" fake:"{uuid}"`
-	Reader              *CldConfigClientAuthDetails `json:"reader,omitempty"`
-	Writer              *CldConfigClientAuthDetails `json:"writer,omitempty"`
-	CostExportsLocation string                      `json:"costExportsLocation,omitempty"`
-	CheckExchange       bool                        `json:"checkExchange"`
-	IsB2C               bool                        `json:"isB2C"`
-	GetWorkbookAlerts   bool                        `json:"getWorkbookAlerts"`
+	TenantName           string                      `json:"tenantName,omitempty"`
+	Default              bool                        `json:"default,omitempty" fake:"-"`
+	TenantID             string                      `json:"tenantId,omitempty" fake:"{uuid}"`
+	Reader               *CldConfigClientAuthDetails `json:"reader,omitempty"`
+	Writer               *CldConfigClientAuthDetails `json:"writer,omitempty"`
+	CostExportsLocation  string                      `json:"costExportsLocation,omitempty"`
+	CheckExchange        bool                        `json:"checkExchange,omitempty"`
+	IsB2C                bool                        `json:"isB2C,omitempty"`
+	GetWorkbookAlerts    bool                        `json:"getWorkbookAlerts,omitempty"`
+	AWSIngestWorkspaceID string                      `json:"awsIngestWorkspaceID,omitempty"`
+	AWSIngestRef         string                      `json:"awsIngestRef,omitempty"`
 }
 
 type CldConfigClientAuthDetails struct {
