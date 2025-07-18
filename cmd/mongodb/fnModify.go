@@ -341,6 +341,7 @@ func UpdateResourcesNotExistInAzure(azureResources []lib.AzureResourceDetails, c
 		if _, ok := allDbResMap[res.ID]; !ok {
 			curr.ExistsInAzure = false
 		} else {
+			fmt.Println("found")
 			curr.ExistsInAzure = true
 		}
 
