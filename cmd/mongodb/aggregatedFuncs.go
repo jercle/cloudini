@@ -594,33 +594,26 @@ func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, t
 	_, _, cachePath := lib.InitConfig(nil)
 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 
-	// resSkuOpts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
-	// 	SubscriptionId: opts.SkuListSubscription,
-	// 	AzureAuth:      opts.SkuListAuth,
-	// 	Location:       opts.Location,
-	// 	SuppressSteps:  true,
-	// }
+	resSkuOpts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
+		SubscriptionId: opts.SkuListSubscription,
+		AzureAuth:      opts.SkuListAuth,
+		Location:       opts.Location,
+		SuppressSteps:  true,
+	}
 
 	fmt.Println("Fetching all Azure Resources...")
-	// s.Start()
+	s.Start()
 	startTime := time.Now()
-	// allResources, allResourcesSlice := azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
-	// s.Stop()
-	// fmt.Println(strconv.Itoa(len(allResourcesSlice)) + " resources found")
-	elapsed := time.Since(startTime)
-	// fmt.Println(elapsed)
-	// allResourcesSliceStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
-	// os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
-	// allResourcesStr, _ := json.MarshalIndent(allResources, "", "  ")
-	// os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
-	// os.Exit(0)
-
-	var allResourcesSlice []lib.AzureResourceDetails
-	file, err := os.ReadFile(cachePath + "/allResourcesSlice.json")
-	lib.CheckFatalError(err)
-	err = json.Unmarshal(file, &allResourcesSlice)
-	lib.CheckFatalError(err)
+	allResources, allResourcesSlice := azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
+	s.Stop()
 	fmt.Println(strconv.Itoa(len(allResourcesSlice)) + " resources found")
+	elapsed := time.Since(startTime)
+	fmt.Println(elapsed)
+	allResourcesSliceStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
+	os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
+	allResourcesStr, _ := json.MarshalIndent(allResources, "", "  ")
+	os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
+	// os.Exit(0)
 
 	fmt.Println("Updating Azure Resources in database...")
 	s.Start()
