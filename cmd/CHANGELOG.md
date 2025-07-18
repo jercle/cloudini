@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.5]
+*
+
 ## [0.3.4]
 * Bugfix: GetDataFromPackerLogfile - nil dereference in field selection. Added var declaration back.
 
