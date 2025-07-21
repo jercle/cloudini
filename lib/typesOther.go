@@ -56,13 +56,8 @@ type PackerPublishImageResponse struct {
 			} `json:"source,omitempty" bson:"source,omitempty"`
 		} `json:"storageProfile,omitempty" bson:"storageProfile,omitempty"`
 	} `json:"properties,omitempty" bson:"properties,omitempty"`
-	Tags struct {
-		CostGroup string `json:"cost_group,omitempty" bson:"cost_group,omitempty"`
-		Env       string `json:"env,omitempty" bson:"env,omitempty"`
-		ManagedBy string `json:"managed_by,omitempty" bson:"managed_by,omitempty"`
-		System    string `json:"system,omitempty" bson:"system,omitempty"`
-	} `json:"tags,omitempty" bson:"tags,omitempty"`
-	Type string `json:"type,omitempty" bson:"type,omitempty"`
+	Tags map[string]string `json:"tags" bson:"tags"`
+	Type string            `json:"type,omitempty" bson:"type,omitempty"`
 }
 
 //

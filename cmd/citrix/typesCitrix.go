@@ -252,7 +252,7 @@ type MachineCatalog struct {
 			SecurityType                      string `json:"securityType,omitempty" bson:"securityType,omitempty"`
 			StorageType                       any    `json:"storageType,omitempty" bson:"storageType,omitempty"`
 			SupportsHibernation               any    `json:"supportsHibernation,omitempty" bson:"supportsHibernation,omitempty"`
-			Tags                              string `json:"tags,omitempty" bson:"tags,omitempty"`
+			Tags                              string `json:"tags" bson:"tags"`
 			ZoneName                          any    `json:"zoneName,omitempty" bson:"zoneName,omitempty"`
 		} `json:"vMMetadata,omitempty" bson:"vMMetadata,omitempty"`
 		Warning                    any     `json:"warning,omitempty" bson:"warning,omitempty"`

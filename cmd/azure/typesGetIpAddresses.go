@@ -116,7 +116,7 @@ type IPAddressesAllResourceTypes struct {
 		Name  string   `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
 		Type  string   `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
 	} `json:"subnets,omitempty,omitzero" bson:"subnets,omitempty,omitzero"`
-	Tags       map[string]string `json:"tags,omitempty,omitzero" bson:"tags,omitempty,omitzero"`
+	Tags       map[string]string `json:"tags" bson:"tags"`
 	TenantID   string            `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
 	TenantName string            `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
 	Type       string            `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
@@ -154,7 +154,7 @@ func (t *IPAddressesAllResourceTypes) UnmarshalJSON(data []byte) error {
 			Name  string   `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
 			Type  string   `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
 		} `json:"subnets,omitempty,omitzero" bson:"subnets,omitempty,omitzero"`
-		Tags       string `json:"tags,omitempty,omitzero" bson:"tags,omitempty,omitzero"`
+		Tags       string `json:"tags" bson:"tags"`
 		TenantID   string `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
 		TenantName string `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
 		Type       string `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`

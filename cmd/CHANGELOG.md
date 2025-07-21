@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.10]
+* Bugfix: Change Tags prop on all Azure types to not omitempty
+
 ## [0.3.9]
 * Bugfix: Fix public ip address query
 

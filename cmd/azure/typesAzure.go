@@ -41,7 +41,7 @@ type ListRspResource struct {
 		Name string `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
 		Tier string `json:"tier,omitempty,omitzero" bson:"tier,omitempty,omitzero"`
 	} `json:"sku,omitempty" bson:"sku,omitempty"`
-	Tags  map[string]string `json:"tags,omitempty" bson:"tags,omitempty"`
+	Tags  map[string]string `json:"tags," bson:"tags"`
 	Type  string            `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
 	Zones []string          `json:"zones,omitempty" bson:"zones,omitempty"`
 }
@@ -200,7 +200,7 @@ type EntraApplication struct {
 	Spa            *struct {
 		RedirectUris *[]string `json:"redirectUris,omitempty" bson:"redirectUris,omitempty"`
 	} `json:"spa,omitempty" bson:"spa,omitempty"`
-	Tags                 *[]string `json:"tags,omitempty" bson:"tags,omitempty"`
+	Tags                 *[]string `json:"tags" bson:"tags"`
 	TenantName           string    `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
 	TenantId             string    `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
 	TokenEncryptionKeyID *string   `json:"tokenEncryptionKeyId,omitempty" bson:"tokenEncryptionKeyId,omitempty"`
@@ -308,13 +308,8 @@ type ImageGallery struct {
 			IsSoftDeleteEnabled bool `json:"isSoftDeleteEnabled,omitempty,omitzero" bson:"isSoftDeleteEnabled,omitempty,omitzero"`
 		} `json:"softDeletePolicy,omitempty" bson:"softDeletePolicy,omitempty"`
 	} `json:"properties,omitempty,omitzero" bson:"properties,omitempty,omitzero"`
-	Tags *struct {
-		CitrixCustomerID           string `json:"CitrixCustomerId,omitempty,omitzero" bson:"CitrixCustomerId,omitempty,omitzero"`
-		CitrixProvisioningSchemeID string `json:"CitrixProvisioningSchemeId,omitempty,omitzero" bson:"CitrixProvisioningSchemeId,omitempty,omitzero"`
-		CitrixResource             string `json:"CitrixResource,omitempty,omitzero" bson:"CitrixResource,omitempty,omitzero"`
-		CitrixVirtualSiteID        string `json:"CitrixVirtualSiteId,omitempty,omitzero" bson:"CitrixVirtualSiteId,omitempty,omitzero"`
-	} `json:"tags,omitempty" bson:"tags,omitempty"`
-	Type string `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+	Tags map[string]string `json:"tags" bson:"tags"`
+	Type string            `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
 }
 
 //
