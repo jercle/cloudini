@@ -2233,9 +2233,9 @@ type AzureResourceTemplate struct {
 		Sku        *struct {
 			Name string `json:"name,omitempty" bson:"name,omitempty"`
 		} `json:"sku,omitempty" bson:"sku,omitempty"`
-		Tags  *map[string]string `json:"tags,omitempty" bson:"tags,omitempty"`
-		Type  string             `json:"type,omitempty" bson:"type,omitempty"`
-		Zones []string           `json:"zones,omitempty" bson:"zones,omitempty"`
+		Tags  map[string]string `json:"tags" bson:"tags"`
+		Type  string            `json:"type,omitempty" bson:"type,omitempty"`
+		Zones []string          `json:"zones,omitempty" bson:"zones,omitempty"`
 	} `json:"resources,omitempty" bson:"resources,omitempty"`
 	Variables *struct {
 		SubnetRef string `json:"subnetRef,omitempty" bson:"subnetRef,omitempty"`
@@ -3752,7 +3752,7 @@ type AzureResourceDetails struct {
 	Sku                       *AzureResourceSku               `json:"sku,omitempty" bson:"sku,omitempty" fake:"-"`
 	SubscriptionID            string                          `json:"subscriptionId,omitempty" bson:"subscriptionId,omitempty" fake:"{uuid}"`
 	SubscriptionName          string                          `json:"subscriptionName,omitempty" bson:"subscriptionName,omitempty" fake:"{username}"`
-	Tags                      map[string]string               `json:"tags,omitempty" bson:"tags,omitempty" fake:"-"`
+	Tags                      map[string]string               `json:"tags" bson:"tags" fake:"-"`
 	TenantID                  string                          `json:"tenantId,omitempty" bson:"tenantId,omitempty" fake:"{uuid}"`
 	TenantName                string                          `json:"tenantName,omitempty" bson:"tenantName,omitempty" fake:"{username}"`
 	Type                      string                          `json:"type,omitempty" bson:"type,omitempty" fake:"{username}"`

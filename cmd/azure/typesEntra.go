@@ -150,7 +150,7 @@ type RoleAssignmentScheduleProcessed struct {
 		ManagedIdentityResourceID any      `json:"managedIdentityResourceId,omitempty" bson:"managedIdentityResourceId,omitempty"`
 		ServicePrincipalNames     []string `json:"servicePrincipalNames,omitempty" bson:"servicePrincipalNames,omitempty"`
 		ServicePrincipalType      string   `json:"servicePrincipalType,omitempty" bson:"servicePrincipalType,omitempty"`
-		Tags                      []string `json:"tags,omitempty" bson:"tags,omitempty"`
+		Tags                      []string `json:"tags" bson:"tags"`
 		UserPrincipalName         string   `json:"userPrincipalName,omitempty" bson:"userPrincipalName,omitempty"`
 		UserType                  string   `json:"userType,omitempty" bson:"userType,omitempty"`
 	} `json:"principal,omitempty" bson:"principal,omitempty"`
@@ -420,7 +420,7 @@ type RolePrinciple struct {
 	// State                                  any       `json:"state,omitempty" bson:"state,omitempty"`
 	// StreetAddress                          any       `json:"streetAddress,omitempty" bson:"streetAddress,omitempty"`
 	// Surname                                *string   `json:"surname,omitempty" bson:"surname,omitempty"`
-	Tags []string `json:"tags,omitempty" bson:"tags,omitempty"`
+	Tags []string `json:"tags" bson:"tags"`
 	// Theme                                  any       `json:"theme,omitempty" bson:"theme,omitempty"`
 	// TokenEncryptionKeyID                   any       `json:"tokenEncryptionKeyId,omitempty" bson:"tokenEncryptionKeyId,omitempty"`
 	// TokensRevocationDateTime               any       `json:"tokensRevocationDateTime,omitempty" bson:"tokensRevocationDateTime,omitempty"`

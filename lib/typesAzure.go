@@ -129,7 +129,7 @@ type GalleryImageVersionDetailed struct {
 			} `json:"source,omitempty" bson:"source,omitempty"`
 		} `json:"storageProfile,omitempty" bson:"storageProfile,omitempty"`
 	} `json:"properties,omitempty" bson:"properties,omitempty"`
-	Tags                      map[string]string `json:"tags,omitempty" bson:"tags,omitempty"`
+	Tags                      map[string]string `json:"tags" bson:"tags"`
 	Type                      string            `json:"type,omitempty" bson:"type,omitempty"`
 	UsedByCitrix              bool              `json:"usedByCitrix,omitempty" bson:"usedByCitrix,omitempty"`
 	MachineCatalogsUsingImage []string          `json:"machineCatalogsUsingImage,omitempty" bson:"machineCatalogsUsingImage,omitempty"`
@@ -149,7 +149,7 @@ type GalleryImageVersionFlat struct {
 	ImageDefinitionName string    `json:"imageDefinitionName,omitempty" bson:"imageDefinitionName,omitempty"`
 	Name                string    `json:"name,omitempty" bson:"name,omitempty"`
 	PublishedDate       time.Time `json:"publishedDate,omitempty" bson:"publishedDate,omitempty"`
-	Tags                string    `json:"tags,omitempty" bson:"tags,omitempty"`
+	Tags                string    `json:"tags" bson:"tags"`
 }
 
 type GalleryImageVersion struct {
@@ -202,7 +202,7 @@ type GalleryImage struct {
 			VCpUs  string `json:"vCPUs,omitempty" bson:"vCPUs,omitempty"`
 		} `json:"recommended,omitempty" bson:"recommended,omitempty"`
 	} `json:"properties,omitempty" bson:"properties,omitempty"`
-	Tags                      *map[string]string                     `json:"tags,omitempty" bson:"tags,omitempty"`
+	Tags                      *map[string]string                     `json:"tags" bson:"tags"`
 	Type                      string                                 `json:"type,omitempty" bson:"type,omitempty"`
 	ImageVersions             map[string]GalleryImageVersionDetailed `json:"imageVersions,omitempty" bson:"imageVersions,omitempty"`
 	UsedByCitrix              bool                                   `json:"usedByCitrix,omitempty" bson:"usedByCitrix,omitempty"`
@@ -227,7 +227,7 @@ type GalleryImageFlat struct {
 	Publisher      string `json:"publisher,omitempty" bson:"publisher,omitempty"`
 	Sku            string `json:"sku,omitempty" bson:"sku,omitempty"`
 	OSType         string `json:"osType,omitempty" bson:"osType,omitempty"`
-	Tags           string `json:"tags,omitempty" bson:"tags,omitempty"`
+	Tags           string `json:"tags" bson:"tags"`
 }
 
 //

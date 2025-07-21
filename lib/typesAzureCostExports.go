@@ -217,7 +217,7 @@ type AggregatedCostItem struct {
 	ResourceType        string             `csv:"ResourceType" json:"resourceType,omitempty"  bson:"resourceType,omitempty"`
 	InstanceId          string             `csv:"InstanceId" json:"instanceId,omitempty"  bson:"instanceId,omitempty"`
 	// UsageQuantity    float64           `csv:"UsageQuantity" json:"usageQuantity" json:"usageQuantity"`
-	Tags map[string]string `csv:"Tags,omitempty" json:"tags,omitempty"  bson:"tags,omitempty"`
+	Tags map[string]string `csv:"Tags" json:"tags"  bson:"tags"`
 	// Tags string `csv:"Tags,omitempty" json:"Tags,omitempty"`
 	// OfferId          string  `csv:"-"`
 	AdditionalInfo          interface{} `csv:"AdditionalInfo,omitempty" json:"additionalInfo,omitempty"  bson:"additionalInfo,omitempty"`
@@ -235,7 +235,7 @@ type CostItemFlat struct {
 	ProductName             string    `csv:"ProductName" json:"productName,omitempty"  bson:"productName,omitempty"`
 	InstanceId              string    `csv:"InstanceId" json:"instanceId,omitempty"  bson:"instanceId,omitempty"`
 	UsageQuantity           float64   `csv:"UsageQuantity" json:"usageQuantity" bson:"usageQuantity"`
-	Tags                    string    `csv:"Tags,omitempty" json:"tags,omitempty"  bson:"tags,omitempty"`
+	Tags                    string    `csv:"Tags" json:"tags"  bson:"tags"`
 	AdditionalInfo          string    `csv:"AdditionalInfo,omitempty" json:"additionalInfo,omitempty"  bson:"additionalInfo,omitempty"`
 	ResourceMeterIdentifier string    `json:"resourceMeterIdentifier,omitempty"  bson:"resourceMeterIdentifier,omitempty"`
 }
