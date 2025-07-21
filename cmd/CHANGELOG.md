@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.9]
+* Bugfix: Fix public ip address query
+
 ## [0.3.8]
 * Bugfix: Resources initially fetched from Azure do not have ExistsInAzure set to true
 

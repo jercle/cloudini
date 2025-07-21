@@ -250,31 +250,12 @@ func GetIPAddressesQueries(selectedQueries *[]string) map[string]string {
     on peId
 | summarize associatedNics = make_list(nicId), privateIps = make_list(privateIp) by id, name, type, tenantId, subscriptionId, tags = dynamic_to_json(tags)`
 
-	const GetIPAddressesQueryPublicIPs = `Resources
-| where type =~ 'microsoft.network/virtualnetworks'
-| mv-expand subnetObj = properties.subnets
-//| extend snetId = subnetObj.id, snetName = subnetObj.name, snetCidrSingle = iff(isnull(subnetObj.properties.addressPrefix), dynamic([]), pack_array(subnetObj.properties.addressPrefix)), snetCidrArr = subnetObj.properties.addressPrefixes, snetType = subnetObj.properties.type
-//| extend snetCidrs = array_concat(snetCidrSingle, snetCidrArr)
-//| extend subnet = pack_dictionary('id', snetId, 'name', snetName, 'cidrs', snetCidrs, 'type', snetType)
-//| summarize cidrs = make_list(properties.addressSpace.addressPrefixes), subnets = make_list(subnet) by id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags)
-
-Resources
-| where type =~ 'microsoft.network/virtualnetworks'
-| mv-expand subnetObj = properties.subnets
-| extend snetId = subnetObj.id, snetName = subnetObj.name, snetCidr = subnetObj.properties.addressPrefix, snetType = subnetObj.properties.type
-| extend subnet = pack_dictionary('id', snetId, 'name', snetName, 'cidr', snetCidr, 'type', snetType)
-| summarize cidrs = make_list(properties.addressSpace.addressPrefixes), subnets = make_list(subnet) by id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags)
-
-
-resources
-| where id =~ "/subscriptions/2ff9367c-2183-4ef6-9ba2-102c2b014d94/resourcegroups/rg-apcdtqshared-adc/providers/microsoft.network/publicipaddresses/apcdtq-ctxgw002-mgmt-publicip"
-
+	const GetIPAddressesQueryPublicIPs = `
 resources
 | where type =~ 'microsoft.network/publicipaddresses'
 | extend ipConfig = properties.ipConfiguration.id
 | extend isAttached = isnotnull(ipConfig)
 | project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), publicIps = iff(isnotnull(properties.ipAddress), pack_array(properties.ipAddress), dynamic([])) , isAttached`
-
 	const GetIPAddressesQueryWebSites = `Resources
 | where type =~ 'microsoft.web/sites'
 | extend possibleInboundIps = split(properties.possibleInboundIpAddresses, ',')
