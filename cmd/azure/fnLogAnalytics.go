@@ -265,7 +265,7 @@ func GetAlertDataFromSearchResultsLink(linkToFilteredSearchResultsAPI string, li
 
 	if len(resData.Tables) == 0 {
 		data := make(map[string]any)
-		data["queryError"] = res
+		data["queryError"] = string(res)
 		data["queryLink"] = linkToFilteredSearchResultsUi
 		// fmt.Println(string(res))
 		// fmt.Println(linkToFilteredSearchResultsAPI)
