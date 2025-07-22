@@ -95,6 +95,10 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 		fmt.Println("AzResGrpsListColl == nil")
 		os.Exit(1)
 	}
+	if opts.AzResResourceListColl == nil {
+		fmt.Println("AzResResourceListColl == nil")
+		os.Exit(1)
+	}
 
 	var costExportMonth string
 
@@ -351,12 +355,12 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	config := lib.GetCldConfig(nil)
 	// dlPath := cachePath + "/aib-logs"
 	var opts lib.StorageAccountRequestOptions
-	opts.ConfiguredTenantName = "REDDTQ"
-	opts.ContainerName = "cert-sync"
+	opts.ConfiguredTenantName = config.CertificateManagement.StorageAccountTenantName
+	opts.ContainerName = config.CertificateManagement.ContainerName
 	opts.DownloadPath = cachePath + "/cert-sync"
-	opts.StorageAccountName = config.AzureDevOps.Packer.Logs.StorageAcct
+	opts.StorageAccountName = config.CertificateManagement.StorageAccountName
 	opts.OverwriteExisting = true
-	opts.GetWriteToken = true
+	// opts.GetWriteToken = true
 
 	fmt.Println("Fetching certs from storage")
 	s.Start()
@@ -591,6 +595,7 @@ func UpdateSupportAlerts(coll *mongo.Collection) {
 //
 
 func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, tokenReq lib.AllTenantTokens) {
+
 	_, _, cachePath := lib.InitConfig(nil)
 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 

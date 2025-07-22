@@ -2047,7 +2047,7 @@ type AzureResourceStreamDeclarations struct {
 	} `json:"Custom-Text-Loki_CL,omitempty" bson:"Custom-Text-Loki_CL,omitempty"`
 }
 
-type AzureResourceSubnets struct {
+type AzureResourceSubnet struct {
 	Etag       string `json:"etag,omitempty" bson:"etag,omitempty"`
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`
 	Name       string `json:"name,omitempty" bson:"name,omitempty"`
@@ -3503,7 +3503,7 @@ type AzureResourceProperties struct {
 	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
 	// } `json:"subnet,omitempty" bson:"subnet,omitempty"`
 	// SubnetID              string                 `json:"subnetId,omitempty" bson:"subnetId,omitempty"`
-	// Subnets               []AzureResourceSubnets `json:"subnets,omitempty" bson:"subnets,omitempty"`
+	Subnets []AzureResourceSubnet `json:"subnets,omitempty" bson:"subnets,omitempty"`
 	// Subscription          string                 `json:"subscription,omitempty" bson:"subscription,omitempty"`
 	// SupportPlan           string                 `json:"supportPlan,omitempty" bson:"supportPlan,omitempty"`
 	// SupportedCapabilities *struct {
@@ -3716,8 +3716,8 @@ type AzureVirtualMachineSku struct {
 	MaxNetworkInterfaces                         string    `json:"maxNetworkInterfaces,omitempty"`
 	Cores                                        string    `json:"cores,omitempty"`
 	SupportsAutoplacement                        string    `json:"supportsAutoplacement,omitempty"`
-	LastAzureSync                                time.Time `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty"`
-	LastDBSync                                   time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
+	LastAzureSync                                time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
+	LastDBSync                                   time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
 }
 
 // type AzureResourceSku struct {
@@ -3736,8 +3736,8 @@ type AzureResourceDetails struct {
 	Identity                  *AzureResourceIdentity          `json:"identity,omitempty" bson:"identity,omitempty" fake:"-"`
 	IsSqlRelated              bool                            `json:"isSqlRelated,omitempty" bson:"isSqlRelated,omitempty" fake:"{bool}"`
 	Kind                      string                          `json:"kind,omitempty" bson:"kind,omitempty"`
-	LastAzureSync             time.Time                       `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty" fake:"-"`
-	LastDBSync                time.Time                       `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty" fake:"-"`
+	LastAzureSync             time.Time                       `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero" fake:"-"`
+	LastDBSync                time.Time                       `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero" fake:"-"`
 	Location                  string                          `json:"location,omitempty" bson:"location,omitempty" fake:"-"`
 	ManagedBy                 string                          `json:"managedBy,omitempty" bson:"managedBy,omitempty" fake:"-"`
 	Name                      string                          `json:"name,omitempty" bson:"name,omitempty" fake:"{username}"`
@@ -3806,8 +3806,8 @@ type AzureResourceSku struct {
 	VMvCPUs        int       `json:"vMvCPUs,omitempty" bson:"vMvCPUs,omitempty"`
 	VMCores        int       `json:"vMCores,omitempty" bson:"vMCores,omitempty"`
 	VMvCPUsPerCore int       `json:"vMvCPUsPerCore,omitempty" bson:"vMvCPUsPerCore,omitempty"`
-	LastAzureSync  time.Time `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty"`
-	LastDBSync     time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
+	LastAzureSync  time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
+	LastDBSync     time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
 }
 
 type AzureVirtualMachineSize struct {

@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.3.14]
+* Change handling of subnets when fetching all resources, breaking them out to their own resources
+* Add CertificateManagement config field and update UpdateAllCertInfo to use
+
 ## [0.3.13]
 * Bugfix: Update Log Analytics query token type
 

@@ -225,8 +225,8 @@ type EntraApplication struct {
 	} `json:"web,omitempty" bson:"web,omitempty"`
 	Windows       any       `json:"windows,omitempty" bson:"windows,omitempty"`
 	MongoDbId     string    `json:"_id,omitempty" bson:"_id,omitempty"`
-	LastAzureSync time.Time `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty" fake:"-"`
-	LastDBSync    time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty" fake:"-"`
+	LastAzureSync time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero" fake:"-"`
+	LastDBSync    time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero" fake:"-"`
 }
 
 //
@@ -249,8 +249,8 @@ type EntraExpiringCredential struct {
 	MongoDbId               string    `json:"_id,omitempty" bson:"_id,omitempty"`
 	TenantName              string    `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
 	TenantId                string    `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
-	LastAzureSync           time.Time `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty" fake:"-"`
-	LastDBSync              time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty" fake:"-"`
+	LastAzureSync           time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero" fake:"-"`
+	LastDBSync              time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero" fake:"-"`
 }
 
 //

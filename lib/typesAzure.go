@@ -207,8 +207,8 @@ type GalleryImage struct {
 	ImageVersions             map[string]GalleryImageVersionDetailed `json:"imageVersions,omitempty" bson:"imageVersions,omitempty"`
 	UsedByCitrix              bool                                   `json:"usedByCitrix,omitempty" bson:"usedByCitrix,omitempty"`
 	MachineCatalogsUsingImage []string                               `json:"machineCatalogsUsingImage,omitempty" bson:"machineCatalogsUsingImage,omitempty"`
-	LastAzureSync             time.Time                              `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty"`
-	LastDBSync                time.Time                              `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
+	LastAzureSync             time.Time                              `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
+	LastDBSync                time.Time                              `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
 }
 
 //
