@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.12]
+* Bugfix: Change queryError type to string
+
 ## [0.3.11]
 * Handle errors with Log Analytics alert queries
 
