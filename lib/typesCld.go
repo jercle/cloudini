@@ -4,16 +4,17 @@ import "time"
 
 type CldConfigRoot struct {
 	// Cloudini     *CloudiniConfig         `json:"cloudini,omitempty"`
-	ActiveDirectory *ActiveDirectoryConfig  `json:"activeDirectory,omitempty"`
-	AWS             *AWSConfig              `json:"aws,omitempty"`
-	Azure           *AzureConfig            `json:"azure,omitempty"`
-	AzureDevOps     *AzureDevOpsConfig      `json:"azureDevOps,omitempty"`
-	CitrixCloud     *CitrixCloud            `json:"citrixCloud,omitempty"`
-	Domains         *map[string]string      `json:"domains,omitempty" fakesize:"2"`
-	Forgerock       *ForgerockConfig        `json:"forgerock,omitempty"`
-	MongoDBConfig   *MongoDBConfig          `json:"mongoDbConfig,omitempty"`
-	ProxyConfig     *map[string]ProxyConfig `json:"proxyConfig,omitempty" fakesize:"2"`
-	SophosConfig    *SophosConfig           `json:"sophos,omitempty"`
+	ActiveDirectory       *ActiveDirectoryConfig       `json:"activeDirectory,omitempty"`
+	AWS                   *AWSConfig                   `json:"aws,omitempty"`
+	Azure                 *AzureConfig                 `json:"azure,omitempty"`
+	AzureDevOps           *AzureDevOpsConfig           `json:"azureDevOps,omitempty"`
+	CertificateManagement *CertificateManagementConfig `json:"certificateManagement,omitempty"`
+	CitrixCloud           *CitrixCloud                 `json:"citrixCloud,omitempty"`
+	Domains               *map[string]string           `json:"domains,omitempty" fakesize:"2"`
+	Forgerock             *ForgerockConfig             `json:"forgerock,omitempty"`
+	MongoDBConfig         *MongoDBConfig               `json:"mongoDbConfig,omitempty"`
+	ProxyConfig           *map[string]ProxyConfig      `json:"proxyConfig,omitempty" fakesize:"2"`
+	SophosConfig          *SophosConfig                `json:"sophos,omitempty"`
 }
 
 type ForgerockConfig struct {
@@ -88,6 +89,12 @@ type PackerConfig struct {
 
 type AzureDevOpsConfig struct {
 	Packer *PackerConfig `json:"packer,omitempty"`
+}
+
+type CertificateManagementConfig struct {
+	StorageAccountTenantName string `json:"storageAccountTenantName,omitempty"`
+	StorageAccountName       string `json:"storageAccountName,omitempty"`
+	ContainerName            string `json:"containerName,omitempty"`
 }
 
 type MongoDBConfig struct {

@@ -794,64 +794,74 @@ func UpsertVcpuCounts(vcpuCountData lib.VCpuCountByTenant, collection *mongo.Col
 //
 
 // func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) {
-func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) (results []mongo.BulkWriteResult) {
+func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) *mongo.BulkWriteResult {
+	// for _, res := range resources {
+	// 	if res.Type == "microsoft.network/virtualnetworks/subnets" {
+	// 		lib.JsonMarshalAndPrint(res)
+	// 	}
+	// }
+	// os.Exit(0)
 	ctx := context.TODO()
 
 	var updates []mongo.WriteModel
 
 	for _, res := range resources {
 		resource := res
-		if !strings.EqualFold(resource.Type, "microsoft.compute/virtualmachines") {
-			resource.Properties.Sku = ""
-		}
+		// if !strings.EqualFold(resource.Type, "microsoft.compute/virtualmachines") {
+		// 	resource.Properties.Sku = nil
+		// }
 		resource.LastDBSync = time.Now()
 		resource.ID = strings.ToLower(res.ID)
 		filter := bson.D{{"_id", resource.ID}}
 		update := bson.D{{"$set", resource}}
 
 		// .SetUpsert(true)
-		// updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
-		_, err := resourcesListColl.UpdateOne(ctx, filter, update, nil)
-		lib.CheckFatalError(err)
-		if err != nil {
-			// fmt.Println(err)
-			_, _, cachePath := lib.InitConfig(nil)
-			_ = updates
-			allResStr, _ := json.MarshalIndent(resources, "", "  ")
-			os.WriteFile(cachePath+"/mongo.updateOne-error.resources.json", allResStr, 0644)
-			jsonStr, _ := json.MarshalIndent(res, "", "  ")
-			os.WriteFile(cachePath+"/mongo.updateOne-error.err.json", jsonStr, 0644)
-			// fmt.Println(string(jsonStr))
-			fmt.Println(res.ID)
-			lib.CheckFatalError(err)
-			// os.Exit(1)
-		}
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+		// 	_, err := resourcesListColl.UpdateOne(ctx, filter, update, nil)
+		// 	lib.CheckFatalError(err)
+		// 	if err != nil {
+		// 		// fmt.Println(err)
+		// 		_, _, cachePath := lib.InitConfig(nil)
+		// 		_ = updates
+		// 		allResStr, _ := json.MarshalIndent(resources, "", "  ")
+		// 		os.WriteFile(cachePath+"/mongo.updateOne-error.resources.json", allResStr, 0644)
+		// 		jsonStr, _ := json.MarshalIndent(res, "", "  ")
+		// 		os.WriteFile(cachePath+"/mongo.updateOne-error.err.json", jsonStr, 0644)
+		// 		// fmt.Println(string(jsonStr))
+		// 		fmt.Println(res.ID)
+		// 		lib.CheckFatalError(err)
+		// 		// os.Exit(1)
+		// 	}
 	}
 
-	if len(updates) > 0 {
-		var opts options.BulkWriteOptions
-		opts.SetOrdered(false)
+	results, err := resourcesListColl.BulkWrite(ctx, updates)
+	lib.CheckFatalError(err)
+	return results
 
-		chunkSize := 100
-		var chunks [][]mongo.WriteModel
-		for i := 0; i < len(updates); i += chunkSize {
-			end := i + chunkSize
-			if end > len(updates) {
-				end = len(updates)
-			}
-			chunks = append(chunks, updates[i:end])
-		}
+	// if len(updates) > 0 {
+	// 	var opts options.BulkWriteOptions
+	// 	opts.SetOrdered(false)
 
-		for _, chunk := range chunks {
-			res, err := resourcesListColl.BulkWrite(ctx, chunk, &opts)
-			results = append(results, *res)
-			lib.CheckFatalError(err)
-		}
-		return results
-	} else {
-		results := []mongo.BulkWriteResult{}
-		return results
-	}
+	// 	chunkSize := 100
+	// 	var chunks [][]mongo.WriteModel
+	// 	for i := 0; i < len(updates); i += chunkSize {
+	// 		end := i + chunkSize
+	// 		if end > len(updates) {
+	// 			end = len(updates)
+	// 		}
+	// 		chunks = append(chunks, updates[i:end])
+	// 	}
+
+	// 	for _, chunk := range chunks {
+	// 		res, err := resourcesListColl.BulkWrite(ctx, chunk, &opts)
+	// 		results = append(results, *res)
+	// 		lib.CheckFatalError(err)
+	// 	}
+	// 	return results
+	// } else {
+	// 	results := []mongo.BulkWriteResult{}
+	// 	return results
+	// }
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)

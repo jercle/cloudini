@@ -82,6 +82,6 @@ type ResourceGroup struct {
 	Type           string            `json:"type"`
 	Zones          any               `json:"zones"`
 	TenantName     string            `json:"tenantName"`
-	LastAzureSync  time.Time         `json:"lastAzureSync,omitempty" bson:"lastAzureSync,omitempty"`
-	LastDBSync     time.Time         `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
+	LastAzureSync  time.Time         `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
+	LastDBSync     time.Time         `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
 }

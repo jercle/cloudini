@@ -95,6 +95,10 @@ func GetAllResourcesForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfi
 
 				var currSubResources SubscriptionResourceList
 				for _, resource := range subResources.Resources {
+					// if resource.Type == "microsoft.network/virtualnetworks/subnets" {
+					// 	lib.JsonMarshalAndPrint(resource)
+					// 	os.Exit(0)
+					// }
 					if resource.Type == "microsoft.compute/virtualmachines" {
 						mappedDetails := MapVmSizeDetails(resource.Properties.HardwareProfile.VmSize, vcpuSkus)
 						mappedDetailsStr, _ := json.Marshal(mappedDetails)
@@ -107,7 +111,10 @@ func GetAllResourcesForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfi
 					currRes.LastAzureSync = time.Now()
 					currRes.ExistsInAzure = true
 					currSubResources.Resources = append(currSubResources.Resources, currRes)
+					mutex.Lock()
 					allResourcesSlice = append(allResourcesSlice, currRes)
+					mutex.Unlock()
+
 				}
 				// fmt.Println(currSubResources.Resources[0])
 				// fmt.Println(subResources.Resources[0])
@@ -145,6 +152,8 @@ func GetAllResourcesForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfi
 		lib.CheckFatalError(err)
 		fmt.Println("Saved to " + mapFileName + " and " + arrayFileName)
 	}
+
+	fmt.Println(len(allResourcesSlice))
 
 	// fmt.Println(len(allResourcesSlice))
 
@@ -281,12 +290,7 @@ func GetAllTenantResources(outputFile string, token *lib.AzureMultiAuthToken) Te
 		}
 	}
 
-	jsonBody := `{
-	"subs": [
-` + subIdsStr + `
-	],
-	"query": "` + graphQuery + `"
-}`
+	jsonBody := `{"query": "` + graphQuery + `"}`
 
 	res, _, err := HttpPost(urlString, jsonBody, *token)
 	lib.CheckFatalError(err)
@@ -313,6 +317,31 @@ func GetAllTenantResources(outputFile string, token *lib.AzureMultiAuthToken) Te
 	for _, res := range response.Data {
 		currRes := res
 		currRes.ID = strings.ToLower(res.ID)
+		currRes.Type = strings.ToLower(res.Type)
+		if currRes.Type == "microsoft.network/virtualnetworks" {
+			var subnets []lib.AzureResourceSubnet
+			for _, snet := range currRes.Properties.Subnets {
+				var snetResource lib.AzureResourceDetails
+				jsonStr, _ := json.Marshal(snet)
+				err := json.Unmarshal(jsonStr, &snetResource)
+				lib.CheckFatalError(err)
+				snetResource.TenantID = res.TenantID
+				snetResource.TenantName = res.TenantName
+				snetResource.SubscriptionID = res.SubscriptionID
+				snetResource.SubscriptionName = res.SubscriptionName
+				snetResource.ResourceGroup = res.ResourceGroup
+				snetResource.ID = strings.ToLower(snet.ID)
+				snetResource.Type = strings.ToLower(snet.Type)
+				allResources = append(allResources, snetResource)
+				// lib.JsonMarshalAndPrint(allResources)
+				// os.Exit(0)
+				var snetData lib.AzureResourceSubnet
+				snetData.ID = snet.ID
+				snetData.Name = snet.Name
+				subnets = append(subnets, snetData)
+			}
+			currRes.Properties.Subnets = subnets
+		}
 		allResources = append(allResources, currRes)
 	}
 
@@ -347,6 +376,30 @@ func GetAllTenantResources(outputFile string, token *lib.AzureMultiAuthToken) Te
 		for _, res := range whileRes.Data {
 			currRes := res
 			currRes.ID = strings.ToLower(res.ID)
+			if currRes.Type == "microsoft.network/virtualnetworks" {
+				var subnets []lib.AzureResourceSubnet
+				for _, snet := range currRes.Properties.Subnets {
+					var snetResource lib.AzureResourceDetails
+					jsonStr, _ := json.Marshal(snet)
+					err := json.Unmarshal(jsonStr, &snetResource)
+					lib.CheckFatalError(err)
+					snetResource.TenantID = res.TenantID
+					snetResource.TenantName = res.TenantName
+					snetResource.SubscriptionID = res.SubscriptionID
+					snetResource.SubscriptionName = res.SubscriptionName
+					snetResource.ResourceGroup = res.ResourceGroup
+					snetResource.ID = strings.ToLower(snet.ID)
+					snetResource.Type = strings.ToLower(snet.Type)
+					allResources = append(allResources, snetResource)
+					// lib.JsonMarshalAndPrint(allResources)
+					// os.Exit(0)
+					var snetData lib.AzureResourceSubnet
+					snetData.ID = snet.ID
+					snetData.Name = snet.Name
+					subnets = append(subnets, snetData)
+				}
+				currRes.Properties.Subnets = subnets
+			}
 			allResources = append(allResources, currRes)
 		}
 
