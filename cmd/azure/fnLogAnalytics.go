@@ -195,9 +195,8 @@ func getAllWorkspaceTables(cred *azidentity.DefaultAzureCredential, subscription
 
 func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (alerts []AzureAlertProcessed) {
 	logAnalyticsToken, err := GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
-		TenantName:    token.TenantName,
-		Scope:         "loganalytics",
-		GetWriteToken: true,
+		TenantName: token.TenantName,
+		Scope:      "loganalytics",
 	}, nil)
 	lib.CheckFatalError(err)
 

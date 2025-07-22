@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.13]
+* Bugfix: Update Log Analytics query token type
+
 ## [0.3.12]
 * Bugfix: Change queryError type to string
 
