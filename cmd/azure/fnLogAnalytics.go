@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -194,8 +195,9 @@ func getAllWorkspaceTables(cred *azidentity.DefaultAzureCredential, subscription
 
 func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (alerts []AzureAlertProcessed) {
 	logAnalyticsToken, err := GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
-		TenantName: token.TenantName,
-		Scope:      "loganalytics",
+		TenantName:    token.TenantName,
+		Scope:         "loganalytics",
+		GetWriteToken: true,
 	}, nil)
 	lib.CheckFatalError(err)
 
@@ -229,7 +231,14 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 		curr.LastAzureSync = currentTime
 		if alert.Properties.Context.Context != nil {
 			curr.LinkToFilteredSearchResultsAPI = alert.Properties.Context.Context.Condition.AllOf[0].LinkToFilteredSearchResultsAPI
-			curr.AlertData = GetAlertDataFromSearchResultsLink(curr.LinkToFilteredSearchResultsAPI, logAnalyticsToken)
+			curr.LinkToFilteredSearchResultsUi = alert.Properties.Context.Context.Condition.AllOf[0].LinkToFilteredSearchResultsUi
+			ad, err := GetAlertDataFromSearchResultsLink(curr.LinkToFilteredSearchResultsAPI, curr.LinkToFilteredSearchResultsUi, logAnalyticsToken)
+			if err != nil {
+				fmt.Println(err)
+				lib.JsonMarshalAndPrint(curr)
+				os.Exit(0)
+			}
+			curr.AlertData = ad
 		}
 		alerts = append(alerts, curr)
 	}
@@ -240,12 +249,34 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 //
 //
 
-func GetAlertDataFromSearchResultsLink(linkToFilteredSearchResultsAPI string, token *lib.AzureMultiAuthToken) (alertData []map[string]any) {
+func GetAlertDataFromSearchResultsLink(linkToFilteredSearchResultsAPI string, linkToFilteredSearchResultsUi string, token *lib.AzureMultiAuthToken) (alertData []map[string]any, e *error) {
 	res, err := HttpGet(linkToFilteredSearchResultsAPI, *token)
-	lib.CheckFatalError(err)
+	if err != nil {
+		return nil, &err
+	}
+	// lib.CheckFatalError(err)
 
 	var resData GetAlertDataFromSearchResultsLinkResult
 	err = json.Unmarshal(res, &resData)
+	if err != nil {
+		return alertData, &err
+	}
+	// lib.CheckFatalError(err)
+
+	if len(resData.Tables) == 0 {
+		data := make(map[string]any)
+		data["queryError"] = res
+		data["queryLink"] = linkToFilteredSearchResultsUi
+		// fmt.Println(string(res))
+		// fmt.Println(linkToFilteredSearchResultsAPI)
+		// fmt.Println(token.TenantName)
+		// os.Exit(0)
+		// err = fmt.Errorf(string(res))
+		// return nil, &err
+		alertData = append(alertData, data)
+		return
+
+	}
 
 	columns := resData.Tables[0].Columns
 	rows := resData.Tables[0].Rows

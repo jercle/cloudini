@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.11]
+* Handle errors with Log Analytics alert queries
+
 ## [0.3.10]
 * Bugfix: Change Tags prop on all Azure types to not omitempty
 

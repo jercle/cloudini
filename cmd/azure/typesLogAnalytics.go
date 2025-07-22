@@ -130,6 +130,7 @@ type AzureAlertProcessed struct {
 	Severity                       string    `json:"severity,omitempty,omitzero" bson:"severity,omitempty,omitzero"`
 	TriageAlert                    string    `json:"triageAlert,omitempty,omitzero" bson:"triageAlert,omitempty,omitzero"`
 	ID                             string    `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	LinkToFilteredSearchResultsUi  string    `json:"linkToFilteredSearchResultsUI,omitempty,omitzero" bson:"linkToFilteredSearchResultsUI,omitempty,omitzero"`
 	LinkToFilteredSearchResultsAPI string    `json:"linkToFilteredSearchResultsAPI,omitempty,omitzero" bson:"linkToFilteredSearchResultsAPI,omitempty,omitzero"`
 	Properties                     struct {
 		Context struct {
