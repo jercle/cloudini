@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.15]
+* Handle empty curr.LinkToFilteredSearchResultsAPI string in azure.GetAzureWorkbookAlerts
+
 ## [0.3.14]
 * Change handling of subnets when fetching all resources, breaking them out to their own resources
 * Add CertificateManagement config field and update UpdateAllCertInfo to use

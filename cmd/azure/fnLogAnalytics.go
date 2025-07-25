@@ -228,7 +228,7 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 		curr.AlertLastModified = alertLastModified
 
 		curr.LastAzureSync = currentTime
-		if alert.Properties.Context.Context != nil {
+		if alert.Properties.Context.Context != nil && curr.LinkToFilteredSearchResultsAPI != "" {
 			curr.LinkToFilteredSearchResultsAPI = alert.Properties.Context.Context.Condition.AllOf[0].LinkToFilteredSearchResultsAPI
 			curr.LinkToFilteredSearchResultsUi = alert.Properties.Context.Context.Condition.AllOf[0].LinkToFilteredSearchResultsUi
 			ad, err := GetAlertDataFromSearchResultsLink(curr.LinkToFilteredSearchResultsAPI, curr.LinkToFilteredSearchResultsUi, logAnalyticsToken)
