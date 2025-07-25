@@ -39,4 +39,3 @@ dist
 lib/certtostorelocal/testdata/ca
 scripts/rsync.sh
 scripts/replace.sh
-scripts/rsync.sh

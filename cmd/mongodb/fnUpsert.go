@@ -111,14 +111,6 @@ func UpsertMonthlyTenantSubResGrpCosts(
 		currTenant.TenantName = tenantName
 		currTenant.TenantId = tenantDetails.TenantId
 		currTenant.LastDBSync = time.Now().Local()
-		// lib.JsonMarshalAndPrint(tenantData)
-		// jsonStr, _ := json.MarshalIndent(tenantData, "", "  ")
-		// os.WriteFile("/home/jercle/git/cld/dev/cost-exports/202504/yellowproc.json", jsonStr, 0644)
-		// os.Exit(0)
-
-		// jsonStr, _ := json.MarshalIndent(currTenant, "", "  ")
-		// fmt.Println(string(jsonStr))
-		// continue
 
 		for subName, subData := range tenantData.Subscriptions {
 			var currSub lib.MongoDbCostSubscription
