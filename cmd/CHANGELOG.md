@@ -2,6 +2,7 @@
 
 ## [0.3.15]
 * Handle empty curr.LinkToFilteredSearchResultsAPI string in azure.GetAzureWorkbookAlerts
+* Update deps
 
 ## [0.3.14]
 * Change handling of subnets when fetching all resources, breaking them out to their own resources
