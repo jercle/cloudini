@@ -2,6 +2,7 @@
 
 ## [0.3.16]
 * Breakfix: remove duplicated flag in windows/cmdCert templated file
+* Update deps
 
 ## [0.3.15]
 * Handle empty curr.LinkToFilteredSearchResultsAPI string in azure.GetAzureWorkbookAlerts
