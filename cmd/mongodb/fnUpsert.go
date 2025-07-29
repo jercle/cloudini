@@ -834,7 +834,7 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 		var opts options.BulkWriteOptions
 		opts.SetOrdered(false)
 
-		chunkSize := 100
+		chunkSize := 5000
 		var chunks [][]mongo.WriteModel
 		for i := 0; i < len(updates); i += chunkSize {
 			end := i + chunkSize
