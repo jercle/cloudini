@@ -25,6 +25,7 @@ var (
 	envPrefix = "CLD"
 
 	// Replace hyphenated flag names with camelCase in the config file
+
 	replaceHyphenWithCamelCase = true
 
 	// outJSON flag
