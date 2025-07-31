@@ -34,7 +34,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/iancoleman/strcase v0.3.0
 	github.com/manifoldco/promptui v0.9.0
-	github.com/mattn/go-sqlite3 v1.14.29
+	github.com/mattn/go-sqlite3 v1.14.30
 	github.com/microsoft/azure-devops-go-api/azuredevops/v7 v7.1.0
 	github.com/muesli/go-app-paths v0.2.2
 	github.com/nwidger/jsoncolor v0.3.2
