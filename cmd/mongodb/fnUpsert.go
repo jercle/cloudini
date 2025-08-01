@@ -832,7 +832,7 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 
 	if len(updates) > 0 {
 		var opts options.BulkWriteOptions
-		opts.SetOrdered(false)
+		opts.SetOrdered(true)
 
 		chunkSize := 5000
 		var chunks [][]mongo.WriteModel
