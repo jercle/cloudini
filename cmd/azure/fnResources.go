@@ -18,6 +18,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v6"
+	"github.com/rmasci/ipsubnet"
 
 	"github.com/jercle/cloudini/lib"
 )
@@ -319,33 +320,13 @@ func GetAllTenantResources(outputFile string, token *lib.AzureMultiAuthToken) Te
 		currRes.ID = strings.ToLower(res.ID)
 		currRes.Type = strings.ToLower(res.Type)
 		if currRes.Type == "microsoft.network/virtualnetworks" {
-			var subnets []lib.AzureResourceSubnet
-			for _, snet := range currRes.Properties.Subnets {
-				var snetResource lib.AzureResourceDetails
-				jsonStr, _ := json.Marshal(snet)
-				err := json.Unmarshal(jsonStr, &snetResource)
-				lib.CheckFatalError(err)
-				snetResource.TenantID = res.TenantID
-				snetResource.TenantName = res.TenantName
-				snetResource.SubscriptionID = res.SubscriptionID
-				snetResource.SubscriptionName = res.SubscriptionName
-				snetResource.ResourceGroup = res.ResourceGroup
-				snetResource.ID = strings.ToLower(snet.ID)
-				snetResource.Type = strings.ToLower(snet.Type)
-				allResources = append(allResources, snetResource)
-				// lib.JsonMarshalAndPrint(allResources)
-				// os.Exit(0)
-				var snetData lib.AzureResourceSubnet
-				snetData.ID = snet.ID
-				snetData.Name = snet.Name
-				subnets = append(subnets, snetData)
-			}
-			currRes.Properties.Subnets = subnets
+			vnet, subnets := BuildVnetAndSubnet(currRes)
+			allResources = append(allResources, vnet)
+			allResources = append(allResources, subnets...)
+		} else {
+			allResources = append(allResources, currRes)
 		}
-		allResources = append(allResources, currRes)
 	}
-
-	// allResources = append(allResources, response.Data...)
 
 	hasSkipToken := false
 	skipToken := ""
@@ -372,35 +353,16 @@ func GetAllTenantResources(outputFile string, token *lib.AzureMultiAuthToken) Te
 		err = json.Unmarshal(res, &whileRes)
 		lib.CheckFatalError(err)
 
-		// allResources = append(allResources, whileRes.Data...)
 		for _, res := range whileRes.Data {
 			currRes := res
 			currRes.ID = strings.ToLower(res.ID)
 			if currRes.Type == "microsoft.network/virtualnetworks" {
-				var subnets []lib.AzureResourceSubnet
-				for _, snet := range currRes.Properties.Subnets {
-					var snetResource lib.AzureResourceDetails
-					jsonStr, _ := json.Marshal(snet)
-					err := json.Unmarshal(jsonStr, &snetResource)
-					lib.CheckFatalError(err)
-					snetResource.TenantID = res.TenantID
-					snetResource.TenantName = res.TenantName
-					snetResource.SubscriptionID = res.SubscriptionID
-					snetResource.SubscriptionName = res.SubscriptionName
-					snetResource.ResourceGroup = res.ResourceGroup
-					snetResource.ID = strings.ToLower(snet.ID)
-					snetResource.Type = strings.ToLower(snet.Type)
-					allResources = append(allResources, snetResource)
-					// lib.JsonMarshalAndPrint(allResources)
-					// os.Exit(0)
-					var snetData lib.AzureResourceSubnet
-					snetData.ID = snet.ID
-					snetData.Name = snet.Name
-					subnets = append(subnets, snetData)
-				}
-				currRes.Properties.Subnets = subnets
+				vnet, subnets := BuildVnetAndSubnet(currRes)
+				allResources = append(allResources, vnet)
+				allResources = append(allResources, subnets...)
+			} else {
+				allResources = append(allResources, currRes)
 			}
-			allResources = append(allResources, currRes)
 		}
 
 		if whileRes.SkipToken != "" {
@@ -448,6 +410,95 @@ func GetAllTenantResources(outputFile string, token *lib.AzureMultiAuthToken) Te
 	// allTenantResources.resources
 
 	return allTenantResources
+}
+
+//
+//
+
+func BuildVnetAndSubnet(res lib.AzureResourceDetails) (vnet lib.AzureResourceDetails, subnets []lib.AzureResourceDetails) {
+	vnet = res
+
+	snets := vnet.Properties.Other["subnets"].([]interface{})
+
+	for _, snet := range snets {
+		// snet := snetRaw.(lib.AzureResourceDetails)
+		var snetResource lib.AzureResourceDetails
+		jsonStr, _ := json.Marshal(snet)
+		err := json.Unmarshal(jsonStr, &snetResource)
+		lib.CheckFatalError(err)
+
+		snetResource.TenantID = res.TenantID
+		snetResource.TenantName = res.TenantName
+		snetResource.SubscriptionID = res.SubscriptionID
+		snetResource.SubscriptionName = res.SubscriptionName
+		snetResource.ResourceGroup = res.ResourceGroup
+		snetResource.ID = strings.ToLower(snetResource.ID)
+		snetResource.Type = strings.ToLower(snetResource.Type)
+		snetResource.Properties.ParentVnet = res.ID
+
+		snetResource.Properties.IpAddressesUsed = len(snetResource.Properties.IpConfigurations)
+		vnet.Properties.IpAddressesUsed += snetResource.Properties.IpAddressesUsed
+
+		cidrRangeRaw, ok := snetResource.Properties.Other["addressPrefix"].(interface{})
+		if ok {
+			cidrRange, isOk := cidrRangeRaw.(string)
+			if isOk {
+				snetResource.Properties.IpCidrBlock = cidrRange
+				cidrNotation, err := strconv.Atoi(strings.Split(cidrRange, "/")[1])
+				lib.CheckFatalError(err)
+				cidrIp := strings.Split(cidrRange, "/")[0]
+				snetCalc := ipsubnet.SubnetCalculator(cidrIp, int64(cidrNotation))
+
+				snetResource.Properties.IpNumberAddresses = int(snetCalc.GetNumberIPAddresses())
+				snetResource.Properties.IpNumberAddressableHosts = int(snetCalc.GetNumberAddressableHosts())
+				snetResource.Properties.IpNumberAddressableHostsRemaining = snetResource.Properties.IpNumberAddressableHosts - snetResource.Properties.IpAddressesUsed
+				snetResource.Properties.IpPercentAddressableHostsUsed = float64(snetResource.Properties.IpAddressesUsed) / float64(snetResource.Properties.IpNumberAddressableHosts) * 100
+				snetResource.Properties.IpRange = snetCalc.GetIPAddressRange()
+				// fmt.Println("GetHostPortion:", snetCalc.GetHostPortion())
+				// fmt.Println("GetNetworkPortion:", snetCalc.GetNetworkPortion())
+				// fmt.Println("GetNetworkSize:", snetCalc.GetNetworkSize())
+				// fmt.Println("GetIPAddressRange:", snetCalc.GetIPAddressRange())
+				// fmt.Println("GetIPAddress:", snetCalc.GetIPAddress())
+				delete(snetResource.Properties.Other, "addressPrefix")
+			}
+		} else {
+			cidrRanges, rangesOk := snetResource.Properties.Other["addressPrefixes"].([]interface{})[0].(string)
+			if rangesOk {
+				snetResource.Properties.IpCidrBlock = cidrRanges
+				cidrNotation, err := strconv.Atoi(strings.Split(cidrRanges, "/")[1])
+				lib.CheckFatalError(err)
+				cidrIp := strings.Split(cidrRanges, "/")[0]
+				snet := ipsubnet.SubnetCalculator(cidrIp, int64(cidrNotation))
+
+				snetResource.Properties.IpNumberAddresses = int(snet.GetNumberIPAddresses())
+				snetResource.Properties.IpNumberAddressableHosts = int(snet.GetNumberAddressableHosts())
+				snetResource.Properties.IpNumberAddressableHostsRemaining = snetResource.Properties.IpNumberAddressableHosts - snetResource.Properties.IpAddressesUsed
+				snetResource.Properties.IpPercentAddressableHostsUsed = float64(snetResource.Properties.IpAddressesUsed) / float64(snetResource.Properties.IpNumberAddressableHosts) * 100
+				delete(snetResource.Properties.Other, "addressPrefixes")
+			}
+
+		}
+
+		subnets = append(subnets, snetResource)
+		vnet.Properties.SubnetIds = append(vnet.Properties.SubnetIds, snetResource.ID)
+	}
+
+	cidrRange, ok := vnet.Properties.Other["addressSpace"].(map[string]interface{})["addressPrefixes"].([]interface{})[0].(string)
+	if ok {
+		vnet.Properties.IpCidrBlock = cidrRange
+		cidrNotation, err := strconv.Atoi(strings.Split(cidrRange, "/")[1])
+		lib.CheckFatalError(err)
+		cidrIp := strings.Split(cidrRange, "/")[0]
+		snet := ipsubnet.SubnetCalculator(cidrIp, int64(cidrNotation))
+
+		vnet.Properties.IpNumberAddresses = int(snet.GetNumberIPAddresses())
+		vnet.Properties.IpNumberAddressableHosts = int(snet.GetNumberAddressableHosts())
+		vnet.Properties.IpNumberAddressableHostsRemaining = vnet.Properties.IpNumberAddressableHosts - vnet.Properties.IpAddressesUsed
+		vnet.Properties.IpPercentAddressableHostsUsed = float64(vnet.Properties.IpAddressesUsed) / float64(vnet.Properties.IpNumberAddressableHosts) * 100
+		delete(vnet.Properties.Other, "addressSpace")
+	}
+	delete(vnet.Properties.Other, "subnets")
+	return
 }
 
 //
@@ -757,3 +808,5 @@ func ListManagementGroups(token *lib.AzureMultiAuthToken) ([]ManagementGroup, er
 
 	return response.Value, nil
 }
+
+//

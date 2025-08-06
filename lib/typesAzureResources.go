@@ -3118,7 +3118,14 @@ type AzureResourceProperties struct {
 	// IpConfiguration             *struct {
 	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
 	// } `json:"ipConfiguration,omitempty" bson:"ipConfiguration,omitempty"`
-	// IpConfigurations []*AzureResourceIpConfiguration `json:"ipConfigurations,omitempty" bson:"ipConfigurations,omitempty"`
+	IpConfigurations                  []*AzureResourceIpConfiguration `json:"ipConfigurations,omitempty" bson:"ipConfigurations,omitempty"`
+	IpCidrBlock                       string                          `json:"ipCidrBlock,omitempty,omitzero" bson:"ipCidrBlock,omitempty,omitzero"`
+	IpNumberAddresses                 int                             `json:"ipNumberAddresses,omitempty,omitzero" bson:"ipNumberAddresses,omitempty,omitzero"`
+	IpNumberAddressableHosts          int                             `json:"ipNumberAddressableHosts,omitempty,omitzero" bson:"ipNumberAddressableHosts,omitempty,omitzero"`
+	IpAddressesUsed                   int                             `json:"ipAddressesUsed,omitempty,omitzero" bson:"ipAddressesUsed,omitempty,omitzero"`
+	IpNumberAddressableHostsRemaining int                             `json:"ipNumberAddressableHostsRemaining,omitempty,omitzero" bson:"ipNumberAddressableHostsRemaining,omitempty,omitzero"`
+	IpPercentAddressableHostsUsed     float64                         `json:"ipPercentAddressableHostsUsed,omitempty,omitzero" bson:"ipPercentAddressableHostsUsed,omitempty,omitzero"`
+	IpRange                           []string                        `json:"IpRange,omitempty,omitzero" bson:"IpRange,omitempty,omitzero"`
 	// IpMode           string                          `json:"ipMode,omitempty" bson:"ipMode,omitempty"`
 	// IpRules          []struct {
 	// 	IpAddressOrRange string `json:"ipAddressOrRange,omitempty" bson:"ipAddressOrRange,omitempty"`
@@ -3296,6 +3303,7 @@ type AzureResourceProperties struct {
 	// 	Token_GrantType string `json:"token:grantType,omitempty" bson:"token:grantType,omitempty"`
 	// } `json:"parameterValues,omitempty" bson:"parameterValues,omitempty"`
 	// Parameters *AzureResourceParameters `json:"parameters,omitempty" bson:"parameters,omitempty"`
+	ParentVnet string `json:"ParentVnet,omitempty" bson:"ParentVnet,omitempty"`
 	// PausedDate string                   `json:"pausedDate,omitempty" bson:"pausedDate,omitempty"`
 	// Peer       *struct {
 	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
@@ -3503,7 +3511,9 @@ type AzureResourceProperties struct {
 	// 	ID string `json:"id,omitempty" bson:"id,omitempty"`
 	// } `json:"subnet,omitempty" bson:"subnet,omitempty"`
 	// SubnetID              string                 `json:"subnetId,omitempty" bson:"subnetId,omitempty"`
-	Subnets []AzureResourceSubnet `json:"subnets,omitempty" bson:"subnets,omitempty"`
+	// Subnets []AzureResourceSubnet `json:"subnets,omitempty" bson:"subnets,omitempty"`
+	SubnetIds []string `json:"subnetIds,omitempty" bson:"subnetIds,omitempty"`
+	// Subnets []AzureResourceDetails `json:"subnets,omitempty" bson:"subnets,omitempty"`
 	// Subscription          string                 `json:"subscription,omitempty" bson:"subscription,omitempty"`
 	// SupportPlan           string                 `json:"supportPlan,omitempty" bson:"supportPlan,omitempty"`
 	// SupportedCapabilities *struct {

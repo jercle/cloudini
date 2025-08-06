@@ -66,6 +66,13 @@ var cmdSubnetCalc = &cobra.Command{
 				fmt.Println("Number of addressable hosts:", snet.GetNumberAddressableHosts())
 				fmt.Println("Subnet Mask:", snet.GetSubnetMask())
 
+				fmt.Println("")
+				fmt.Println("GetHostPortion:", snet.GetHostPortion())
+				fmt.Println("GetNetworkPortion:", snet.GetNetworkPortion())
+				fmt.Println("GetNetworkSize:", snet.GetNetworkSize())
+				fmt.Println("GetIPAddressRange:", snet.GetIPAddressRange())
+				fmt.Println("GetIPAddress:", snet.GetIPAddress())
+
 			} else {
 				fmt.Println("Number of addresses:", 1)
 				fmt.Println("Address:", ipAddr.String())
