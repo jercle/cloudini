@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.3.17]
+* Update subnet calc
+* Update handling vnets and subnets when fetching resources, adding extra IP and CIDR related fields
+* Update deps
+
 ## [0.3.16]
 * Breakfix: remove duplicated flag in windows/cmdCert templated file
 * Update deps
