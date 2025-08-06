@@ -786,7 +786,7 @@ func UpsertVcpuCounts(vcpuCountData lib.VCpuCountByTenant, collection *mongo.Col
 //
 
 // func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) {
-func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) (results []mongo.BulkWriteResult) {
 	// for _, res := range resources {
 	// 	if res.Type == "microsoft.network/virtualnetworks/subnets" {
 	// 		lib.JsonMarshalAndPrint(res)
@@ -826,34 +826,34 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 		// 	}
 	}
 
-	results, err := resourcesListColl.BulkWrite(ctx, updates)
-	lib.CheckFatalError(err)
-	return results
+	// results, err := resourcesListColl.BulkWrite(ctx, updates)
+	// lib.CheckFatalError(err)
+	// return results
 
-	// if len(updates) > 0 {
-	// 	var opts options.BulkWriteOptions
-	// 	opts.SetOrdered(false)
+	if len(updates) > 0 {
+		var opts options.BulkWriteOptions
+		opts.SetOrdered(true)
 
-	// 	chunkSize := 100
-	// 	var chunks [][]mongo.WriteModel
-	// 	for i := 0; i < len(updates); i += chunkSize {
-	// 		end := i + chunkSize
-	// 		if end > len(updates) {
-	// 			end = len(updates)
-	// 		}
-	// 		chunks = append(chunks, updates[i:end])
-	// 	}
+		chunkSize := 5000
+		var chunks [][]mongo.WriteModel
+		for i := 0; i < len(updates); i += chunkSize {
+			end := i + chunkSize
+			if end > len(updates) {
+				end = len(updates)
+			}
+			chunks = append(chunks, updates[i:end])
+		}
 
-	// 	for _, chunk := range chunks {
-	// 		res, err := resourcesListColl.BulkWrite(ctx, chunk, &opts)
-	// 		results = append(results, *res)
-	// 		lib.CheckFatalError(err)
-	// 	}
-	// 	return results
-	// } else {
-	// 	results := []mongo.BulkWriteResult{}
-	// 	return results
-	// }
+		for _, chunk := range chunks {
+			res, err := resourcesListColl.BulkWrite(ctx, chunk, &opts)
+			results = append(results, *res)
+			lib.CheckFatalError(err)
+		}
+		return results
+	} else {
+		results := []mongo.BulkWriteResult{}
+		return results
+	}
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
