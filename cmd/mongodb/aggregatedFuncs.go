@@ -678,10 +678,20 @@ func UpdateAWSMonitoringData(coll *mongo.Collection) {
 
 func ConvertLAResultToAWSIngestCounts(data azure.LogAnalyticsQueryResponse, awsIngestRef string) (ingestCounts AWSIngestCounts) {
 	ingestCountRows := data.Tables[0].Rows
+
+	// lib.JsonMarshalAndPrint(data)
+	// os.Exit(0)
 	for _, row := range ingestCountRows {
+		// zeroIfNull := float64(0)
+		var percentageOfTotalLogs float64
+		if row["PercentageOfTotalLogs"] == nil {
+			percentageOfTotalLogs = 0
+		} else {
+			percentageOfTotalLogs = row["PercentageOfTotalLogs"].(float64)
+		}
 		count := AWSIngestCount{
 			LogType:               row["LogType"].(string),
-			PercentageOfTotalLogs: row["PercentageOfTotalLogs"].(float64),
+			PercentageOfTotalLogs: percentageOfTotalLogs,
 			Count:                 row["Count"].(float64),
 		}
 		ingestCounts.Counts = append(ingestCounts.Counts, count)

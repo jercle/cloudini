@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.3.18]
+* Update ConvertLAResultToAWSIngestCounts to handle null values
+* Update deps
+
 ## [0.3.17]
 * Update subnet calc
 * Update handling vnets and subnets when fetching resources, adding extra IP and CIDR related fields
