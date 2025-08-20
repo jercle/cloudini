@@ -67,7 +67,7 @@ var cmdMongoUpdate = &cobra.Command{
 		azResSKUColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResSKU)
 		azResTenantsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResTenants)
 		azResVcpuCountsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResVcpuCounts)
-		azResIpAddresses := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResIPAddresses)
+		// azResIpAddresses := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResIPAddresses)
 		azStorageAcctMinTlsVersions := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzStorageAcctMinTlsVersions)
 
 		citrixMachineCatalogsColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMachineCatalogs)
@@ -90,13 +90,16 @@ var cmdMongoUpdate = &cobra.Command{
 
 		genSupportAlertsColl := c.Database(mongoConf.DbGeneral).Collection(mongoConf.CollGenSupportAlerts)
 
+		ipamIpAddressBlocks := c.Database(mongoConf.DbIpam).Collection(mongoConf.CollIpamIpAddressBlocks)
+		ipamIpAddresses := c.Database(mongoConf.DbIpam).Collection(mongoConf.CollIpamIpAddresses)
+
 		m365MailboxStatisticsColl := c.Database(mongoConf.DbM365).Collection(mongoConf.CollM365MailboxStatistics)
 
 		tokenReq, err := azure.GetAllTenantSPTokens(lib.AzureMultiAuthTokenRequestOptions{}, nil)
 		lib.CheckFatalError(err)
 
 		if updateAll || updateIpAddresses {
-			UpdateAllAzureResourceIPAddresses(azResIpAddresses, tokenReq)
+			UpdateAllAzureResourceIPAddresses(ipamIpAddresses, ipamIpAddressBlocks, tokenReq)
 		}
 
 		if updateAll || updateAllGalleryImagesAndUpdateWithUsedByCitrix {

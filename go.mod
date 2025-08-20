@@ -1,6 +1,6 @@
 module github.com/jercle/cloudini
 
-go 1.25rc2
+go 1.25.0
 
 ignore dev
 
@@ -14,7 +14,7 @@ require (
 	github.com/alecthomas/assert/v2 v2.11.0
 	github.com/antonmedv/clipboard v1.0.1
 	github.com/briandowns/spinner v1.23.2
-	github.com/brianvoe/gofakeit/v7 v7.3.0
+	github.com/brianvoe/gofakeit/v7 v7.4.0
 	github.com/charmbracelet/bubbles v0.21.0
 	github.com/charmbracelet/bubbletea v1.3.6
 	github.com/charmbracelet/fang v0.3.0
@@ -50,7 +50,7 @@ require (
 	go.mongodb.org/mongo-driver v1.17.4
 	golang.design/x/clipboard v0.7.1
 	golang.org/x/crypto v0.41.0
-	golang.org/x/exp v0.0.0-20250813145105-42675adae3e6
+	golang.org/x/exp v0.0.0-20250819193227-8b4c13bb791b
 	golang.org/x/mod v0.27.0
 	golang.org/x/sys v0.35.0
 	golang.org/x/text v0.28.0
@@ -70,9 +70,9 @@ require (
 	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta1 // indirect
 	github.com/charmbracelet/x/ansi v0.10.1 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
-	github.com/charmbracelet/x/exp/charmtone v0.0.0-20250814162307-57b675fecd71 // indirect
-	github.com/charmbracelet/x/exp/color v0.0.0-20250814162307-57b675fecd71 // indirect
-	github.com/charmbracelet/x/exp/slice v0.0.0-20250814162307-57b675fecd71 // indirect
+	github.com/charmbracelet/x/exp/charmtone v0.0.0-20250818131617-61d774aefe53 // indirect
+	github.com/charmbracelet/x/exp/color v0.0.0-20250818131617-61d774aefe53 // indirect
+	github.com/charmbracelet/x/exp/slice v0.0.0-20250818131617-61d774aefe53 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
@@ -132,7 +132,7 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
 	github.com/yuin/goldmark v1.7.13 // indirect
 	github.com/yuin/goldmark-emoji v1.0.6 // indirect
-	golang.org/x/exp/shiny v0.0.0-20250813145105-42675adae3e6 // indirect
+	golang.org/x/exp/shiny v0.0.0-20250819193227-8b4c13bb791b // indirect
 	golang.org/x/image v0.30.0 // indirect
 	golang.org/x/mobile v0.0.0-20250813145510-f12310a0cfd9 // indirect
 	golang.org/x/net v0.43.0 // indirect
