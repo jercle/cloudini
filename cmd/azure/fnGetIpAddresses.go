@@ -3,8 +3,11 @@ package azure
 import (
 	"encoding/json/jsontext"
 	json "encoding/json/v2"
+	"errors"
 	"fmt"
+	"math/big"
 	"net"
+	"net/netip"
 	"os"
 	"slices"
 	"strings"
@@ -664,4 +667,208 @@ func GetAllTenantIpAddresses(outputFile string, token *lib.AzureMultiAuthToken) 
 	// allTenantResources.resources
 
 	return allTenantResourceIPs
+}
+
+//
+//
+
+func IpRangeToCidr(start, end string) ([]string, error) {
+	ips, err := netip.ParseAddr(start)
+	if err != nil {
+		return nil, err
+	}
+	ipe, err := netip.ParseAddr(end)
+	if err != nil {
+		return nil, err
+	}
+
+	isV4 := ips.Is4()
+	if isV4 != ipe.Is4() {
+		return nil, errors.New("start and end types are different")
+	}
+	if ips.Compare(ipe) > 0 {
+		return nil, errors.New("start > end")
+	}
+
+	var (
+		ipsInt = new(big.Int).SetBytes(ips.AsSlice())
+		ipeInt = new(big.Int).SetBytes(ipe.AsSlice())
+		nextIp = new(big.Int)
+		maxBit = new(big.Int)
+		cmpSh  = new(big.Int)
+		bits   = new(big.Int)
+		mask   = new(big.Int)
+		one    = big.NewInt(1)
+		buf    []byte
+		cidr   []string
+		bitSh  uint
+	)
+	if isV4 {
+		maxBit.SetUint64(32)
+		buf = make([]byte, 4)
+	} else {
+		maxBit.SetUint64(128)
+		buf = make([]byte, 16)
+	}
+
+	for {
+		bits.SetUint64(1)
+		mask.SetUint64(1)
+		for bits.Cmp(maxBit) < 0 {
+			nextIp.Or(ipsInt, mask)
+
+			bitSh = uint(bits.Uint64())
+			cmpSh.Lsh(cmpSh.Rsh(ipsInt, bitSh), bitSh)
+			if (nextIp.Cmp(ipeInt) > 0) || (cmpSh.Cmp(ipsInt) != 0) {
+				bits.Sub(bits, one)
+				mask.Rsh(mask, 1)
+				break
+			}
+			bits.Add(bits, one)
+			mask.Add(mask.Lsh(mask, 1), one)
+		}
+
+		addr, _ := netip.AddrFromSlice(ipsInt.FillBytes(buf))
+		cidr = append(cidr, addr.String()+"/"+bits.Sub(maxBit, bits).String())
+
+		if nextIp.Or(ipsInt, mask); nextIp.Cmp(ipeInt) >= 0 {
+			break
+		}
+		ipsInt.Add(nextIp, one)
+	}
+	return cidr, nil
+}
+
+//
+//
+
+func GetIpAddressBlocksForCidrFromVNets(cidrsToCheck []lib.IpamCidrBlockToCheck, vnets []IPAddressesAllResourceTypes) (allAddressBlocks []IpAddressBlocksByBlockTag) {
+	for _, cidr := range cidrsToCheck {
+		lastFoundVnet := ""
+		var currentRange IpAddressBlock
+
+		ipsInCidr, err := GetIPsFromCIDR(cidr.CidrBlock)
+		lib.CheckFatalError(err)
+
+		var ipAddressBlocks []IpAddressBlock
+
+		for i, ip := range ipsInCidr {
+			if i == 0 {
+				// currentRange = append(currentRange, ip.String())
+				currentRange.FirstIp = ip.String()
+			}
+
+			found := false
+			foundVnet := ""
+			for _, vnet := range vnets {
+				_, vnetIpNet, err := net.ParseCIDR(vnet.Cidrs[0])
+				lib.CheckFatalError(err)
+				if vnetIpNet.Contains(ip) {
+					found = true
+					foundVnet = vnet.Name
+					break
+				}
+			}
+
+			if found {
+				if i == 0 {
+					lastFoundVnet = foundVnet
+				}
+				if lastFoundVnet != foundVnet {
+					cidrBlock, err := IpRangeToCidr(currentRange.FirstIp, currentRange.LastIp)
+					lib.CheckFatalError(err)
+					currentRange.CidrBlocks = cidrBlock
+					ipAddressBlocks = append(ipAddressBlocks, currentRange)
+					currentRange = IpAddressBlock{
+						FirstIp:         ip.String(),
+						VNetName:        foundVnet,
+						AllocatedToVnet: true,
+						// IpAddresses:     []net.IP{ip},
+					}
+					lastFoundVnet = foundVnet
+				} else {
+					currentRange.VNetName = foundVnet
+					currentRange.LastIp = ip.String()
+					currentRange.AllocatedToVnet = true
+					lastFoundVnet = foundVnet
+
+					if i == len(ipsInCidr)-1 {
+						cidrBlock, err := IpRangeToCidr(currentRange.FirstIp, currentRange.LastIp)
+						lib.CheckFatalError(err)
+						currentRange.CidrBlocks = cidrBlock
+						ipAddressBlocks = append(ipAddressBlocks, currentRange)
+					}
+				}
+			} else {
+				if lastFoundVnet != "" {
+					cidrBlock, err := IpRangeToCidr(currentRange.FirstIp, currentRange.LastIp)
+					lib.CheckFatalError(err)
+					currentRange.CidrBlocks = cidrBlock
+					ipAddressBlocks = append(ipAddressBlocks, currentRange)
+					currentRange = IpAddressBlock{
+						FirstIp:         ip.String(),
+						VNetName:        "",
+						AllocatedToVnet: false,
+						// IpAddresses:     []net.IP{ip},
+					}
+					lastFoundVnet = ""
+				} else {
+					// currentRange.IpAddresses = append(currentRange.IpAddresses, ip)
+					currentRange.VNetName = ""
+					currentRange.LastIp = ip.String()
+					currentRange.AllocatedToVnet = false
+
+					lastFoundVnet = ""
+
+					if i == len(ipsInCidr)-1 {
+						cidrBlock, err := IpRangeToCidr(currentRange.FirstIp, currentRange.LastIp)
+						lib.CheckFatalError(err)
+						currentRange.CidrBlocks = cidrBlock
+						ipAddressBlocks = append(ipAddressBlocks, currentRange)
+					}
+				}
+			}
+		}
+
+		byBlockTag := IpAddressBlocksByBlockTag{
+			BlockTag:      cidr.BlockTag,
+			AddressBlocks: ipAddressBlocks,
+		}
+
+		allAddressBlocks = append(allAddressBlocks, byBlockTag)
+	}
+
+	return
+}
+
+//
+//
+
+// getIPsFromCIDR parses a CIDR string and returns a slice of net.IP representing all IPs in the range.
+func GetIPsFromCIDR(cidr string) ([]net.IP, error) {
+	_, ipNet, err := net.ParseCIDR(cidr)
+	if err != nil {
+		return nil, fmt.Errorf("invalid CIDR: %w", err)
+	}
+
+	var ips []net.IP
+	for ip := ipNet.IP.Mask(ipNet.Mask); ipNet.Contains(ip); IncrementIp(ip) {
+		newIP := make(net.IP, len(ip))
+		copy(newIP, ip)
+		ips = append(ips, newIP)
+	}
+	return ips, nil
+}
+
+//
+//
+
+// IncrementIp increments an IP address by one.
+func IncrementIp(ip net.IP) {
+	for i := len(ip) - 1; i >= 0; i-- {
+		ip[i]++
+		if ip[i] > 0 {
+			break
+		}
+	}
 }

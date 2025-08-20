@@ -67,13 +67,16 @@ func UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(imageGalleryImagesColl *mon
 //
 //
 
-func UpdateAllAzureResourceIPAddresses(resIPAddressesColl *mongo.Collection, tokenReq lib.AllTenantTokens) {
+func UpdateAllAzureResourceIPAddresses(ipAddressesColl *mongo.Collection, ipAddressBlocksColl *mongo.Collection, tokenReq lib.AllTenantTokens) {
 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 
 	opts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
 		SuppressSteps: true,
 		// SelectedIPAddressQueries: &[]string{"GetIPAddressesQueryVirtualMachines"},
 	}
+
+	config := lib.GetCldConfig(nil)
+	cidrsToCheck := config.Azure.Ipam.CidrBlocksToCheck
 
 	fmt.Println("Fetching all resource IPs...")
 	// s.Start()
@@ -83,8 +86,26 @@ func UpdateAllAzureResourceIPAddresses(resIPAddressesColl *mongo.Collection, tok
 
 	fmt.Println("Updating all resource IPs in database...")
 	s.Start()
-	UpsertAzureIPAddresses(resources, resIPAddressesColl)
+	UpsertAzureIPAddresses(resources, ipAddressesColl)
 	s.Stop()
+
+	fmt.Println("Getting IP Address Blocks...")
+	s.Start()
+	var vnets []azure.IPAddressesAllResourceTypes
+	for _, res := range resources {
+		if res.Type != "microsoft.network/virtualnetworks" {
+			continue
+		}
+		vnets = append(vnets, res)
+	}
+	ipAddressBlocks := azure.GetIpAddressBlocksForCidrFromVNets(cidrsToCheck, vnets)
+	s.Stop()
+
+	fmt.Println("Updating IP Address Blocks in database...")
+	s.Start()
+	UpdateIpamAddressBlocks(ipAddressBlocks, ipAddressBlocksColl)
+	s.Stop()
+
 }
 
 //

@@ -110,6 +110,7 @@ type MongoDBConfig struct {
 	DbEntra                   string `json:"dbEntra,omitempty"`
 	DbEnvironmentOptimisation string `json:"dbEnvironmentOptimisation,omitempty"`
 	DbGeneral                 string `json:"dbGeneral,omitempty"`
+	DbIpam                    string `json:"dbIpam,omitempty"`
 	DbM365                    string `json:"dbM365,omitempty"`
 
 	// Collections
@@ -147,6 +148,9 @@ type MongoDBConfig struct {
 	CollGenEolTracking   string `json:"collGenEolTracking,omitempty"`
 	CollGenSupportAlerts string `json:"collGenSupportAlerts,omitempty"`
 
+	CollIpamIpAddressBlocks string `json:"collIpamIpAddressBlocks,omitempty"`
+	CollIpamIpAddresses     string `json:"collIpamIpAddresses,omitempty"`
+
 	CollM365MailboxStatistics string `json:"collM365MailboxStatistics,omitempty"`
 }
 
@@ -176,6 +180,16 @@ type AzureConfig struct {
 	ResourceLocation           string              `json:"resourceLocation,omitempty"`
 	VirtualMachines            map[string]string   `json:"virtualMachines,omitempty"`
 	SupportAlerts              SupportAlertsConfig `json:"supportAlerts,omitempty"`
+	Ipam                       IpamConfig          `json:"ipam,omitempty"`
+}
+
+type IpamConfig struct {
+	CidrBlocksToCheck []IpamCidrBlockToCheck `json:"cidrBlocksToCheck"`
+}
+
+type IpamCidrBlockToCheck struct {
+	CidrBlock string `json:"cidrBlock"`
+	BlockTag  string `json:"blockTag"`
 }
 
 type CldConfigOptions struct {
