@@ -94,7 +94,7 @@ type IPAddressesAllResourceTypes struct {
 	AssociatedResourceIDs []string  `json:"associatedResourceIDs,omitempty,omitzero" bson:"associatedResourceIDs,omitempty,omitzero"`
 	AttachedTo            string    `json:"attachedTo,omitempty,omitzero" bson:"attachedTo,omitempty,omitzero"`
 	Cidrs                 []string  `json:"cidrs,omitempty,omitzero" bson:"cidrs,omitempty,omitzero"`
-	ID                    string    `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	ID                    string    `json:"id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
 	InboundIps            []string  `json:"inboundIps,omitempty,omitzero" bson:"inboundIps,omitempty,omitzero"`
 	IsAttached            bool      `json:"isAttached,omitempty,omitzero" bson:"isAttached,omitempty,omitzero"`
 	LastAzureSync         time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
@@ -229,6 +229,39 @@ func (t *IPAddressesAllResourceTypes) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+type IPAddressesAllResourceTypesProcessed struct {
+	AssociatedNics        []string  `json:"associatedNics,omitempty,omitzero" bson:"associatedNics,omitempty,omitzero"`
+	AssociatedResourceIDs []string  `json:"associatedResourceIDs,omitempty,omitzero" bson:"associatedResourceIDs,omitempty,omitzero"`
+	AttachedTo            string    `json:"attachedTo,omitempty,omitzero" bson:"attachedTo,omitempty,omitzero"`
+	Cidrs                 []string  `json:"cidrs,omitempty,omitzero" bson:"cidrs,omitempty,omitzero"`
+	ID                    string    `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	InboundIps            []string  `json:"inboundIps,omitempty,omitzero" bson:"inboundIps,omitempty,omitzero"`
+	IsAttached            bool      `json:"isAttached,omitempty,omitzero" bson:"isAttached,omitempty,omitzero"`
+	LastAzureSync         time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
+	LastDBSync            time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
+	Name                  string    `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
+	OutboundIps           []string  `json:"outboundIps,omitempty,omitzero" bson:"outboundIps,omitempty,omitzero"`
+	PossibleInboundIps    []string  `json:"possibleInboundIps,omitempty,omitzero" bson:"possibleInboundIps,omitempty,omitzero"`
+	PossibleOutboundIps   []string  `json:"possibleOutboundIps,omitempty,omitzero" bson:"possibleOutboundIps,omitempty,omitzero"`
+	PrivateIps            []string  `json:"privateIps,omitempty,omitzero" bson:"privateIps,omitempty,omitzero"`
+	PublicIpIds           []string  `json:"publicIpIds,omitempty,omitzero" bson:"publicIpIds,omitempty,omitzero"`
+	PublicIps             []string  `json:"publicIps,omitempty,omitzero" bson:"publicIps,omitempty,omitzero"`
+	PublicNetworkAccess   string    `json:"publicNetworkAccess,omitempty,omitzero" bson:"publicNetworkAccess,omitempty,omitzero"`
+	ResourceGroup         string    `json:"resourceGroup,omitempty,omitzero" bson:"resourceGroup,omitempty,omitzero"`
+	SubscriptionID        string    `json:"subscriptionId,omitempty,omitzero" bson:"subscriptionId,omitempty,omitzero"`
+	SubscriptionName      string    `json:"subscriptionName,omitempty,omitzero" bson:"subscriptionName,omitempty,omitzero"`
+	Subnets               []struct {
+		Cidrs []string `json:"cidrs,omitempty,omitzero" bson:"cidrs,omitempty,omitzero"`
+		ID    string   `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+		Name  string   `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
+		Type  string   `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+	} `json:"subnets,omitempty,omitzero" bson:"subnets,omitempty,omitzero"`
+	Tags       map[string]string `json:"tags" bson:"tags"`
+	TenantID   string            `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
+	TenantName string            `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
+	Type       string            `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+}
+
 //
 //
 
@@ -259,4 +292,25 @@ type AzureResourceIPConfig struct {
 	AttachedVmName   string    `json:"attachedVmName,omitempty,omitzero" bson:"attachedVmName,omitempty,omitzero"`
 	LastAzureSync    time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
 	LastDBSync       time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
+}
+
+//
+//
+
+type IpAddressBlock struct {
+	AllocatedToVnet bool   `json:"allocatedToVnet" bson:"allocatedToVnet"`
+	VNetName        string `json:"vnetName" bson:"vnetName"`
+	// IpAddresses     []net.IP `json:"ipAddresses" bson:"ipAddresses"`
+	FirstIp    string    `json:"firstIp" bson:"firstIp"`
+	LastIp     string    `json:"lastIp" bson:"lastIp"`
+	CidrBlocks []string  `json:"cidrBlocks" bson:"cidrBlocks"`
+	LastDBSync time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
+}
+
+//
+//
+
+type IpAddressBlocksByBlockTag struct {
+	AddressBlocks []IpAddressBlock `json:"addressBlocks" bson:"addressBlocks"`
+	BlockTag      string           `json:"blockTag" bson:"_id"`
 }
