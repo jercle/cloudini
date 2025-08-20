@@ -1022,10 +1022,10 @@ func UpsertCertInfo(caCertInfo []lib.CertAuthorityCertInfo, serverCertInfo []lib
 //
 //
 
-func UpsertAzureIPAddresses(resources []azure.IPAddressesAllResourceTypes, resIPAddressesColl *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertAzureIPAddresses(resources []azure.IPAddressesAllResourceTypes, ipamIpAddressesColl *mongo.Collection) *mongo.BulkWriteResult {
 	ctx := context.TODO()
 
-	DeleteAllDocumentsInCollection(resIPAddressesColl)
+	DeleteAllDocumentsInCollection(ipamIpAddressesColl)
 
 	var updates []mongo.WriteModel
 
@@ -1033,13 +1033,31 @@ func UpsertAzureIPAddresses(resources []azure.IPAddressesAllResourceTypes, resIP
 		resource := res
 		resource.LastDBSync = time.Now()
 		resource.ID = strings.ToLower(res.ID)
-		filter := bson.D{{"_id", resource.ID}}
-		update := bson.D{{"$set", resource}}
 
-		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+		updates = append(updates, mongo.NewInsertOneModel().SetDocument(resource))
 	}
 
-	results, err := resIPAddressesColl.BulkWrite(ctx, updates)
+	results, err := ipamIpAddressesColl.BulkWrite(ctx, updates)
+	lib.CheckFatalError(err)
+
+	return results
+}
+
+//
+//
+
+func UpdateIpamAddressBlocks(ipAddressBlocks []azure.IpAddressBlocksByBlockTag, ipamIpAddressBlocksColl *mongo.Collection) *mongo.BulkWriteResult {
+	ctx := context.TODO()
+
+	DeleteAllDocumentsInCollection(ipamIpAddressBlocksColl)
+
+	var inserts []mongo.WriteModel
+
+	for _, ipBlock := range ipAddressBlocks {
+		inserts = append(inserts, mongo.NewInsertOneModel().SetDocument(ipBlock))
+	}
+
+	results, err := ipamIpAddressBlocksColl.BulkWrite(ctx, inserts)
 	lib.CheckFatalError(err)
 
 	return results
