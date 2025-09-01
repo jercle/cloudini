@@ -42,8 +42,8 @@ require (
 	github.com/rmasci/ipsubnet v0.0.0-20210318194400-8c413a19960d
 	github.com/rodaine/table v1.3.0
 	github.com/schollz/progressbar/v3 v3.18.0
-	github.com/spf13/cobra v1.9.1
-	github.com/spf13/pflag v1.0.7
+	github.com/spf13/cobra v1.10.0
+	github.com/spf13/pflag v1.0.8
 	github.com/spf13/viper v1.20.1
 	github.com/tidwall/pretty v1.2.1
 	github.com/xuri/excelize/v2 v2.9.1
