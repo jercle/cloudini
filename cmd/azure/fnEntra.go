@@ -153,7 +153,7 @@ func GetAllB2CTenantUsers() (users []B2CUserMinimal) {
 			// }
 			token, err := tokenReq.SelectTenant(tName)
 			lib.CheckFatalError(err)
-			urlString := "https://graph.microsoft.com/beta/users/"
+			urlString := "https://graph.microsoft.com/beta/users"
 			res, err := HttpGet(urlString, *token)
 			lib.CheckFatalError(err)
 
@@ -198,6 +198,10 @@ func GetAllB2CTenantUsers() (users []B2CUserMinimal) {
 			}
 		}
 	}
+
+	jsonStr, _ := json.Marshal(users)
+
+	os.WriteFile("/home/jercle/git/cld/b2cusers.json", jsonStr, 0644)
 	return
 }
 

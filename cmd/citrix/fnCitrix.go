@@ -16,10 +16,14 @@ import (
 func ListMachineCatalogs(creds lib.CitrixCloudAccountConfig, tokenData lib.CitrixTokenData) (machineCatalogs MachineCatalogs) {
 	urlString := "https://api.cloud.com/cvad/manage/MachineCatalogs"
 	res, err := HttpGet(urlString, creds.CustomerId, creds.SiteId, tokenData)
+	// fmt.Println(string(res))
+	// os.WriteFile("ctx-res.json", res, 0644)
 	lib.CheckFatalError(err)
 
 	var mcatRes GetMachineCatalogsResponse
 	json.Unmarshal(res, &mcatRes)
+	// lib.JsonMarshalAndPrint(mcatRes)
+	// os.Exit(0)
 
 	for _, mcat := range mcatRes.Items {
 		curr := mcat
