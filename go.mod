@@ -29,7 +29,7 @@ require (
 	github.com/github/smimesign v0.2.0
 	github.com/go-ldap/ldap/v3 v3.4.11
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
-	github.com/google/certtostore v1.0.4
+	github.com/google/certtostore v1.0.6
 	github.com/google/deck v1.1.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/iancoleman/strcase v0.3.0
