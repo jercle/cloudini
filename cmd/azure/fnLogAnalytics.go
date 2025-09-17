@@ -322,7 +322,7 @@ func GetLogAnalyticsWorkbookQuery(resourceId string, token *lib.AzureMultiAuthTo
 //
 
 func RunLogAnalyticsQuery(workspaceId string, query string, token lib.AzureMultiAuthToken) (results LogAnalyticsQueryResponse) {
-	urlString := "https://api.loganalytics.io/v1/workspaces/" + workspaceId + "/query"
+	urlString := "https://api.loganalytics.azure.com/v1/workspaces/" + workspaceId + "/query"
 
 	queryStr, _ := json.Marshal(query)
 	jsonBody := `{"query":` + string(queryStr) + `, "timespan": "PT24H"}`
