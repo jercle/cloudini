@@ -52,6 +52,9 @@ func MarkImageGalleryImagesUsedByCitrix(machineCatalogs map[string]citrix.Machin
 		var galleryImage lib.GalleryImage
 
 		err := collection.FindOne(ctx, filter).Decode(&galleryImage)
+		if err != nil {
+			lib.JsonMarshalAndPrint(filter)
+		}
 		lib.CheckFatalError(err)
 		currImg := galleryImage
 

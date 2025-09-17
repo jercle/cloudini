@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.3.20]
+* Update Azure Log Analytics API endpoint to api.loganalytics.azure.com
+* Update deps
+
 ## [0.3.19]
 * Add getting and upserting IP Address Blocks to see blocks of IP Addresses used by vnets for given CIDR Blocks
 * Update deps
