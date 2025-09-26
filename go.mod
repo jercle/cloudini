@@ -58,7 +58,11 @@ require (
 )
 
 require (
+	github.com/Azure/AppConfiguration-GoProvider/azureappconfiguration v1.2.0 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/data/azappconfig v1.2.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.11.2 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azsecrets v1.4.0 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal v1.2.0 // indirect
 	github.com/Azure/go-ntlmssp v0.0.0-20221128193559-754e69321358 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.5.0 // indirect
 	github.com/alecthomas/chroma/v2 v2.20.0 // indirect

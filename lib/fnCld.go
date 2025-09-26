@@ -1,18 +1,24 @@
 package lib
 
 import (
+	"context"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"log"
 	"math/big"
 	"os"
 	"slices"
 	"sort"
 	"strconv"
 	"time"
+
+	"github.com/Azure/AppConfiguration-GoProvider/azureappconfiguration"
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
+	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 )
 
 // usrHomeDir, err := os.UserHomeDir()
@@ -30,6 +36,14 @@ func InitConfig(options *CldConfigOptions) (configFile string, configPath string
 	configPath = usrHomeDir + "/.config/cld"
 	configFilePath := configPath + "/cldConf.json"
 	cachePath = configPath + "/cache"
+
+	if os.Getenv("AZURE_APPCONFIG_ENDPOINT") != "" {
+		// useAzAppConfig = true
+		// azAppConfigTenantId = os.Getenv("AZURE_APPCONFIG_TENANT_ID")
+		// azAppConfigClientId = os.Getenv("AZURE_APPCONFIG_CLIENT_ID")
+		// azAppConfigClientSecret = os.Getenv("AZURE_APPCONFIG_CLIENT_SECRET")
+		return "azureAppConfig", "azureAppConfig", cachePath
+	}
 
 	CLD_CONFIG_PATH := os.Getenv("CLD_CONFIG_PATH")
 
@@ -143,6 +157,11 @@ func GetCldConfig(options *CldConfigOptions) CldConfigRoot {
 		config CldConfigRoot
 	)
 	encryptedConfig, _ := CheckConfigEncryptionOption()
+
+	azAppConfigUrl := os.Getenv("AZURE_APPCONFIG_ENDPOINT")
+	if azAppConfigUrl != "" {
+		return getAzureAppConfigData()
+	}
 
 	// fmt.Println(encryptedConfig)
 	// os.Exit(0)
@@ -512,4 +531,78 @@ func MapTenantIdToConfiguredTenantName(tenantId string, config AzureConfig) (ten
 		}
 	}
 	return
+}
+
+//
+//
+
+func getAzureAppConfigData() CldConfigRoot {
+	azAppConfigUrl := os.Getenv("AZURE_APPCONFIG_ENDPOINT")
+	azAppConfigTenantId := os.Getenv("AZURE_APPCONFIG_TENANT_ID")
+	azAppConfigClientId := os.Getenv("AZURE_APPCONFIG_CLIENT_ID")
+	azAppConfigClientSecret := os.Getenv("AZURE_APPCONFIG_CLIENT_SECRET")
+
+	if azAppConfigClientSecret == "" || azAppConfigClientId == "" || azAppConfigTenantId == "" {
+		fmt.Println("Ensure AZURE_APPCONFIG_TENANT_ID, AZURE_APPCONFIG_CLIENT_ID, and AZURE_APPCONFIG_CLIENT_SECRET are set")
+		os.Exit(1)
+	}
+
+	clientOptions := policy.ClientOptions{
+		Telemetry: policy.TelemetryOptions{
+			Disabled: true,
+		},
+	}
+	credOptions := &azidentity.ClientSecretCredentialOptions{
+		ClientOptions: clientOptions,
+	}
+
+	credential, err := azidentity.NewClientSecretCredential(azAppConfigTenantId, azAppConfigClientId, azAppConfigClientSecret, credOptions)
+	CheckFatalError(err)
+
+	authOptions := azureappconfiguration.AuthenticationOptions{
+		Endpoint:   azAppConfigUrl,
+		Credential: credential,
+	}
+
+	// kvRefreshOptions := &azureappconfiguration.RefreshOptions{
+	// 	Interval: 1 * time.Minute,
+	// 	Enabled:  true,
+	// }
+
+	// kvOptions := &azureappconfiguration.KeyVaultOptions{
+	// 	Credential: credential,
+	// 	// RefreshOptions: *kvRefreshOptions,
+	// }
+
+	// refreshOptions := &azureappconfiguration.KeyValueRefreshOptions{
+	// 	Interval: 1 * time.Second,
+	// 	Enabled:  true,
+	// }
+	// options := &azureappconfiguration.Options{
+	// KeyVaultOptions: *kvOptions,
+	// RefreshOptions:  *refreshOptions,
+	// Selectors: []azureappconfiguration.Selector{
+	// 	{
+	// 		KeyFilter:   "*",
+	// 		LabelFilter: "",
+	// 	},
+	// },
+	// }
+
+	appConfig, err := azureappconfiguration.Load(context.TODO(), authOptions, nil)
+	if err != nil {
+		log.Fatalf("Failed to load configuration: %v", err)
+	}
+
+	var cldConfig CldConfigRoot
+
+	appConfigBytes, err := appConfig.GetBytes(nil)
+	CheckFatalError(err)
+	// fmt.Println(string(appConfigBytes))
+	json.Unmarshal(appConfigBytes, &cldConfig)
+
+	// JsonMarshalAndPrint(cldConfig)
+	// }
+
+	return cldConfig
 }
