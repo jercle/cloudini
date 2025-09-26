@@ -14,10 +14,10 @@ require (
 	github.com/alecthomas/assert/v2 v2.11.0
 	github.com/antonmedv/clipboard v1.0.1
 	github.com/briandowns/spinner v1.23.2
-	github.com/brianvoe/gofakeit/v7 v7.6.0
+	github.com/brianvoe/gofakeit/v7 v7.7.3
 	github.com/charmbracelet/bubbles v0.21.0
-	github.com/charmbracelet/bubbletea v1.3.9
-	github.com/charmbracelet/fang v0.4.1
+	github.com/charmbracelet/bubbletea v1.3.10
+	github.com/charmbracelet/fang v0.4.2
 	github.com/charmbracelet/glamour v0.10.0
 	github.com/charmbracelet/lipgloss v1.1.1-0.20250630134802-a6c079dc8a3f
 	github.com/charmbracelet/log v0.4.2
@@ -70,9 +70,9 @@ require (
 	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta1 // indirect
 	github.com/charmbracelet/x/ansi v0.10.1 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
-	github.com/charmbracelet/x/exp/charmtone v0.0.0-20250916153604-9a2e892ed98e // indirect
-	github.com/charmbracelet/x/exp/color v0.0.0-20250916153604-9a2e892ed98e // indirect
-	github.com/charmbracelet/x/exp/slice v0.0.0-20250916153604-9a2e892ed98e // indirect
+	github.com/charmbracelet/x/exp/charmtone v0.0.0-20250922100529-c9afca5d6f21 // indirect
+	github.com/charmbracelet/x/exp/color v0.0.0-20250922100529-c9afca5d6f21 // indirect
+	github.com/charmbracelet/x/exp/slice v0.0.0-20250922100529-c9afca5d6f21 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
@@ -97,7 +97,7 @@ require (
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-localereader v0.0.1 // indirect
-	github.com/mattn/go-runewidth v0.0.16 // indirect
+	github.com/mattn/go-runewidth v0.0.17 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.27 // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
@@ -116,13 +116,13 @@ require (
 	github.com/richardlehane/msoleps v1.0.4 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
-	github.com/sagikazarmark/locafero v0.11.0 // indirect
+	github.com/sagikazarmark/locafero v0.12.0 // indirect
 	github.com/sahilm/fuzzy v0.1.1 // indirect
 	github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
-	github.com/tiendc/go-deepcopy v1.6.1 // indirect
+	github.com/tiendc/go-deepcopy v1.7.1 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
