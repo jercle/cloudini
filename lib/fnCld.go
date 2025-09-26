@@ -564,32 +564,21 @@ func getAzureAppConfigData() CldConfigRoot {
 		Credential: credential,
 	}
 
-	// kvRefreshOptions := &azureappconfiguration.RefreshOptions{
-	// 	Interval: 1 * time.Minute,
-	// 	Enabled:  true,
-	// }
+	kvOptions := &azureappconfiguration.KeyVaultOptions{
+		Credential: credential,
+	}
 
-	// kvOptions := &azureappconfiguration.KeyVaultOptions{
-	// 	Credential: credential,
-	// 	// RefreshOptions: *kvRefreshOptions,
-	// }
+	options := &azureappconfiguration.Options{
+		KeyVaultOptions: *kvOptions,
+		// Selectors: []azureappconfiguration.Selector{
+		// 	{
+		// 		KeyFilter:   "*",
+		// 		LabelFilter: "",
+		// 	},
+		// },
+	}
 
-	// refreshOptions := &azureappconfiguration.KeyValueRefreshOptions{
-	// 	Interval: 1 * time.Second,
-	// 	Enabled:  true,
-	// }
-	// options := &azureappconfiguration.Options{
-	// KeyVaultOptions: *kvOptions,
-	// RefreshOptions:  *refreshOptions,
-	// Selectors: []azureappconfiguration.Selector{
-	// 	{
-	// 		KeyFilter:   "*",
-	// 		LabelFilter: "",
-	// 	},
-	// },
-	// }
-
-	appConfig, err := azureappconfiguration.Load(context.TODO(), authOptions, nil)
+	appConfig, err := azureappconfiguration.Load(context.TODO(), authOptions, options)
 	if err != nil {
 		log.Fatalf("Failed to load configuration: %v", err)
 	}
