@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.3.21]
+## [0.3.22]
 * Add using Azure App Configuration for config
 
 ## [0.3.20]
