@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.24]
+* Bugfix: Fix env var name for AZURE_APPCONFIG_ENDPOINT
+
 ## [0.3.23]
 * Add functionality to provide an Azure App Config label env var, which will then merge values with the label over the initial fetch if the env var exists.
 

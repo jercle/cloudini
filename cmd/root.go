@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cliVersion = "0.3.23"
+var cliVersion = "0.3.24"
 
 var (
 	// The name of our config file, without the file extension because viper supports many different config file languages.
@@ -50,7 +50,7 @@ var cldVersion = versioninfo.Short()
 // rootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:     "cld",
-	Version: cldVersion,
+	Version: cliVersion,
 	Short:   "A brief description of your application",
 	Long: `This CLI has been created to add additional functionality
 to Azure CLI such as data
