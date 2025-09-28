@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.22]
+* Add using Azure App Configuration for config
+
 ## [0.3.20]
 * Update Azure Log Analytics API endpoint to api.loganalytics.azure.com
 * Update deps
