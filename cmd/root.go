@@ -123,8 +123,6 @@ Azure App Configuration can be used instead of a json config file, using the fol
 	},
 
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("AzAppConfigUrl", AzAppConfigUrl)
-		// os.Exit(0)
 		if ShowChangelog {
 			ViewChangelog(ChangelogFile)
 		}
