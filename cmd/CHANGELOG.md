@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.23]
+* Add functionality to provide an Azure App Config label env var, which will then merge values with the label over the initial fetch if the env var exists.
+
 ## [0.3.22]
 * Add using Azure App Configuration for config
 

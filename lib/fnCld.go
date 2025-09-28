@@ -158,7 +158,7 @@ func GetCldConfig(options *CldConfigOptions) CldConfigRoot {
 	)
 	encryptedConfig, _ := CheckConfigEncryptionOption()
 
-	azAppConfigUrl := os.Getenv("AZURE_APPCONFIG_ENDPOINT")
+	azAppConfigUrl := os.Getenv("CLD_AZURE_APPCONFIG_ENDPOINT")
 	if azAppConfigUrl != "" {
 		return getAzureAppConfigData()
 	}
@@ -542,6 +542,8 @@ func getAzureAppConfigData() CldConfigRoot {
 	azAppConfigClientId := os.Getenv("AZURE_APPCONFIG_CLIENT_ID")
 	azAppConfigClientSecret := os.Getenv("AZURE_APPCONFIG_CLIENT_SECRET")
 
+	azAppConfigLabel := os.Getenv("AZURE_APPCONFIG_LABEL")
+
 	if azAppConfigClientSecret == "" || azAppConfigClientId == "" || azAppConfigTenantId == "" {
 		fmt.Println("Ensure AZURE_APPCONFIG_TENANT_ID, AZURE_APPCONFIG_CLIENT_ID, and AZURE_APPCONFIG_CLIENT_SECRET are set")
 		os.Exit(1)
@@ -573,7 +575,7 @@ func getAzureAppConfigData() CldConfigRoot {
 		// Selectors: []azureappconfiguration.Selector{
 		// 	{
 		// 		KeyFilter:   "*",
-		// 		LabelFilter: "",
+		// 		LabelFilter: azAppConfigLabel,
 		// 	},
 		// },
 	}
@@ -587,11 +589,28 @@ func getAzureAppConfigData() CldConfigRoot {
 
 	appConfigBytes, err := appConfig.GetBytes(nil)
 	CheckFatalError(err)
-	// fmt.Println(string(appConfigBytes))
 	json.Unmarshal(appConfigBytes, &cldConfig)
 
-	// JsonMarshalAndPrint(cldConfig)
-	// }
+	if azAppConfigLabel != "" {
+		options := &azureappconfiguration.Options{
+			KeyVaultOptions: *kvOptions,
+			Selectors: []azureappconfiguration.Selector{
+				{
+					KeyFilter:   "*",
+					LabelFilter: azAppConfigLabel,
+				},
+			},
+		}
+
+		appConfig, err := azureappconfiguration.Load(context.TODO(), authOptions, options)
+		if err != nil {
+			log.Fatalf("Failed to load configuration: %v", err)
+		}
+
+		appConfigBytes, err := appConfig.GetBytes(nil)
+		CheckFatalError(err)
+		json.Unmarshal(appConfigBytes, &cldConfig)
+	}
 
 	return cldConfig
 }
