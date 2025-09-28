@@ -29,14 +29,14 @@ var (
 	replaceHyphenWithCamelCase = true
 
 	// outJSON flag
-	OutJSON                 bool
-	DebugMode               bool
-	ShowChangelog           bool
-	AzAppConfigUrl          string
-	AzAppConfigTenantId     string
-	AzAppConfigClientId     string
-	AzAppConfigClientSecret string
-	AzAppConfigLabel        string
+	OutJSON       bool
+	DebugMode     bool
+	ShowChangelog bool
+	// AzAppConfigUrl          string
+	// AzAppConfigTenantId     string
+	// AzAppConfigClientId     string
+	// AzAppConfigClientSecret string
+	// AzAppConfigLabel        string
 
 	// // Only used when initially encrypting a previously unencrypted config file
 	// InitialEncryptionOfUnencryptedConfigFile bool
