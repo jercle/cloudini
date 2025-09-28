@@ -158,7 +158,7 @@ func GetCldConfig(options *CldConfigOptions) CldConfigRoot {
 	)
 	encryptedConfig, _ := CheckConfigEncryptionOption()
 
-	azAppConfigUrl := os.Getenv("CLD_AZURE_APPCONFIG_ENDPOINT")
+	azAppConfigUrl := os.Getenv("AZURE_APPCONFIG_ENDPOINT")
 	if azAppConfigUrl != "" {
 		return getAzureAppConfigData()
 	}
