@@ -21,17 +21,22 @@ var (
 	defaultConfigFilename = "cldConf"
 
 	// The environment variable prefix of all environment variables bound to our command line flags.
-	// For example, --number is bound to STING_NUMBER.
-	envPrefix = "CLD"
+	// For example, --number is bound to CLD_NUMBER.
+	envPrefix = "cld"
 
 	// Replace hyphenated flag names with camelCase in the config file
 
 	replaceHyphenWithCamelCase = true
 
 	// outJSON flag
-	OutJSON       bool
-	DebugMode     bool
-	ShowChangelog bool
+	OutJSON                 bool
+	DebugMode               bool
+	ShowChangelog           bool
+	AzAppConfigUrl          string
+	AzAppConfigTenantId     string
+	AzAppConfigClientId     string
+	AzAppConfigClientSecret string
+	AzAppConfigLabel        string
 
 	// // Only used when initially encrypting a previously unencrypted config file
 	// InitialEncryptionOfUnencryptedConfigFile bool
@@ -51,7 +56,15 @@ var RootCmd = &cobra.Command{
 to Azure CLI such as data
 aggregation from multiple 'az' commands into a MongoDB Dababase, reporting,
 and pulling data from both Azure DevOps and Azure,
-as well as other functionality. AWS functionality is also being added.`,
+as well as other functionality. AWS functionality is also being added.
+
+Azure App Configuration can be used instead of a json config file, using the following env vars:
+* AZURE_APPCONFIG_ENDPOINT (required to enable)
+* AZURE_APPCONFIG_TENANT_ID (required if enabled)
+* AZURE_APPCONFIG_CLIENT_ID (required if enabled)
+* AZURE_APPCONFIG_CLIENT_SECRET (required if enabled)
+
+* AZURE_APPCONFIG_LABEL (optional - used only when labels are in use and need to be merged into standard config)`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -110,6 +123,8 @@ as well as other functionality. AWS functionality is also being added.`,
 	},
 
 	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("AzAppConfigUrl", AzAppConfigUrl)
+		// os.Exit(0)
 		if ShowChangelog {
 			ViewChangelog(ChangelogFile)
 		}
@@ -167,9 +182,9 @@ func bindFlags(cmd *cobra.Command, v *viper.Viper) {
 		configName := f.Name
 		// If using camelCase in the config file, replace hyphens with a camelCased string.
 		// Since viper does case-insensitive comparisons, we don't need to bother fixing the case, and only need to remove the hyphens.
-		if replaceHyphenWithCamelCase {
-			configName = strings.ReplaceAll(f.Name, "-", "")
-		}
+		// if replaceHyphenWithCamelCase {
+		// 	configName = strings.ReplaceAll(f.Name, "-", "")
+		// }
 
 		// Apply the viper config value to the flag when the flag is not set and viper has a value
 		if !f.Changed && v.IsSet(configName) {
@@ -192,6 +207,13 @@ func Execute() {
 func init() {
 	RootCmd.PersistentFlags().BoolVarP(&OutJSON, "outJSON", "j", false, "Output formatted to JSON")
 	RootCmd.PersistentFlags().BoolVar(&DebugMode, "debug", false, "Debug mode creates trace logs for Golang pprof")
+	// RootCmd.PersistentFlags().StringVar(&AzAppConfigUrl, "azure-appconfig-endpoint", "", "Enables use of Azure App Config instead of json config file")
+	// RootCmd.PersistentFlags().StringVar(&AzAppConfigTenantId, "azure-appconfig-tenant-id", "", "Tenant ID to use for Azure App Config if enabled")
+	// RootCmd.PersistentFlags().StringVar(&AzAppConfigClientId, "azure-appconfig-client-id", "", "Client ID to use for Azure App Config if enabled")
+	// RootCmd.PersistentFlags().StringVar(&AzAppConfigClientSecret, "azure-appconfig-client-secret", "", "Client Secret to use for Azure App Config if enabled")
+	// RootCmd.PersistentFlags().StringVar(&AzAppConfigLabel, "azure-appconfig-label", "", "Azure App Config Label to use for Azure App Config if enabled and label needed")
+	// RootCmd.PersistentFlags().BoolVar(&DebugMode, "debug", false, "Debug mode creates trace logs for Golang pprof")
+	// RootCmd.PersistentFlags().BoolVar(&DebugMode, "debug", false, "Debug mode creates trace logs for Golang pprof")
 	RootCmd.Flags().BoolVar(&ShowChangelog, "changelog", false, "Shows Cloudini Changelog")
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
