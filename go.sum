@@ -140,8 +140,8 @@ github.com/golang-jwt/jwt/v5 v5.3.0 h1:pv4AsKCKKZuqlgs5sUmn4x8UlGa0kEVt/puTpKx9v
 github.com/golang-jwt/jwt/v5 v5.3.0/go.mod h1:fxCRLWMO43lRc8nhHWY6LGqRcf+1gQWArsqaEUEa5bE=
 github.com/golang/snappy v1.0.0 h1:Oy607GVXHs7RtbggtPBnr2RmDArIsAefDwvrdWvRhGs=
 github.com/golang/snappy v1.0.0/go.mod h1:/XxbfmMg8lxefKM7IXC3fBNl/7bRcc72aCRzEWrmP2Q=
-github.com/google/certtostore v1.0.4 h1:yKmrFxXlIMh6RsagOdzd7o9gJNBHO9tMG/JmoIAqcdA=
-github.com/google/certtostore v1.0.4/go.mod h1:f+lIoiW/ICUQI3gBALMd2/s5hMJvPJoRV8JZ1ix607E=
+github.com/google/certtostore v1.0.6 h1:LlCIgyTvDxTlcncMPTSYZGo6lCsiHzO6Dy7ff6ltk/0=
+github.com/google/certtostore v1.0.6/go.mod h1:2N0ZPLkGvQWhYvXaiBGq02r71fnSLfq78VKIWQHr1wo=
 github.com/google/deck v1.1.0 h1:kePIz/wtlpsFSx3+sEmYnlBPudF0x3u0QqB91EC8l38=
 github.com/google/deck v1.1.0/go.mod h1:VyLix33qBTXGsn4vbF85lWLv/9ushseSAoqS27uX6Zg=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
