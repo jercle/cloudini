@@ -5,7 +5,7 @@ go 1.25.1
 ignore dev
 
 require (
-	github.com/Azure/AppConfiguration-GoProvider/azureappconfiguration v1.2.0
+	github.com/Azure/AppConfiguration-GoProvider/azureappconfiguration v1.3.0
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.19.1
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.12.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v6 v6.4.0

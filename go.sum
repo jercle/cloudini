@@ -1,5 +1,5 @@
-github.com/Azure/AppConfiguration-GoProvider/azureappconfiguration v1.2.0 h1:YhxqMEusdtId4Yn4h9BDErw+vtL2upubKYvF1avqips=
-github.com/Azure/AppConfiguration-GoProvider/azureappconfiguration v1.2.0/go.mod h1:hRvrMckOXBsRZysyifgIJPLpio0kaYtnJvZYvQtpUfY=
+github.com/Azure/AppConfiguration-GoProvider/azureappconfiguration v1.3.0 h1:LpR4+JABMeDLrCJZUlS2QRJ1OiQRkSFnMiJ+HOPgE8U=
+github.com/Azure/AppConfiguration-GoProvider/azureappconfiguration v1.3.0/go.mod h1:JZjuVES/kbo6vp6wC0W5Mk72obx6BM54JCBa+oZY4mk=
 github.com/Azure/azure-sdk-for-go/sdk/azcore v1.19.1 h1:5YTBM8QDVIBN3sxBil89WfdAAqDZbyJTgh688DSxX5w=
 github.com/Azure/azure-sdk-for-go/sdk/azcore v1.19.1/go.mod h1:YD5h/ldMsG0XiIw7PdyNhLxaM317eFh5yNLccNfGdyw=
 github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.12.0 h1:wL5IEG5zb7BVv1Kv0Xm92orq+5hB5Nipn3B5tn4Rqfk=
