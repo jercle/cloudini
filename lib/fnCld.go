@@ -580,7 +580,7 @@ func getAzureAppConfigData() CldConfigRoot {
 			ID: mgIdentClientId,
 		}
 
-		credential, err := azidentity.NewManagedIdentityCredential(mgdIdentOpts)
+		credential, err := azidentity.NewManagedIdentityCredential(&mgdIdentOpts)
 		CheckFatalError(err)
 		authOptions.Credential = credential
 		kvOptions.Credential = credential
