@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.27]
+* Update Managed Identity Env Var to AZURE_APPCONFIG_MANAGED_IDENTITY
+
 ## [0.3.26]
 * Enable the use of Managed Identities for App Config using AZURE_APPCONFIG_USE_MANAGED_IDENTITY
 

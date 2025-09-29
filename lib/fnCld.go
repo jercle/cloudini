@@ -78,6 +78,12 @@ func InitConfig(options *CldConfigOptions) (configFile string, configPath string
 }
 
 func SaveCldConfig(configFilePath string, config CldConfigRoot, options *CldConfigOptions) {
+	if configFilePath == "azureAppConfig" {
+		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
+		err := os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
+		CheckFatalError(err)
+		return
+	}
 	encryptConfig, _ := CheckConfigEncryptionOption()
 	_ = encryptConfig
 
@@ -129,6 +135,13 @@ func EncryptDecryptedConfigFile(configFilePath string, outputFileName string) {
 }
 
 func DecryptEncryptedConfigFile(configFilePath string, outputFileName string) {
+	if configFilePath == "azureAppConfig" {
+		config := GetCldConfig(nil)
+		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
+		err := os.WriteFile(outputFileName, jsonBytes, os.ModePerm)
+		CheckFatalError(err)
+		return
+	}
 	config, err := os.ReadFile(configFilePath)
 	CheckFatalError(err)
 
@@ -541,7 +554,7 @@ func getAzureAppConfigData() CldConfigRoot {
 	azAppConfigTenantId := os.Getenv("AZURE_APPCONFIG_TENANT_ID")
 	azAppConfigClientId := os.Getenv("AZURE_APPCONFIG_CLIENT_ID")
 	azAppConfigClientSecret := os.Getenv("AZURE_APPCONFIG_CLIENT_SECRET")
-	azAppConfigUseManagedIdentity := os.Getenv("AZURE_APPCONFIG_USE_MANAGED_IDENTITY")
+	azAppConfigManagedIdentity := os.Getenv("AZURE_APPCONFIG_MANAGED_IDENTITY")
 
 	azAppConfigLabel := os.Getenv("AZURE_APPCONFIG_LABEL")
 
@@ -561,8 +574,11 @@ func getAzureAppConfigData() CldConfigRoot {
 
 	kvOptions := &azureappconfiguration.KeyVaultOptions{}
 
-	if azAppConfigUseManagedIdentity == "true" {
-		credential, err := azidentity.NewManagedIdentityCredential(nil)
+	if azAppConfigUseManagedIdentity != "" {
+		mgdIdentOpts := azidentity.ManagedIdentityCredentialOptions{
+			ID: azAppConfigUseManagedIdentity
+		}
+		credential, err := azidentity.NewManagedIdentityCredential(mgdIdentOpts)
 		CheckFatalError(err)
 		authOptions.Credential = credential
 		kvOptions.Credential = credential
