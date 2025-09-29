@@ -541,6 +541,7 @@ func getAzureAppConfigData() CldConfigRoot {
 	azAppConfigTenantId := os.Getenv("AZURE_APPCONFIG_TENANT_ID")
 	azAppConfigClientId := os.Getenv("AZURE_APPCONFIG_CLIENT_ID")
 	azAppConfigClientSecret := os.Getenv("AZURE_APPCONFIG_CLIENT_SECRET")
+	azAppConfigUseManagedIdentity := os.Getenv("AZURE_APPCONFIG_USE_MANAGED_IDENTITY")
 
 	azAppConfigLabel := os.Getenv("AZURE_APPCONFIG_LABEL")
 
@@ -558,16 +559,23 @@ func getAzureAppConfigData() CldConfigRoot {
 		ClientOptions: clientOptions,
 	}
 
-	credential, err := azidentity.NewClientSecretCredential(azAppConfigTenantId, azAppConfigClientId, azAppConfigClientSecret, credOptions)
-	CheckFatalError(err)
-
 	authOptions := azureappconfiguration.AuthenticationOptions{
-		Endpoint:   azAppConfigUrl,
-		Credential: credential,
+		Endpoint: azAppConfigUrl,
+		// Credential: credential,
 	}
 
-	kvOptions := &azureappconfiguration.KeyVaultOptions{
-		Credential: credential,
+	kvOptions := &azureappconfiguration.KeyVaultOptions{}
+
+	if azAppConfigUseManagedIdentity == "true" {
+		credential, err := azidentity.NewManagedIdentityCredential(nil)
+		CheckFatalError(err)
+		authOptions.Credential = credential
+		kvOptions.Credential = credential
+	} else {
+		credential, err := azidentity.NewClientSecretCredential(azAppConfigTenantId, azAppConfigClientId, azAppConfigClientSecret, credOptions)
+		CheckFatalError(err)
+		authOptions.Credential = credential
+		kvOptions.Credential = credential
 	}
 
 	options := &azureappconfiguration.Options{
