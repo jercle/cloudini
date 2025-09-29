@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.25]
+* Update dependencies
+
 ## [0.3.24]
 * Bugfix: Fix env var name for AZURE_APPCONFIG_ENDPOINT
 
