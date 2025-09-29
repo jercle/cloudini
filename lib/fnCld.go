@@ -545,11 +545,6 @@ func getAzureAppConfigData() CldConfigRoot {
 
 	azAppConfigLabel := os.Getenv("AZURE_APPCONFIG_LABEL")
 
-	if azAppConfigClientSecret == "" || azAppConfigClientId == "" || azAppConfigTenantId == "" {
-		fmt.Println("Ensure AZURE_APPCONFIG_TENANT_ID, AZURE_APPCONFIG_CLIENT_ID, and AZURE_APPCONFIG_CLIENT_SECRET are set")
-		os.Exit(1)
-	}
-
 	clientOptions := policy.ClientOptions{
 		Telemetry: policy.TelemetryOptions{
 			Disabled: true,
@@ -572,6 +567,10 @@ func getAzureAppConfigData() CldConfigRoot {
 		authOptions.Credential = credential
 		kvOptions.Credential = credential
 	} else {
+		if azAppConfigClientSecret == "" || azAppConfigClientId == "" || azAppConfigTenantId == "" {
+			fmt.Println("Ensure AZURE_APPCONFIG_TENANT_ID, AZURE_APPCONFIG_CLIENT_ID, and AZURE_APPCONFIG_CLIENT_SECRET are set")
+			os.Exit(1)
+		}
 		credential, err := azidentity.NewClientSecretCredential(azAppConfigTenantId, azAppConfigClientId, azAppConfigClientSecret, credOptions)
 		CheckFatalError(err)
 		authOptions.Credential = credential
