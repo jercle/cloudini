@@ -94,8 +94,10 @@ func HttpPost(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byt
 //
 //
 
-func HttpPut(urlString string, mat lib.AzureMultiAuthToken) ([]byte, []byte, error) {
-	req, err := http.NewRequest(http.MethodPost, urlString, nil)
+func HttpPut(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byte, []byte, error) {
+	bodyReader := bytes.NewReader([]byte(body))
+
+	req, err := http.NewRequest(http.MethodPut, urlString, bodyReader)
 	lib.CheckFatalError(err)
 	// if err != nil {
 	// 	return nil, err

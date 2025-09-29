@@ -53,6 +53,9 @@ func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthToke
 	ctx := context.Background()
 	options := matOptions
 
+	// lib.JsonMarshalAndPrint(matOptions)
+	// os.Exit(0)
+
 	var tokenRequestOptions policy.TokenRequestOptions
 	var cachedToken *lib.AzureTokenData
 
