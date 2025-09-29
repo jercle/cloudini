@@ -30,7 +30,7 @@ require (
 	github.com/github/smimesign v0.2.0
 	github.com/go-ldap/ldap/v3 v3.4.11
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
-	github.com/google/certtostore v1.0.4
+	github.com/google/certtostore v1.0.6
 	github.com/google/deck v1.1.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/iancoleman/strcase v0.3.0
@@ -66,7 +66,7 @@ require (
 	github.com/Azure/go-ntlmssp v0.0.0-20221128193559-754e69321358 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.5.0 // indirect
 	github.com/alecthomas/chroma/v2 v2.20.0 // indirect
-	github.com/alecthomas/repr v0.5.1 // indirect
+	github.com/alecthomas/repr v0.5.2 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
