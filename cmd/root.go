@@ -65,7 +65,7 @@ Azure App Configuration can be used instead of a json config file, using the fol
 * AZURE_APPCONFIG_CLIENT_SECRET (required if enabled)
 
 * AZURE_APPCONFIG_LABEL (optional - used only when labels are in use and need to be merged into standard config)
-* AZURE_APPCONFIG_USE_MANAGED_IDENTITY (optional - Uses Managed Identity for App Config auth instead of Client Secret)`,
+* AZURE_APPCONFIG_USE_MANAGED_IDENTITY (optional - Uses Managed Identity for App Config auth instead of Client Secret. Must be set to 'true' to enable)`,
 
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
