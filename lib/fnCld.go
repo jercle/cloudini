@@ -575,8 +575,9 @@ func getAzureAppConfigData() CldConfigRoot {
 	kvOptions := &azureappconfiguration.KeyVaultOptions{}
 
 	if azAppConfigManagedIdentity != "" {
+		mgIdentClientId := azidentity.ClientID(azAppConfigManagedIdentity)
 		mgdIdentOpts := azidentity.ManagedIdentityCredentialOptions{
-			ID: azidentity.ClientID(azAppConfigManagedIdentity),
+			ID: mgIdentClientId,
 		}
 
 		credential, err := azidentity.NewManagedIdentityCredential(mgdIdentOpts)
