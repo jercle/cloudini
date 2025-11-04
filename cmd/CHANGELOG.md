@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.28]
+* Update deps
+
 ## [0.3.27]
 * Update Managed Identity Env Var to AZURE_APPCONFIG_MANAGED_IDENTITY
 
