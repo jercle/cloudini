@@ -17,7 +17,7 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v6"
+	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v7"
 	"github.com/rmasci/ipsubnet"
 
 	"github.com/jercle/cloudini/lib"
@@ -739,7 +739,10 @@ func GetVcpuCountForAllConfiguredTenants(
 
 		id := vm.ID
 		vcpus, err := strconv.Atoi(vm.Properties.HardwareProfile.VmSizeSku.VCPUs)
-		lib.CheckFatalError(err)
+		if err != nil {
+			lib.JsonMarshalAndPrint(vm)
+			lib.CheckFatalError(err)
+		}
 
 		if vm.WindowsType != "desktop" {
 			if strings.Contains(strings.ToLower(vm.Properties.Extended.InstanceView.PowerState.Code), "deallocated") {
