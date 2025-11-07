@@ -1,7 +1,8 @@
 package azure
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"os"
 	"strings"
 	"sync"
@@ -39,10 +40,10 @@ func GetAppRegDataForAllConfiguredTenants(outputPath string) (allAppRegistration
 		if _, err := os.Stat(outputPath); err != nil {
 			os.MkdirAll(outputPath, os.ModePerm)
 		}
-		expiringCredsStr, _ := json.MarshalIndent(expiringCreds, "", "  ")
+		expiringCredsStr, _ := json.Marshal(expiringCreds, jsontext.WithIndent("  "))
 		os.WriteFile(outputPath+"/entraApps-ALL-expiringCredentials.json", expiringCredsStr, 0644)
 
-		allAppRegistrationsStr, _ := json.MarshalIndent(allAppRegistrations, "", "  ")
+		allAppRegistrationsStr, _ := json.Marshal(allAppRegistrations, jsontext.WithIndent("  "))
 		os.WriteFile(outputPath+"/entraApps-ALL-allAppRegistrations.json", allAppRegistrationsStr, 0644)
 	}
 
@@ -148,9 +149,6 @@ func GetAllB2CTenantUsers() (users []B2CUserMinimal) {
 	for tName, tConfig := range tenants {
 		if tConfig.IsB2C {
 			var nextLink string
-			// if tName != "***REMOVED***" {
-			// 	continue
-			// }
 			token, err := tokenReq.SelectTenant(tName)
 			lib.CheckFatalError(err)
 			urlString := "https://graph.microsoft.com/beta/users"
@@ -163,15 +161,26 @@ func GetAllB2CTenantUsers() (users []B2CUserMinimal) {
 			nextLink = resData.NextLink
 
 			for _, user := range resData.Value {
-				jsonStr, _ := json.Marshal(user)
 				var userData B2CUserMinimal
+				jsonStr, _ := json.Marshal(user)
 				err := json.Unmarshal(jsonStr, &userData)
 				lib.CheckFatalError(err)
 				upn := userData.UserPrincipalName
 				domain := strings.Split(upn, "@")
 				tenant := strings.Split(domain[1], ".")[0]
 				userData.B2CTenant = tenant
-				// userData.TenantName = tName
+
+				var unknownFields map[string]time.Time
+				err = json.Unmarshal(user.UnknownFields, &unknownFields)
+				for k, v := range unknownFields {
+					if strings.HasPrefix(k, "extension") && strings.HasSuffix(k, "lastLogonTime") {
+						userData.ExtensionLastLogonTime = v
+					}
+					if strings.HasPrefix(k, "extension") && strings.HasSuffix(k, "passwordResetOn") {
+						userData.ExtensionPasswordResetOn = v
+					}
+				}
+
 				users = append(users, userData)
 			}
 
@@ -199,9 +208,9 @@ func GetAllB2CTenantUsers() (users []B2CUserMinimal) {
 		}
 	}
 
-	jsonStr, _ := json.Marshal(users)
+	// jsonStr, _ := json.Marshal(users)
 
-	os.WriteFile("/home/jercle/git/cld/b2cusers.json", jsonStr, 0644)
+	// os.WriteFile("/home/jercle/git/cld/b2cusers.json", jsonStr, 0644)
 	return
 }
 

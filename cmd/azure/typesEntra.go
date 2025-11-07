@@ -1,6 +1,10 @@
 package azure
 
-import "time"
+import (
+	"time"
+
+	"encoding/json/jsontext"
+)
 
 type EntraRoleDefinition struct {
 	Description     string `json:"description,omitempty" bson:"description,omitempty"`
@@ -468,24 +472,23 @@ type B2CUser struct {
 		CloudSipProxyAddress        any   `json:"cloudSipProxyAddress"`
 		IsSipEnabled                any   `json:"isSipEnabled"`
 	} `json:"cloudRealtimeCommunicationInfo"`
-	CompanyName                                              any       `json:"companyName"`
-	ConsentProvidedForMinor                                  any       `json:"consentProvidedForMinor"`
-	Country                                                  any       `json:"country"`
-	CreatedDateTime                                          time.Time `json:"createdDateTime"`
-	CreationType                                             *string   `json:"creationType"`
-	DeletedDateTime                                          any       `json:"deletedDateTime"`
-	Department                                               any       `json:"department"`
-	DeviceKeys                                               []any     `json:"deviceKeys"`
-	DisplayName                                              string    `json:"displayName"`
-	EmployeeHireDate                                         any       `json:"employeeHireDate"`
-	EmployeeID                                               any       `json:"employeeId"`
-	EmployeeLeaveDateTime                                    any       `json:"employeeLeaveDateTime"`
-	EmployeeOrgData                                          any       `json:"employeeOrgData"`
-	EmployeeType                                             any       `json:"employeeType"`
-	ExtensionF0e6c33abb094f2596ccacdf3a141aafLastLogonTime   time.Time `json:"extension_f0e6c33abb094f2596ccacdf3a141aaf_lastLogonTime,omitempty"`
-	ExtensionF0e6c33abb094f2596ccacdf3a141aafPasswordResetOn time.Time `json:"extension_f0e6c33abb094f2596ccacdf3a141aaf_passwordResetOn,omitempty"`
-	ExternalUserConvertedOn                                  any       `json:"externalUserConvertedOn"`
-	ExternalUserInformation                                  struct {
+	CompanyName             any       `json:"companyName"`
+	ConsentProvidedForMinor any       `json:"consentProvidedForMinor"`
+	Country                 any       `json:"country"`
+	CreatedDateTime         time.Time `json:"createdDateTime"`
+	CreationType            *string   `json:"creationType"`
+	DeletedDateTime         any       `json:"deletedDateTime"`
+	Department              any       `json:"department"`
+	DeviceKeys              []any     `json:"deviceKeys"`
+	DisplayName             string    `json:"displayName"`
+	EmployeeHireDate        any       `json:"employeeHireDate"`
+	EmployeeID              any       `json:"employeeId"`
+	EmployeeLeaveDateTime   any       `json:"employeeLeaveDateTime"`
+	EmployeeOrgData         any       `json:"employeeOrgData"`
+	EmployeeType            any       `json:"employeeType"`
+	UnknownFields                 jsontext.Value `json:",unknown"`
+	ExternalUserConvertedOn any            `json:"externalUserConvertedOn"`
+	ExternalUserInformation struct {
 		AcceptedAsMail   *string    `json:"acceptedAsMail"`
 		AcceptedDateTime *time.Time `json:"acceptedDateTime"`
 		InviteReplyUrls  []any      `json:"inviteReplyUrls"`
@@ -588,14 +591,12 @@ type GetAllB2CTenantUsersResponse struct {
 //
 
 type B2CUserMinimal struct {
-	AccountEnabled                                           bool      `json:"accountEnabled,omitempty,omitzero" bson:"accountEnabled,omitempty,omitzero"`
-	AccountLocked                                            bool      `json:"accountLocked,omitempty,omitzero" bson:"accountLocked,omitempty,omitzero"`
-	CreatedDateTime                                          time.Time `json:"createdDateTime,omitempty,omitzero" bson:"createdDateTime,omitempty,omitzero"`
-	CreationType                                             *string   `json:"creationType,omitempty,omitzero" bson:"creationType,omitempty,omitzero"`
-	DisplayName                                              string    `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
-	Extension4e4fa41c1d3246639764b37ff949534dLastLogonTime   time.Time `json:"extension_4e4fa41c1d3246639764b37ff949534d_lastLogonTime,omitempty" bson:"extension_4e4fa41c1d3246639764b37ff949534d_lastLogonTime,omitempty"`
-	Extension4e4fa41c1d3246639764b37ff949534dPasswordResetOn time.Time `json:"extension_4e4fa41c1d3246639764b37ff949534d_passwordResetOn,omitempty" bson:"extension_4e4fa41c1d3246639764b37ff949534d_passwordResetOn,omitempty"`
-	ExternalUserInformation                                  struct {
+	AccountEnabled  bool      `json:"accountEnabled,omitempty,omitzero" bson:"accountEnabled,omitempty,omitzero"`
+	AccountLocked   bool      `json:"accountLocked,omitempty,omitzero" bson:"accountLocked,omitempty,omitzero"`
+	CreatedDateTime time.Time `json:"createdDateTime,omitempty,omitzero" bson:"createdDateTime,omitempty,omitzero"`
+	CreationType    *string   `json:"creationType,omitempty,omitzero" bson:"creationType,omitempty,omitzero"`
+	DisplayName     string    `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
+	ExternalUserInformation struct {
 		AcceptedAsMail   any       `json:"acceptedAsMail,omitempty,omitzero" bson:"acceptedAsMail,omitempty,omitzero"`
 		AcceptedDateTime any       `json:"acceptedDateTime,omitempty,omitzero" bson:"acceptedDateTime,omitempty,omitzero"`
 		InviteReplyUrls  []any     `json:"inviteReplyUrls,omitempty,omitzero" bson:"inviteReplyUrls,omitempty,omitzero"`
@@ -624,5 +625,7 @@ type B2CUserMinimal struct {
 	UserType                        string    `json:"userType,omitempty,omitzero" bson:"userType,omitempty,omitzero"`
 	B2CTenant                       string    `json:"b2cTenant,omitempty,omitzero" bson:"b2cTenant,omitempty,omitzero"`
 	LastDBSync                      time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
+	ExtensionLastLogonTime          time.Time `json:"extensionLastLogonTime,omitempty,omitzero" bson:"extensionLastLogonTime,omitempty,omitzero"`
+	ExtensionPasswordResetOn        time.Time `json:"extensionPasswordResetOn,omitempty,omitzero" bson:"extensionPasswordResetOn,omitempty,omitzero"`
 	// TenantName                      string    `json:"tenantName" bson:"tenantName"`
 }

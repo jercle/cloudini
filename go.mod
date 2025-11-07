@@ -1,6 +1,6 @@
 module github.com/jercle/cloudini
 
-go 1.25.1
+go 1.25.3
 
 ignore dev
 
@@ -81,6 +81,7 @@ require (
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
+	github.com/dnlo/struct2csv v0.0.0-20190928115744-2f584471b24e // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-asn1-ber/asn1-ber v1.5.8-0.20250403174932-29230038a667 // indirect

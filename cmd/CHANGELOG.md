@@ -2,6 +2,8 @@
 
 ## [0.3.28]
 * Update deps
+* Update fetching Resource SKUs
+* B2C user fetching now includes extensions with prefix of 'extension' and suffixes of 'lastLogonTime' and 'passwordResetOn'
 
 ## [0.3.27]
 * Update Managed Identity Env Var to AZURE_APPCONFIG_MANAGED_IDENTITY

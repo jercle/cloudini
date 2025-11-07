@@ -158,6 +158,14 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	UpsertResourceSKUs(resourceSKUs, opts.AzResSKUColl)
 	s.Stop()
 
+
+	fmt.Println("Getting full list of SKUs from database...")
+	s.Start()
+	resourceSKUs = GetResourceSKUs(opts.AzResSKUColl)
+	s.Stop()
+
+
+
 	fmt.Println("Fetching all Azure Resources...")
 	s.Start()
 	startTime := time.Now()
