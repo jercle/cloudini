@@ -158,13 +158,10 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	UpsertResourceSKUs(resourceSKUs, opts.AzResSKUColl)
 	s.Stop()
 
-
 	fmt.Println("Getting full list of SKUs from database...")
 	s.Start()
 	resourceSKUs = GetResourceSKUs(opts.AzResSKUColl)
 	s.Stop()
-
-
 
 	fmt.Println("Fetching all Azure Resources...")
 	s.Start()
@@ -600,7 +597,11 @@ func UpdateSupportAlerts(coll *mongo.Collection) {
 		TenantName: saConf.TenantName,
 	}, nil)
 	lib.CheckFatalError(err)
+	// fmt.Println(saConf.WorkbookId)
+	// os.Exit(0)
 	supportAlertsQuery := azure.GetLogAnalyticsWorkbookQuery(saConf.WorkbookId, saToken)
+	// fmt.Println(supportAlertsQuery)
+	// os.Exit(0)
 
 	fmt.Println("Getting support alert data")
 	s.Start()

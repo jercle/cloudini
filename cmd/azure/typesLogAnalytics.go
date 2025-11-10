@@ -1,6 +1,10 @@
 package azure
 
-import "time"
+import (
+	"time"
+
+	"encoding/json/jsontext"
+)
 
 type GetAzureAlertsResponse struct {
 	Count           float64      `json:"count,omitempty,omitzero" bson:"count,omitempty,omitzero"`
@@ -14,17 +18,18 @@ type GetAzureAlertsResponse struct {
 //
 
 type AzureAlert struct {
-	AffectedResource    string `json:"affectedResource,omitempty,omitzero" bson:"affectedResource,omitempty,omitzero"`
-	AlertCreated        string `json:"alertCreated,omitempty,omitzero" bson:"alertCreated,omitempty,omitzero"`
-	AlertLastModified   string `json:"alertLastModified,omitempty,omitzero" bson:"alertLastModified,omitempty,omitzero"`
-	AlertLastModifiedBy string `json:"alertLastModifiedBy,omitempty,omitzero" bson:"alertLastModifiedBy,omitempty,omitzero"`
-	AlertState          string `json:"alertState,omitempty,omitzero" bson:"alertState,omitempty,omitzero"`
-	Description         string `json:"description,omitempty,omitzero" bson:"description,omitempty,omitzero"`
-	Name                string `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
-	Results             string `json:"results,omitempty,omitzero" bson:"results,omitempty,omitzero"`
-	Severity            string `json:"severity,omitempty,omitzero" bson:"severity,omitempty,omitzero"`
-	TriageAlert         string `json:"triageAlert,omitempty,omitzero" bson:"triageAlert,omitempty,omitzero"`
-	ID                  string `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	AffectedResource    string         `json:"AffectedResource,omitempty,omitzero" bson:"AffectedResource,omitempty,omitzero"`
+	AlertCreated        string         `json:"AlertCreated,omitempty,omitzero" bson:"AlertCreated,omitempty,omitzero"`
+	AlertLastModified   string         `json:"AlertLastModified,omitempty,omitzero" bson:"AlertLastModified,omitempty,omitzero"`
+	AlertLastModifiedBy string         `json:"AlertLastModifiedBy,omitempty,omitzero" bson:"AlertLastModifiedBy,omitempty,omitzero"`
+	AlertState          string         `json:"AlertState,omitempty,omitzero" bson:"AlertState,omitempty,omitzero"`
+	Description         string         `json:"Description,omitempty,omitzero" bson:"Description,omitempty,omitzero"`
+	UnknownFields       jsontext.Value `json:",unknown"`
+	Name                string         `json:"Name,omitempty,omitzero" bson:"Name,omitempty,omitzero"`
+	Results             string         `json:"Results,omitempty,omitzero" bson:"Results,omitempty,omitzero"`
+	Severity            string         `json:"Severity,omitempty,omitzero" bson:"Severity,omitempty,omitzero"`
+	TriageAlert         string         `json:"TriageAlert,omitempty,omitzero" bson:"TriageAlert,omitempty,omitzero"`
+	ID                  string         `json:"ID,omitempty,omitzero" bson:"ID,omitempty,omitzero"`
 	Properties          struct {
 		Context struct {
 			AffectedItems      string `json:"affectedItems,omitempty" bson:"affectedItems,omitempty"`

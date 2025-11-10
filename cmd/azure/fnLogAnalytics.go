@@ -2,7 +2,8 @@ package azure
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"io"
 	"net/http"
@@ -101,7 +102,7 @@ func (tables *LogAnalyticsTables) filterByRetentionInDaysAsDefault(filter bool) 
 //
 
 func (tables *LogAnalyticsTables) printJSON() {
-	jsonData, err := json.MarshalIndent(tables, "", "  ")
+	jsonData, err := json.Marshal(tables, jsontext.WithIndent("  "))
 
 	if err != nil {
 		log.Fatal(err)
@@ -213,15 +214,25 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 	currentTime := time.Now()
 
 	for _, alert := range alertsResponse.Data {
-		jsonStr, _ := json.Marshal(alert)
+		jsonStr, _ := json.Marshal(alert, jsontext.WithIndent("  "))
 		var curr AzureAlertProcessed
 		err = json.Unmarshal(jsonStr, &curr)
-		// lib.CheckFatalError(err)
+		lib.CheckFatalError(err)
 		curr.TenantName = token.TenantName
 		// lib.JsonMarshalAndPrint(curr)
+		// fmt.Println(string(jsonStr))
 		// os.Exit(0)
 		alertCreated, err := time.Parse("15:04 PM 02-01-06", alert.AlertCreated)
+		// if err != nil {
+		// fmt.Println(string(jsonStr))
+		// fmt.Println("alert.AlertCreated:", alert.AlertCreated)
+		// fmt.Println("alert.Name:", alert.Name)
+		// lib.JsonMarshalAndPrint(alert)
+
+		// os.Exit(0)
 		lib.CheckFatalError(err)
+		// }
+
 		curr.AlertCreated = alertCreated
 		alertLastModified, err := time.Parse("15:04 PM 02-01-06", alert.AlertLastModified)
 		lib.CheckFatalError(err)
@@ -299,14 +310,22 @@ func GetLogAnalyticsWorkbookQuery(resourceId string, token *lib.AzureMultiAuthTo
 	res, err := HttpGet(urlString, *token)
 	lib.CheckFatalError(err)
 
+	// fmt.Println(string(res))
+
 	var resData LogAnalyticsWorkbook
 	err = json.Unmarshal(res, &resData)
 	lib.CheckFatalError(err)
+	// lib.JsonMarshalAndPrint(resData)
 
 	var serializedData LogAnalyticsWorkbookSerializedData
 	err = json.Unmarshal([]byte(resData.Properties.SerializedData), &serializedData)
 	lib.CheckFatalError(err)
-	query := serializedData.Items[0].Content.Query
+	query := serializedData.Items[1].Content.Query
+	// lib.JsonMarshalAndPrint(serializedData)
+	// for i, query := range serializedData.Items {
+	// 	fmt.Println(strconv.Itoa(i), query.Name)
+	// }
+	// os.Exit(0)
 
 	jsonStr, _ := json.Marshal(query)
 	queryString := strings.TrimSuffix(string(jsonStr), "\"")
