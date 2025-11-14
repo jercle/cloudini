@@ -596,3 +596,6 @@ type StorageAccountTlsVersion struct {
 	LastDBSync        time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
 	LastAzureSync     time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
 }
+
+//
+//

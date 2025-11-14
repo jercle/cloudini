@@ -1,6 +1,6 @@
 module github.com/jercle/cloudini
 
-go 1.25.3
+go 1.25.4
 
 ignore dev
 

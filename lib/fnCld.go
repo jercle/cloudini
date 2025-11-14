@@ -57,7 +57,6 @@ func InitConfig(options *CldConfigOptions) (configFile string, configPath string
 
 	if _, err := os.Stat(configPath); err != nil {
 		os.MkdirAll(configPath, os.ModePerm)
-		os.MkdirAll(cachePath, os.ModePerm)
 	}
 	if _, err := os.Stat(cachePath); err != nil {
 		os.MkdirAll(cachePath, os.ModePerm)
@@ -65,7 +64,16 @@ func InitConfig(options *CldConfigOptions) (configFile string, configPath string
 
 	fileStat, err := os.Stat(configFile)
 
-	if err != nil || fileStat.Size() == 0 {
+	if err != nil {
+		config := CldConfigRoot{}
+		config.Azure.MultiTenantAuth.Tenants = make(CldConfigTenants)
+
+		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
+		err := os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
+		CheckFatalError(err)
+	}
+
+	if fileStat.Size() == 0 {
 		config := CldConfigRoot{}
 		config.Azure.MultiTenantAuth.Tenants = make(CldConfigTenants)
 

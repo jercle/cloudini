@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.3.30]
+* Update lib.wrapperFuncs to use jsonv2
+* Add functionality to get all resource, resource group, subscription, and management group role assignments for tenant
+
+## [0.3.29]
+* Bugfix: Fix Log Analytics query
+
 ## [0.3.28]
 * Update deps
 * Update fetching Resource SKUs

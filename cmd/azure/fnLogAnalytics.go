@@ -208,6 +208,9 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 	res, _, err := HttpPost(urlString, jsonBody, *token)
 	lib.CheckFatalError(err)
 
+	// fmt.Println(string(res))
+	// os.Exit(0)
+
 	var alertsResponse GetAzureAlertsResponse
 	err = json.Unmarshal(res, &alertsResponse)
 
@@ -219,7 +222,7 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 		err = json.Unmarshal(jsonStr, &curr)
 		lib.CheckFatalError(err)
 		curr.TenantName = token.TenantName
-		// lib.JsonMarshalAndPrint(curr)
+		// lib.JsonMarshalAndPrint(alert.UnknownFields)
 		// fmt.Println(string(jsonStr))
 		// os.Exit(0)
 		alertCreated, err := time.Parse("15:04 PM 02-01-06", alert.AlertCreated)
@@ -239,10 +242,11 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 		curr.AlertLastModified = alertLastModified
 
 		curr.LastAzureSync = currentTime
-		if alert.Properties.Context.Context != nil && curr.LinkToFilteredSearchResultsAPI != "" {
+		if alert.Properties.Context.Context != nil {
 			curr.LinkToFilteredSearchResultsAPI = alert.Properties.Context.Context.Condition.AllOf[0].LinkToFilteredSearchResultsAPI
 			curr.LinkToFilteredSearchResultsUi = alert.Properties.Context.Context.Condition.AllOf[0].LinkToFilteredSearchResultsUi
 			ad, err := GetAlertDataFromSearchResultsLink(curr.LinkToFilteredSearchResultsAPI, curr.LinkToFilteredSearchResultsUi, logAnalyticsToken)
+			// fmt.Println(curr.LinkToFilteredSearchResultsAPI)
 			if err != nil {
 				fmt.Println(err)
 				lib.JsonMarshalAndPrint(curr)
@@ -321,6 +325,8 @@ func GetLogAnalyticsWorkbookQuery(resourceId string, token *lib.AzureMultiAuthTo
 	err = json.Unmarshal([]byte(resData.Properties.SerializedData), &serializedData)
 	lib.CheckFatalError(err)
 	query := serializedData.Items[1].Content.Query
+	// jsonStr1, _ := json.Marshal(serializedData)
+	// os.WriteFile("/home/jercle/git/cld/cmd/azure/fnLogAnalytics.json", jsonStr1, 0644)
 	// lib.JsonMarshalAndPrint(serializedData)
 	// for i, query := range serializedData.Items {
 	// 	fmt.Println(strconv.Itoa(i), query.Name)

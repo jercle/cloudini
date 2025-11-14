@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/earthboundkid/versioninfo/v2"
+	"github.com/jercle/cloudini/lib"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
@@ -136,6 +137,7 @@ Azure App Configuration can be used instead of a json config file, using the fol
 }
 
 func InitializeConfig(cmd *cobra.Command) error {
+	lib.InitConfig(nil)
 	v := viper.New()
 
 	// Set the base name of the config file, without the file extension.

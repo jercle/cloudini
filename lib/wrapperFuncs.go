@@ -1,7 +1,8 @@
 package lib
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"log"
 	"os"
@@ -125,7 +126,7 @@ func PrintJsonBytes(jsonBytes []byte) {
 //
 
 func MarshalAndPrintJson(data any) {
-	jsonStr, err := json.MarshalIndent(data, "", "  ")
+	jsonStr, err := json.Marshal(data, jsontext.WithIndent("  "))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -158,7 +159,7 @@ func (wg *WaitGroupCount) GetCount() int {
 //
 
 func JsonMarshalAndPrint(str interface{}) {
-	jsonStr, _ := json.MarshalIndent(str, "", "  ")
+	jsonStr, _ := json.Marshal(str, jsontext.WithIndent("  "))
 	fmt.Println(string(jsonStr))
 }
 
@@ -166,6 +167,6 @@ func JsonMarshalAndPrint(str interface{}) {
 //
 
 func JsonMarshalAndWriteFile(str interface{}, outputFile string) {
-	jsonStr, _ := json.MarshalIndent(str, "", "  ")
+	jsonStr, _ := json.Marshal(str, jsontext.WithIndent("  "))
 	os.WriteFile(outputFile, jsonStr, 0644)
 }

@@ -534,6 +534,9 @@ func ListRoleEligibilityScheduleInstances(scope string, token *lib.AzureMultiAut
 	return response.Value, nil
 }
 
+//
+//
+
 func ListRoleAssignmentScheduleInstances(scope string, token *lib.AzureMultiAuthToken) ([]RoleAssignmentScheduleInstance, error) {
 	var (
 		// response ListRoleAssignmentScheduleInstancesResponse

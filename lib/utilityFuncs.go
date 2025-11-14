@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"go/format"
+	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -544,4 +546,28 @@ func SelectMapStringFieldsFromArrayOfKeys(dataMap map[string]string, keysToSelec
 		}
 	}
 	return newMap
+}
+
+//
+//
+
+func HttpBearerGet(urlString string, bearerToken string) ([]byte, error) {
+	req, err := http.NewRequest(http.MethodGet, urlString, nil)
+	CheckFatalError(err)
+
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+bearerToken)
+
+	res, err := http.DefaultClient.Do(req)
+	CheckFatalError(err)
+
+	responseBody, err := io.ReadAll(res.Body)
+
+	if res.StatusCode == 404 {
+		jsonErr := `{"status": "` + res.Status + `", "response": ` + string(responseBody) + `}`
+		err = fmt.Errorf(jsonErr)
+		return nil, err
+	}
+
+	return responseBody, nil
 }
