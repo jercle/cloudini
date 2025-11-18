@@ -594,12 +594,13 @@ func UpdateSupportAlerts(coll *mongo.Collection) {
 	saConf := config.Azure.SupportAlerts
 
 	saToken, err := azure.GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
-		TenantName: saConf.TenantName,
+		TenantName: saConf.DefaultTenant,
 	}, nil)
 	lib.CheckFatalError(err)
 	// fmt.Println(saConf.WorkbookId)
 	// os.Exit(0)
-	supportAlertsQuery := azure.GetLogAnalyticsWorkbookQuery(saConf.WorkbookId, saToken)
+	workbookId := saConf.TenantWorkbookIds[saConf.DefaultTenant]
+	supportAlertsQuery := azure.GetLogAnalyticsWorkbookQuery(workbookId, saToken)
 	// fmt.Println(supportAlertsQuery)
 	// os.Exit(0)
 

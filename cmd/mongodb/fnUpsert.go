@@ -110,7 +110,7 @@ func UpsertMonthlyTenantSubResGrpCosts(
 		currTenant.CostGroups = tenantData.CostGroups
 		currTenant.TenantName = tenantName
 		currTenant.TenantId = tenantDetails.TenantId
-		currTenant.LastDBSync = time.Now().Local()
+		currTenant.LastDBSync = time.Now()
 
 		for subName, subData := range tenantData.Subscriptions {
 			var currSub lib.MongoDbCostSubscription
@@ -159,6 +159,7 @@ func UpsertMonthlyTenantSubResGrpCosts(
 					currRes.Name = resName
 					currRes.MongoId = strings.ToLower(tenantName + "_" + currRes.SubscriptionId + "_" + currRes.ResourceGroupName + "_" + resName)
 					currRes.LastDBSync = time.Now()
+
 					for _, meterData := range resData.MeterData {
 						var currMeter lib.MongoDbCostMeter
 						var mcd lib.MongoDbCostData
@@ -675,6 +676,7 @@ func UpsertMultipleEntraApps[T azure.EntraApplication | azure.EntraExpiringCrede
 			var curr azure.EntraApplication
 			err := json.Unmarshal(currStr, &curr)
 			curr.LastDBSync = time.Now()
+
 			lib.CheckFatalError(err)
 			filter = bson.D{{"_id", curr.AppID}}
 			update = bson.D{{"$set", curr}}
@@ -683,6 +685,7 @@ func UpsertMultipleEntraApps[T azure.EntraApplication | azure.EntraExpiringCrede
 			var curr azure.EntraExpiringCredential
 			err := json.Unmarshal(currStr, &curr)
 			curr.LastDBSync = time.Now()
+
 			lib.CheckFatalError(err)
 			filter = bson.D{{"_id", curr.MongoDbId}}
 			update = bson.D{{"$set", curr}}

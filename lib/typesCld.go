@@ -231,6 +231,7 @@ type TokenCache map[string]string
 // }
 
 type SupportAlertsConfig struct {
-	TenantName string `json:"tenantName,omitempty"`
-	WorkbookId string `json:"workbookId,omitempty"`
+	DefaultTenant     string            `json:"defaultTenant,omitempty"`
+	TenantWorkbookIds map[string]string `json:"tenantWorkbookIds,omitempty"`
+	// WorkbookId string `json:"workbookId,omitempty"`
 }

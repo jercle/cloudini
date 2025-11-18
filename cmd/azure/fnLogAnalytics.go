@@ -209,6 +209,7 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 	lib.CheckFatalError(err)
 
 	// fmt.Println(string(res))
+	// os.WriteFile("/home/jercle/git/cld/cmd/azure/fnLogAnalytics.json", res, 0644)
 	// os.Exit(0)
 
 	var alertsResponse GetAzureAlertsResponse
@@ -216,28 +217,43 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 
 	currentTime := time.Now()
 
+	cldConf := lib.GetCldConfig(nil)
+	locale, err := time.LoadLocation("Australia/Canberra")
+	lib.CheckFatalError(err)
+
+	timeInLocal := false
+
+	if strings.Contains(graphQuery, "datetime_utc_to_local") {
+		timeInLocal = true
+	}
+
 	for _, alert := range alertsResponse.Data {
 		jsonStr, _ := json.Marshal(alert, jsontext.WithIndent("  "))
 		var curr AzureAlertProcessed
 		err = json.Unmarshal(jsonStr, &curr)
 		lib.CheckFatalError(err)
 		curr.TenantName = token.TenantName
+		curr.AzureWorkbookUrl = "https://portal.azure.com/#@" + token.TenantId + "/resource" + cldConf.Azure.SupportAlerts.TenantWorkbookIds[token.TenantName] + "/workbook"
 		// lib.JsonMarshalAndPrint(alert.UnknownFields)
 		// fmt.Println(string(jsonStr))
 		// os.Exit(0)
-		alertCreated, err := time.Parse("15:04 PM 02-01-06", alert.AlertCreated)
-		// if err != nil {
-		// fmt.Println(string(jsonStr))
-		// fmt.Println("alert.AlertCreated:", alert.AlertCreated)
-		// fmt.Println("alert.Name:", alert.Name)
-		// lib.JsonMarshalAndPrint(alert)
 
-		// os.Exit(0)
+		var alertCreated time.Time
+		if timeInLocal {
+			alertCreated, err = time.ParseInLocation("15:04 PM 02-01-06", alert.AlertCreated, locale)
+		} else {
+			alertCreated, err = time.Parse("15:04 PM 02-01-06", alert.AlertCreated)
+		}
 		lib.CheckFatalError(err)
-		// }
 
 		curr.AlertCreated = alertCreated
-		alertLastModified, err := time.Parse("15:04 PM 02-01-06", alert.AlertLastModified)
+
+		var alertLastModified time.Time
+		if timeInLocal {
+			alertLastModified, err = time.ParseInLocation("15:04 PM 02-01-06", alert.AlertLastModified, locale)
+		} else {
+			alertLastModified, err = time.Parse("15:04 PM 02-01-06", alert.AlertLastModified)
+		}
 		lib.CheckFatalError(err)
 		curr.AlertLastModified = alertLastModified
 

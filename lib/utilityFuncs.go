@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"go/format"
 	"io"
+	"log/slog"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -570,4 +571,11 @@ func HttpBearerGet(urlString string, bearerToken string) ([]byte, error) {
 	}
 
 	return responseBody, nil
+}
+
+//
+//
+
+func LoggerJson() *slog.Logger {
+	return slog.New(slog.NewJSONHandler(os.Stdout, nil))
 }

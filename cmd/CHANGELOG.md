@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.31]
+* Update handling Log Analytics queries to parse as local time if 'datetime_utc_to_local' is present in the query
+
 ## [0.3.30]
 * Update lib.wrapperFuncs to use jsonv2
 * Add functionality to get all resource, resource group, subscription, and management group role assignments for tenant

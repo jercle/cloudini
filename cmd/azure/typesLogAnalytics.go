@@ -124,6 +124,7 @@ type AzureAlert struct {
 //
 
 type AzureAlertProcessed struct {
+	AzureWorkbookUrl               string    `json:"azureWorkbookUrl,omitempty,omitzero" bson:"azureWorkbookUrl,omitempty,omitzero"`
 	AffectedResource               string    `json:"affectedResource,omitempty,omitzero" bson:"affectedResource,omitempty,omitzero"`
 	AlertCreated                   time.Time `json:"alertCreated,omitempty,omitzero" bson:"alertCreated,omitempty,omitzero"`
 	AlertLastModified              time.Time `json:"alertLastModified,omitempty,omitzero" bson:"alertLastModified,omitempty,omitzero"`
@@ -134,7 +135,7 @@ type AzureAlertProcessed struct {
 	Results                        string    `json:"results,omitempty,omitzero" bson:"results,omitempty,omitzero"`
 	Severity                       string    `json:"severity,omitempty,omitzero" bson:"severity,omitempty,omitzero"`
 	TriageAlert                    string    `json:"triageAlert,omitempty,omitzero" bson:"triageAlert,omitempty,omitzero"`
-	ID                             string    `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	ID                             string    `json:"id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
 	LinkToFilteredSearchResultsUi  string    `json:"linkToFilteredSearchResultsUI,omitempty,omitzero" bson:"linkToFilteredSearchResultsUI,omitempty,omitzero"`
 	LinkToFilteredSearchResultsAPI string    `json:"linkToFilteredSearchResultsAPI,omitempty,omitzero" bson:"linkToFilteredSearchResultsAPI,omitempty,omitzero"`
 	Properties                     struct {
