@@ -37,6 +37,13 @@ func InitConfig(options *CldConfigOptions) (configFile string, configPath string
 	configFilePath := configPath + "/cldConf.json"
 	cachePath = configPath + "/cache"
 
+	if _, err := os.Stat(configPath); err != nil {
+		os.MkdirAll(configPath, os.ModePerm)
+	}
+	if _, err := os.Stat(cachePath); err != nil {
+		os.MkdirAll(cachePath, os.ModePerm)
+	}
+
 	if os.Getenv("AZURE_APPCONFIG_ENDPOINT") != "" {
 		// useAzAppConfig = true
 		// azAppConfigTenantId = os.Getenv("AZURE_APPCONFIG_TENANT_ID")
@@ -53,13 +60,6 @@ func InitConfig(options *CldConfigOptions) (configFile string, configPath string
 		configFile = CLD_CONFIG_PATH
 	} else {
 		configFile = configFilePath
-	}
-
-	if _, err := os.Stat(configPath); err != nil {
-		os.MkdirAll(configPath, os.ModePerm)
-	}
-	if _, err := os.Stat(cachePath); err != nil {
-		os.MkdirAll(cachePath, os.ModePerm)
 	}
 
 	fileStat, err := os.Stat(configFile)

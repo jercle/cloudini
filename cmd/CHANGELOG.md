@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.32]
+* Bugfix: Change ordering of InitConfig dir checks
+
 ## [0.3.31]
 * Update handling Log Analytics queries to parse as local time if 'datetime_utc_to_local' is present in the query
 
