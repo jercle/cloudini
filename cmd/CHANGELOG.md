@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.33]
+* Bugfix: Update timezone to Australia/Sydney
+
 ## [0.3.32]
 * Bugfix: Change ordering of InitConfig dir checks
 
