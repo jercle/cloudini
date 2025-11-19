@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.34]
+* Bugfix: Handling timezone in go alpine container
+
 ## [0.3.33]
 * Bugfix: Update timezone to Australia/Sydney
 

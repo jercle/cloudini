@@ -218,7 +218,12 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 	currentTime := time.Now()
 
 	cldConf := lib.GetCldConfig(nil)
-	locale, err := time.LoadLocation("Australia/Sydney")
+	var locale *time.Location
+	locale, err = time.LoadLocation("Australia/Sydney")
+	if err != nil {
+		file, _ := os.ReadFile("/etc/localtime")
+		locale, err = time.LoadLocationFromTZData("Australia/Sydney", file)
+	}
 	lib.CheckFatalError(err)
 
 	timeInLocal := false
