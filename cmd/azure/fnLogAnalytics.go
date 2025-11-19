@@ -198,6 +198,9 @@ func getAllWorkspaceTables(cred *azidentity.DefaultAzureCredential, subscription
 
 func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (alerts []AzureAlertProcessed) {
 	// fmt.Println("Fetching alerts for ", token.TenantName)
+	if token.TenantName != "BLUE" {
+		return
+	}
 	logAnalyticsToken, err := GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
 		TenantName: token.TenantName,
 		Scope:      "loganalytics",
@@ -236,6 +239,9 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 	}
 
 	for _, alert := range alertsResponse.Data {
+		if alert.AlertState == "Closed" {
+			continue
+		}
 		jsonStr, _ := json.Marshal(alert, jsontext.WithIndent("  "))
 		// fmt.Println(string(jsonStr))
 		// os.Exit(0)

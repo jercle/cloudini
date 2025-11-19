@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.37]
+* Add filter to Support Alerts to skip closed alerts
+
 ## [0.3.36]
 * Bugfix: Update GetAzureWorkbookAlerts to handle LinkToFilteredSearchResultsAPI not existing
 
