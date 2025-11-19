@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.36]
+* Bugfix: Update GetAzureWorkbookAlerts to handle LinkToFilteredSearchResultsAPI not existing
+
 ## [0.3.35]
 * Embed timezone data
 

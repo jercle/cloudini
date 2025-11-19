@@ -22,10 +22,10 @@ func HttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
 	res, err := http.DefaultClient.Do(req)
-	lib.CheckFatalError(err)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	// lib.CheckFatalError(err)
+	if err != nil {
+		return nil, err
+	}
 
 	// lib.JsonMarshalAndPrint(res.Header)
 

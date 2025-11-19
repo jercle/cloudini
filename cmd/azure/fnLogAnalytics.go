@@ -197,6 +197,7 @@ func getAllWorkspaceTables(cred *azidentity.DefaultAzureCredential, subscription
 //
 
 func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (alerts []AzureAlertProcessed) {
+	// fmt.Println("Fetching alerts for ", token.TenantName)
 	logAnalyticsToken, err := GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
 		TenantName: token.TenantName,
 		Scope:      "loganalytics",
@@ -236,6 +237,8 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 
 	for _, alert := range alertsResponse.Data {
 		jsonStr, _ := json.Marshal(alert, jsontext.WithIndent("  "))
+		// fmt.Println(string(jsonStr))
+		// os.Exit(0)
 		var curr AzureAlertProcessed
 		err = json.Unmarshal(jsonStr, &curr)
 		lib.CheckFatalError(err)
@@ -268,14 +271,18 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 		if alert.Properties.Context.Context != nil {
 			curr.LinkToFilteredSearchResultsAPI = alert.Properties.Context.Context.Condition.AllOf[0].LinkToFilteredSearchResultsAPI
 			curr.LinkToFilteredSearchResultsUi = alert.Properties.Context.Context.Condition.AllOf[0].LinkToFilteredSearchResultsUi
-			ad, err := GetAlertDataFromSearchResultsLink(curr.LinkToFilteredSearchResultsAPI, curr.LinkToFilteredSearchResultsUi, logAnalyticsToken)
-			// fmt.Println(curr.LinkToFilteredSearchResultsAPI)
-			if err != nil {
-				fmt.Println(err)
-				lib.JsonMarshalAndPrint(curr)
-				os.Exit(0)
+			if curr.LinkToFilteredSearchResultsAPI != "" {
+				// fmt.Println("Fetching alert data for ", curr.TenantName, curr.Name)
+				ad, err := GetAlertDataFromSearchResultsLink(curr.LinkToFilteredSearchResultsAPI, curr.LinkToFilteredSearchResultsUi, logAnalyticsToken)
+				// fmt.Println(curr.LinkToFilteredSearchResultsAPI)
+				// lib.CheckFatalError(err)
+				if err != nil {
+					fmt.Println(err)
+					lib.JsonMarshalAndPrint(curr)
+					os.Exit(1)
+				}
+				curr.AlertData = ad
 			}
-			curr.AlertData = ad
 		}
 		alerts = append(alerts, curr)
 	}
@@ -286,17 +293,17 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 //
 //
 
-func GetAlertDataFromSearchResultsLink(linkToFilteredSearchResultsAPI string, linkToFilteredSearchResultsUi string, token *lib.AzureMultiAuthToken) (alertData []map[string]any, e *error) {
+func GetAlertDataFromSearchResultsLink(linkToFilteredSearchResultsAPI string, linkToFilteredSearchResultsUi string, token *lib.AzureMultiAuthToken) (alertData []map[string]any, e error) {
 	res, err := HttpGet(linkToFilteredSearchResultsAPI, *token)
 	if err != nil {
-		return nil, &err
+		return nil, err
 	}
 	// lib.CheckFatalError(err)
 
 	var resData GetAlertDataFromSearchResultsLinkResult
 	err = json.Unmarshal(res, &resData)
 	if err != nil {
-		return alertData, &err
+		return alertData, err
 	}
 	// lib.CheckFatalError(err)
 
@@ -334,6 +341,7 @@ func GetAlertDataFromSearchResultsLink(linkToFilteredSearchResultsAPI string, li
 
 func GetLogAnalyticsWorkbookQuery(resourceId string, token *lib.AzureMultiAuthToken) string {
 	urlString := "https://management.azure.com" + resourceId + "?api-version=2021-08-01&canFetchContent=true"
+
 	res, err := HttpGet(urlString, *token)
 	lib.CheckFatalError(err)
 
