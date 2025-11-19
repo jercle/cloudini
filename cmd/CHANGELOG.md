@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.35]
+* Embed timezone data
+
 ## [0.3.34]
 * Bugfix: Handling timezone in go alpine container
 

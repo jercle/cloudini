@@ -20,6 +20,8 @@ import (
 	"github.com/fatih/color"
 	"github.com/jercle/cloudini/lib"
 	"github.com/rodaine/table"
+
+	_ "time/tzdata"
 )
 
 type LogAnalyticsTables []struct {
@@ -220,10 +222,10 @@ func GetAzureWorkbookAlerts(graphQuery string, token *lib.AzureMultiAuthToken) (
 	cldConf := lib.GetCldConfig(nil)
 	var locale *time.Location
 	locale, err = time.LoadLocation("Australia/Sydney")
-	if err != nil {
-		file, _ := os.ReadFile("/etc/localtime")
-		locale, err = time.LoadLocationFromTZData("Australia/Sydney", file)
-	}
+	// if err != nil {
+	// 	file, _ := os.ReadFile("/etc/localtime")
+	// 	locale, err = time.LoadLocationFromTZData("Australia/Sydney", file)
+	// }
 	lib.CheckFatalError(err)
 
 	timeInLocal := false
