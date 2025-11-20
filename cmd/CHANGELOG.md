@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.38]
+* Remove UnknownFields from azure.AzureAlertProcessed
+
 ## [0.3.37]
 * Add filter to Support Alerts to skip closed alerts
 
