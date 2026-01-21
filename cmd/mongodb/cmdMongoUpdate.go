@@ -19,7 +19,7 @@ var (
 	updateEntraItems                                bool
 	updateEntraPimItems                             bool
 	updateIpAddresses                               bool
-	updateO365Data                                  bool
+	updateM365Data                                  bool
 	updateAllCertInfo                               bool
 	showExecutionTime                               bool
 	updateADUsers                                   bool
@@ -95,7 +95,8 @@ var cmdMongoUpdate = &cobra.Command{
 		envOptCostingResourcesColl := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptCostingResources)
 		envOptCostingSubsColl := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptCostingSubs)
 		envOptCostingTenantsColl := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptCostingTenants)
-
+		envOptM365LicenseCounts := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptM365LicenseCounts)
+		// collEnvOptM365LicenseCounts
 		genSupportAlertsColl := c.Database(mongoConf.DbGeneral).Collection(mongoConf.CollGenSupportAlerts)
 
 		ipamIpAddressBlocks := c.Database(mongoConf.DbIpam).Collection(mongoConf.CollIpamIpAddressBlocks)
@@ -179,8 +180,8 @@ var cmdMongoUpdate = &cobra.Command{
 			UpdateB2CUsers(entraB2CUsersColl)
 		}
 
-		if updateAll || updateO365Data {
-			UpdateM365Data(m365MailboxStatisticsColl)
+		if updateAll || updateM365Data {
+			UpdateM365Data(m365MailboxStatisticsColl, envOptM365LicenseCounts)
 		}
 
 		if updateWebsiteCertInfo {
@@ -222,7 +223,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&showExecutionTime, "showExecutionTime", "t", false, "Prints execution time when complete")
 	cmdMongoUpdate.Flags().StringVarP(&costDataMonth, "costDataMonth", "m", "", "Which month to get cost data from - defaults to whatever month it was yesterday. Use with 'updateAzureResVcpuCountsCostData' Format: YYYYMM")
 	// cmdMongoUpdate.Flags().BoolVarP(&updateADUsers, "updateADUsers", "a", false, "Get AD users and update database")
-	cmdMongoUpdate.Flags().BoolVarP(&updateO365Data, "updateM365Data", "o", false, "Updates O365 data")
+	cmdMongoUpdate.Flags().BoolVarP(&updateM365Data, "updateM365Data", "o", false, "Updates O365 data")
 	cmdMongoUpdate.Flags().BoolVarP(&updateB2CUsers, "updateB2CUsers", "b", false, "Updates B2C users")
 	cmdMongoUpdate.Flags().BoolVarP(&updateWebsiteCertInfo, "updateWebsiteCertInfo", "w", false, "Updates Website Cert info from configured URLs in database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateSupportAlerts, "updateSupportAlerts", "s", false, "Updates Support alerts")

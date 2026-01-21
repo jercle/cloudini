@@ -472,21 +472,21 @@ type B2CUser struct {
 		CloudSipProxyAddress        any   `json:"cloudSipProxyAddress"`
 		IsSipEnabled                any   `json:"isSipEnabled"`
 	} `json:"cloudRealtimeCommunicationInfo"`
-	CompanyName             any       `json:"companyName"`
-	ConsentProvidedForMinor any       `json:"consentProvidedForMinor"`
-	Country                 any       `json:"country"`
-	CreatedDateTime         time.Time `json:"createdDateTime"`
-	CreationType            *string   `json:"creationType"`
-	DeletedDateTime         any       `json:"deletedDateTime"`
-	Department              any       `json:"department"`
-	DeviceKeys              []any     `json:"deviceKeys"`
-	DisplayName             string    `json:"displayName"`
-	EmployeeHireDate        any       `json:"employeeHireDate"`
-	EmployeeID              any       `json:"employeeId"`
-	EmployeeLeaveDateTime   any       `json:"employeeLeaveDateTime"`
-	EmployeeOrgData         any       `json:"employeeOrgData"`
-	EmployeeType            any       `json:"employeeType"`
-	UnknownFields                 jsontext.Value `json:",unknown"`
+	CompanyName             any            `json:"companyName"`
+	ConsentProvidedForMinor any            `json:"consentProvidedForMinor"`
+	Country                 any            `json:"country"`
+	CreatedDateTime         time.Time      `json:"createdDateTime"`
+	CreationType            *string        `json:"creationType"`
+	DeletedDateTime         any            `json:"deletedDateTime"`
+	Department              any            `json:"department"`
+	DeviceKeys              []any          `json:"deviceKeys"`
+	DisplayName             string         `json:"displayName"`
+	EmployeeHireDate        any            `json:"employeeHireDate"`
+	EmployeeID              any            `json:"employeeId"`
+	EmployeeLeaveDateTime   any            `json:"employeeLeaveDateTime"`
+	EmployeeOrgData         any            `json:"employeeOrgData"`
+	EmployeeType            any            `json:"employeeType"`
+	UnknownFields           jsontext.Value `json:",unknown"`
 	ExternalUserConvertedOn any            `json:"externalUserConvertedOn"`
 	ExternalUserInformation struct {
 		AcceptedAsMail   *string    `json:"acceptedAsMail"`
@@ -591,11 +591,11 @@ type GetAllB2CTenantUsersResponse struct {
 //
 
 type B2CUserMinimal struct {
-	AccountEnabled  bool      `json:"accountEnabled,omitempty,omitzero" bson:"accountEnabled,omitempty,omitzero"`
-	AccountLocked   bool      `json:"accountLocked,omitempty,omitzero" bson:"accountLocked,omitempty,omitzero"`
-	CreatedDateTime time.Time `json:"createdDateTime,omitempty,omitzero" bson:"createdDateTime,omitempty,omitzero"`
-	CreationType    *string   `json:"creationType,omitempty,omitzero" bson:"creationType,omitempty,omitzero"`
-	DisplayName     string    `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
+	AccountEnabled          bool      `json:"accountEnabled,omitempty,omitzero" bson:"accountEnabled,omitempty,omitzero"`
+	AccountLocked           bool      `json:"accountLocked,omitempty,omitzero" bson:"accountLocked,omitempty,omitzero"`
+	CreatedDateTime         time.Time `json:"createdDateTime,omitempty,omitzero" bson:"createdDateTime,omitempty,omitzero"`
+	CreationType            *string   `json:"creationType,omitempty,omitzero" bson:"creationType,omitempty,omitzero"`
+	DisplayName             string    `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
 	ExternalUserInformation struct {
 		AcceptedAsMail   any       `json:"acceptedAsMail,omitempty,omitzero" bson:"acceptedAsMail,omitempty,omitzero"`
 		AcceptedDateTime any       `json:"acceptedDateTime,omitempty,omitzero" bson:"acceptedDateTime,omitempty,omitzero"`
@@ -628,4 +628,175 @@ type B2CUserMinimal struct {
 	ExtensionLastLogonTime          time.Time `json:"extensionLastLogonTime,omitempty,omitzero" bson:"extensionLastLogonTime,omitempty,omitzero"`
 	ExtensionPasswordResetOn        time.Time `json:"extensionPasswordResetOn,omitempty,omitzero" bson:"extensionPasswordResetOn,omitempty,omitzero"`
 	// TenantName                      string    `json:"tenantName" bson:"tenantName"`
+}
+
+//
+//
+
+type GetAllEntraUsersForTenantResponse struct {
+	Context  string      `json:"@odata.context,omitempty,omitzero" bson:"@odata.context,omitempty,omitzero"`
+	NextLink *string     `json:"@odata.nextLink,omitempty,omitzero" bson:"@odata.nextLink,omitempty,omitzero"`
+	Value    []EntraUser `json:"value,omitempty,omitzero" bson:"value,omitempty,omitzero"`
+}
+
+//
+//
+
+type EntraUser struct {
+	AccountEnabled           bool    `json:"accountEnabled,omitempty,omitzero" bson:"accountEnabled,omitempty,omitzero"`
+	AgeGroup                 *string `json:"ageGroup,omitempty,omitzero" bson:"ageGroup,omitempty,omitzero"`
+	AgentIdentityBlueprintID any     `json:"agentIdentityBlueprintId,omitempty,omitzero" bson:"agentIdentityBlueprintId,omitempty,omitzero"`
+	AlternativeSecurityIds   []any   `json:"alternativeSecurityIds,omitempty,omitzero" bson:"alternativeSecurityIds,omitempty,omitzero"`
+	AssignedLicenses         []struct {
+		DisabledPlans []string `json:"disabledPlans,omitempty,omitzero" bson:"disabledPlans,omitempty,omitzero"`
+		SkuID         string   `json:"skuId,omitempty,omitzero" bson:"skuId,omitempty,omitzero"`
+	} `json:"assignedLicenses,omitempty,omitzero" bson:"assignedLicenses,omitempty,omitzero"`
+	AssignedPlans []struct {
+		AssignedDateTime time.Time `json:"assignedDateTime,omitempty,omitzero" bson:"assignedDateTime,omitempty,omitzero"`
+		CapabilityStatus string    `json:"capabilityStatus,omitempty,omitzero" bson:"capabilityStatus,omitempty,omitzero"`
+		Service          string    `json:"service,omitempty,omitzero" bson:"service,omitempty,omitzero"`
+		ServicePlanID    string    `json:"servicePlanId,omitempty,omitzero" bson:"servicePlanId,omitempty,omitzero"`
+	} `json:"assignedPlans,omitempty,omitzero" bson:"assignedPlans,omitempty,omitzero"`
+	AuthorizationInfo struct {
+		CertificateUserIds []any `json:"certificateUserIds,omitempty,omitzero" bson:"certificateUserIds,omitempty,omitzero"`
+	} `json:"authorizationInfo,omitempty,omitzero" bson:"authorizationInfo,omitempty,omitzero"`
+	BusinessPhones                 []any `json:"businessPhones,omitempty,omitzero" bson:"businessPhones,omitempty,omitzero"`
+	City                           any   `json:"city,omitempty,omitzero" bson:"city,omitempty,omitzero"`
+	CloudRealtimeCommunicationInfo struct {
+		CloudMsRtcOwnerUrn          any      `json:"cloudMSRtcOwnerUrn,omitempty,omitzero" bson:"cloudMSRtcOwnerUrn,omitempty,omitzero"`
+		CloudMsRtcPolicyAssignments []string `json:"cloudMSRtcPolicyAssignments,omitempty,omitzero" bson:"cloudMSRtcPolicyAssignments,omitempty,omitzero"`
+		CloudMsRtcPool              *string  `json:"cloudMSRtcPool,omitempty,omitzero" bson:"cloudMSRtcPool,omitempty,omitzero"`
+		CloudMsRtcServiceAttributes *struct {
+			ApplicationOption   *float64 `json:"applicationOption,omitempty,omitzero" bson:"applicationOption,omitempty,omitzero"`
+			DeploymentLocator   string   `json:"deploymentLocator,omitempty,omitzero" bson:"deploymentLocator,omitempty,omitzero"`
+			HideFromAddressList *bool    `json:"hideFromAddressList,omitempty,omitzero" bson:"hideFromAddressList,omitempty,omitzero"`
+			OptionFlag          float64  `json:"optionFlag,omitempty,omitzero" bson:"optionFlag,omitempty,omitzero"`
+		} `json:"cloudMSRtcServiceAttributes,omitempty,omitzero" bson:"cloudMSRtcServiceAttributes,omitempty,omitzero"`
+		CloudSipLine         any     `json:"cloudSipLine,omitempty,omitzero" bson:"cloudSipLine,omitempty,omitzero"`
+		CloudSipProxyAddress *string `json:"cloudSipProxyAddress,omitempty,omitzero" bson:"cloudSipProxyAddress,omitempty,omitzero"`
+		IsSipEnabled         *bool   `json:"isSipEnabled,omitempty,omitzero" bson:"isSipEnabled,omitempty,omitzero"`
+	} `json:"cloudRealtimeCommunicationInfo,omitempty,omitzero" bson:"cloudRealtimeCommunicationInfo,omitempty,omitzero"`
+	CompanyName             *string   `json:"companyName,omitempty,omitzero" bson:"companyName,omitempty,omitzero"`
+	ConsentProvidedForMinor any       `json:"consentProvidedForMinor,omitempty,omitzero" bson:"consentProvidedForMinor,omitempty,omitzero"`
+	Country                 *string   `json:"country,omitempty,omitzero" bson:"country,omitempty,omitzero"`
+	CreatedDateTime         time.Time `json:"createdDateTime,omitempty,omitzero" bson:"createdDateTime,omitempty,omitzero"`
+	CreationType            *string   `json:"creationType,omitempty,omitzero" bson:"creationType,omitempty,omitzero"`
+	DeletedDateTime         any       `json:"deletedDateTime,omitempty,omitzero" bson:"deletedDateTime,omitempty,omitzero"`
+	Department              *string   `json:"department,omitempty,omitzero" bson:"department,omitempty,omitzero"`
+	DeviceKeys              []any     `json:"deviceKeys,omitempty,omitzero" bson:"deviceKeys,omitempty,omitzero"`
+	DisplayName             string    `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
+	EmployeeHireDate        any       `json:"employeeHireDate,omitempty,omitzero" bson:"employeeHireDate,omitempty,omitzero"`
+	EmployeeID              any       `json:"employeeId,omitempty,omitzero" bson:"employeeId,omitempty,omitzero"`
+	EmployeeLeaveDateTime   any       `json:"employeeLeaveDateTime,omitempty,omitzero" bson:"employeeLeaveDateTime,omitempty,omitzero"`
+	EmployeeOrgData         any       `json:"employeeOrgData,omitempty,omitzero" bson:"employeeOrgData,omitempty,omitzero"`
+	EmployeeType            any       `json:"employeeType,omitempty,omitzero" bson:"employeeType,omitempty,omitzero"`
+	ExternalUserConvertedOn any       `json:"externalUserConvertedOn,omitempty,omitzero" bson:"externalUserConvertedOn,omitempty,omitzero"`
+	ExternalUserInformation struct {
+		AcceptedAsMail   any       `json:"acceptedAsMail,omitempty,omitzero" bson:"acceptedAsMail,omitempty,omitzero"`
+		AcceptedDateTime any       `json:"acceptedDateTime,omitempty,omitzero" bson:"acceptedDateTime,omitempty,omitzero"`
+		InviteReplyUrls  []any     `json:"inviteReplyUrls,omitempty,omitzero" bson:"inviteReplyUrls,omitempty,omitzero"`
+		InviteResources  []any     `json:"inviteResources,omitempty,omitzero" bson:"inviteResources,omitempty,omitzero"`
+		InviteTicket     any       `json:"inviteTicket,omitempty,omitzero" bson:"inviteTicket,omitempty,omitzero"`
+		InvitedAsMail    any       `json:"invitedAsMail,omitempty,omitzero" bson:"invitedAsMail,omitempty,omitzero"`
+		InvitedDateTime  time.Time `json:"invitedDateTime,omitempty,omitzero" bson:"invitedDateTime,omitempty,omitzero"`
+		SignInNames      []string  `json:"signInNames,omitempty,omitzero" bson:"signInNames,omitempty,omitzero"`
+	} `json:"externalUserInformation,omitempty,omitzero" bson:"externalUserInformation,omitempty,omitzero"`
+	ExternalUserState               any     `json:"externalUserState,omitempty,omitzero" bson:"externalUserState,omitempty,omitzero"`
+	ExternalUserStateChangeDateTime any     `json:"externalUserStateChangeDateTime,omitempty,omitzero" bson:"externalUserStateChangeDateTime,omitempty,omitzero"`
+	FaxNumber                       any     `json:"faxNumber,omitempty,omitzero" bson:"faxNumber,omitempty,omitzero"`
+	GivenName                       *string `json:"givenName,omitempty,omitzero" bson:"givenName,omitempty,omitzero"`
+	ID                              string  `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	Identities                      []struct {
+		Issuer           string `json:"issuer,omitempty,omitzero" bson:"issuer,omitempty,omitzero"`
+		IssuerAssignedID string `json:"issuerAssignedId,omitempty,omitzero" bson:"issuerAssignedId,omitempty,omitzero"`
+		SignInType       string `json:"signInType,omitempty,omitzero" bson:"signInType,omitempty,omitzero"`
+	} `json:"identities,omitempty,omitzero" bson:"identities,omitempty,omitzero"`
+	IdentityParentID              any      `json:"identityParentId,omitempty,omitzero" bson:"identityParentId,omitempty,omitzero"`
+	ImAddresses                   []string `json:"imAddresses,omitempty,omitzero" bson:"imAddresses,omitempty,omitzero"`
+	InfoCatalogs                  []any    `json:"infoCatalogs,omitempty,omitzero" bson:"infoCatalogs,omitempty,omitzero"`
+	IsLicenseReconciliationNeeded bool     `json:"isLicenseReconciliationNeeded,omitempty,omitzero" bson:"isLicenseReconciliationNeeded,omitempty,omitzero"`
+	IsManagementRestricted        any      `json:"isManagementRestricted,omitempty,omitzero" bson:"isManagementRestricted,omitempty,omitzero"`
+	IsResourceAccount             any      `json:"isResourceAccount,omitempty,omitzero" bson:"isResourceAccount,omitempty,omitzero"`
+	JobTitle                      any      `json:"jobTitle,omitempty,omitzero" bson:"jobTitle,omitempty,omitzero"`
+	LegalAgeGroupClassification   *string  `json:"legalAgeGroupClassification,omitempty,omitzero" bson:"legalAgeGroupClassification,omitempty,omitzero"`
+	Mail                          *string  `json:"mail,omitempty,omitzero" bson:"mail,omitempty,omitzero"`
+	MailNickname                  string   `json:"mailNickname,omitempty,omitzero" bson:"mailNickname,omitempty,omitzero"`
+	MobilePhone                   any      `json:"mobilePhone,omitempty,omitzero" bson:"mobilePhone,omitempty,omitzero"`
+	NetID                         string   `json:"netId,omitempty,omitzero" bson:"netId,omitempty,omitzero"`
+	OfficeLocation                any      `json:"officeLocation,omitempty,omitzero" bson:"officeLocation,omitempty,omitzero"`
+	OnPremisesDistinguishedName   string   `json:"onPremisesDistinguishedName,omitempty,omitzero" bson:"onPremisesDistinguishedName,omitempty,omitzero"`
+	OnPremisesDomainName          *string  `json:"onPremisesDomainName,omitempty,omitzero" bson:"onPremisesDomainName,omitempty,omitzero"`
+	OnPremisesExtensionAttributes struct {
+		ExtensionAttribute1  any `json:"extensionAttribute1,omitempty,omitzero" bson:"extensionAttribute1,omitempty,omitzero"`
+		ExtensionAttribute10 any `json:"extensionAttribute10,omitempty,omitzero" bson:"extensionAttribute10,omitempty,omitzero"`
+		ExtensionAttribute11 any `json:"extensionAttribute11,omitempty,omitzero" bson:"extensionAttribute11,omitempty,omitzero"`
+		ExtensionAttribute12 any `json:"extensionAttribute12,omitempty,omitzero" bson:"extensionAttribute12,omitempty,omitzero"`
+		ExtensionAttribute13 any `json:"extensionAttribute13,omitempty,omitzero" bson:"extensionAttribute13,omitempty,omitzero"`
+		ExtensionAttribute14 any `json:"extensionAttribute14,omitempty,omitzero" bson:"extensionAttribute14,omitempty,omitzero"`
+		ExtensionAttribute15 any `json:"extensionAttribute15,omitempty,omitzero" bson:"extensionAttribute15,omitempty,omitzero"`
+		ExtensionAttribute2  any `json:"extensionAttribute2,omitempty,omitzero" bson:"extensionAttribute2,omitempty,omitzero"`
+		ExtensionAttribute3  any `json:"extensionAttribute3,omitempty,omitzero" bson:"extensionAttribute3,omitempty,omitzero"`
+		ExtensionAttribute4  any `json:"extensionAttribute4,omitempty,omitzero" bson:"extensionAttribute4,omitempty,omitzero"`
+		ExtensionAttribute5  any `json:"extensionAttribute5,omitempty,omitzero" bson:"extensionAttribute5,omitempty,omitzero"`
+		ExtensionAttribute6  any `json:"extensionAttribute6,omitempty,omitzero" bson:"extensionAttribute6,omitempty,omitzero"`
+		ExtensionAttribute7  any `json:"extensionAttribute7,omitempty,omitzero" bson:"extensionAttribute7,omitempty,omitzero"`
+		ExtensionAttribute8  any `json:"extensionAttribute8,omitempty,omitzero" bson:"extensionAttribute8,omitempty,omitzero"`
+		ExtensionAttribute9  any `json:"extensionAttribute9,omitempty,omitzero" bson:"extensionAttribute9,omitempty,omitzero"`
+	} `json:"onPremisesExtensionAttributes,omitempty,omitzero" bson:"onPremisesExtensionAttributes,omitempty,omitzero"`
+	OnPremisesImmutableID        *string    `json:"onPremisesImmutableId,omitempty,omitzero" bson:"onPremisesImmutableId,omitempty,omitzero"`
+	OnPremisesLastSyncDateTime   *time.Time `json:"onPremisesLastSyncDateTime,omitempty,omitzero" bson:"onPremisesLastSyncDateTime,omitempty,omitzero"`
+	OnPremisesObjectIdentifier   *string    `json:"onPremisesObjectIdentifier,omitempty,omitzero" bson:"onPremisesObjectIdentifier,omitempty,omitzero"`
+	OnPremisesProvisioningErrors []any      `json:"onPremisesProvisioningErrors,omitempty,omitzero" bson:"onPremisesProvisioningErrors,omitempty,omitzero"`
+	OnPremisesSamAccountName     string     `json:"onPremisesSamAccountName,omitempty,omitzero" bson:"onPremisesSamAccountName,omitempty,omitzero"`
+	OnPremisesSecurityIdentifier *string    `json:"onPremisesSecurityIdentifier,omitempty,omitzero" bson:"onPremisesSecurityIdentifier,omitempty,omitzero"`
+	OnPremisesSipInfo            struct {
+		IsSipEnabled          bool `json:"isSipEnabled,omitempty,omitzero" bson:"isSipEnabled,omitempty,omitzero"`
+		SipDeploymentLocation any  `json:"sipDeploymentLocation,omitempty,omitzero" bson:"sipDeploymentLocation,omitempty,omitzero"`
+		SipPrimaryAddress     any  `json:"sipPrimaryAddress,omitempty,omitzero" bson:"sipPrimaryAddress,omitempty,omitzero"`
+	} `json:"onPremisesSipInfo,omitempty,omitzero" bson:"onPremisesSipInfo,omitempty,omitzero"`
+	OnPremisesSyncEnabled       *bool    `json:"onPremisesSyncEnabled,omitempty,omitzero" bson:"onPremisesSyncEnabled,omitempty,omitzero"`
+	OnPremisesUserPrincipalName *string  `json:"onPremisesUserPrincipalName,omitempty,omitzero" bson:"onPremisesUserPrincipalName,omitempty,omitzero"`
+	OtherMails                  []string `json:"otherMails,omitempty,omitzero" bson:"otherMails,omitempty,omitzero"`
+	PasswordPolicies            *string  `json:"passwordPolicies,omitempty,omitzero" bson:"passwordPolicies,omitempty,omitzero"`
+	PasswordProfile             *struct {
+		ForceChangePasswordNextSignIn        bool `json:"forceChangePasswordNextSignIn,omitempty,omitzero" bson:"forceChangePasswordNextSignIn,omitempty,omitzero"`
+		ForceChangePasswordNextSignInWithMfa bool `json:"forceChangePasswordNextSignInWithMfa,omitempty,omitzero" bson:"forceChangePasswordNextSignInWithMfa,omitempty,omitzero"`
+		Password                             any  `json:"password,omitempty,omitzero" bson:"password,omitempty,omitzero"`
+	} `json:"passwordProfile,omitempty,omitzero" bson:"passwordProfile,omitempty,omitzero"`
+	PortalSetting         *string `json:"portalSetting,omitempty,omitzero" bson:"portalSetting,omitempty,omitzero"`
+	PostalCode            any     `json:"postalCode,omitempty,omitzero" bson:"postalCode,omitempty,omitzero"`
+	PreferredDataLocation any     `json:"preferredDataLocation,omitempty,omitzero" bson:"preferredDataLocation,omitempty,omitzero"`
+	PreferredLanguage     *string `json:"preferredLanguage,omitempty,omitzero" bson:"preferredLanguage,omitempty,omitzero"`
+	ProvisionedPlans      []struct {
+		CapabilityStatus   string `json:"capabilityStatus,omitempty,omitzero" bson:"capabilityStatus,omitempty,omitzero"`
+		ProvisioningStatus string `json:"provisioningStatus,omitempty,omitzero" bson:"provisioningStatus,omitempty,omitzero"`
+		Service            string `json:"service,omitempty,omitzero" bson:"service,omitempty,omitzero"`
+	} `json:"provisionedPlans,omitempty,omitzero" bson:"provisionedPlans,omitempty,omitzero"`
+	ProxyAddresses                 []string  `json:"proxyAddresses,omitempty,omitzero" bson:"proxyAddresses,omitempty,omitzero"`
+	RefreshTokensValidFromDateTime time.Time `json:"refreshTokensValidFromDateTime,omitempty,omitzero" bson:"refreshTokensValidFromDateTime,omitempty,omitzero"`
+	ReleaseTrack                   any       `json:"releaseTrack,omitempty,omitzero" bson:"releaseTrack,omitempty,omitzero"`
+	SecurityIdentifier             string    `json:"securityIdentifier,omitempty,omitzero" bson:"securityIdentifier,omitempty,omitzero"`
+	ServiceProvisioningErrors      []struct {
+		Odata_Type      string    `json:"@odata.type,omitempty,omitzero" bson:"@odata.type,omitempty,omitzero"`
+		CreatedDateTime time.Time `json:"createdDateTime,omitempty,omitzero" bson:"createdDateTime,omitempty,omitzero"`
+		ErrorDetail     string    `json:"errorDetail,omitempty,omitzero" bson:"errorDetail,omitempty,omitzero"`
+		IsResolved      bool      `json:"isResolved,omitempty,omitzero" bson:"isResolved,omitempty,omitzero"`
+		ServiceInstance string    `json:"serviceInstance,omitempty,omitzero" bson:"serviceInstance,omitempty,omitzero"`
+	} `json:"serviceProvisioningErrors,omitempty,omitzero" bson:"serviceProvisioningErrors,omitempty,omitzero"`
+	ShowInAddressList               *bool     `json:"showInAddressList,omitempty,omitzero" bson:"showInAddressList,omitempty,omitzero"`
+	SignInSessionsValidFromDateTime time.Time `json:"signInSessionsValidFromDateTime,omitempty,omitzero" bson:"signInSessionsValidFromDateTime,omitempty,omitzero"`
+	SignInActivity                  *struct {
+		LastNonInteractiveSignInDateTime  *time.Time `json:"lastNonInteractiveSignInDateTime,omitempty,omitzero" bson:"lastNonInteractiveSignInDateTime,omitempty,omitzero"`
+		LastNonInteractiveSignInRequestID *string    `json:"lastNonInteractiveSignInRequestId,omitempty,omitzero" bson:"lastNonInteractiveSignInRequestId,omitempty,omitzero"`
+		LastSignInDateTime                *time.Time `json:"lastSignInDateTime,omitempty,omitzero" bson:"lastSignInDateTime,omitempty,omitzero"`
+		LastSignInRequestID               *string    `json:"lastSignInRequestId,omitempty,omitzero" bson:"lastSignInRequestId,omitempty,omitzero"`
+		LastSuccessfulSignInDateTime      *time.Time `json:"lastSuccessfulSignInDateTime,omitempty,omitzero" bson:"lastSuccessfulSignInDateTime,omitempty,omitzero"`
+		LastSuccessfulSignInRequestID     *string    `json:"lastSuccessfulSignInRequestId,omitempty,omitzero" bson:"lastSuccessfulSignInRequestId,omitempty,omitzero"`
+	} `json:"signInActivity,omitempty" bson:"signInActivity,omitempty"`
+	State             any     `json:"state,omitempty,omitzero" bson:"state,omitempty,omitzero"`
+	StreetAddress     any     `json:"streetAddress,omitempty,omitzero" bson:"streetAddress,omitempty,omitzero"`
+	Surname           *string `json:"surname,omitempty,omitzero" bson:"surname,omitempty,omitzero"`
+	UsageLocation     *string `json:"usageLocation,omitempty,omitzero" bson:"usageLocation,omitempty,omitzero"`
+	UserPrincipalName string  `json:"userPrincipalName,omitempty,omitzero" bson:"userPrincipalName,omitempty,omitzero"`
+	UserType          string  `json:"userType,omitempty,omitzero" bson:"userType,omitempty,omitzero"`
 }

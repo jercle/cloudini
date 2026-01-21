@@ -1354,3 +1354,31 @@ func UpsertAWSMontoringData(data interface{}, coll *mongo.Collection) {
 	_, err = coll.UpdateOne(context.TODO(), filter, update, mdbOpts)
 	lib.CheckFatalError(err)
 }
+
+//
+//
+
+func InsertM365LicenseCounts(licenseCounts map[string]m365.M365LicenseCounts, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+
+	// fmt.Println(len(serverCertInfo))
+
+	for _, tData := range licenseCounts {
+		curr := tData
+
+		// filter := bson.D{{"_id", curr.ID}}
+		// update := bson.D{{"$set", curr}}
+
+		// .SetUpsert(true)
+		updates = append(updates, mongo.NewInsertOneModel().SetDocument(curr))
+	}
+
+	res, err := coll.BulkWrite(ctx, updates, nil)
+	lib.CheckFatalError(err)
+
+	results = res
+
+	return
+}
