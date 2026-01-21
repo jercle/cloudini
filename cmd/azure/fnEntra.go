@@ -539,3 +539,43 @@ func ListRoleAssignmentScheduleInstances(scope string, token *lib.AzureMultiAuth
 
 	return response.Value, nil
 }
+
+//
+//
+
+func GetAllEntraUsersForTenant(token *lib.AzureMultiAuthToken, selects *[]string, apiVersion *string) (users []EntraUser) {
+	var (
+		response GetAllEntraUsersForTenantResponse
+		nextLink *string
+	)
+
+	baseGraphUrl := "https://graph.microsoft.com/"
+	apiVers := "v1.0"
+	if apiVersion != nil {
+		apiVers = *apiVersion
+	}
+	endpoint := "/users"
+	if selects != nil {
+		endpoint += "?$select=" + strings.Join(*selects, ",")
+	}
+	urlString := baseGraphUrl + apiVers + endpoint
+
+	res, resErr := HttpGet(urlString, *token)
+	lib.CheckHttpGetError(resErr)
+	err := json.Unmarshal(res, &response)
+	lib.CheckFatalError(err)
+
+	users = append(users, response.Value...)
+
+	nextLink = response.NextLink
+
+	for nextLink != nil {
+		var currentSet GetAllEntraUsersForTenantResponse
+		res, _ := HttpGet(*nextLink, *token)
+		json.Unmarshal(res, &currentSet)
+		nextLink = currentSet.NextLink
+		users = append(users, currentSet.Value...)
+	}
+
+	return
+}

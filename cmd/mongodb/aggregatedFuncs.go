@@ -513,7 +513,7 @@ func UpdateB2CUsers(coll *mongo.Collection) {
 //
 //
 
-func UpdateM365Data(coll *mongo.Collection) {
+func UpdateM365Data(m365MailboxStatisticsColl *mongo.Collection, m365LicenseCountsColl *mongo.Collection) {
 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 
 	fmt.Println("Getting mailbox stats")
@@ -523,7 +523,17 @@ func UpdateM365Data(coll *mongo.Collection) {
 
 	fmt.Println("Upserting mailbox stats")
 	s.Start()
-	UpsertMailboxStatistics(data, coll)
+	UpsertMailboxStatistics(data, m365MailboxStatisticsColl)
+	s.Stop()
+
+	fmt.Println("Getting license counts")
+	// s.Start()
+	licenseCounts := m365.GetM365LicenseCountsForAllConfiguredTenants(nil)
+	// s.Stop()
+
+	fmt.Println("Upserting license counts")
+	s.Start()
+	InsertM365LicenseCounts(licenseCounts, m365LicenseCountsColl)
 	s.Stop()
 
 	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
@@ -745,6 +755,9 @@ func ConvertLAResultToAWSIngestCounts(data azure.LogAnalyticsQueryResponse, awsI
 	return
 }
 
+//
+//
+
 func UpsertP2SVpnConnectionDetails(p2sVpnGatewayResourceId string, tenantName string, storageAccountName string, containerName string) {
 	// blobSAS := azure.GenerateP2SVpnConnectionHealthDetailed(p2sVpnGatewayResourceId, tenantName, storageAccountName, containerName)
 
@@ -797,13 +810,48 @@ func UpsertP2SVpnConnectionDetails(p2sVpnGatewayResourceId string, tenantName st
 }
 
 //
+//
 
-// list blobs in container
-// pager := azClient.NewListBlobsFlatPager(containerName, nil)
-// for pager.More() {
-// 	resp, err := pager.NextPage(context.Background())
-// 	lib.CheckFatalError(err)
-// 	for _, b := range resp.Segment.BlobItems {
-// 		fmt.Println(*b.Name)
+// func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, tokenReq lib.AllTenantTokens) {
+
+// 	_, _, cachePath := lib.InitConfig(nil)
+// 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+// 	resSkuOpts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
+// 		SubscriptionId: opts.SkuListSubscription,
+// 		AzureAuth:      opts.SkuListAuth,
+// 		Location:       opts.Location,
+// 		SuppressSteps:  true,
 // 	}
+
+// 	fmt.Println("Fetching all Azure Resources...")
+// 	s.Start()
+// 	startTime := time.Now()
+// 	allResources, allResourcesSlice := azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
+// 	s.Stop()
+// 	fmt.Println(strconv.Itoa(len(allResourcesSlice)) + " resources found")
+// 	elapsed := time.Since(startTime)
+// 	fmt.Println(elapsed)
+// 	allResourcesSliceStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
+// 	os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
+// 	allResourcesStr, _ := json.MarshalIndent(allResources, "", "  ")
+// 	os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
+// 	// os.Exit(0)
+
+// 	fmt.Println("Updating Azure Resources in database...")
+// 	s.Start()
+// 	startTime = time.Now()
+// 	UpsertMultipleResources(allResourcesSlice, opts.AzResResourceListColl)
+// 	s.Stop()
+// 	elapsed = time.Since(startTime)
+// 	fmt.Println(elapsed)
+
+// 	fmt.Println("")
+// 	fmt.Println("Updating 'existsInAzure' value for all resources in database...")
+// 	s.Start()
+// 	startTime = time.Now()
+// 	UpdateResourcesNotExistInAzure(allResourcesSlice, opts.AzResResourceListColl)
+// 	elapsed = time.Since(startTime)
+// 	s.Stop()
+// 	fmt.Println(elapsed)
 // }

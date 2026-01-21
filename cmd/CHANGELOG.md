@@ -1,6 +1,7 @@
 # Change Log
 
 ## [0.3.44]
+* Add functionality to fetch m365 license counts
 * Update deps
 
 ## [0.3.43]

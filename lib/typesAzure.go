@@ -247,6 +247,14 @@ type GetAllResourcesForAllConfiguredTenantsOptions struct {
 	SelectedIPAddressQueries        *[]string
 }
 
+//
+//
+
+type GetAllM365LicenseCountsForAllConfiguredTenantsOptions struct {
+	OutputFilePath string
+	SuppressSteps  bool
+}
+
 type VCpuCountByTenant map[string]struct {
 	VmResources               []string  `json:"vmResources,omitempty" bson:"vmResources,omitempty"`
 	VmResourcesDeallocated    []string  `json:"vmResourcesDeallocated,omitempty" bson:"vmResourcesDeallocated,omitempty"`

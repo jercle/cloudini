@@ -139,12 +139,13 @@ type MongoDBConfig struct {
 	CollEntraRoleEligibilityScheduleInstances string `json:"collEntraRoleEligibilityScheduleInstances,omitempty"`
 	CollEntraB2CUsers                         string `json:"collEntraB2CUsers,omitempty"`
 
-	CollEnvOptCosting          string `json:"collEnvOptCosting,omitempty"`
-	CollEnvOptCostingMeters    string `json:"collEnvOptCostingMeters,omitempty"`
-	CollEnvOptCostingResGrps   string `json:"collEnvOptCostingResGrps,omitempty"`
-	CollEnvOptCostingResources string `json:"collEnvOptCostingResources,omitempty"`
-	CollEnvOptCostingSubs      string `json:"collEnvOptCostingSubs,omitempty"`
-	CollEnvOptCostingTenants   string `json:"collEnvOptCostingTenants,omitempty"`
+	CollEnvOptCosting           string `json:"collEnvOptCosting,omitempty"`
+	CollEnvOptCostingMeters     string `json:"collEnvOptCostingMeters,omitempty"`
+	CollEnvOptCostingResGrps    string `json:"collEnvOptCostingResGrps,omitempty"`
+	CollEnvOptCostingResources  string `json:"collEnvOptCostingResources,omitempty"`
+	CollEnvOptCostingSubs       string `json:"collEnvOptCostingSubs,omitempty"`
+	CollEnvOptCostingTenants    string `json:"collEnvOptCostingTenants,omitempty"`
+	CollEnvOptM365LicenseCounts string `json:"collEnvOptM365LicenseCounts,omitempty"`
 
 	CollGenEolTracking   string `json:"collGenEolTracking,omitempty"`
 	CollGenSupportAlerts string `json:"collGenSupportAlerts,omitempty"`
