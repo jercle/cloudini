@@ -68,7 +68,7 @@ func GetM365LicenseCountsForTenant(currentDate *time.Time, token *lib.AzureMulti
 			}
 			countsBySku[skuPartNum] = currSku
 		}
-		m365LicenseCounts.Users = append(m365LicenseCounts.Users, user)
+		m365LicenseCounts.Users = append(m365LicenseCounts.Users, currUser)
 		m365LicenseCounts.UsersCount++
 		if user.NoLogonLast45Days {
 			m365LicenseCounts.UsersNoLogonLast45DaysCount++
@@ -80,6 +80,7 @@ func GetM365LicenseCountsForTenant(currentDate *time.Time, token *lib.AzureMulti
 		if !user.AccountEnabled {
 			m365LicenseCounts.UsersDisabledCount++
 		}
+
 	}
 
 	m365LicenseCounts.UsersCountChecked = m365LicenseCounts.UsersNoLogonLast45DaysCount + m365LicenseCounts.UsersNoLogonLast90DaysCount + m365LicenseCounts.UsersActiveCount

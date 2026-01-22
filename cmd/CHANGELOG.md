@@ -1,6 +1,9 @@
 # Change Log
 
 ## [0.3.44]
+* Bugfix: Fix license count functionality to correctly append users
+
+## [0.3.44]
 * Add functionality to fetch m365 license counts
 * Update deps
 
