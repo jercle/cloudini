@@ -260,6 +260,9 @@ func GetAzCliToken() lib.AzureMultiAuthToken {
 		log.Error("Unable to obtain Azure token", err, err)
 	}
 
+	// azidentity.NewInteractiveBrowserCredential()
+	azidentity.NewInteractiveBrowserCredential(nil)
+
 	tokenResponse, err := cliCred.GetToken(ctx, tokenRequestOptions)
 	if err != nil {
 		log.Error("Unable to obtain Azure token", err, err)

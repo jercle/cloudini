@@ -275,6 +275,10 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	)
 
 	fmt.Println("Deleting cached cost data")
+	os.RemoveAll(cachePath + "/vCpuCountWithResources.json")
+	os.RemoveAll(cachePath + "/transformedData.json")
+	os.RemoveAll(cachePath + "/allResourcesSlice.json")
+	os.RemoveAll(cachePath + "/allResources.json")
 	os.RemoveAll(tempBlobDir)
 
 	return transformedData
@@ -456,6 +460,11 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	// serverCertUpdates :=
 	UpsertServerCertificates(serverCertInfoRelated, serverCertsInfoColl)
 	s.Stop()
+
+	fmt.Println("Clearing cert cache")
+	os.RemoveAll(cachePath + "/cert-sync")
+	os.RemoveAll(cachePath + "/cert-sync-processed")
+
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
 	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
@@ -681,6 +690,8 @@ func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, t
 	startTime = time.Now()
 	UpdateResourcesNotExistInAzure(allResourcesSlice, opts.AzResResourceListColl)
 	elapsed = time.Since(startTime)
+	os.RemoveAll(cachePath + "/allResourcesSlice.json")
+	os.RemoveAll(cachePath + "/allResources.json")
 	s.Stop()
 	fmt.Println(elapsed)
 }
@@ -855,3 +866,25 @@ func UpsertP2SVpnConnectionDetails(p2sVpnGatewayResourceId string, tenantName st
 // 	s.Stop()
 // 	fmt.Println(elapsed)
 // }
+
+//
+//
+
+func UpdateCitrixPolicySettingDefs(settingDefsColl *mongo.Collection, citrixConf lib.CitrixCloudAccountConfig) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	fmt.Println("Fetching Citrix Policy Definitions...")
+	s.Start()
+	// galleryImagesWithVersions := azure.GetAllImagesAndVersionsForAllGalleries(tokenReq)
+	tokenData, err := citrix.GetToken(citrixConf, nil)
+	lib.CheckFatalError(err)
+	settingDefs := citrix.GetPolicySettingDefinitions(citrixConf, tokenData)
+	s.Stop()
+	fmt.Println("Fetching Citrix Policy Definitions in database...")
+	s.Start()
+	UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
+	// DeleteAllDocumentsInCollection(imageGalleryImagesColl)
+	// UpsertImageGalleryImages(galleryImagesWithVersions, imageGalleryImagesColl)
+	s.Stop()
+
+}

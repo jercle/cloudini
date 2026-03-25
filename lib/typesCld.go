@@ -49,6 +49,11 @@ type ADDomainConfig struct {
 
 type CitrixCloud struct {
 	Environments *map[string]CitrixCloudAccountConfig `json:"environments,omitempty" fake:"-"`
+	General      CitrixCloudGeneral                   `json:"general,omitempty" fake:"-"`
+}
+
+type CitrixCloudGeneral struct {
+	PolicyDefinitionsEnvironment string `json:"policyDefinitionsEnvironment,omitempty" fake:"{password:true,false,true,false,false,12}"`
 }
 
 type CitrixCloudAccountConfig struct {
@@ -128,7 +133,8 @@ type MongoDBConfig struct {
 	CollAzResP2SVpnConnections      string `json:"collAzResP2SVpnConnections,omitempty"`
 	CollAzStorageAcctMinTlsVersions string `json:"collAzStorageAcctMinTlsVersions,omitempty"`
 
-	CollCitrixMachineCatalogs string `json:"collCitrixMachineCatalogs,omitempty"`
+	CollCitrixMachineCatalogs          string `json:"collCitrixMachineCatalogs,omitempty"`
+	CollCitrixPolicySettingDefinitions string `json:"collCitrixPolicySettingDefinitions,omitempty"`
 
 	CollCertsCaCertInfo     string `json:"collCertsCaCertInfo,omitempty"`
 	CollCertsServerCertInfo string `json:"collCertsServerCertInfo,omitempty"`
@@ -197,6 +203,7 @@ type IpamCidrBlockToCheck struct {
 type CldConfigOptions struct {
 	ConfigFile             string
 	EncryptUnencryptedFile bool
+	UseAzCliAuth           bool
 }
 
 type CldConfigTenants map[string]CldConfigTenantAuth

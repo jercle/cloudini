@@ -11,6 +11,7 @@ var (
 	resourceGroup  string
 	clientSecret   string
 	clientId       string
+	useAzCliAuth   bool
 )
 
 var azCmd = &cobra.Command{
@@ -36,6 +37,7 @@ func init() {
 	azCmd.PersistentFlags().StringVar(&clientId, "clientId", "", "Client ID for Service Principal authentication.")
 	azCmd.PersistentFlags().StringVar(&clientSecret, "clientSecret", "", "Client Secret for Service Principal authentication.")
 	azCmd.PersistentFlags().StringVar(&tenantId, "tenantId", "", "Tenant ID.")
+	azCmd.PersistentFlags().BoolVar(&useAzCliAuth, "useAzCliAuth", false, "Uses Azure CLI authentication instead of a Service Principal")
 
 	// if subscriptionId == "" {
 	// 	sub, err := GetActiveSub()

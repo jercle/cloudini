@@ -34,6 +34,9 @@ func ListMachineCatalogs(creds lib.CitrixCloudAccountConfig, tokenData lib.Citri
 	return
 }
 
+//
+//
+
 func GetMachineCatalogDeliveryGroupAssociations(customerId string, siteId string, machineCatalogId string, tokenData lib.CitrixTokenData) []MchnCatDelGrpAssociation {
 	urlString := "https://api.cloud.com/cvad/manage/" +
 		"/MachineCatalogs/" +
@@ -49,6 +52,9 @@ func GetMachineCatalogDeliveryGroupAssociations(customerId string, siteId string
 	return MacCatDelGrpAssociations.Items
 }
 
+//
+//
+
 func CacheToken(tokenData lib.CitrixTokenData, cldOpts *lib.CldConfigOptions) {
 	_, _, cachePath := lib.InitConfig(cldOpts)
 	fmt.Println(cachePath)
@@ -60,6 +66,9 @@ func CacheToken(tokenData lib.CitrixTokenData, cldOpts *lib.CldConfigOptions) {
 	// fmt.Println(string(jsonStr))
 
 }
+
+//
+//
 
 func GetUserInfo(customerId string, tokenData lib.CitrixTokenData) (GetUserInfoResponse, error) {
 	urlString := "https://api.cloud.com/cvad/manage/Me"
@@ -86,6 +95,9 @@ func GetUserInfo(customerId string, tokenData lib.CitrixTokenData) (GetUserInfoR
 
 	return userInfo, nil
 }
+
+//
+//
 
 func HttpGet(urlString string, customerId string, siteId string, tokenData lib.CitrixTokenData) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
@@ -119,6 +131,9 @@ func HttpGet(urlString string, customerId string, siteId string, tokenData lib.C
 
 	return responseBody, nil
 }
+
+//
+//
 
 func HttpPost(urlString string, body string, creds lib.CitrixCloudAccountConfig) ([]byte, []byte, error) {
 	bodyReader := bytes.NewReader([]byte(body))
@@ -160,6 +175,9 @@ func HttpPost(urlString string, body string, creds lib.CitrixCloudAccountConfig)
 
 	return responseBody, resHeader, nil
 }
+
+//
+//
 
 func GetToken(creds lib.CitrixCloudAccountConfig, cldConfigOpts *lib.CldConfigOptions) (lib.CitrixTokenData, error) {
 	cachedToken := lib.GetCachedToken[lib.CitrixTokenData]("citrix-"+creds.CustomerId, cldConfigOpts)
@@ -238,6 +256,9 @@ func GetToken(creds lib.CitrixCloudAccountConfig, cldConfigOpts *lib.CldConfigOp
 	return tokenData, nil
 }
 
+//
+//
+
 func GetMachineCatalaogsForAllConfiguredtenants() (combinedMachineCatalogs MachineCatalogs) {
 	config := lib.GetCldConfig(nil)
 	citrixEnvs := *config.CitrixCloud.Environments
@@ -256,4 +277,19 @@ func GetMachineCatalaogsForAllConfiguredtenants() (combinedMachineCatalogs Machi
 		}
 	}
 	return
+}
+
+//
+//
+
+func GetPolicySettingDefinitions(creds lib.CitrixCloudAccountConfig, tokenData lib.CitrixTokenData) []PolicySettingDefinition {
+	urlString := "https://api-ap-s.cloud.com/cvad/manage/gpo/settingDefinitions?isLean=false"
+
+	res, err := HttpGet(urlString, creds.CustomerId, creds.SiteId, tokenData)
+	lib.CheckFatalError(err)
+
+	var resData GetPolicySettingDefinitionsResponse
+	json.Unmarshal(res, &resData)
+
+	return resData.Items
 }

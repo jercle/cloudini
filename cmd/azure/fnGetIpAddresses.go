@@ -525,7 +525,7 @@ func GetAllVMIpAddrForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfig
 
 	// fmt.Println(len(allResourcesSlice))
 
-	return allResourceIPs
+	return
 }
 
 //

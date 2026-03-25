@@ -35,7 +35,9 @@ Note: You can only run this command for vms in one tenant at a time
 			vmList []string
 		)
 
-		config := lib.GetCldConfig(nil)
+		config := lib.GetCldConfig(new(lib.CldConfigOptions{
+			UseAzCliAuth: useAzCliAuth,
+		}))
 
 		tokOpts := lib.AzureMultiAuthTokenRequestOptions{
 			TenantName: tenantName,
@@ -45,13 +47,21 @@ Note: You can only run this command for vms in one tenant at a time
 			tokOpts.GetWriteToken = true
 		}
 
+		if useAzCliAuth {
+			fmt.Println("useAzCliAuth")
+			tokenReq := GetAzCliToken()
+			token = &tokenReq
+		} else {
+			fmt.Println("!useAzCliAuth")
+			tokenReq, err := GetTenantSPToken(tokOpts, nil)
+			lib.CheckFatalError(err)
+			token = tokenReq
+		}
+
 		// lib.JsonMarshalAndPrint(tokOpts)
 		// os.Exit(0)
 
 		if !listConfiguredVMs {
-			tokenReq, err := GetTenantSPToken(tokOpts, nil)
-			lib.CheckFatalError(err)
-			token = tokenReq
 
 			if runAgainstAllConfiguredVMs {
 				for _, vm := range config.Azure.VirtualMachines {
@@ -99,7 +109,7 @@ func init() {
 	cmdVirtualMachines.Flags().BoolVarP(&listConfiguredVMs, "list-configured-vms", "l", false, "Lists currently configured VMs in the cloudini config file")
 	cmdVirtualMachines.Flags().BoolVar(&runAgainstAllConfiguredVMs, "all", false, "Runs the command against all configured VMs")
 	cmdVirtualMachines.Flags().StringVarP(&tenantName, "tenantName", "t", "", "Name of Tenant for configured auth")
-	cmdVirtualMachines.MarkFlagRequired("tenantName")
+	// cmdVirtualMachines.MarkFlagRequired("tenantName")
 	// cmdVirtualMachines.MarkFlagRequired("configured-vms")
 	cmdVirtualMachines.MarkFlagsMutuallyExclusive("start", "stop", "deallocate", "status-info", "list-configured-vms")
 	cmdVirtualMachines.MarkFlagsMutuallyExclusive("list-configured-vms", "all", "configured-vms")
