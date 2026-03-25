@@ -12,22 +12,37 @@ type GetUserInfoResponse struct {
 	VerifiedEmail         string             `json:"VerifiedEmail,omitempty" bson:"VerifiedEmail,omitempty"`
 }
 
+//
+//
+
 type CustomerResponse struct {
 	ID    string         `json:"Id,omitempty" bson:"Id,omitempty"`
 	Name  any            `json:"Name,omitempty" bson:"Name,omitempty"`
 	Sites []SiteResponse `json:"Sites,omitempty" bson:"Sites,omitempty"`
 }
 
+//
+//
+
 type SiteResponse struct {
 	ID   string `json:"Id,omitempty" bson:"Id,omitempty"`
 	Name string `json:"Name,omitempty" bson:"Name,omitempty"`
 }
 
+//
+//
+
 type GetMachineCatalogsResponse struct {
 	Items MachineCatalogs `json:"Items,omitempty" bson:"Items,omitempty"`
 }
 
+//
+//
+
 type MachineCatalogs []MachineCatalog
+
+//
+//
 
 type MachineCatalog struct {
 	AdminFolder struct {
@@ -304,9 +319,15 @@ type MachineCatalog struct {
 	LastDBSync     time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
 }
 
+//
+//
+
 type GetMachineCatalogDeliveryGroupAssociationsResponse struct {
 	Items []MchnCatDelGrpAssociation `json:"Items,omitempty" bson:"Items,omitempty"`
 }
+
+//
+//
 
 type MchnCatDelGrpAssociation struct {
 	Associated bool    `json:"Associated,omitempty" bson:"Associated,omitempty"`
@@ -315,6 +336,9 @@ type MchnCatDelGrpAssociation struct {
 	Priority   any     `json:"Priority,omitempty" bson:"Priority,omitempty"`
 	Uid        float64 `json:"Uid,omitempty" bson:"Uid,omitempty"`
 }
+
+//
+//
 
 type MachineCatalogCurrentImage struct {
 	ImageDefinitionName  string    `json:"imageDefinition,omitempty" bson:"imageDefinition,omitempty"`
@@ -326,4 +350,75 @@ type MachineCatalogCurrentImage struct {
 	PreparedImageVersion string    `json:"preparedImageVersion,omitempty" bson:"preparedImageVersion,omitempty"`
 	LastCitrixSync       time.Time `json:"lastCitrixSync,omitempty" bson:"lastCitrixSync,omitempty"`
 	LastDBSync           string    `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
+}
+
+//
+//
+
+type GetPolicySettingDefinitionsResponse struct {
+	ContinuationToken string                    `json:"continuationToken,omitempty,omitzero" bson:"continuationToken,omitempty,omitzero"`
+	Items             []PolicySettingDefinition `json:"items,omitempty,omitzero" bson:"items,omitempty,omitzero"`
+}
+
+//
+//
+
+type PolicySettingDefinition struct {
+	Category     string    `json:"category,omitempty,omitzero" bson:"category,omitempty,omitzero"`
+	DefaultSnip  *string   `json:"defaultSnip,omitempty,omitzero" bson:"defaultSnip,omitempty,omitzero"`
+	DefaultValue string    `json:"defaultValue,omitempty,omitzero" bson:"defaultValue,omitempty,omitzero"`
+	DisplayName  string    `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
+	Explanation  string    `json:"explanation,omitempty,omitzero" bson:"explanation,omitempty,omitzero"`
+	InitialValue *string   `json:"initialValue,omitempty,omitzero" bson:"initialValue,omitempty,omitzero"`
+	SettingName  string    `json:"settingName,omitempty,omitzero" bson:"settingName,omitempty,omitzero"`
+	LastDBSync   time.Time `json:"lastDatabaseSync,omitempty" bson:"lastDatabaseSync,omitempty"`
+}
+
+//
+//
+
+type PolicySettingDefinitionRaw struct {
+	AllowedText   string  `json:"allowedText,omitempty,omitzero" bson:"allowedText,omitempty,omitzero"`
+	Category      string  `json:"category,omitempty,omitzero" bson:"category,omitempty,omitzero"`
+	DefaultSnip   *string `json:"defaultSnip,omitempty,omitzero" bson:"defaultSnip,omitempty,omitzero"`
+	DefaultValue  string  `json:"defaultValue,omitempty,omitzero" bson:"defaultValue,omitempty,omitzero"`
+	DeniedText    string  `json:"deniedText,omitempty,omitzero" bson:"deniedText,omitempty,omitzero"`
+	DependsOn     *string `json:"dependsOn,omitempty,omitzero" bson:"dependsOn,omitempty,omitzero"`
+	DisabledValue *string `json:"disabledValue,omitempty,omitzero" bson:"disabledValue,omitempty,omitzero"`
+	DisplayName   string  `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
+	EditorName    string  `json:"editorName,omitempty,omitzero" bson:"editorName,omitempty,omitzero"`
+	EnumType      *struct {
+		Members []struct {
+			DisplayName *string `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
+			Name        string  `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
+			Value       float64 `json:"value,omitempty,omitzero" bson:"value,omitempty,omitzero"`
+		} `json:"members,omitempty,omitzero" bson:"members,omitempty,omitzero"`
+		TypeName string `json:"typeName,omitempty,omitzero" bson:"typeName,omitempty,omitzero"`
+	} `json:"enumType,omitempty,omitzero" bson:"enumType,omitempty,omitzero"`
+	Explanation        string             `json:"explanation,omitempty,omitzero" bson:"explanation,omitempty,omitzero"`
+	GpoScope           string             `json:"gpoScope,omitempty,omitzero" bson:"gpoScope,omitempty,omitzero"`
+	HideValueHint      bool               `json:"hideValueHint,omitempty,omitzero" bson:"hideValueHint,omitempty,omitzero"`
+	InitialValue       *string            `json:"initialValue,omitempty,omitzero" bson:"initialValue,omitempty,omitzero"`
+	IsEnableDisable    bool               `json:"isEnableDisable,omitempty,omitzero" bson:"isEnableDisable,omitempty,omitzero"`
+	IsToggled          bool               `json:"isToggled,omitempty,omitzero" bson:"isToggled,omitempty,omitzero"`
+	IsUserSetting      bool               `json:"isUserSetting,omitempty,omitzero" bson:"isUserSetting,omitempty,omitzero"`
+	ProductGroup       string             `json:"productGroup,omitempty,omitzero" bson:"productGroup,omitempty,omitzero"`
+	RelatedSettings    *map[string]string `json:"relatedSettings,omitempty,omitzero" bson:"relatedSettings,omitempty,omitzero"`
+	SecureDefaultValue *string            `json:"secureDefaultValue,omitempty,omitzero" bson:"secureDefaultValue,omitempty,omitzero"`
+	SettingName        string             `json:"settingName,omitempty,omitzero" bson:"settingName,omitempty,omitzero"`
+	ValidatorError     *string            `json:"validatorError,omitempty,omitzero" bson:"validatorError,omitempty,omitzero"`
+	ValueAsArray       bool               `json:"valueAsArray,omitempty,omitzero" bson:"valueAsArray,omitempty,omitzero"`
+	ValueMaximum       *string            `json:"valueMaximum,omitempty,omitzero" bson:"valueMaximum,omitempty,omitzero"`
+	ValueMinimum       *string            `json:"valueMinimum,omitempty,omitzero" bson:"valueMinimum,omitempty,omitzero"`
+	ValueType          string             `json:"valueType,omitempty,omitzero" bson:"valueType,omitempty,omitzero"`
+	ValueUnit          string             `json:"valueUnit,omitempty,omitzero" bson:"valueUnit,omitempty,omitzero"`
+	ValueValidator     *string            `json:"valueValidator,omitempty,omitzero" bson:"valueValidator,omitempty,omitzero"`
+	VdaVersions        []string           `json:"vdaVersions,omitempty,omitzero" bson:"vdaVersions,omitempty,omitzero"`
+	VersionCode        string             `json:"versionCode,omitempty,omitzero" bson:"versionCode,omitempty,omitzero"`
+	VersionDetails     []struct {
+		DisplayName string  `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
+		Edition     *string `json:"edition,omitempty,omitzero" bson:"edition,omitempty,omitzero"`
+		Product     string  `json:"product,omitempty,omitzero" bson:"product,omitempty,omitzero"`
+		Version     string  `json:"version,omitempty,omitzero" bson:"version,omitempty,omitzero"`
+	} `json:"versionDetails,omitempty,omitzero" bson:"versionDetails,omitempty,omitzero"`
 }

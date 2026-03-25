@@ -13,6 +13,7 @@ import (
 
 var (
 	updateAllGalleryImagesAndUpdateWithUsedByCitrix bool
+	updateCitrixPolicySettingDefinitions            bool
 	updateAzureResVcpuCountsCostData                bool
 	updateAzureResourceRelations                    bool
 	costDataMonth                                   string
@@ -79,6 +80,7 @@ var cmdMongoUpdate = &cobra.Command{
 		azStorageAcctMinTlsVersions := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzStorageAcctMinTlsVersions)
 
 		citrixMachineCatalogsColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMachineCatalogs)
+		citrixPolicySettingDefinitions := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixPolicySettingDefinitions)
 
 		certsCaCertInfo := c.Database(mongoConf.DbCertificates).Collection(mongoConf.CollCertsCaCertInfo)
 		certsServerCertInfo := c.Database(mongoConf.DbCertificates).Collection(mongoConf.CollCertsServerCertInfo)
@@ -113,6 +115,12 @@ var cmdMongoUpdate = &cobra.Command{
 
 		if updateAll || updateAllGalleryImagesAndUpdateWithUsedByCitrix {
 			UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(azResImageGalleryImagesColl, citrixMachineCatalogsColl, tokenReq)
+		}
+
+		if updateAll || updateCitrixPolicySettingDefinitions {
+			citrixEnvs := *config.CitrixCloud.Environments
+			envCreds := citrixEnvs[config.CitrixCloud.General.PolicyDefinitionsEnvironment]
+			UpdateCitrixPolicySettingDefs(citrixPolicySettingDefinitions, envCreds)
 		}
 
 		if updateAll || updateAllCertInfo {
@@ -221,6 +229,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateAllCertInfo, "updateAllCertInfo", "x", false, "Update server certificates and expiries")
 	cmdMongoUpdate.Flags().BoolVarP(&updateEntraPimItems, "updateEntraPimItems", "p", false, "Gets all PIM assignments and eligibilities, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&showExecutionTime, "showExecutionTime", "t", false, "Prints execution time when complete")
+	cmdMongoUpdate.Flags().BoolVarP(&updateCitrixPolicySettingDefinitions, "updateCitrixPolicySettingDefinitions", "d", false, "Fetches Citrix Cloud Policy Defs and upserts to MongoDB")
 	cmdMongoUpdate.Flags().StringVarP(&costDataMonth, "costDataMonth", "m", "", "Which month to get cost data from - defaults to whatever month it was yesterday. Use with 'updateAzureResVcpuCountsCostData' Format: YYYYMM")
 	// cmdMongoUpdate.Flags().BoolVarP(&updateADUsers, "updateADUsers", "a", false, "Get AD users and update database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateM365Data, "updateM365Data", "o", false, "Updates O365 data")

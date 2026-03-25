@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.3.46]
+* Get Citrix Cloud Policy Definitions and upsert to MongoDB
+* Update deps
+* Update to Golang 1.26.1
+
+## [0.3.45]
+* Remove cached data after successful use
+
 ## [0.3.44]
 * Bugfix: Fix license count functionality to correctly append users
 

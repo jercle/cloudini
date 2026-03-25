@@ -181,7 +181,14 @@ func GetCldConfig(options *CldConfigOptions) CldConfigRoot {
 
 	azAppConfigUrl := os.Getenv("AZURE_APPCONFIG_ENDPOINT")
 	if azAppConfigUrl != "" {
-		return getAzureAppConfigData()
+		useAzCliAuth := false
+		if options != nil && options.UseAzCliAuth {
+			fmt.Println("UseAzCliAuth")
+		}
+		// useAzCliAuth := options.UseAzCliAuth || false
+		// JsonMarshalAndPrint(useAzCliAuth)
+		// fmt.Println("PRINTING")
+		return getAzureAppConfigData(useAzCliAuth)
 	}
 
 	// fmt.Println(encryptedConfig)
@@ -557,7 +564,7 @@ func MapTenantIdToConfiguredTenantName(tenantId string, config AzureConfig) (ten
 //
 //
 
-func getAzureAppConfigData() CldConfigRoot {
+func getAzureAppConfigData(useAzCliAuth bool) CldConfigRoot {
 	azAppConfigUrl := os.Getenv("AZURE_APPCONFIG_ENDPOINT")
 	azAppConfigTenantId := os.Getenv("AZURE_APPCONFIG_TENANT_ID")
 	azAppConfigClientId := os.Getenv("AZURE_APPCONFIG_CLIENT_ID")

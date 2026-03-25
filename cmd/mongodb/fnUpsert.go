@@ -660,6 +660,33 @@ func UpsertCitrixMachineCatalogs(machineCatalogs citrix.MachineCatalogs, coll *m
 //
 //
 
+func UpsertCitrixPolicySettingDefs(settingDefs []citrix.PolicySettingDefinition, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
+	if len(settingDefs) == 0 {
+		fmt.Println("No data in slice")
+		return nil
+	}
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+
+	for _, sd := range settingDefs {
+		curr := sd
+		curr.LastDBSync = time.Now()
+		filter := bson.D{{"_id", sd.SettingName}}
+		update := bson.D{{"$set", curr}}
+
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+	}
+
+	results, err := coll.BulkWrite(ctx, updates)
+	lib.CheckFatalError(err)
+
+	return results
+}
+
+//
+//
+
 func UpsertMultipleEntraApps[T azure.EntraApplication | azure.EntraExpiringCredential](apps []T, collection *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(apps) == 0 {
 		fmt.Println("No apps in slice")
