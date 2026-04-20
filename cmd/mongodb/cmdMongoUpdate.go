@@ -30,6 +30,7 @@ var (
 	updateAWSMonitoringData                         bool
 	updateAll                                       bool
 	updateResources                                 bool
+	updateIntuneManagedDevices                      bool
 
 	updateP2SVpnConnectionDetails bool
 	p2sVpnGatewayResourceId       string
@@ -76,6 +77,7 @@ var cmdMongoUpdate = &cobra.Command{
 		azResTenantsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResTenants)
 		azResVcpuCountsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResVcpuCounts)
 		azResP2SVpnConnections := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResP2SVpnConnections)
+		azResIntuneManagedDevices := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResIntuneManagedDevices)
 		// azResIpAddresses := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResIPAddresses)
 		azStorageAcctMinTlsVersions := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzStorageAcctMinTlsVersions)
 
@@ -216,6 +218,10 @@ var cmdMongoUpdate = &cobra.Command{
 		if showExecutionTime {
 			fmt.Println("Execution time: " + elapsed.String())
 		}
+
+		if updateIntuneManagedDevices {
+			UpdateIntuneManagedDevices(azResIntuneManagedDevices)
+		}
 	},
 }
 
@@ -238,6 +244,8 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateSupportAlerts, "updateSupportAlerts", "s", false, "Updates Support alerts")
 	cmdMongoUpdate.Flags().BoolVarP(&updateResources, "updateResources", "r", false, "Updates Database with current Azure resources")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAWSMonitoringData, "updateAWSMonitoringData", "l", false, "Updates Database with AWS Monitoring data")
+	cmdMongoUpdate.Flags().BoolVarP(&updateIntuneManagedDevices, "updateIntuneManagedDevices", "f", false, "Get all Intune Managed Devices, then upsert into database")
+
 	cmdMongoUpdate.Flags().BoolVar(&updateAll, "updateAll", false, "Updates all data as if providing all available flags. Currently excludes updateAzureResourceRelations and updateWebsiteCertInfo")
 
 	cmdMongoUpdate.Flags().BoolVar(&updateP2SVpnConnectionDetails, "updateP2SVpnConnectionDetails", false, "Get P2S VPN connecton details, aggregate with user, then upsert to database")

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"sync"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -769,56 +768,59 @@ func ConvertLAResultToAWSIngestCounts(data azure.LogAnalyticsQueryResponse, awsI
 //
 //
 
-func UpsertP2SVpnConnectionDetails(p2sVpnGatewayResourceId string, tenantName string, storageAccountName string, containerName string) {
-	// blobSAS := azure.GenerateP2SVpnConnectionHealthDetailed(p2sVpnGatewayResourceId, tenantName, storageAccountName, containerName)
+// func UpsertP2SVpnConnectionDetails(p2sVpnGatewayResourceId string, tenantName string, storageAccountName string, containerName string) {
+// 	// blobSAS := azure.GenerateP2SVpnConnectionHealthDetailed(p2sVpnGatewayResourceId, tenantName, storageAccountName, containerName)
 
-	blobSAS := "https://***REMOVED***.blob.core.windows.net/p2svpn/20251218-17.16.10.json?sv=2025-07-05&spr=https&st=2025-12-18T06%3A27%3A41Z&se=2025-12-19T06%3A27%3A41Z&sr=b&sp=r&sig=EbCKVSkW5v3yT94OJxzBuQydP8s4Vbd9yS7RJWevfXs%3D"
+// 	connections := azure.GetP2SVpnConnectionDetailsFromBlob(azure.StorageAccountUploadBlobOptions{
+// 		ContainerName:      containerName,
+// 		StorageAccountName: storageAccountName,
+// 		// BlobFileName: ,
+// 		// BlobPrefix: ,
+// 	}, )
 
-	connections := azure.GetP2SVpnConnectionDetailsFromBlobSAS(blobSAS)
+// 	// lib.JsonMarshalAndPrint(connections)
 
-	// lib.JsonMarshalAndPrint(connections)
+// 	var (
+// 		wg  sync.WaitGroup
+// 		mut sync.Mutex
+// 	)
+// 	// var connectionsProcessed []azure.AzureP2SConnectionHealth
 
-	var (
-		wg  sync.WaitGroup
-		mut sync.Mutex
-	)
-	// var connectionsProcessed []azure.AzureP2SConnectionHealth
+// 	connectionsProcessing := make(map[string]azure.AzureP2SConnectionHealth)
 
-	connectionsProcessing := make(map[string]azure.AzureP2SConnectionHealth)
+// 	for _, conn := range connections {
+// 		wg.Go(func() {
+// 			deviceSerial := conn.UserName
+// 			_, deviceDetail, err := azure.GetUserFromDeviceSerial(tenantName, deviceSerial)
+// 			lib.CheckFatalError(err)
 
-	for _, conn := range connections {
-		wg.Go(func() {
-			deviceSerial := conn.UserName
-			_, deviceDetail, err := azure.GetUserFromDeviceSerial(tenantName, deviceSerial)
-			lib.CheckFatalError(err)
+// 			conn.UserPrincipalName = deviceDetail.UserPrincipalName
+// 			conn.ManagedDeviceADDeviceId = deviceDetail.AzureAdDeviceID
+// 			conn.ManagedDeviceIntuneId = deviceDetail.ID
+// 			conn.ManagedDeviceName = deviceDetail.DeviceName
+// 			conn.ManagedDeviceLastSyncDateTime = deviceDetail.LastSyncDateTime
+// 			conn.ManagedDeviceSerial = deviceSerial
+// 			conn.UserName = ""
+// 			mut.Lock()
+// 			// connectionsProcessed = append(connectionsProcessed, conn)
+// 			connectionsProcessing[conn.VpnConnectionID] = conn
+// 			mut.Unlock()
+// 		})
+// 	}
+// 	wg.Wait()
+// 	// lib.JsonMarshalAndPrint(connectionsProcessed)
+// 	lib.JsonMarshalAndPrint(connectionsProcessing)
+// 	// TODO: Update all json.marshalindents in this file
 
-			conn.UserPrincipalName = deviceDetail.UserPrincipalName
-			conn.ManagedDeviceADDeviceId = deviceDetail.AzureAdDeviceID
-			conn.ManagedDeviceIntuneId = deviceDetail.ID
-			conn.ManagedDeviceName = deviceDetail.DeviceName
-			conn.ManagedDeviceLastSyncDateTime = deviceDetail.LastSyncDateTime
-			conn.ManagedDeviceSerial = deviceSerial
-			conn.UserName = ""
-			mut.Lock()
-			// connectionsProcessed = append(connectionsProcessed, conn)
-			connectionsProcessing[conn.VpnConnectionID] = conn
-			mut.Unlock()
-		})
-	}
-	wg.Wait()
-	// lib.JsonMarshalAndPrint(connectionsProcessed)
-	lib.JsonMarshalAndPrint(connectionsProcessing)
-	// TODO: Update all json.marshalindents in this file
+// 	var connectionsProcessed []azure.AzureP2SConnectionHealth
 
-	var connectionsProcessed []azure.AzureP2SConnectionHealth
+// 	for _, v := range connectionsProcessing {
+// 		connectionsProcessed = append(connectionsProcessed, v)
+// 	}
+// 	jsonStr, _ := json.MarshalIndent(connectionsProcessed, "", "  ")
+// 	os.WriteFile("/home/jercle/git/cld/cmd/mongodb/aggregatedFuncs-p2svpn-array.json", jsonStr, 0644)
 
-	for _, v := range connectionsProcessing {
-		connectionsProcessed = append(connectionsProcessed, v)
-	}
-	jsonStr, _ := json.MarshalIndent(connectionsProcessed, "", "  ")
-	os.WriteFile("/home/jercle/git/cld/cmd/mongodb/aggregatedFuncs-p2svpn-array.json", jsonStr, 0644)
-
-}
+// }
 
 //
 //
@@ -887,4 +889,26 @@ func UpdateCitrixPolicySettingDefs(settingDefsColl *mongo.Collection, citrixConf
 	// UpsertImageGalleryImages(galleryImagesWithVersions, imageGalleryImagesColl)
 	s.Stop()
 
+}
+
+func UpdateIntuneManagedDevices(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	fmt.Println("Fetching Intune Managed Devices...")
+	s.Start()
+	// galleryImagesWithVersions := azure.GetAllImagesAndVersionsForAllGalleries(tokenReq)
+	// tokenData, err := citrix.GetToken(citrixConf, nil)
+	managedDevices := azure.GetIntuneManagedDevicesForAllConfiguredTenants()
+	// lib.CheckFatalError(err)
+	// settingDefs := citrix.GetPolicySettingDefinitions(citrixConf, tokenData)
+	s.Stop()
+	fmt.Println("Upserting Intune Managed Devices to database...")
+	s.Start()
+	// UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
+	coll.Drop(context.TODO())
+	results := InsertIntuneManagedDevices(managedDevices, coll)
+	// DeleteAllDocumentsInCollection(imageGalleryImagesColl)
+	// UpsertImageGalleryImages(galleryImagesWithVersions, imageGalleryImagesColl)
+	s.Stop()
+	lib.JsonMarshalAndPrint(results)
 }

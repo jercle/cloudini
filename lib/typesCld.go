@@ -97,9 +97,10 @@ type AzureDevOpsConfig struct {
 }
 
 type CertificateManagementConfig struct {
-	StorageAccountTenantName string `json:"storageAccountTenantName,omitempty"`
-	StorageAccountName       string `json:"storageAccountName,omitempty"`
-	ContainerName            string `json:"containerName,omitempty"`
+	StorageAccountTenantName      string            `json:"storageAccountTenantName,omitempty"`
+	StorageAccountName            string            `json:"storageAccountName,omitempty"`
+	ContainerName                 string            `json:"containerName,omitempty"`
+	CustomCertTemplateOidMappings map[string]string `json:"customCertTemplateOidMappings,omitempty"`
 }
 
 type MongoDBConfig struct {
@@ -131,6 +132,7 @@ type MongoDBConfig struct {
 	CollAzResVcpuCounts             string `json:"collAzResVcpuCounts,omitempty"`
 	CollAzResIPAddresses            string `json:"collAzResIPAddresses,omitempty"`
 	CollAzResP2SVpnConnections      string `json:"collAzResP2SVpnConnections,omitempty"`
+	CollAzResIntuneManagedDevices   string `json:"collAzResIntuneManagedDevices,omitempty"`
 	CollAzStorageAcctMinTlsVersions string `json:"collAzStorageAcctMinTlsVersions,omitempty"`
 
 	CollCitrixMachineCatalogs          string `json:"collCitrixMachineCatalogs,omitempty"`
@@ -220,6 +222,7 @@ type CldConfigTenantAuth struct {
 	GetWorkbookAlerts    bool                        `json:"getWorkbookAlerts,omitempty"`
 	AWSIngestWorkspaceID string                      `json:"awsIngestWorkspaceID,omitempty"`
 	AWSIngestRef         string                      `json:"awsIngestRef,omitempty"`
+	FetchIntuneDevices   bool                        `json:"fetchIntuneDevices,omitempty"`
 }
 
 type CldConfigClientAuthDetails struct {

@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.3.47]
+* Add getting Intune Managed Devices
+* Update deps
+* Update to Go 1.26.2
+
 ## [0.3.46]
 * Get Citrix Cloud Policy Definitions and upsert to MongoDB
 * Update deps

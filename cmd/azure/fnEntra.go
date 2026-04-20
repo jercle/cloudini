@@ -579,3 +579,26 @@ func GetAllEntraUsersForTenant(token *lib.AzureMultiAuthToken, selects *[]string
 
 	return
 }
+
+//
+//
+
+func GetEntraUserByObjectId(objectId string, token *lib.AzureMultiAuthToken, selects *[]string, apiVersion *string) (user EntraUser) {
+	baseGraphUrl := "https://graph.microsoft.com/"
+	apiVers := "v1.0"
+	if apiVersion != nil {
+		apiVers = *apiVersion
+	}
+	endpoint := "/users/" + objectId
+	if selects != nil {
+		endpoint += "?$select=" + strings.Join(*selects, ",")
+	}
+	urlString := baseGraphUrl + apiVers + endpoint
+
+	res, resErr := HttpGet(urlString, *token)
+	lib.CheckHttpGetError(resErr)
+	err := json.Unmarshal(res, &user)
+	lib.CheckFatalError(err)
+
+	return
+}

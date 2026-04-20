@@ -54,8 +54,26 @@ func GenerateP2SVpnConnectionHealthDetailed(p2sVpnGatewayResourceId string, tena
 //
 //
 
-func GetP2SVpnConnectionDetailsFromBlobSAS(blobSAS string) (connections []AzureP2SConnectionHealth) {
-	file, err := StorageBlobHttpGetFromSAS(blobSAS)
+// func GetP2SVpnConnectionDetailsFromBlobSAS(blobSAS string) (connections []AzureP2SConnectionHealth) {
+// 	file, err := StorageBlobHttpGetFromSAS(blobSAS)
+// 	lib.CheckFatalError(err)
+
+// 	var connectionDetailsRaw []AzureP2SConnectionDetails
+// 	json.Unmarshal(file, &connectionDetailsRaw)
+
+// 	for _, conn := range connectionDetailsRaw {
+// 		for _, c := range conn.UserNameVpnConnectionHealths {
+// 			for _, detail := range c.VpnConnectionHealths {
+// 				connections = append(connections, detail)
+// 			}
+// 		}
+// 	}
+
+// 	return
+// }
+
+func GetP2SVpnConnectionDetailsFromBlob(options StorageAccountUploadBlobOptions, token lib.AzureMultiAuthToken) (connections []AzureP2SConnectionHealth) {
+	file, err := StorageBlobHttpGet(options, token)
 	lib.CheckFatalError(err)
 
 	var connectionDetailsRaw []AzureP2SConnectionDetails

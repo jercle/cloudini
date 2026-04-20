@@ -1409,3 +1409,32 @@ func InsertM365LicenseCounts(licenseCounts map[string]m365.M365LicenseCounts, co
 
 	return
 }
+
+//
+//
+
+func InsertIntuneManagedDevices(managedDevices []azure.ManagedDevice, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
+	if len(managedDevices) == 0 {
+		fmt.Println("No data in slice")
+		return nil
+	}
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+
+	// fmt.Println(len(serverCertInfo))
+
+	for _, md := range managedDevices {
+		// filter := bson.D{{"_id", md.ID}}
+		// update := bson.D{{"$set", md}}
+
+		// .SetUpsert(true)
+		// updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+		updates = append(updates, mongo.NewInsertOneModel().SetDocument(md))
+	}
+
+	res, err := coll.BulkWrite(ctx, updates, nil)
+	lib.CheckFatalError(err)
+
+	return res
+}
