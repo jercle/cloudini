@@ -38,6 +38,7 @@ type ManagedDevice struct {
 	LastDatabaseSync      time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
 	AzureAdDeviceID       string    `json:"azureADDeviceId,omitempty,omitzero" bson:"azureADDeviceId,omitempty,omitzero"`
 	DeviceName            string    `json:"deviceName,omitempty,omitzero" bson:"deviceName,omitempty,omitzero"`
+	DeviceType            string    `json:"deviceType,omitempty,omitzero" bson:"deviceType,omitempty,omitzero"`
 	EnrolledDateTime      time.Time `json:"enrolledDateTime,omitempty,omitzero" bson:"enrolledDateTime,omitempty,omitzero"`
 	EnrollmentProfileName any       `json:"enrollmentProfileName,omitempty,omitzero" bson:"enrollmentProfileName,omitempty,omitzero"`
 	EthernetMacAddress    any       `json:"ethernetMacAddress,omitempty,omitzero" bson:"ethernetMacAddress,omitempty,omitzero"`
@@ -90,6 +91,7 @@ type ManagedDevice struct {
 	ManagementCertificateExpirationDate time.Time                   `json:"managementCertificateExpirationDate,omitempty,omitzero" bson:"managementCertificateExpirationDate,omitempty,omitzero"`
 	Model                               string                      `json:"model,omitempty,omitzero" bson:"model,omitempty,omitzero"`
 	OSVersion                           string                      `json:"osVersion,omitempty,omitzero" bson:"osVersion,omitempty,omitzero"`
+	OperatingSystem                     string                      `json:"operatingSystem,omitempty,omitzero" bson:"operatingSystem,omitempty,omitzero"`
 	SerialNumber                        string                      `json:"serialNumber,omitempty,omitzero" bson:"serialNumber,omitempty,omitzero"`
 	UserPrincipalName                   string                      `json:"userPrincipalName,omitempty,omitzero" bson:"userPrincipalName,omitempty,omitzero"`
 	UsersLoggedOn                       []ManagedDeviceUserLoggedOn `json:"usersLoggedOn,omitempty,omitzero" bson:"usersLoggedOn,omitempty,omitzero"`

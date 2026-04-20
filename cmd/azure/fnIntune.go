@@ -56,7 +56,7 @@ func ListManagedDeviceIds(token *lib.AzureMultiAuthToken) (deviceIds []string) {
 func GetDeviceInformation(deviceId string, token *lib.AzureMultiAuthToken) (managedDevice ManagedDevice) {
 	url := "https://graph.microsoft.com/beta/deviceManagement/managedDevices/" +
 		deviceId +
-		"?$select=hardwareInformation,id,deviceName,enrolledDateTime,lastSyncDateTime,osVersion,userPrincipalName,azureADDeviceId,model,imei,serialNumber,wiFiMacAddress,managedDeviceName,managementCertificateExpirationDate,ethernetMacAddress,enrollmentProfileName,usersLoggedOn"
+		"?$select=hardwareInformation,id,deviceName,enrolledDateTime,lastSyncDateTime,osVersion,userPrincipalName,azureADDeviceId,model,imei,serialNumber,wiFiMacAddress,managedDeviceName,managementCertificateExpirationDate,ethernetMacAddress,enrollmentProfileName,usersLoggedOn,deviceType,operatingSystem"
 	devRes, err := HttpGet(url, *token)
 	lib.CheckFatalError(err)
 
