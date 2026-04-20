@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.49]
+* Make Mongo update commands run using Goroutines
+
 ## [0.3.48]
 * Update GetDeviceInformation select statement
 

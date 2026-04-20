@@ -3,7 +3,7 @@ package mongodb
 import (
 	"context"
 	"fmt"
-	"os"
+	"sync"
 	"time"
 
 	"github.com/jercle/cloudini/cmd/azure"
@@ -27,16 +27,16 @@ var (
 	updateB2CUsers                                  bool
 	updateWebsiteCertInfo                           bool
 	updateSupportAlerts                             bool
-	updateAWSMonitoringData                         bool
-	updateAll                                       bool
-	updateResources                                 bool
-	updateIntuneManagedDevices                      bool
+	// updateAWSMonitoringData                         bool
+	updateAll                  bool
+	updateResources            bool
+	updateIntuneManagedDevices bool
 
-	updateP2SVpnConnectionDetails bool
-	p2sVpnGatewayResourceId       string
-	tenantName                    string
-	storageAccountName            string
-	containerName                 string
+	// updateP2SVpnConnectionDetails bool
+	// p2sVpnGatewayResourceId       string
+	tenantName         string
+	storageAccountName string
+	containerName      string
 
 // tenantId       string
 // subscriptionId string
@@ -55,6 +55,8 @@ var cmdMongoUpdate = &cobra.Command{
 	// This application is a tool to generate the needed files
 	// to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		var wg sync.WaitGroup
+
 		startTime := time.Now()
 		config := lib.GetCldConfig(nil)
 		mongoConf := config.MongoDBConfig
@@ -68,7 +70,7 @@ var cmdMongoUpdate = &cobra.Command{
 		// adUsers := c.Database(mongoConf.DbAD).Collection(mongoConf.CollADUsers)
 		// _ = adUsers
 
-		awsMonitoringColl := c.Database(mongoConf.DbAWSMonitoring).Collection(mongoConf.CollAWSMonLogging)
+		// awsMonitoringColl := c.Database(mongoConf.DbAWSMonitoring).Collection(mongoConf.CollAWSMonLogging)
 
 		azResImageGalleryImagesColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResImageGalleryImages)
 		azResResourceListColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResResourceList)
@@ -76,7 +78,7 @@ var cmdMongoUpdate = &cobra.Command{
 		azResSKUColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResSKU)
 		azResTenantsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResTenants)
 		azResVcpuCountsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResVcpuCounts)
-		azResP2SVpnConnections := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResP2SVpnConnections)
+		// azResP2SVpnConnections := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResP2SVpnConnections)
 		azResIntuneManagedDevices := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResIntuneManagedDevices)
 		// azResIpAddresses := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResIPAddresses)
 		azStorageAcctMinTlsVersions := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzStorageAcctMinTlsVersions)
@@ -112,37 +114,49 @@ var cmdMongoUpdate = &cobra.Command{
 		lib.CheckFatalError(err)
 
 		if updateAll || updateIpAddresses {
-			UpdateAllAzureResourceIPAddresses(ipamIpAddresses, ipamIpAddressBlocks, tokenReq)
+			wg.Go(func() {
+				UpdateAllAzureResourceIPAddresses(ipamIpAddresses, ipamIpAddressBlocks, tokenReq)
+			})
 		}
 
 		if updateAll || updateAllGalleryImagesAndUpdateWithUsedByCitrix {
-			UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(azResImageGalleryImagesColl, citrixMachineCatalogsColl, tokenReq)
+			wg.Go(func() {
+				UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(azResImageGalleryImagesColl, citrixMachineCatalogsColl, tokenReq)
+			})
 		}
 
 		if updateAll || updateCitrixPolicySettingDefinitions {
-			citrixEnvs := *config.CitrixCloud.Environments
-			envCreds := citrixEnvs[config.CitrixCloud.General.PolicyDefinitionsEnvironment]
-			UpdateCitrixPolicySettingDefs(citrixPolicySettingDefinitions, envCreds)
+			wg.Go(func() {
+				citrixEnvs := *config.CitrixCloud.Environments
+				envCreds := citrixEnvs[config.CitrixCloud.General.PolicyDefinitionsEnvironment]
+				UpdateCitrixPolicySettingDefs(citrixPolicySettingDefinitions, envCreds)
+			})
 		}
 
 		if updateAll || updateAllCertInfo {
-			UpdateAllCertInfo(certsCaCertInfo, certsServerCertInfo)
+			wg.Go(func() {
+				UpdateAllCertInfo(certsCaCertInfo, certsServerCertInfo)
+			})
 		}
 
 		if updateAll || updateEntraItems {
-			appRegOpts := UpdateEntraItemsOptions{
-				EntraAppRegColl:              entraAppRegColl,
-				EntraAppRegCredsExpiringColl: entraAppRegCredsExpiringColl,
-			}
-			UpdateEntraItems(appRegOpts, tokenReq)
+			wg.Go(func() {
+				appRegOpts := UpdateEntraItemsOptions{
+					EntraAppRegColl:              entraAppRegColl,
+					EntraAppRegCredsExpiringColl: entraAppRegCredsExpiringColl,
+				}
+				UpdateEntraItems(appRegOpts, tokenReq)
+			})
 		}
 
 		if updateAll || updateEntraPimItems {
-			opts := UpdateEntraPimItemsOptions{
-				EntraRoleAssignmentScheduleInstancesColl:  entraRoleAssignmentScheduleInstancesColl,
-				EntraRoleEligibilityScheduleInstancesColl: entraRoleEligibilityScheduleInstancesColl,
-			}
-			UpdateEntraPimItems(opts)
+			wg.Go(func() {
+				opts := UpdateEntraPimItemsOptions{
+					EntraRoleAssignmentScheduleInstancesColl:  entraRoleAssignmentScheduleInstancesColl,
+					EntraRoleEligibilityScheduleInstancesColl: entraRoleEligibilityScheduleInstancesColl,
+				}
+				UpdateEntraPimItems(opts)
+			})
 		}
 
 		// Longest running, so keep last
@@ -187,41 +201,58 @@ var cmdMongoUpdate = &cobra.Command{
 		// }
 
 		if updateAll || updateB2CUsers {
-			UpdateB2CUsers(entraB2CUsersColl)
+			wg.Go(func() {
+				UpdateB2CUsers(entraB2CUsersColl)
+			})
 		}
 
 		if updateAll || updateM365Data {
-			UpdateM365Data(m365MailboxStatisticsColl, envOptM365LicenseCounts)
+			wg.Go(func() {
+				UpdateM365Data(m365MailboxStatisticsColl, envOptM365LicenseCounts)
+
+			})
 		}
 
 		if updateWebsiteCertInfo {
-			UpdateWebsiteCertsPullingFromDatabase(c)
+			wg.Go(func() {
+				UpdateWebsiteCertsPullingFromDatabase(c)
+
+			})
 		}
 
 		if updateAll || updateSupportAlerts {
-			UpdateSupportAlerts(genSupportAlertsColl)
+			wg.Go(func() {
+				UpdateSupportAlerts(genSupportAlertsColl)
+
+			})
 		}
 
-		if updateAll || updateAWSMonitoringData {
-			UpdateAWSMonitoringData(awsMonitoringColl)
+		// if updateAll || updateAWSMonitoringData {
+		// 	UpdateAWSMonitoringData(awsMonitoringColl)
+		// }
+
+		// if updateP2SVpnConnectionDetails {
+		// 	if tenantName == "" || storageAccountName == "" || containerName == "" || p2sVpnGatewayResourceId == "" {
+		// 		fmt.Println("Please provide tenantName, storageAccountName, containerName, and p2sVpnGatewayResourceId")
+		// 		os.Exit(1337)
+		// 	}
+		// 	UpdateAWSMonitoringData(azResP2SVpnConnections)
+		// }
+
+		if updateIntuneManagedDevices {
+			wg.Go(func() {
+				UpdateIntuneManagedDevices(azResIntuneManagedDevices)
+
+			})
 		}
 
-		if updateP2SVpnConnectionDetails {
-			if tenantName == "" || storageAccountName == "" || containerName == "" || p2sVpnGatewayResourceId == "" {
-				fmt.Println("Please provide tenantName, storageAccountName, containerName, and p2sVpnGatewayResourceId")
-				os.Exit(1337)
-			}
-			UpdateAWSMonitoringData(azResP2SVpnConnections)
-		}
+		wg.Wait()
 
 		elapsed := time.Since(startTime)
 		if showExecutionTime {
 			fmt.Println("Execution time: " + elapsed.String())
 		}
 
-		if updateIntuneManagedDevices {
-			UpdateIntuneManagedDevices(azResIntuneManagedDevices)
-		}
 	},
 }
 
@@ -243,16 +274,16 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateWebsiteCertInfo, "updateWebsiteCertInfo", "w", false, "Updates Website Cert info from configured URLs in database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateSupportAlerts, "updateSupportAlerts", "s", false, "Updates Support alerts")
 	cmdMongoUpdate.Flags().BoolVarP(&updateResources, "updateResources", "r", false, "Updates Database with current Azure resources")
-	cmdMongoUpdate.Flags().BoolVarP(&updateAWSMonitoringData, "updateAWSMonitoringData", "l", false, "Updates Database with AWS Monitoring data")
+	// cmdMongoUpdate.Flags().BoolVarP(&updateAWSMonitoringData, "updateAWSMonitoringData", "l", false, "Updates Database with AWS Monitoring data")
 	cmdMongoUpdate.Flags().BoolVarP(&updateIntuneManagedDevices, "updateIntuneManagedDevices", "f", false, "Get all Intune Managed Devices, then upsert into database")
 
 	cmdMongoUpdate.Flags().BoolVar(&updateAll, "updateAll", false, "Updates all data as if providing all available flags. Currently excludes updateAzureResourceRelations and updateWebsiteCertInfo")
 
-	cmdMongoUpdate.Flags().BoolVar(&updateP2SVpnConnectionDetails, "updateP2SVpnConnectionDetails", false, "Get P2S VPN connecton details, aggregate with user, then upsert to database")
+	// cmdMongoUpdate.Flags().BoolVar(&updateP2SVpnConnectionDetails, "updateP2SVpnConnectionDetails", false, "Get P2S VPN connecton details, aggregate with user, then upsert to database")
 	cmdMongoUpdate.Flags().StringVar(&tenantName, "tenantName", "", "Name of Azure Tenant")
 	cmdMongoUpdate.Flags().StringVar(&storageAccountName, "storageAccountName", "", "Name of Storage Account to upload P2S VPN connection statistics")
 	cmdMongoUpdate.Flags().StringVar(&containerName, "containerName", "", "Name of Blob Container to upload P2S VPN connection statistics")
-	cmdMongoUpdate.Flags().StringVar(&p2sVpnGatewayResourceId, "p2sVpnGatewayResourceId", "", "Resource ID of P2S VPN Gateway")
+	// cmdMongoUpdate.Flags().StringVar(&p2sVpnGatewayResourceId, "p2sVpnGatewayResourceId", "", "Resource ID of P2S VPN Gateway")
 	// cmdMongo.PersistentFlags().StringVarP(&subscriptionId, "subscriptionId", "s", "", "Subscription ID to run command against. If not supplied, current default Azure CLI subscription is used.")
 	// cmdMongo.PersistentFlags().StringVarP(&resourceGroup, "resourceGroup", "r", "", "Resource group to run command against.")
 	// cmdMongo.PersistentFlags().StringVar(&clientId, "clientId", "", "Client ID for Service Principal authentication.")
