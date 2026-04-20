@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"encoding/asn1"
 	"net"
 	"net/url"
 	"time"
@@ -182,9 +183,9 @@ type ServerCertInfo struct {
 		Key               *string `json:"key,omitempty" bson:"key,omitempty"`
 		Oid               string  `json:"oid,omitempty" bson:"oid,omitempty"`
 	} `json:"publicKey,omitempty" bson:"publicKey,omitempty"`
-	RawData             []float64 `json:"rawData,omitempty" bson:"rawData,omitempty"`
-	SendAsTrustedIssuer bool      `json:"sendAsTrustedIssuer,omitempty" bson:"sendAsTrustedIssuer,omitempty"`
-	SerialNumber        string    `json:"serialNumber,omitempty" bson:"serialNumber,omitempty"`
+	RawData             []byte `json:"rawData,omitempty" bson:"rawData,omitempty"`
+	SendAsTrustedIssuer bool   `json:"sendAsTrustedIssuer,omitempty" bson:"sendAsTrustedIssuer,omitempty"`
+	SerialNumber        string `json:"serialNumber,omitempty" bson:"serialNumber,omitempty"`
 	SignatureAlgorithm  struct {
 		FriendlyName string `json:"friendlyName,omitempty" bson:"friendlyName,omitempty"`
 		Value        string `json:"value,omitempty" bson:"value,omitempty"`
@@ -199,6 +200,62 @@ type ServerCertInfo struct {
 	Version    float64 `json:"version,omitempty" bson:"version,omitempty"`
 	ParentPath *string `json:"parentPath,omitempty" bson:"parentPath,omitempty"`
 }
+
+// type ServerCertInfoFile struct {
+// 	Certificates
+// }
+
+//
+//
+
+type FormattedServerCertInfo struct {
+	IssuerName            string                            `json:"issuerName,omitempty,omitzero" bson:"issuerName,omitempty,omitzero"`
+	IssuerRDN             string                            `json:"issuerRDN,omitempty,omitzero" bson:"issuerRDN,omitempty,omitzero"`
+	DNSNames              []string                          `json:"dnsNames,omitempty,omitzero" bson:"dnsNames,omitempty,omitzero"`
+	EmailAddresses        []string                          `json:"emailAddresses,omitempty,omitzero" bson:"emailAddresses,omitempty,omitzero"`
+	IPAddresses           []net.IP                          `json:"ipAddresses,omitempty,omitzero" bson:"ipAddresses,omitempty,omitzero"`
+	SubjectName           string                            `json:"subjectName,omitempty,omitzero" bson:"subjectName,omitempty,omitzero"`
+	SubjectRDN            string                            `json:"subjectRDN,omitempty,omitzero" bson:"subjectRDN,omitempty,omitzero"`
+	SubjectEmail          string                            `json:"subjectEmail,omitempty,omitzero" bson:"subjectEmail,omitempty,omitzero"`
+	CRLDistributionPoints []string                          `json:"crlDistributionPoints,omitempty,omitzero" bson:"crlDistributionPoints,omitempty,omitzero"`
+	CertificateTemplate   string                            `json:"certificateTemplate,omitempty,omitzero" bson:"certificateTemplate,omitempty,omitzero"`
+	RawData               []byte                            `json:"rawData,omitempty,omitzero" bson:"rawData,omitempty,omitzero"`
+	PublicKeyAlgorithm    string                            `json:"publicKeyAlgorithm,omitempty,omitzero" bson:"publicKeyAlgorithm,omitempty,omitzero"`
+	SignatureAlgorithm    string                            `json:"signatureAlgorithm,omitempty,omitzero" bson:"signatureAlgorithm,omitempty,omitzero"`
+	IsCA                  bool                              `json:"isCA,omitempty,omitzero" bson:"isCA,omitempty,omitzero"`
+	Serial                string                            `json:"serial,omitempty,omitzero" bson:"serial,omitempty,omitzero"`
+	SubjectKeyId          string                            `json:"subjectKeyId,omitempty,omitzero" bson:"subjectKeyId,omitempty,omitzero"`
+	AuthorityKeyId        string                            `json:"authorityKeyId,omitempty,omitzero" bson:"authorityKeyId,omitempty,omitzero"`
+	ExtendedKeyUsage      []string                          `json:"extendedKeyUsage,omitempty,omitzero" bson:"extendedKeyUsage,omitempty,omitzero"`
+	KeyUsage              []string                          `json:"keyUsage,omitempty,omitzero" bson:"keyUsage,omitempty,omitzero"`
+	OtherExtensions       []string                          `json:"otherExtensions,omitempty,omitzero" bson:"otherExtensions,omitempty,omitzero"`
+	NotBefore             time.Time                         `json:"notBefore,omitempty,omitzero" bson:"notBefore,omitempty,omitzero"`
+	NotAfter              time.Time                         `json:"notAfter,omitempty,omitzero" bson:"notAfter,omitempty,omitzero"`
+	BasicConstraintsValid bool                              `json:"basicConstraintsValid,omitempty,omitzero" bson:"basicConstraintsValid,omitempty,omitzero"`
+	Thumbprint            string                            `json:"thumbprint,omitempty,omitzero" bson:"thumbprint,omitempty,omitzero"`
+	ParentPath            *string                           `json:"parentPath,omitempty,omitzero" bson:"parentPath,omitempty,omitzero"`
+	FriendlyNames         []string                          `json:"friendlyNames,omitempty,omitzero" bson:"friendlyNames,omitempty,omitzero"`
+	RelatedCertAuthData   *CertAuthorityCertInfo            `json:"relatedCertAuthData,omitempty,omitzero" bson:"relatedCertAuthData,omitempty,omitzero"`
+	ID                    string                            `json:"id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
+	LastDBSync            *time.Time                        `json:"lastDatabaseSync,omitempty,omitzero"  bson:"lastDatabaseSync,omitempty,omitzero"`
+	LastServerSync        time.Time                         `json:"lastServerSync,omitempty,omitzero"  bson:"lastServerSync,omitempty,omitzero"`
+	PulledFromServer      *string                           `json:"pulledFromServer,omitempty,omitzero" bson:"pulledFromServer,omitempty,omitzero"`
+	ServersPulledFrom     []ServerCertInfoServersPulledFrom `json:"serversPulledFrom,omitempty,omitzero" bson:"serversPulledFrom,omitempty,omitzero"`
+	TenantName            *string                           `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
+	TenantNames           []string                          `json:"tenantNames,omitempty,omitzero" bson:"tenantNames,omitempty,omitzero"`
+}
+
+//
+//
+
+type CertTemplateExtension struct {
+	TemplateID   asn1.ObjectIdentifier
+	MajorVersion int `asn1:"optional,omitempty"`
+	MinorVersion int `asn1:"optional,omitempty"`
+}
+
+//
+//
 
 // type ServerCertInfoServersPulledFrom map[string][]string
 
