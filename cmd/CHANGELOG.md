@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.51]
+* Change FriendlyNames field to []FriendlyName instead of map[string]string
+
 ## [0.3.50]
 * Update cert info processing
 

@@ -358,16 +358,34 @@ func RelateCertAuthCertsToServerCertsNew(caCertInfo []CertAuthorityCertInfo, ser
 		}
 
 		fn := *sci.FriendlyName
+
 		if fn != "" {
-			if data := curr.FriendlyNames; data == nil {
-				curr.FriendlyNames = make(map[string][]string)
-				curr.FriendlyNames[fn] = []string{*sci.PulledFromServer}
-			} else {
-				if !slices.Contains(curr.FriendlyNames[fn], *sci.PulledFromServer) {
-					curr.FriendlyNames[fn] = append(curr.FriendlyNames[fn], *sci.PulledFromServer)
+			matchedFn := false
+			for i, data := range curr.FriendlyNames {
+				currFn := data
+				if currFn.Name == fn {
+					matchedFn = true
+					if !slices.Contains(currFn.Servers, *sci.PulledFromServer) {
+						currFn.Servers = append(currFn.Servers, *sci.PulledFromServer)
+					}
 				}
+				curr.FriendlyNames[i] = currFn
+			}
+			if !matchedFn {
+				curr.FriendlyNames = append(curr.FriendlyNames, FriendlyName{fn, []string{*sci.PulledFromServer}})
 			}
 		}
+
+		// if fn != "" {
+		// 	if data := curr.FriendlyNames; data == nil {
+		// 		curr.FriendlyNames = make(map[string][]string)
+		// 		curr.FriendlyNames[fn] = []string{*sci.PulledFromServer}
+		// 	} else {
+		// 		if !slices.Contains(curr.FriendlyNames[fn], *sci.PulledFromServer) {
+		// 			curr.FriendlyNames[fn] = append(curr.FriendlyNames[fn], *sci.PulledFromServer)
+		// 		}
+		// 	}
+		// }
 		curr.FriendlyName = nil
 
 		matchedSpf := false

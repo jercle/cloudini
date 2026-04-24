@@ -347,7 +347,7 @@ type FormattedServerCertInfo struct {
 	ServersPulledFrom     []ServerCertInfoServersPulledFrom `json:"serversPulledFrom,omitempty,omitzero" bson:"serversPulledFrom,omitempty,omitzero"`
 	TenantName            *string                           `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
 	TenantNames           []string                          `json:"tenantNames,omitempty,omitzero" bson:"tenantNames,omitempty,omitzero"`
-	FriendlyNames         map[string][]string               `json:"friendlyNames,omitempty,omitzero" bson:"friendlyNames,omitempty,omitzero"`
+	FriendlyNames         []FriendlyName                    `json:"friendlyNames,omitempty,omitzero" bson:"friendlyNames,omitempty,omitzero"`
 	FriendlyName          *string                           `json:"friendlyName,omitempty,omitzero" bson:"friendlyName,omitempty,omitzero"`
 	HasPrivateKey         bool                              `json:"hasPrivateKey,omitempty,omitzero" bson:"hasPrivateKey,omitempty,omitzero"`
 	ServersWithPrivateKey *[]string                         `json:"serversWithPrivateKey,omitempty,omitzero" bson:"serversWithPrivateKey,omitempty,omitzero"`
