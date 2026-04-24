@@ -32,6 +32,11 @@ func GetCertAuthCertInfoFromFile(path string) (processedItems []CertAuthorityCer
 	stat, _ := os.Stat(path)
 	fileModTime := stat.ModTime()
 
+	fileName := filepath.Base(path)
+	fnSplit := strings.Join(strings.Split(fileName, "-")[1:], "-")
+	fnSplit = strings.Split(fnSplit, ".")[0]
+	tNameAndHostname := strings.Split(fnSplit, "_")
+
 	for _, item := range fileData {
 		curr := make(map[string]interface{})
 		for key, val := range item {
@@ -59,7 +64,15 @@ func GetCertAuthCertInfoFromFile(path string) (processedItems []CertAuthorityCer
 				camelKey == "certificateExpirationDate" ||
 				camelKey == "requestResolutionDate" ||
 				camelKey == "requestSubmissionDate" {
-				valDate, err := time.Parse("1/2/2006 3:04 PM", val)
+				var valDate time.Time
+				if tNameAndHostname[0] == "DEV" {
+					valDate, err = time.Parse("2/1/2006 3:04 PM", val)
+				} else {
+					valDate, err = time.Parse("1/2/2006 3:04 PM", val)
+				}
+				if err != nil {
+					JsonMarshalAndPrint(item)
+				}
 				CheckFatalError(err)
 				curr[camelKey] = valDate
 			} else {
@@ -83,10 +96,6 @@ func GetCertAuthCertInfoFromFile(path string) (processedItems []CertAuthorityCer
 
 		currData.LastServerSync = fileModTime
 
-		fileName := filepath.Base(path)
-		fnSplit := strings.Join(strings.Split(fileName, "-")[1:], "-")
-		fnSplit = strings.Split(fnSplit, ".")[0]
-		tNameAndHostname := strings.Split(fnSplit, "_")
 		currData.TenantName, currData.CertificateAuthorityName = tNameAndHostname[0], tNameAndHostname[1]
 
 		processedItems = append(processedItems, currData)
@@ -98,91 +107,74 @@ func GetCertAuthCertInfoFromFile(path string) (processedItems []CertAuthorityCer
 //
 //
 
-// func GetServerCertInfoFromFileNew(path string) (processedItems []FormattedServerCertInfo) {
-// 	file, err := ReadFileUTF16(path)
-// 	CheckFatalError(err)
+func GetServerCertInfoFromFileNew(path string) (formattedCerts []FormattedServerCertInfo) {
+	file, err := ReadFileUTF16(path)
+	CheckFatalError(err)
 
-// 	// fmt.Println(path)
-// 	var fileData []map[string]interface{}
-// 	err = json.Unmarshal(file, &fileData)
-// 	CheckFatalError(err)
+	var fileData []ServerCertInfoRaw
+	err = json.Unmarshal(file, &fileData)
+	if err != nil {
+		fmt.Println(path)
+		CheckFatalError(err)
+	}
 
-// 	stat, _ := os.Stat(path)
-// 	fileModTime := stat.ModTime()
+	fileName := filepath.Base(path)
+	fnSplit := strings.Join(strings.Split(fileName, "-")[1:], "-")
+	fnSplit = strings.Split(fnSplit, ".")[0]
+	tNameAndHostname := strings.Split(fnSplit, "_")
 
-// 	for _, item := range fileData {
-// 		curr := make(map[string]interface{})
+	hostnameLower := strings.ToLower(tNameAndHostname[1])
 
-// 		for key, val := range item {
-// 			if key == "PSProvider" ||
-// 				key == "PSDrive" ||
-// 				key == "PSIsContainer" ||
-// 				// key == "PSParentPath" ||
-// 				// key == "PSPath" ||
-// 				key == "PSChildName" {
-// 				continue
-// 			}
+	for _, cert := range fileData {
 
-// 			if key == "NotBefore" || key == "NotAfter" {
-// 				valStr := strings.TrimPrefix(val.(string), "/Date(")
-// 				valStr = strings.TrimSuffix(valStr, ")/")
-// 				valInt, err := strconv.ParseInt(valStr, 10, 64)
-// 				CheckFatalError(err)
-// 				valDate := time.UnixMilli(valInt)
-// 				curr[key] = valDate
-// 			} else if key == "PSParentPath" {
-// 				parentPath := strings.Split(val.(string), "::")[1]
-// 				parentPathSpl := strings.Split(parentPath, "\\")
-// 				curr["parentPath"] = strings.Join(parentPathSpl, "/")
-// 			} else {
-// 				curr[key] = val
-// 			}
-// 		}
+		parsedCert, err := x509.ParseCertificate(cert.RawData)
 
-// 		// jsonStrRaw, _ := json.Marshal(curr)
-// 		// os.WriteFile("main-cert-raw.json", jsonStrRaw, 0644)
+		if err != nil {
+			if err.Error() != "x509: RSA modulus is not a positive number" {
+				CheckFatalError(err)
+			}
+		}
+		var fc FormattedServerCertInfo
+		if parsedCert != nil {
+			fc = FormatCertData(parsedCert)
+		} else {
+			fc.NotBefore = time.Time(cert.NotBefore)
+			fc.NotAfter = time.Time(cert.NotAfter)
+			fc.Serial = cert.SerialNumber
+			fc.Thumbprint = cert.Thumbprint
+			fc.DNSNames = cert.DnsNameList
+			fc.SubjectName = cert.Subject
+			fc.IssuerName = cert.Issuer
+			fc.SignatureAlgorithm = cert.SignatureAlgorithm.FriendlyName
+			fc.KeyUsage = cert.EnhancedKeyUsageList
+		}
+		fc.SerialWindows = cert.SerialNumber
+		fc.ServerSyncTime = time.Time(cert.ServerSyncTime)
 
-// 		var currData ServerCertInfo
-// 		jsonStr, _ := json.Marshal(curr)
-// 		err = json.Unmarshal(jsonStr, &currData)
-// 		CheckFatalError(err)
+		fc.FriendlyName = &cert.FriendlyName
+		fc.TenantName = &tNameAndHostname[0]
+		fc.TenantNames = append(fc.TenantNames, tNameAndHostname[0])
+		fc.PulledFromServer = &hostnameLower
+		fc.HasPrivateKey = cert.HasPrivateKey
+		if cert.HasPrivateKey {
+			var swpk []string
+			swpk = append(swpk, hostnameLower)
+			fc.ServersWithPrivateKey = &swpk
+		}
 
-// 		fileName := filepath.Base(path)
-// 		fnSplit := strings.Join(strings.Split(fileName, "-")[1:], "-")
-// 		fnSplit = strings.Split(fnSplit, ".")[0]
-// 		tNameAndHostname := strings.Split(fnSplit, "_")
+		parentPath := strings.Split(cert.PsParentPath, "::")[1]
+		parentPathSpl := strings.Split(parentPath, "\\")
+		parentPathJoined := strings.Join(parentPathSpl, "/")
+		fc.ParentPath = &parentPathJoined
 
-// 		hostnameLower := strings.ToLower(tNameAndHostname[1])
+		fc.Id = fc.IssuerName + "_" + fc.Serial
 
-// 		currData.TenantName = &tNameAndHostname[0]
-// 		currData.TenantNames = append(currData.TenantNames, tNameAndHostname[0])
-// 		currData.PulledFromServer = &hostnameLower
-// 		currData.LastServerSync = fileModTime
+		formattedCerts = append(formattedCerts, fc)
 
-// 		// if len(*currData.EnhancedKeyUsageList) == 0 {
-// 		// 	*currData.EnhancedKeyUsageList = nil
-// 		// }
+	}
+	return
 
-// 		// if currData.EnrollmentPolicyEndPoint.AuthenticationType == 0 && currData.EnrollmentPolicyEndPoint.URL == nil {
-// 		// 	currData.EnrollmentPolicyEndPoint = nil
-// 		// }
-
-// 		// if currData.EnrollmentServerEndPoint.AuthenticationType == 0 && currData.EnrollmentServerEndPoint.URL == nil {
-// 		// 	currData.EnrollmentServerEndPoint = nil
-// 		// }
-
-// 		// // currData.RawData = nil
-// 		// currData.IssuerName.RawData = nil
-// 		// currData.SubjectName.RawData = nil
-
-// 		currDataStr, _ := json.Marshal(currData)
-// 		var processedItem ServerCertInfo
-// 		json.Unmarshal(currDataStr, &processedItem)
-// 		processedItems = append(processedItems, processedItem)
-// 	}
-
-//		return
-//	}
+}
 func GetServerCertInfoFromFile(path string) (processedItems []ServerCertInfo) {
 	file, err := ReadFileUTF16(path)
 	CheckFatalError(err)
@@ -192,8 +184,8 @@ func GetServerCertInfoFromFile(path string) (processedItems []ServerCertInfo) {
 	err = json.Unmarshal(file, &fileData)
 	CheckFatalError(err)
 
-	stat, _ := os.Stat(path)
-	fileModTime := stat.ModTime()
+	// stat, _ := os.Stat(path)
+	// fileModTime := stat.ModTime()
 
 	for _, item := range fileData {
 		curr := make(map[string]interface{})
@@ -242,7 +234,7 @@ func GetServerCertInfoFromFile(path string) (processedItems []ServerCertInfo) {
 		currData.TenantName = &tNameAndHostname[0]
 		currData.TenantNames = append(currData.TenantNames, tNameAndHostname[0])
 		currData.PulledFromServer = &hostnameLower
-		currData.LastServerSync = fileModTime
+		// currData.LastServerSync = fileModTime
 
 		if len(*currData.EnhancedKeyUsageList) == 0 {
 			*currData.EnhancedKeyUsageList = nil
@@ -272,6 +264,32 @@ func GetServerCertInfoFromFile(path string) (processedItems []ServerCertInfo) {
 //
 //
 
+func GetCertInfoFromFilesNew(basePath string, outputPath string) (caCertInfo []CertAuthorityCertInfo, serverCertInfo []FormattedServerCertInfo) {
+	paths := GetFullFilePaths(basePath)
+
+	for _, path := range paths {
+
+		if strings.Contains(path, "caCertList") {
+			curr := GetCertAuthCertInfoFromFile(path)
+			caCertInfo = append(caCertInfo, curr...)
+		} else if strings.Contains(path, "serverCertList") {
+			curr := GetServerCertInfoFromFileNew(path)
+			serverCertInfo = append(serverCertInfo, curr...)
+		}
+	}
+
+	if outputPath != "" {
+		if _, err := os.Stat(outputPath); err != nil {
+			os.MkdirAll(outputPath, os.ModePerm)
+		}
+		caCertInfoStr, _ := json.MarshalIndent(caCertInfo, "", "  ")
+		serverCertInfoStr, _ := json.MarshalIndent(serverCertInfo, "", "  ")
+		os.WriteFile(outputPath+"/caCertInfo.json", caCertInfoStr, 0644)
+		os.WriteFile(outputPath+"/serverCertInfo.json", serverCertInfoStr, 0644)
+	}
+
+	return
+}
 func GetCertInfoFromFiles(basePath string, outputPath string) (caCertInfo []CertAuthorityCertInfo, serverCertInfo []ServerCertInfo) {
 	paths := GetFullFilePaths(basePath)
 
@@ -304,7 +322,7 @@ func GetCertInfoFromFiles(basePath string, outputPath string) (caCertInfo []Cert
 
 func RelateCertAuthCertsToServerCertsNew(caCertInfo []CertAuthorityCertInfo, serverCertInfo []FormattedServerCertInfo) (caCertInfoWithRelations []CertAuthorityCertInfo, serverCertInfoWithRelations []FormattedServerCertInfo) {
 	caCertsBySerialNumber := make(map[string]CertAuthorityCertInfo)
-	serverCertsBySerialNumber := make(map[string]FormattedServerCertInfo)
+	serverCertsByIsserNameAndSerial := make(map[string]FormattedServerCertInfo)
 
 	for i, caci := range caCertInfo {
 		if _, ok := caCertsBySerialNumber[caci.SerialNumber]; ok {
@@ -333,22 +351,24 @@ func RelateCertAuthCertsToServerCertsNew(caCertInfo []CertAuthorityCertInfo, ser
 			CertificatePaths: []string{*sci.ParentPath},
 		}
 
-		// var test bool
-		// var foundData ServerCertInfo
-		if data, ok := serverCertsBySerialNumber[curr.Serial]; ok {
-			// fmt.Println(data)
-			// foundData = data
-			// if curr.SerialNumber == "31360b71167360af4f00f3e3e4d0c213" {
-			// 	test = true
-			// }
-			// fmt.Println("ok")
+		if data, ok := serverCertsByIsserNameAndSerial[curr.IssuerName+curr.Serial]; ok {
 			curr.ServersPulledFrom = data.ServersPulledFrom
 			curr.TenantNames = data.TenantNames
-			// }
+			curr.FriendlyNames = data.FriendlyNames
 		}
 
-		// fmt.Println(curr.TenantNames)
-		// os.Exit(0)
+		fn := *sci.FriendlyName
+		if fn != "" {
+			if data := curr.FriendlyNames; data == nil {
+				curr.FriendlyNames = make(map[string][]string)
+				curr.FriendlyNames[fn] = []string{*sci.PulledFromServer}
+			} else {
+				if !slices.Contains(curr.FriendlyNames[fn], *sci.PulledFromServer) {
+					curr.FriendlyNames[fn] = append(curr.FriendlyNames[fn], *sci.PulledFromServer)
+				}
+			}
+		}
+		curr.FriendlyName = nil
 
 		matchedSpf := false
 		for index, spf := range curr.ServersPulledFrom {
@@ -363,21 +383,9 @@ func RelateCertAuthCertsToServerCertsNew(caCertInfo []CertAuthorityCertInfo, ser
 			curr.ServersPulledFrom = append(curr.ServersPulledFrom, pfs)
 		}
 
-		// for _, tn := range curr.TenantNames {
-		// 	// currTn := tn
-		// 	// if tn != sci.TenantName {
-		// 	// 	matchedTNs = true
-		// 	// 	currSpf.CertificatePaths = append(currSpf.CertificatePaths, pfs.CertificatePaths...)
-		// 	// }
-
 		if !slices.Contains(curr.TenantNames, *curr.TenantName) {
 			curr.TenantNames = append(curr.TenantNames, *curr.TenantName)
 		}
-		// curr.TenantNames[index] = currSpf
-		// }
-		// if !matchedTNs {
-		// 	curr.TenantNames = append(curr.TenantNames, tn)
-		// }
 
 		curr.PulledFromServer = nil
 		curr.TenantName = nil
@@ -386,30 +394,18 @@ func RelateCertAuthCertsToServerCertsNew(caCertInfo []CertAuthorityCertInfo, ser
 		if relatedCertAuth, ok := caCertsBySerialNumber[curr.Serial]; ok {
 			curr.RelatedCertAuthData = &relatedCertAuth
 		}
-		curr.ID = curr.Serial
-		serverCertsBySerialNumber[curr.Serial] = curr
-		// serverCertInfoWithRelations = append(serverCertInfoWithRelations, curr)
+		serverCertsByIsserNameAndSerial[curr.IssuerName+curr.Serial] = curr
 
-		// if test && curr.SerialNumber == "31360b71167360af4f00f3e3e4d0c213" {
-		// JsonMarshalAndPrint(foundData)
-		// JsonMarshalAndPrint(sci)
-		// JsonMarshalAndPrint(curr)
-		// os.Exit(0)
-		// }
 	}
 
-	// JsonMarshalAndPrint(serverCertsBySerialNumber["31360b71167360af4f00f3e3e4d0c213"])
-
-	for _, cert := range serverCertsBySerialNumber {
+	for _, cert := range serverCertsByIsserNameAndSerial {
 		serverCertInfoWithRelations = append(serverCertInfoWithRelations, cert)
 	}
-
-	// serverCertInfoWithRelations = append(serverCertInfoWithRelations, curr)
 
 	for _, caci := range caCertsBySerialNumber {
 		curr := caci
 		curr.ID = curr.SerialNumber
-		curr.RelatedServersCertUsedOn = serverCertsBySerialNumber[caci.SerialNumber].ServersPulledFrom
+		curr.RelatedServersCertUsedOn = serverCertsByIsserNameAndSerial[caci.SerialNumber].ServersPulledFrom
 		caCertInfoWithRelations = append(caCertInfoWithRelations, curr)
 	}
 
@@ -574,6 +570,8 @@ func GetCertExtensionFromOID(oid string) string {
 		"1.3.6.1.4.1.311.21.20": "szOID_REQUEST_CLIENT_INFO",
 		"1.3.6.1.4.1.311.21.21": "szOID_ENCRYPTED_KEY_HASH",
 		"1.3.6.1.4.1.311.21.22": "szOID_CERTSRV_CROSSCA_VERSION",
+
+		"1.3.6.1.4.1.311.25.2": "Intune AD SID",
 
 		"1.3.6.1.5.5.7.1.1": "Certificate Authority Information Access",
 

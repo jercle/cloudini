@@ -1098,6 +1098,63 @@ func UpdateIpamAddressBlocks(ipAddressBlocks []azure.IpAddressBlocksByBlockTag, 
 //
 //
 
+func UpsertServerCertificatesNew(serverCertInfo []lib.FormattedServerCertInfo, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
+	if len(serverCertInfo) == 0 {
+		fmt.Println("No apps in slice")
+		return nil
+	}
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+
+	// fmt.Println(len(serverCertInfo))
+
+	for _, cert := range serverCertInfo {
+		curr := cert
+
+		timeNow := time.Now()
+		curr.LastDBSync = &timeNow
+		// filter := bson.D{{"_id", curr.Id}}
+		// update := bson.D{{"$set", curr}}
+
+		// .SetUpsert(true)
+		// updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+		updates = append(updates, mongo.NewInsertOneModel().SetDocument(curr))
+	}
+
+	// var opts options.BulkWriteOptions
+	// opts.SetOrdered(false)
+
+	// chunkSize := 100
+	// var chunks [][]mongo.WriteModel
+	// for i := 0; i < len(updates); i += chunkSize {
+	// 	end := i + chunkSize
+	// 	if end > len(updates) {
+	// 		end = len(updates)
+	// 	}
+	// 	chunks = append(chunks, updates[i:end])
+	// }
+
+	// for _, chunk := range chunks {
+	// 	res, err := coll.BulkWrite(ctx, chunk, &opts)
+	// 	results = append(results, *res)
+	// 	lib.CheckFatalError(err)
+	// }
+
+	results, err := coll.BulkWrite(ctx, updates, nil)
+	lib.CheckFatalError(err)
+
+	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
+	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
+	// fmt.Printf("Number of documents matched: %d\n", )
+	// fmt.Printf("Number of documents inserted: %d\n", results.UpsertedCount)
+	// fmt.Printf("Number of documents replaced or updated: %d\n", results.ModifiedCount)
+	// fmt.Printf("Number of documents deleted: %d\n", results.DeletedCount)
+	// fmt.Println("Upserted IDs:")
+	// jsonStr, _ := json.MarshalIndent(results.UpsertedIDs, "", "  ")
+	// fmt.Println(string(jsonStr))
+	return
+}
 func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(serverCertInfo) == 0 {
 		fmt.Println("No apps in slice")
@@ -1151,6 +1208,9 @@ func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.C
 	// fmt.Println(string(jsonStr))
 	return results
 }
+
+//
+//
 
 func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(caCertInfo) == 0 {

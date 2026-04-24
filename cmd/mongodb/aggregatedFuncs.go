@@ -401,11 +401,13 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	s.Start()
 	azure.DownloadAllBlobsInContainer(opts)
 	s.Stop()
+	// return
 
 	fmt.Println("Getting cert info from downloaded files")
 	startTime := time.Now()
 	s.Start()
-	caCertInfo, serverCertInfo := lib.GetCertInfoFromFiles(cachePath+"/cert-sync", cachePath+"/cert-sync-processed")
+	caCertInfo, serverCertInfo := lib.GetCertInfoFromFilesNew(cachePath+"/cert-sync", cachePath+"/cert-sync-processed")
+	// caCertInfo, serverCertInfo := lib.GetCertInfoFromFiles(cachePath+"/cert-sync", cachePath+"/cert-sync-processed")
 	s.Stop()
 	elapsed := time.Since(startTime)
 	fmt.Println(elapsed)
@@ -413,22 +415,24 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	fmt.Println("Relating server certs to CA requests")
 	startTime = time.Now()
 	s.Start()
-	caCertInfoRelated, serverCertInfoRelated := lib.RelateCertAuthCertsToServerCerts(caCertInfo, serverCertInfo)
+	caCertInfoRelated, serverCertInfoRelated := lib.RelateCertAuthCertsToServerCertsNew(caCertInfo, serverCertInfo)
+	// caCertInfoRelated, serverCertInfoRelated := lib.RelateCertAuthCertsToServerCerts(caCertInfo, serverCertInfo)
 	s.Stop()
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
 
-	certsCount := make(map[string]int)
-	var multi []lib.ServerCertInfo
-	for _, cert := range serverCertInfoRelated {
-		certsCount[cert.ID]++
+	// certsCount := make(map[string]int)
+	// var multi []lib.FormattedServerCertInfo
+	// // var multi []lib.ServerCertInfo
+	// for _, cert := range serverCertInfoRelated {
+	// 	certsCount[cert.Id]++
 
-		if cert.ID == "78b5e4cd429a487ca2e7f4341ca26525" {
-			multi = append(multi, cert)
-		}
-		// os.Exit(0)
-	}
-	// lib.JsonMarshalAndPrint(certsCount)
+	// 	if cert.Serial == "78b5e4cd429a487ca2e7f4341ca26525" {
+	// 		multi = append(multi, cert)
+	// 	}
+	// 	// os.Exit(0)
+	// }
+	// // lib.JsonMarshalAndPrint(certsCount)
 	// lib.JsonMarshalAndPrint(multi)
 	// os.Exit(0)
 
@@ -457,7 +461,7 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	s.Start()
 	startTime = time.Now()
 	// serverCertUpdates :=
-	UpsertServerCertificates(serverCertInfoRelated, serverCertsInfoColl)
+	UpsertServerCertificatesNew(serverCertInfoRelated, serverCertsInfoColl)
 	s.Stop()
 
 	fmt.Println("Clearing cert cache")

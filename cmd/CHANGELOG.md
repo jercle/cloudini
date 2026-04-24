@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.50]
+* Update cert info processing
+
 ## [0.3.49]
 * Make Mongo update commands run using Goroutines
 
