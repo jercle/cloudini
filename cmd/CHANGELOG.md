@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.52]
+* Bugfix: Add back file download and installs commented out for testing.
+
 ## [0.3.51]
 * Change FriendlyNames field to []FriendlyName instead of map[string]string
 * Update deps

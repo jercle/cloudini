@@ -387,19 +387,19 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	// azure.DownloadAllBlobsInContainer()
 	// lib.GetServerCertInfoFromFile()
 	_, _, cachePath := lib.InitConfig(nil)
-	// config := lib.GetCldConfig(nil)
-	// var opts lib.StorageAccountRequestOptions
-	// opts.ConfiguredTenantName = config.CertificateManagement.StorageAccountTenantName
-	// opts.ContainerName = config.CertificateManagement.ContainerName
-	// opts.DownloadPath = cachePath + "/cert-sync"
-	// opts.StorageAccountName = config.CertificateManagement.StorageAccountName
-	// opts.OverwriteExisting = true
-	// // opts.GetWriteToken = true
+	config := lib.GetCldConfig(nil)
+	var opts lib.StorageAccountRequestOptions
+	opts.ConfiguredTenantName = config.CertificateManagement.StorageAccountTenantName
+	opts.ContainerName = config.CertificateManagement.ContainerName
+	opts.DownloadPath = cachePath + "/cert-sync"
+	opts.StorageAccountName = config.CertificateManagement.StorageAccountName
+	opts.OverwriteExisting = true
+	// opts.GetWriteToken = true
 
-	// fmt.Println("Fetching certs from storage")
-	// s.Start()
-	// azure.DownloadAllBlobsInContainer(opts)
-	// s.Stop()
+	fmt.Println("Fetching certs from storage")
+	s.Start()
+	azure.DownloadAllBlobsInContainer(opts)
+	s.Stop()
 	// return
 
 	fmt.Println("Getting cert info from downloaded files")
@@ -463,9 +463,9 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 	UpsertServerCertificatesNew(serverCertInfoRelated, serverCertsInfoColl)
 	s.Stop()
 
-	// fmt.Println("Clearing cert cache")
-	// os.RemoveAll(cachePath + "/cert-sync")
-	// os.RemoveAll(cachePath + "/cert-sync-processed")
+	fmt.Println("Clearing cert cache")
+	os.RemoveAll(cachePath + "/cert-sync")
+	os.RemoveAll(cachePath + "/cert-sync-processed")
 
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
