@@ -1,0 +1,1134 @@
+package mongodb
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+	"sync"
+	"time"
+
+	"github.com/briandowns/spinner"
+	"github.com/jercle/cloudini/cmd/ad"
+	"github.com/jercle/cloudini/cmd/ado"
+	"github.com/jercle/cloudini/cmd/azure"
+	"github.com/jercle/cloudini/cmd/citrix"
+	"github.com/jercle/cloudini/cmd/forgerock"
+	"github.com/jercle/cloudini/cmd/m365"
+	"github.com/jercle/cloudini/cmd/web"
+	"github.com/jercle/cloudini/lib"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+)
+
+func UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(imageGalleryImagesColl *mongo.Collection, machineCatalogsColl *mongo.Collection, tokenReq lib.AllTenantTokens) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	fmt.Println("Fetching gallery images...")
+	s.Start()
+	galleryImagesWithVersions := azure.GetAllImagesAndVersionsForAllGalleries(tokenReq)
+	s.Stop()
+	fmt.Println("Updating gallery images in database...")
+	s.Start()
+	DeleteAllDocumentsInCollection(imageGalleryImagesColl)
+	UpsertImageGalleryImages(galleryImagesWithVersions, imageGalleryImagesColl)
+	s.Stop()
+
+	config := lib.GetCldConfig(nil)
+	citrixEnvs := *config.CitrixCloud.Environments
+	if citrixEnvs == nil {
+		err := fmt.Errorf("Citrix environments not configured")
+		lib.CheckFatalError(err)
+	}
+
+	for envName, envCreds := range citrixEnvs {
+		tokenData, err := citrix.GetToken(envCreds, nil)
+		lib.CheckFatalError(err)
+		fmt.Println("Fetching Machine Catalogs for " + envName + "...")
+		s.Start()
+		machineCatalogs := citrix.ListMachineCatalogs(envCreds, tokenData)
+		s.Stop()
+		fmt.Println("Updating Citrix Machine Catalogs in database...")
+		s.Start()
+		UpsertCitrixMachineCatalogs(machineCatalogs, machineCatalogsColl)
+		mcMasterImageVersions := machineCatalogs.ListImageVersions()
+		s.Stop()
+		fmt.Println("Updating Azure Images used by Citrix in database...")
+		s.Start()
+		MarkImageGalleryImagesUsedByCitrix(mcMasterImageVersions, imageGalleryImagesColl)
+		s.Stop()
+	}
+
+	fmt.Println("Updating build and image version data in database...")
+	s.Start()
+	GetBuildDataAndUpdateImageVesionData(imageGalleryImagesColl)
+	s.Stop()
+}
+
+//
+//
+
+func UpdateAllAzureResourceIPAddresses(ipAddressesColl *mongo.Collection, ipAddressBlocksColl *mongo.Collection, tokenReq lib.AllTenantTokens) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	opts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
+		SuppressSteps: true,
+		// SelectedIPAddressQueries: &[]string{"GetIPAddressesQueryVirtualMachines"},
+	}
+
+	config := lib.GetCldConfig(nil)
+	cidrsToCheck := config.Azure.Ipam.CidrBlocksToCheck
+
+	fmt.Println("Fetching all resource IPs...")
+	// s.Start()
+	resources := azure.GetAllVMIpAddrForAllConfiguredTenants(&opts, tokenReq)
+
+	// s.Stop()
+
+	fmt.Println("Updating all resource IPs in database...")
+	s.Start()
+	UpsertAzureIPAddresses(resources, ipAddressesColl)
+	s.Stop()
+
+	fmt.Println("Getting IP Address Blocks...")
+	s.Start()
+	var vnets []azure.IPAddressesAllResourceTypes
+	for _, res := range resources {
+		if res.Type != "microsoft.network/virtualnetworks" {
+			continue
+		}
+		vnets = append(vnets, res)
+	}
+	ipAddressBlocks := azure.GetIpAddressBlocksForCidrFromVNets(cidrsToCheck, vnets)
+	s.Stop()
+
+	fmt.Println("Updating IP Address Blocks in database...")
+	s.Start()
+	UpdateIpamAddressBlocks(ipAddressBlocks, ipAddressBlocksColl)
+	s.Stop()
+
+}
+
+//
+//
+
+func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVcpuCountsOptions, tokenReq lib.AllTenantTokens) lib.AggregatedCostData {
+	if opts.AzResGrpsListColl == nil {
+		fmt.Println("AzResGrpsListColl == nil")
+		// os.Exit(1)
+	}
+	if opts.AzResResourceListColl == nil {
+		fmt.Println("AzResResourceListColl == nil")
+		// os.Exit(1)
+	}
+
+	var costExportMonth string
+
+	if opts.CostDataMonth == "" {
+		costExportMonth = time.Now().AddDate(0, 0, -1).Format("200601")
+	} else {
+		costExportMonth = opts.CostDataMonth
+	}
+
+	config := lib.GetCldConfig(nil)
+	_, _, cachePath := lib.InitConfig(nil)
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	resSkuOpts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
+		SubscriptionId: opts.SkuListSubscription,
+		AzureAuth:      opts.SkuListAuth,
+		Location:       opts.Location,
+		SuppressSteps:  true,
+	}
+
+	fmt.Println("Getting and upserting all tenant and subscription details...")
+	s.Start()
+	UpsertTenantAndSubs(opts.AzResTenantsColl, &tokenReq)
+	s.Stop()
+
+	fmt.Println("Getting Azure Resource SKUs...")
+	s.Start()
+	resourceSKUs := azure.GetAzureResourceSKUsForSubscription(resSkuOpts)
+	s.Stop()
+	// resourceSKUsStr, _ := json.Marshal(resourceSKUs)
+	// os.WriteFile("resourceSKUs2.json", resourceSKUsStr, 0644)
+	// fmt.Println("saved resourceSKUs2.json")
+	// os.Exit(0)
+	fmt.Println("Updating Azure Resource SKUs in database...")
+	s.Start()
+	UpsertResourceSKUs(resourceSKUs, opts.AzResSKUColl)
+	s.Stop()
+
+	fmt.Println("Getting full list of SKUs from database...")
+	s.Start()
+	resourceSKUs = GetResourceSKUs(opts.AzResSKUColl)
+	s.Stop()
+
+	fmt.Println("Fetching all Azure Resources...")
+	s.Start()
+	startTime := time.Now()
+	allResources, allResourcesSlice := azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
+	s.Stop()
+	elapsed := time.Since(startTime)
+	fmt.Println(elapsed)
+
+	// allResFile, err := os.ReadFile(cachePath + "/allResourcesSlice.json")
+	// var allResourcesSlice []lib.AzureResourceDetails
+	// json.Unmarshal(allResFile, &allResourcesSlice)
+
+	citrixEnvs := *config.CitrixCloud.Environments
+
+	var citrixMachines []citrix.CitrixMachine
+	for _, tConf := range citrixEnvs {
+		tokenData, err := citrix.GetToken(tConf, nil)
+		lib.CheckFatalError(err)
+		machines := citrix.GetAllMachines(tConf, tokenData)
+		citrixMachines = append(citrixMachines, machines...)
+	}
+
+	// jsonStrCtx, err := json.MarshalIndent(citrixMachines, "", "  ")
+	// os.WriteFile("citrixMachines.json", jsonStrCtx, 0644)
+	// os.Exit(0)
+
+	// ctxFile, err := os.ReadFile("citrixMachines.json")
+	// lib.CheckFatalError(err)
+	// json.Unmarshal(ctxFile, &citrixMachines)
+
+	ctxDelGrpsByResGrpAndName := make(map[string]string)
+
+	for _, m := range citrixMachines {
+		ctxDelGrpsByResGrpAndName[m.AzureResourceGroup+"_"+m.Name] = m.DeliveryGroup.Name
+	}
+
+	for i, r := range allResourcesSlice {
+		if r.Type == "microsoft.compute/virtualmachines" {
+			curr := r
+			delGrp := ctxDelGrpsByResGrpAndName[r.ResourceGroup+"_"+r.Name]
+			curr.CitrixVmDeliveryGroup = delGrp
+			curr.ID = strings.ToLower(r.ID)
+			allResourcesSlice[i] = curr
+		}
+	}
+
+	// // lib.JsonMarshalAndPrint(vmDiskDelGrpByDiskId)
+	// // os.Exit(0)
+
+	// // for _, r := range allResourcesSlice {
+	// // 	if r.Type == "microsoft.compute/virtualmachines" {
+	// // 		continue
+	// // 	} else if r.Type == "microsoft.compute/disks" {
+	// // 		fmt.Println(r.CitrixVmDeliveryGroup)
+	// // 	} else if r.Type == "microsoft.network/networkinterfaces" {
+	// // 	}
+	// // }
+
+	// allResourcesSliceStr, _ := json.MarshalIndent(processedResSlice, "", "  ")
+	// os.WriteFile(cachePath+"/allResourcesSliceProcessed.json", allResourcesSliceStr, 0644)
+	// allResourcesStr, _ := json.MarshalIndent(allResources, "", "  ")
+	// os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
+	// os.Exit(0)
+
+	// // jsonStr, _ := json.MarshalIndent(allResourcesSlice)
+
+	// fmt.Println("Getting then updating all storage accounts with minimum TLS versions...")
+	// s.Start()
+	// startTime = time.Now()
+	// stgAccountsOptions := lib.GetAllResourcesForAllConfiguredTenantsOptions{
+	// 	GetAllStorageAccountsInTlsCheck: true,
+	// 	SuppressSteps:                   true,
+	// }
+	// stgAccounts := azure.CheckStorageAccountTlsVersionsForAllConfiguredTenants(&stgAccountsOptions, tokenReq)
+	// UpsertStorageAccountMinTlsVersions(stgAccounts, opts.AzStorageAcctMinTlsVersions)
+	// s.Stop()
+	// elapsed = time.Since(startTime)
+	// fmt.Println(elapsed)
+
+	// // for _, res :=
+
+	fmt.Println("Updating Azure Resources in database...")
+	s.Start()
+	startTime = time.Now()
+	UpsertMultipleResources(allResourcesSlice, opts.AzResResourceListColl)
+	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
+
+	fmt.Println("")
+	fmt.Println("Updating 'existsInAzure' value for all resources in database...")
+	s.Start()
+	startTime = time.Now()
+	UpdateResourcesNotExistInAzure(allResourcesSlice, opts.AzResResourceListColl)
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
+	s.Stop()
+
+	fmt.Println("Fetching all Azure Resource Groups...")
+	s.Start()
+	startTime = time.Now()
+	allResGrps := azure.GetAllResGrpsForAllConfiguredTenants(&resSkuOpts, tokenReq)
+	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
+	fmt.Println("Updating Azure Resource Groups in database...")
+	s.Start()
+	startTime = time.Now()
+	UpsertMultipleResGrps(allResGrps, opts.AzResGrpsListColl)
+	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
+
+	fmt.Println("Getting vCPU Counts...")
+	s.Start()
+	_,
+		_,
+		_,
+		_,
+		_,
+		vCpuCountWithResources := azure.GetVcpuCountForAllConfiguredTenants(allResources, nil, config.Azure.MultiTenantAuth.Tenants)
+	s.Stop()
+	vCpuCountWithResourcesStr, _ := json.MarshalIndent(vCpuCountWithResources, "", "  ")
+	os.WriteFile(cachePath+"/vCpuCountWithResources.json", vCpuCountWithResourcesStr, 0644)
+	fmt.Println("Updating vCPU Counts in database...")
+	s.Start()
+	UpsertVcpuCounts(vCpuCountWithResources, opts.AzResVcpuCountsColl)
+	s.Stop()
+
+	tempBlobDir := cachePath + "/costexports"
+	costExportsOutfilePath := tempBlobDir + "/" + costExportMonth
+
+	fmt.Println("Getting cost export data for " + costExportMonth + "...")
+	s.Start()
+	azure.DownloadAllConfiguredTenantCostExportsForMonth(lib.DownloadAllConfiguredTenantCostExportsForMonthOptions{
+		BlobPrefix:        opts.CostDataBlobPrefix + "/" + costExportMonth,
+		OutfilePath:       costExportsOutfilePath,
+		OutfileNamePrefix: "cost-export",
+		CostExportMonth:   costExportMonth,
+		SuppressSteps:     true,
+	}, nil)
+	s.Stop()
+
+	fmt.Println("Combining cost export data")
+	s.Start()
+	combinedCostData := azure.CombineCostExportCSVData(costExportsOutfilePath)
+	s.Stop()
+
+	fmt.Println("Transforming cost export data")
+	transformedData := azure.TransformCostDataNew(combinedCostData, 1, 2)
+	transformedDataStr, _ := json.MarshalIndent(transformedData, "", "  ")
+	os.WriteFile(cachePath+"/transformedData.json", transformedDataStr, 0644)
+
+	//  os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
+	// file, err := os.ReadFile(cachePath + "/allResourcesSlice.json")
+	// lib.CheckFatalError(err)
+	// var processedResSlice []lib.AzureResourceDetails
+	// err = json.Unmarshal(file, &processedResSlice)
+
+	fmt.Println("Updating cost data in database")
+	UpsertMonthlyTenantSubResGrpCosts(transformedData,
+		ctxDelGrpsByResGrpAndName,
+		costExportMonth,
+		opts.EnvOptCostingTenantsColl,
+		opts.EnvOptCostingSubsColl,
+		opts.EnvOptCostingResGrpsColl,
+		opts.EnvOptCostingResourcesColl,
+		opts.EnvOptCostingMetersColl,
+		opts.AzResTenantsColl,
+		opts.AzResResourceListColl,
+	)
+
+	fmt.Println("Deleting cached cost data")
+	os.RemoveAll(cachePath + "/vCpuCountWithResources.json")
+	os.RemoveAll(cachePath + "/transformedData.json")
+	os.RemoveAll(cachePath + "/allResourcesSlice.json")
+	os.RemoveAll(cachePath + "/allResources.json")
+	os.RemoveAll(tempBlobDir)
+
+	return transformedData
+}
+
+//
+//
+
+func UpdateAzureResourceRelations(transformedData lib.AggregatedCostData, opts UpdateAllAzureResourcesAndVcpuCountsOptions) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	// fmt.Println("Processing cost data into usable array")
+	_, costDataSlice := azure.ProcessCostData(transformedData)
+
+	fmt.Println("Getting current and historical resources from database")
+	s.Start()
+	resourceFromDatabase := GetAllResources(opts.AzResResourceListColl)
+	s.Stop()
+
+	_, _, cachePath := lib.InitConfig(nil)
+	// fmt.Println("Processing all resources and cost meters to create relations")
+	costDataSliceStr, _ := json.MarshalIndent(costDataSlice, "", "  ")
+	os.WriteFile(cachePath+"/costDataSlice.json", costDataSliceStr, 0644)
+	resourceFromDatabaseStr, _ := json.MarshalIndent(resourceFromDatabase, "", "  ")
+	os.WriteFile(cachePath+"/resourceFromDatabase.json", resourceFromDatabaseStr, 0644)
+	_, processedResourcesSlice := azure.GatherRelatedResourcesAndCostMeters(costDataSlice, resourceFromDatabase, 2, 2)
+	fmt.Println("Updating all resources with related cost data in database")
+
+	fmt.Println("Upserting all processed resources to database...")
+	s.Start()
+	UpsertMultipleResources(processedResourcesSlice, opts.AzResResourceListColl)
+	s.Stop()
+}
+
+//
+//
+
+func UpdateEntraItems(opts UpdateEntraItemsOptions, tokenReq lib.AllTenantTokens) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+	_, _, cachePath := lib.InitConfig(nil)
+
+	fmt.Println("Fetching all App Registrations...")
+	s.Start()
+	allAppRegistrations, appRegExpiringCreds := azure.GetAppRegDataForAllConfiguredTenants("")
+	s.Stop()
+
+	allAppRegistrationsStr, _ := json.MarshalIndent(allAppRegistrations, "", "  ")
+	os.WriteFile(cachePath+"/allAppRegistrations.json", allAppRegistrationsStr, 0644)
+	defer os.Remove(cachePath + "/allAppRegistrations.json")
+	appRegExpiringCredsStr, _ := json.MarshalIndent(appRegExpiringCreds, "", "  ")
+	os.WriteFile(cachePath+"/appRegExpiringCreds.json", appRegExpiringCredsStr, 0644)
+	defer os.Remove(cachePath + "/appRegExpiringCreds.json")
+
+	fmt.Println("Updating App Registrations in database...")
+	s.Start()
+	UpsertMultipleEntraApps(allAppRegistrations, opts.EntraAppRegColl)
+	s.Stop()
+
+	fmt.Println("Updating App Registrations with expired or expiring credentials in database...")
+	s.Start()
+	DeleteAllDocumentsInCollection(opts.EntraAppRegCredsExpiringColl)
+	UpsertMultipleEntraApps(appRegExpiringCreds, opts.EntraAppRegCredsExpiringColl)
+	s.Stop()
+
+}
+
+//
+//
+
+func UpdateEntraPimItems(opts UpdateEntraPimItemsOptions) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	fmt.Println("Fetching all resource PIM assignments and eligibilities..")
+	s.Start()
+	assignments, eligibilities := azure.ListAllTenantPIMScheduleInstancesForAllTenants()
+	s.Stop()
+
+	fmt.Println("Updating resource PIM assignments in database...")
+	s.Start()
+	UpsertMultipleRoleAssignmentScheduleInstances(assignments, opts.EntraRoleAssignmentScheduleInstancesColl)
+	s.Stop()
+
+	fmt.Println("Updating resource PIM eligibilities in database...")
+	s.Start()
+	UpsertMultipleRoleEligibilityScheduleInstances(eligibilities, opts.EntraRoleEligibilityScheduleInstancesColl)
+	s.Stop()
+}
+
+//
+//
+
+func GetBuildDataAndUpdateImageVesionData(imageGalleryImagesColl *mongo.Collection) {
+	_, _, cachePath := lib.InitConfig(nil)
+	dlPath := cachePath + "/aib-logs"
+
+	ado.DownloadPackerHostLogs(&dlPath)
+	buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
+	UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
+}
+
+//
+//
+
+func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	// azure.DownloadAllBlobsInContainer()
+	// lib.GetServerCertInfoFromFile()
+	_, _, cachePath := lib.InitConfig(nil)
+	config := lib.GetCldConfig(nil)
+	var opts lib.StorageAccountRequestOptions
+	opts.ConfiguredTenantName = config.CertificateManagement.StorageAccountTenantName
+	opts.ContainerName = config.CertificateManagement.ContainerName
+	opts.DownloadPath = cachePath + "/cert-sync"
+	opts.StorageAccountName = config.CertificateManagement.StorageAccountName
+	opts.OverwriteExisting = true
+	// opts.GetWriteToken = true
+
+	fmt.Println("Fetching certs from storage")
+	s.Start()
+	azure.DownloadAllBlobsInContainer(opts)
+	s.Stop()
+	// return
+
+	fmt.Println("Getting cert info from downloaded files")
+	startTime := time.Now()
+	s.Start()
+	caCertInfo, serverCertInfo := lib.GetCertInfoFromFilesNew(cachePath+"/cert-sync", cachePath+"/cert-sync-processed")
+	// caCertInfo, serverCertInfo := lib.GetCertInfoFromFiles(cachePath+"/cert-sync", cachePath+"/cert-sync-processed")
+	s.Stop()
+	elapsed := time.Since(startTime)
+	fmt.Println(elapsed)
+
+	fmt.Println("Relating server certs to CA requests")
+	startTime = time.Now()
+	s.Start()
+	caCertInfoRelated, serverCertInfoRelated := lib.RelateCertAuthCertsToServerCertsNew(caCertInfo, serverCertInfo)
+	// caCertInfoRelated, serverCertInfoRelated := lib.RelateCertAuthCertsToServerCerts(caCertInfo, serverCertInfo)
+	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
+
+	// certsCount := make(map[string]int)
+	// var multi []lib.FormattedServerCertInfo
+	// // var multi []lib.ServerCertInfo
+	// for _, cert := range serverCertInfoRelated {
+	// 	certsCount[cert.Id]++
+
+	// 	if cert.Serial == "78b5e4cd429a487ca2e7f4341ca26525" {
+	// 		multi = append(multi, cert)
+	// 	}
+	// 	// os.Exit(0)
+	// }
+	// // lib.JsonMarshalAndPrint(certsCount)
+	// lib.JsonMarshalAndPrint(multi)
+	// os.Exit(0)
+
+	fmt.Println("Clearing collections")
+	// clearOpts := options.DeleteOptions{}
+	err := serverCertsInfoColl.Drop(context.TODO())
+	lib.CheckFatalError(err)
+	err = certsCaCertInfo.Drop(context.TODO())
+	lib.CheckFatalError(err)
+	// _, err := serverCertsInfoColl.DeleteMany(context.TODO(), bson.D{{}}, nil)
+	// lib.CheckFatalError(err)
+	// lib.JsonMarshalAndPrint(delResult)
+	// os.Exit(0)
+
+	fmt.Println("Upserting CA cert info")
+	s.Start()
+	startTime = time.Now()
+	// caCertUpdates :=
+	UpsertCACertificates(caCertInfoRelated, certsCaCertInfo)
+	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
+	// os.Exit(0)
+
+	fmt.Println("Upserting Server cert info")
+	s.Start()
+	startTime = time.Now()
+	// serverCertUpdates :=
+	UpsertServerCertificatesNew(serverCertInfoRelated, serverCertsInfoColl)
+	s.Stop()
+
+	fmt.Println("Clearing cert cache")
+	os.RemoveAll(cachePath + "/cert-sync")
+	os.RemoveAll(cachePath + "/cert-sync-processed")
+
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
+	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// lib.MarshalAndPrintJson(caCertUpdates)
+	// lib.MarshalAndPrintJson(serverCertUpdates)
+	// os.RemoveAll(cachePath + "/cert-sync")
+	// os.RemoveAll(cachePath + "/cert-sync-processed")
+	// ado.DownloadPackerHostLogs(&dlPath)
+	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
+	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
+}
+
+//
+//
+
+func UpdateADUsers(coll *mongo.Collection) {
+
+	config := lib.GetCldConfig(nil)
+
+	adConf := config.ActiveDirectory
+
+	users := ad.GetAllADUsersForAllConfiguredDomains(*adConf)
+
+	UpsertADUsers(users, coll)
+	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// lib.MarshalAndPrintJson(caCertUpdates)
+	// lib.MarshalAndPrintJson(serverCertUpdates)
+	// os.RemoveAll(cachePath + "/cert-sync")
+	// os.RemoveAll(cachePath + "/cert-sync-processed")
+	// ado.DownloadPackerHostLogs(&dlPath)
+	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
+	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
+}
+
+//
+//
+
+func UpdateB2CUsers(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+	fmt.Println("Getting users from all configured B2C tenants")
+
+	s.Start()
+	users := azure.GetAllB2CTenantUsers()
+	s.Stop()
+
+	fmt.Println("Updating " + strconv.Itoa(len(users)) + " B2C users in database")
+	s.Start()
+	coll.DeleteMany(context.TODO(), bson.D{{}})
+	UpsertB2CUsers(users, coll)
+	s.Stop()
+}
+
+//
+//
+
+func UpdateM365Data(m365MailboxStatisticsColl *mongo.Collection, m365LicenseCountsColl *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	fmt.Println("Getting mailbox stats")
+	s.Start()
+	data := m365.GetMailboxStorageUsedAllConfiguredTenants()
+	s.Stop()
+
+	fmt.Println("Upserting mailbox stats")
+	s.Start()
+	UpsertMailboxStatistics(data, m365MailboxStatisticsColl)
+	s.Stop()
+
+	fmt.Println("Getting license counts")
+	// s.Start()
+	licenseCounts := m365.GetM365LicenseCountsForAllConfiguredTenants(nil)
+	// s.Stop()
+
+	fmt.Println("Upserting license counts")
+	s.Start()
+	InsertM365LicenseCounts(licenseCounts, m365LicenseCountsColl)
+	s.Stop()
+
+	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// lib.MarshalAndPrintJson(caCertUpdates)
+	// lib.MarshalAndPrintJson(serverCertUpdates)
+	// os.RemoveAll(cachePath + "/cert-sync")
+	// os.RemoveAll(cachePath + "/cert-sync-processed")
+	// ado.DownloadPackerHostLogs(&dlPath)
+	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
+	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
+}
+
+func UpdateWebsiteCertsPullingFromDatabase(c *mongo.Client) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+	fmt.Println("Getting configuration")
+
+	s.Start()
+
+	coll := c.Database("appConfig").Collection("adminSettings")
+
+	filter := bson.D{
+		{"_id", "certManagement"},
+	}
+
+	config := coll.FindOne(context.TODO(), filter)
+	s.Stop()
+
+	var cfg CertManagementConfig
+	err := config.Decode(&cfg)
+	lib.CheckFatalError(err)
+	// lib.JsonMarshalAndPrint(cfg)
+
+	for _, cert := range cfg.UrlsToWatch {
+		// fmt.Println(cert.URL)
+
+		cert := web.GetWebsiteCertificate(cert.URL, nil)
+		lib.JsonMarshalAndPrint(cert)
+	}
+	// fmt.Println(config)
+	// lib.JsonMarshalAndPrint(config)
+
+	// fmt.Println("Getting mailbox stats")
+	// s.Start()
+	// data := m365.GetMailboxStorageUsedAllConfiguredTenants()
+	// s.Stop()
+
+	// fmt.Println("Upserting mailbox stats")
+	// s.Start()
+	// UpsertMailboxStatistics(data, coll)
+	// s.Stop()
+
+	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
+	// fmt.Println(string(jsonStr))
+	// lib.MarshalAndPrintJson(caCertUpdates)
+	// lib.MarshalAndPrintJson(serverCertUpdates)
+	// os.RemoveAll(cachePath + "/cert-sync")
+	// os.RemoveAll(cachePath + "/cert-sync-processed")
+	// ado.DownloadPackerHostLogs(&dlPath)
+	// buildData := lib.GetDataFromMultiplePackerLogFiles(dlPath)
+	// UpdateImageDataWithBuildHostLogs(buildData, imageGalleryImagesColl)
+}
+
+func UpdateSupportAlerts(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	config := lib.GetCldConfig(nil)
+	tenants := config.Azure.MultiTenantAuth.Tenants
+
+	saConf := config.Azure.SupportAlerts
+
+	saToken, err := azure.GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
+		TenantName: saConf.DefaultTenant,
+	}, nil)
+	lib.CheckFatalError(err)
+	// fmt.Println(saConf.WorkbookId)
+	// os.Exit(0)
+	workbookId := saConf.TenantWorkbookIds[saConf.DefaultTenant]
+	supportAlertsQuery := azure.GetLogAnalyticsWorkbookQuery(workbookId, saToken)
+	// fmt.Println(supportAlertsQuery)
+	// os.Exit(0)
+
+	fmt.Println("Getting support alert data")
+	s.Start()
+	var allAlerts []azure.AzureAlertProcessed
+	for tName, tData := range tenants {
+		if tData.GetWorkbookAlerts {
+			token, err := azure.GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
+				TenantName: tName,
+			}, nil)
+			lib.CheckFatalError(err)
+			data := azure.GetAzureWorkbookAlerts(supportAlertsQuery, token)
+			allAlerts = append(allAlerts, data...)
+		}
+	}
+	s.Stop()
+
+	fmt.Println("Upserting support alert data")
+	s.Start()
+	coll.Drop(context.TODO())
+	UpsertSupportAlerts(allAlerts, coll)
+	s.Stop()
+}
+
+//
+//
+
+func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, tokenReq lib.AllTenantTokens) {
+
+	_, _, cachePath := lib.InitConfig(nil)
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	resSkuOpts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
+		SubscriptionId: opts.SkuListSubscription,
+		AzureAuth:      opts.SkuListAuth,
+		Location:       opts.Location,
+		SuppressSteps:  true,
+	}
+
+	fmt.Println("Fetching all Azure Resources...")
+	s.Start()
+	startTime := time.Now()
+	allResources, allResourcesSlice := azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
+	s.Stop()
+	fmt.Println(strconv.Itoa(len(allResourcesSlice)) + " resources found")
+	elapsed := time.Since(startTime)
+	fmt.Println(elapsed)
+	allResourcesSliceStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
+	os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
+	allResourcesStr, _ := json.MarshalIndent(allResources, "", "  ")
+	os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
+	// os.Exit(0)
+
+	fmt.Println("Updating Azure Resources in database...")
+	s.Start()
+	startTime = time.Now()
+	UpsertMultipleResources(allResourcesSlice, opts.AzResResourceListColl)
+	s.Stop()
+	elapsed = time.Since(startTime)
+	fmt.Println(elapsed)
+
+	fmt.Println("")
+	fmt.Println("Updating 'existsInAzure' value for all resources in database...")
+	s.Start()
+	startTime = time.Now()
+	UpdateResourcesNotExistInAzure(allResourcesSlice, opts.AzResResourceListColl)
+	elapsed = time.Since(startTime)
+	os.RemoveAll(cachePath + "/allResourcesSlice.json")
+	os.RemoveAll(cachePath + "/allResources.json")
+	s.Stop()
+	fmt.Println(elapsed)
+}
+
+//
+//
+
+func UpdateAWSMonitoringData(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	config := lib.GetCldConfig(nil)
+	laQuery := config.AWS.LogIngestCountQuery
+	tenants := config.Azure.MultiTenantAuth.Tenants
+
+	fmt.Println("Getting and upserting AWS monitoring data")
+	startTime := time.Now()
+
+	s.Start()
+	for tName, tData := range tenants {
+		if tData.AWSIngestWorkspaceID != "" {
+			token, err := azure.GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
+				TenantName: tName,
+				Scope:      "loganalytics",
+			}, nil)
+			lib.CheckFatalError(err)
+
+			results := azure.RunLogAnalyticsQuery(tData.AWSIngestWorkspaceID, laQuery, *token)
+			// lib.JsonMarshalAndPrint(results)
+			ingestCounts := ConvertLAResultToAWSIngestCounts(results, tData.AWSIngestRef)
+			// _ = ingestCounts
+			// lib.JsonMarshalAndPrint(ingestCounts)
+			// _ = results
+			// os.Exit(0)
+			// fmt.Println(tName)
+			UpsertAWSMontoringData(ingestCounts, coll)
+		}
+	}
+	s.Stop()
+	elapsed := time.Since(startTime)
+	fmt.Println(elapsed)
+}
+
+//
+//
+
+func ConvertLAResultToAWSIngestCounts(data azure.LogAnalyticsQueryResponse, awsIngestRef string) (ingestCounts AWSIngestCounts) {
+	ingestCountRows := data.Tables[0].Rows
+
+	// lib.JsonMarshalAndPrint(data)
+	// os.Exit(0)
+	for _, row := range ingestCountRows {
+		// zeroIfNull := float64(0)
+		var percentageOfTotalLogs float64
+		if row["PercentageOfTotalLogs"] == nil {
+			percentageOfTotalLogs = 0
+		} else {
+			percentageOfTotalLogs = row["PercentageOfTotalLogs"].(float64)
+		}
+		count := AWSIngestCount{
+			LogType:               row["LogType"].(string),
+			PercentageOfTotalLogs: percentageOfTotalLogs,
+			Count:                 row["Count"].(float64),
+		}
+		ingestCounts.Counts = append(ingestCounts.Counts, count)
+		ingestCounts.TotalLogs = row["TotalLogs"].(float64)
+		ingestCounts.TotalSQSMessages = row["TotalSQSMessages"].(float64)
+	}
+	ingestCounts.Environment = awsIngestRef
+	ingestCounts.Monitor = "ingestCountsLast24hr"
+	ingestCounts.ID = "ingestCountsLast24hr" + awsIngestRef
+	ingestCounts.LastDBSync = time.Now()
+	return
+}
+
+//
+//
+
+// func UpsertP2SVpnConnectionDetails(p2sVpnGatewayResourceId string, tenantName string, storageAccountName string, containerName string) {
+// 	// blobSAS := azure.GenerateP2SVpnConnectionHealthDetailed(p2sVpnGatewayResourceId, tenantName, storageAccountName, containerName)
+
+// 	connections := azure.GetP2SVpnConnectionDetailsFromBlob(azure.StorageAccountUploadBlobOptions{
+// 		ContainerName:      containerName,
+// 		StorageAccountName: storageAccountName,
+// 		// BlobFileName: ,
+// 		// BlobPrefix: ,
+// 	}, )
+
+// 	// lib.JsonMarshalAndPrint(connections)
+
+// 	var (
+// 		wg  sync.WaitGroup
+// 		mut sync.Mutex
+// 	)
+// 	// var connectionsProcessed []azure.AzureP2SConnectionHealth
+
+// 	connectionsProcessing := make(map[string]azure.AzureP2SConnectionHealth)
+
+// 	for _, conn := range connections {
+// 		wg.Go(func() {
+// 			deviceSerial := conn.UserName
+// 			_, deviceDetail, err := azure.GetUserFromDeviceSerial(tenantName, deviceSerial)
+// 			lib.CheckFatalError(err)
+
+// 			conn.UserPrincipalName = deviceDetail.UserPrincipalName
+// 			conn.ManagedDeviceADDeviceId = deviceDetail.AzureAdDeviceID
+// 			conn.ManagedDeviceIntuneId = deviceDetail.ID
+// 			conn.ManagedDeviceName = deviceDetail.DeviceName
+// 			conn.ManagedDeviceLastSyncDateTime = deviceDetail.LastSyncDateTime
+// 			conn.ManagedDeviceSerial = deviceSerial
+// 			conn.UserName = ""
+// 			mut.Lock()
+// 			// connectionsProcessed = append(connectionsProcessed, conn)
+// 			connectionsProcessing[conn.VpnConnectionID] = conn
+// 			mut.Unlock()
+// 		})
+// 	}
+// 	wg.Wait()
+// 	// lib.JsonMarshalAndPrint(connectionsProcessed)
+// 	lib.JsonMarshalAndPrint(connectionsProcessing)
+// 	// TODO: Update all json.marshalindents in this file
+
+// 	var connectionsProcessed []azure.AzureP2SConnectionHealth
+
+// 	for _, v := range connectionsProcessing {
+// 		connectionsProcessed = append(connectionsProcessed, v)
+// 	}
+// 	jsonStr, _ := json.MarshalIndent(connectionsProcessed, "", "  ")
+// 	os.WriteFile("/home/jercle/git/cld/cmd/mongodb/aggregatedFuncs-p2svpn-array.json", jsonStr, 0644)
+
+// }
+
+//
+//
+
+// func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, tokenReq lib.AllTenantTokens) {
+
+// 	_, _, cachePath := lib.InitConfig(nil)
+// 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+// 	resSkuOpts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
+// 		SubscriptionId: opts.SkuListSubscription,
+// 		AzureAuth:      opts.SkuListAuth,
+// 		Location:       opts.Location,
+// 		SuppressSteps:  true,
+// 	}
+
+// 	fmt.Println("Fetching all Azure Resources...")
+// 	s.Start()
+// 	startTime := time.Now()
+// 	allResources, allResourcesSlice := azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
+// 	s.Stop()
+// 	fmt.Println(strconv.Itoa(len(allResourcesSlice)) + " resources found")
+// 	elapsed := time.Since(startTime)
+// 	fmt.Println(elapsed)
+// 	allResourcesSliceStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
+// 	os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
+// 	allResourcesStr, _ := json.MarshalIndent(allResources, "", "  ")
+// 	os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
+// 	// os.Exit(0)
+
+// 	fmt.Println("Updating Azure Resources in database...")
+// 	s.Start()
+// 	startTime = time.Now()
+// 	UpsertMultipleResources(allResourcesSlice, opts.AzResResourceListColl)
+// 	s.Stop()
+// 	elapsed = time.Since(startTime)
+// 	fmt.Println(elapsed)
+
+// 	fmt.Println("")
+// 	fmt.Println("Updating 'existsInAzure' value for all resources in database...")
+// 	s.Start()
+// 	startTime = time.Now()
+// 	UpdateResourcesNotExistInAzure(allResourcesSlice, opts.AzResResourceListColl)
+// 	elapsed = time.Since(startTime)
+// 	s.Stop()
+// 	fmt.Println(elapsed)
+// }
+
+//
+//
+
+func UpdateCitrixPolicySettingDefs(settingDefsColl *mongo.Collection, citrixConf lib.CitrixCloudAccountConfig) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	fmt.Println("Fetching Citrix Policy Definitions...")
+	s.Start()
+	// galleryImagesWithVersions := azure.GetAllImagesAndVersionsForAllGalleries(tokenReq)
+	tokenData, err := citrix.GetToken(citrixConf, nil)
+	lib.CheckFatalError(err)
+	settingDefs := citrix.GetPolicySettingDefinitions(citrixConf, tokenData)
+	s.Stop()
+	fmt.Println("Fetching Citrix Policy Definitions in database...")
+	s.Start()
+	UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
+	// DeleteAllDocumentsInCollection(imageGalleryImagesColl)
+	// UpsertImageGalleryImages(galleryImagesWithVersions, imageGalleryImagesColl)
+	s.Stop()
+
+}
+
+//
+//
+
+func UpdateIntuneManagedDevices(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	fmt.Println("Fetching Intune Managed Devices...")
+	s.Start()
+	// galleryImagesWithVersions := azure.GetAllImagesAndVersionsForAllGalleries(tokenReq)
+	// tokenData, err := citrix.GetToken(citrixConf, nil)
+	managedDevices := azure.GetIntuneManagedDevicesForAllConfiguredTenants()
+	// lib.CheckFatalError(err)
+	// settingDefs := citrix.GetPolicySettingDefinitions(citrixConf, tokenData)
+	s.Stop()
+	fmt.Println("Upserting Intune Managed Devices to database...")
+	s.Start()
+	// UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
+	coll.Drop(context.TODO())
+	results := InsertIntuneManagedDevices(managedDevices, coll)
+	// DeleteAllDocumentsInCollection(imageGalleryImagesColl)
+	// UpsertImageGalleryImages(galleryImagesWithVersions, imageGalleryImagesColl)
+	s.Stop()
+	lib.JsonMarshalAndPrint(results)
+}
+
+//
+//
+
+func UpdateFrADGroups(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	fmt.Println("Fetching AD Groups...")
+	s.Start()
+	// galleryImagesWithVersions := azure.GetAllImagesAndVersionsForAllGalleries(tokenReq)
+	// tokenData, err := citrix.GetToken(citrixConf, nil)
+	groups, err := forgerock.GetAdGroupsInConfiguredOUs()
+	lib.CheckFatalError(err)
+	// lib.CheckFatalError(err)
+	// settingDefs := citrix.GetPolicySettingDefinitions(citrixConf, tokenData)
+	s.Stop()
+	fmt.Println("Upserting FR AD Groups to database...")
+	s.Start()
+	// UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
+	coll.Drop(context.TODO())
+	results := InsertFrADGroups(groups, coll)
+	// DeleteAllDocumentsInCollection(imageGalleryImagesColl)
+	// UpsertImageGalleryImages(galleryImagesWithVersions, imageGalleryImagesColl)
+	s.Stop()
+	lib.JsonMarshalAndPrint(results)
+}
+
+//
+//
+
+func UpdateCitrixMachineUtilisation(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	config := lib.GetCldConfig(nil)
+
+	citrixEnvs := *config.CitrixCloud.Environments
+
+	// for
+
+	var (
+		allMachines []citrix.MonitorMachine
+		allMetrics  []citrix.MachineMetric
+		allResUtil  []citrix.MachineResourceUtilisation
+		// allLoadIndexes []citrix.MachineLoadIndex
+		wg  sync.WaitGroup
+		mut sync.Mutex
+	)
+
+	fmt.Println("Fetching Citrix Monitor data...")
+	s.Start()
+
+	for tName, tConf := range citrixEnvs {
+		wg.Go(func() {
+			tokenData, err := citrix.GetToken(tConf, nil)
+			lib.CheckFatalError(err)
+			machines := citrix.GetAllMonitorMachines(tConf, tName, tokenData)
+			mut.Lock()
+			allMachines = append(allMachines, machines...)
+			mut.Unlock()
+
+			resUtil := citrix.GetAllMachineResourceUtilisation(tConf, tokenData)
+			mut.Lock()
+			allResUtil = append(allResUtil, resUtil...)
+			mut.Unlock()
+
+			// loadIndexes := citrix.GetAllMachineLoadIndexes(tConf, tokenData)
+			// mut.Lock()
+			// allLoadIndexes = append(allLoadIndexes, loadIndexes...)
+			// mut.Unlock()
+
+			metrics := citrix.GetAllMachineMetrics(tConf, tokenData)
+			mut.Lock()
+			allMetrics = append(allMetrics, metrics...)
+			mut.Unlock()
+		})
+	}
+	wg.Wait()
+
+	machinesById := make(map[string]citrix.MonitorMachine)
+
+	for _, m := range allMachines {
+		if m.ID == "" {
+			lib.JsonMarshalAndPrint(m)
+			os.Exit(0)
+		}
+		if data, ok := machinesById[m.ID]; ok {
+			// currVersion := imagesById[imageId].ImageVersions[data.OutputImgVersion]
+			// currVersion.AzDoBuildData = data
+			// imagesById[imageId].ImageVersions[data.OutputImgVersion] = currVersion
+			lib.JsonMarshalAndPrint(m)
+			mStr, _ := json.MarshalIndent(data, "", "  ")
+			os.WriteFile("main-ctx-monitor-existing.json", mStr, 0644)
+			newStr, _ := json.MarshalIndent(m, "", "  ")
+			os.WriteFile("main-ctx-monitor-new.json", newStr, 0644)
+			os.Exit(0)
+		} else {
+			machinesById[m.ID] = m
+		}
+		// if machinesById[m.ID] != nil {
+
+		// }
+		// machinesById[m.ID] = m
+	}
+
+	for _, m := range allMetrics {
+		if machinesById[m.MachineID].Metrics == nil {
+			curr := machinesById[m.MachineID]
+			curr.Metrics = &m
+			machinesById[m.MachineID] = curr
+		} else if m.CollectedDate.After(machinesById[m.MachineID].Metrics.CollectedDate) {
+			if m.MachineID == "" {
+				lib.JsonMarshalAndPrint(m)
+				os.Exit(0)
+			}
+			curr := machinesById[m.MachineID]
+			curr.Metrics = &m
+			machinesById[m.MachineID] = curr
+		}
+	}
+
+	for _, ru := range allResUtil {
+		if machinesById[ru.MachineID].Metrics == nil {
+			curr := machinesById[ru.MachineID]
+			curr.ResourceUtilisation = &ru
+			machinesById[ru.MachineID] = curr
+		} else if ru.CollectedDate.After(machinesById[ru.MachineID].ResourceUtilisation.CollectedDate) {
+			if ru.MachineID == "" {
+				lib.JsonMarshalAndPrint(ru)
+				os.Exit(0)
+			}
+			curr := machinesById[ru.MachineID]
+			curr.ResourceUtilisation = &ru
+			machinesById[ru.MachineID] = curr
+		}
+	}
+
+	// var processedMachines []citrix.MonitorMachine
+
+	s.Stop()
+	fmt.Println("Upserting Citrix Monitor data to database...")
+	s.Start()
+	// UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
+	// coll.Drop(context.TODO())
+	results := InsertCitrixMonitorData(machinesById, coll)
+	// DeleteAllDocumentsInCollection(imageGalleryImagesColl)
+	// UpsertImageGalleryImages(galleryImagesWithVersions, imageGalleryImagesColl)
+	s.Stop()
+	lib.JsonMarshalAndPrint(results)
+}

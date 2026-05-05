@@ -1,0 +1,6 @@
+{
+  "editor.colorDecoratorsLimit": 1000000,
+  "go.toolsEnvVars": {
+    "GOEXPERIMENT": "jsonv2"
+  }
+}

@@ -1,0 +1,127 @@
+version: 2
+
+project_name: cloudini
+
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod tidy
+    # you may remove this if you don't need go generate
+    # - go generate ./...
+
+builds:
+  - binary: cld
+    env:
+      - CGO_ENABLED=0
+      - GOEXPERIMENT=jsonv2
+    goarch:
+      - amd64
+      - arm64
+    goos:
+      - linux
+      - windows
+      - darwin
+
+env:
+  - GOEXPERIMENT=jsonv2
+
+signs:
+  - artifacts: checksum
+    # stdin: "{{ .Env.GPG_PASSWORD }}"
+    stdin_file: ./gpg_pwd
+
+# brews:
+#   - repository:
+#       owner: jercle
+#       name: homebrew-tap
+#     homepage: "https://github.com/jercle/cloudini"
+#     alternative_names:
+#       - "cloudini@{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
+#     description: "Cloud CLI providing functionality Azure CLI doesn't. Soon to add GCP and AWS features."
+#     test: |
+#       system "#{bin}/cld", "--version"
+
+homebrew_casks:
+  - name: cloudini
+    binary: cld
+    repository:
+      owner: jercle
+      name: homebrew-tap
+    homepage: "https://github.com/jercle/cloudini"
+    description: "Cloud CLI providing functionality Azure CLI doesn't. Soon to add GCP and AWS features."
+    alternative_names:
+      - "cloudini@{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
+
+archives:
+  - formats: [ 'tar.gz' ]
+    # this name template makes the OS and Arch compatible with the results of `uname`.
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    # use zip for windows archives
+    format_overrides:
+      - goos: windows
+        formats: [ 'zip' ]
+
+
+# nfpms:
+#   # note that this is an array of nfpm configs
+#   - #
+#     # ID of the nfpm config, must be unique.
+#     #
+#     # Default: 'default'.
+#     id: cloudini
+
+#     # Name of the package.
+#     #
+#     # Default: ProjectName.
+#     # Templates: allowed.
+#     package_name: cloudini
+
+
+#     # Formats to be generated.
+#     formats:
+#       - apk
+#       - deb
+#       - rpm
+#       - termux.deb
+#       - archlinux
+
+#     # Packages your package depends on. (overridable)
+#     # dependencies:
+#     #   - git
+#     #   - zsh
+
+#     # Path that the binaries should be installed.
+#     #
+#     # Default: '/usr/bin'.
+#     bindir: /usr/bin
+
+
+
+
+#     # Changelog YAML file, see: https://github.com/goreleaser/chglog
+#     #
+#     # You can use goreleaser/chglog to create the changelog for your project,
+#     # pass that changelog yaml file to GoReleaser,
+#     # and it should in turn setup it accordingly for the given available
+#     # formats (deb and rpm at the moment).
+#     #
+#     # Experimental.
+#     changelog: ./cmd/CHANGELOG.md
+
+
+
+
+# changelog:
+#   disable: true
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"

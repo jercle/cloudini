@@ -1,0 +1,91 @@
+{
+  "cloudini": {
+    "encryptConfig": false
+  },
+  "azure": {
+    "multiTenantAuth": {
+      "tenants": {
+        "ENV1": {
+          "tenantName": "ENV1",
+          "default": true,
+          "tenantId": "f34184ef-94ba-434f-89c4-9c3de0163509",
+          "reader": {
+            "clientId": "26a9fa1b-91ce-4fa6-9b57-f937753833e7",
+            "clientSecret": "PQ_84VQ78dpu*9IQGWP0*-1Q.R.imW"
+          },
+          "writer": {
+            "clientId": "a818242b-8d7e-47b3-88ea-5daf42a09b7e",
+            "clientSecret": "WpYiR8*Q682kbWG0_U0yU_I60HK!DV"
+          },
+          "costExportsLocation": "https://env1strgacct.blob.core.windows.net/cost-exports"
+        },
+        "ENV2": {
+          "tenantName": "ENV2",
+          "default": false,
+          "tenantId": "2f5f68d3-657d-40d6-bb33-54b0278dcbff",
+          "reader": {
+            "clientId": "39ad81d1-cd3c-49e7-b97c-f46545847be0",
+            "clientSecret": "6FB8QVJy.yWkCZ*u4cG89C.jAlyUNU"
+          },
+          "writer": {
+            "clientId": "4f257c72-511b-4669-90b1-db17ece198c3",
+            "clientSecret": "_P6*9E*sQ@*xSx6*V31*z!m4eKi*p4"
+          },
+          "costExportsLocation": "https://env2strgacct.blob.core.windows.net/cost-exports"
+        }
+      }
+    }
+  },
+  "sophos": {
+    "environments": {
+      "ENV1": {
+        "hosts": [
+          "sophos-host-1",
+          "sophos-host-2"
+        ],
+        "api_user": "Towne2949",
+        "api_key": "q6_.C78dPXo*P9!E_gHXRk_E.hGv2@"
+      },
+      "ENV2": {
+        "hosts": [
+          "sophos-host-1",
+          "sophos-host-2"
+        ],
+        "api_user": "Turcotte2715",
+        "api_key": "-2519i9-Z72dU*8x.s0uy3jVW5Y0AL"
+      }
+    }
+  },
+  "citrixCloud": {
+    "environments": {
+      "ENV1": {
+        "customerId": "vr6mkpt5g84r",
+        "clientId": "bb58c61b-b43e-478b-b9cd-e30eadb48289",
+        "clientSecret": "Z.6*SO9lMPf9cLu1glmmV*mTo9!!Fu"
+      },
+      "ENV2": {
+        "customerId": "oez634b17t31",
+        "clientId": "0031ddc7-0590-4bc7-b2b7-16057417b6c7",
+        "clientSecret": "F3uv8n2ee!ciQbo*i8sch0Fm64BK1N"
+      }
+    }
+  },
+  "proxyConfig": {
+    "default": {
+      "server": "proxy-lb.fq.d.n",
+      "port": "8080",
+      "enabled": true,
+      "overrides": "localhost;127.0.0.;10.;192.168.*;*.azure.net;*.azure.com;*.windows.net;*.visualstudio.com;*.microsoft.com"
+    },
+    "other": {
+      "server": "127.0.0.1",
+      "port": "3128",
+      "enabled": true,
+      "overrides": ""
+    }
+  },
+  "domains": {
+    "ENV1": "leadinfomediaries.io",
+    "ENV2": "humanfacilitate.org"
+  }
+}
