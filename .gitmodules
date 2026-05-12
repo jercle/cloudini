@@ -1,0 +1,6 @@
+[submodule "testData"]
+	path = testData
+	url = https://github.com/jercle/azure-tooling-testData.git
+[submodule "dev/fakedata"]
+	path = dev/fakedata
+	url = https://github.com/jercle/cloudini-fakedata.git

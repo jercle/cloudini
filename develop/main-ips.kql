@@ -1,0 +1,142 @@
+// NICs
+Resources
+| where type =~ 'microsoft.network/networkinterfaces'
+| mv-expand ipconfig = properties.ipConfigurations
+| extend publicIpId = tostring(ipconfig.properties.publicIPAddress.id), tags = iff(isnull(tags), dynamic({}), tags)
+| extend bareMetalServer= properties.bareMetalServer, privateEndpoint = properties.privateEndpoint, privateLinkService = properties.privateLinkService, virtualMachine = properties.virtualMachine, name, id, properties
+| extend isAttached = isnotnull(bareMetalServer) or isnotnull(privateEndpoint) or isnotnull(privateLinkService) or isnotnull(virtualMachine)
+| extend attachedTo = dynamic_to_json(coalesce(bareMetalServer.id, privateLinkService.id, privateEndpoint.id, virtualMachine.id))
+| join kind=leftouter  (resources | project id, publicIp = properties.ipAddress) on $left.publicIpId == $right.['id']
+| project name, resourceGroup, subscriptionId, tenantId, id, privateIp = ipconfig.properties.privateIPAddress, publicIpId = tostring(ipconfig.properties.publicIPAddress.id), publicIp, type, tags, isAttached, attachedTo
+| summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp)  by id, name, resourceGroup, subscriptionId, tenantId, type, tags = dynamic_to_json(tags), isAttached, attachedTo
+// | project vm = properties.virtualMachine.id
+
+// Virtual Machines
+Resources
+| where type =~ 'microsoft.compute/virtualmachines'
+| project id, vmId = tolower(tostring(id)), vmName = name, type, tenantId, subscriptionId, tags = iff(isnull(tags), dynamic({}), tags)
+| join (
+    Resources
+    | where type =~ 'microsoft.network/networkinterfaces'
+    | mv-expand ipconfig = properties.ipConfigurations
+    | project vmId = tolower(tostring(properties.virtualMachine.id)), nicId = id, privateIp = ipconfig.properties.privateIPAddress, publicIpId = tostring(ipconfig.properties.publicIPAddress.id)
+    | join kind=leftouter (
+        Resources
+        | where type =~ 'microsoft.network/publicipaddresses'
+        | project publicIpId = id, publicIp = properties.ipAddress
+        )
+        on publicIpId
+    | project-away publicIpId, publicIpId1
+    | summarize vmNics = make_list(nicId), privateIps = make_list(privateIp), publicIps = make_list(publicIp) by vmId
+    )
+    on vmId
+| project id, name = vmName, type, privateIps, publicIps, tenantId, subscriptionId, associatedNics = dynamic_to_json(vmNics), tags
+
+// Load Balancers
+Resources
+| where type =~ 'microsoft.network/loadbalancers'
+| mv-expand feIpConfig = properties.frontendIPConfigurations
+| project lbId = id, lbName = name, type, privateIp = feIpConfig.properties.privateIPAddress, publicIpId = tostring(feIpConfig.properties.publicIPAddress.id), tenantId, subscriptionId, tags = dynamic_to_json(tags), vmNics = dynamic([])
+| join kind=leftouter (
+    Resources
+    | where type =~ 'microsoft.network/publicipaddresses'
+    | project publicIpId = id, publicIp = properties.ipAddress
+    )
+    on publicIpId
+| project-away publicIpId, publicIpId1
+| summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp) by id = lbId, name = lbName, type, tenantId, subscriptionId, tags
+
+// Managed Envs
+Resources
+| where type =~ 'microsoft.app/managedenvironments'
+| project id, name, type, tenantId, resourceGroup, subscriptionId, publicNetworkAccess = properties.publicNetworkAccess, privateIps = pack_array(properties.staticIp), vmNics = dynamic_to_json(dynamic([])), tags = dynamic_to_json(tags)
+
+// Bastion Hosts
+Resources
+| where type =~ 'microsoft.network/bastionhosts'
+| mv-expand ipconfig = properties.ipConfigurations
+| project id, name, type, tenantId, resourceGroup, subscriptionId, publicIpId = tostring(ipconfig.properties.publicIPAddress.id), tags = dynamic_to_json(tags)
+| join kind=leftouter  (resources | project id, publicIp = properties.ipAddress) on $left.publicIpId == $right.['id']
+| summarize publicIps = make_list(publicIp), publicIpIds = make_list(publicIpId)  by id, name, resourceGroup, subscriptionId, tenantId, type, tags
+
+// Private Endpoints
+resources
+| where type =~ "microsoft.network/privateendpoints" and name contains "automon"
+| project id, peId = tolower(tostring(id)), name, type, tenantId, subscriptionId, tags = iff(isnull(tags), dynamic({}), tags)
+| join (
+    Resources
+    | where type =~ 'microsoft.network/networkinterfaces'
+    | mv-expand ipconfig = properties.ipConfigurations
+    | project peId  = tolower(tostring(properties.privateEndpoint.id)), privateIp = ipconfig.properties.privateIPAddress, nicId = id
+    )
+    on peId
+| summarize associatedNics = make_list(nicId), privateIps = make_list(privateIp) by id, name, type, tenantId, subscriptionId, tags = dynamic_to_json(tags)
+
+// Public IPs
+resources
+| where type =~ "microsoft.network/publicipaddresses"
+| extend ipConfig = properties.ipConfiguration.id
+| extend isAttached = isnotnull(ipConfig)
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags, publicIps = pack_array(properties.ipAddress), ipConfig, isAttached
+
+// Web Sites
+resources
+| where type =~ "microsoft.web/sites"
+| extend possibleInboundIps = split(properties.possibleInboundIpAddresses, ",")
+| extend possibleOutboundIps = split(properties.possibleOutboundIpAddresses, ",")
+| extend inboundIps = split(properties.inboundIpAddress, ",")
+| extend outboundIps = split(properties.outboundIpAddresses, ",")
+| extend privateIps = array_concat(possibleInboundIps, possibleOutboundIps)
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags, privateIps, possibleInboundIps, possibleOutboundIps, inboundIps, outboundIps
+
+// Managed Clusters
+resources
+| where type =~ "microsoft.containerservice/managedclusters"
+| mv-expand agentPools = properties.agentPoolProfiles
+| project id, name, type, tenantId, subscriptionId, resourceGroup, agentPoolName = agentPools.name, agentPoolType = agentPools.type
+| summarize agentPoolNames = make_list(agentPoolName), agentPoolTypes = make_list(agentPoolType) by id, name, type, tenantId, subscriptionId, resourceGroup
+
+
+// Firewalls
+resources
+| where type =~ 'microsoft.network/azurefirewalls'
+| mv-expand hubIPAddresses = properties.hubIPAddresses
+| mv-expand publicIp = hubIPAddresses.publicIPs.addresses
+| extend privateIp = hubIPAddresses.privateIPAddress
+| extend publicIp = publicIp.address
+| project-away hubIPAddresses
+| mv-expand ipConfig = properties.ipConfigurations
+| extend pubIpId = tostring(ipConfig.properties.publicIPAddress.id), privateIp = iff(isnull(privateIp), ipConfig.properties.privateIPAddress, privateIp)
+| join kind=leftouter  (resources | project pubIpId = id, publicIp = properties.ipAddress) on pubIpId
+| extend publicIp = iff(isnull(publicIp), publicIp1, publicIp)
+| summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp) by id, name, resourceGroup, tenantId, subscriptionId, type, tags = dynamic_to_json(tags)
+
+
+// P2S VPN Gateways
+resources
+| where type =~ 'microsoft.network/p2svpngateways'
+| mv-expand p2sConnConfig = properties.p2SConnectionConfigurations
+| mv-expand vpnClientAddressPoolPrefix = p2sConnConfig.properties.vpnClientAddressPool.addressPrefixes
+| summarize cidrs = make_list(vpnClientAddressPoolPrefix) by id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags)
+
+
+// Virtual Hubs
+resources
+| where type =~ 'microsoft.network/virtualhubs'
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), privateIps = properties.virtualRouterIps, cidrs = pack_array(properties.addressPrefix)
+
+
+// Virtual Networks
+Resources
+| where type =~ 'microsoft.network/virtualnetworks'
+| mv-expand subnetObj = properties.subnets
+| extend snetId = subnetObj.id, snetName = subnetObj.name, snetCidrSingle = iff(isnull(subnetObj.properties.addressPrefix), dynamic([]), pack_array(subnetObj.properties.addressPrefix)), snetCidrArr = subnetObj.properties.addressPrefixes, snetType = subnetObj.type
+| extend snetCidrs = array_concat(snetCidrSingle, snetCidrArr)
+| extend subnet = pack_dictionary('id', snetId, 'name', snetName, 'cidrs', snetCidrs, 'type', snetType)
+| summarize cidrs = make_set(properties.addressSpace.addressPrefixes), subnets = make_list(subnet) by id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags)
+
+
+// IP Groups
+resources
+| where type =~ 'microsoft.network/ipgroups'
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), cidrs = properties.ipAddresses
