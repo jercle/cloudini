@@ -1,0 +1,43 @@
+# If you prefer the allow list template instead of the deny list, see community template:
+# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+#
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+dev/nsglogs
+.env
+dev/la-tables.json
+dev/cost-exports
+dev/res.json
+dev/config.json
+dev/billing.json
+dev/cldConf.json
+dev/tCache
+dev/outputs
+dev/tok.txt
+dev/listVnets.json
+dev/publicIp.json
+dev/subnets.json
+dev/
+gpg_pwd
+dist
+lib/certtostorelocal/testdata/ca
+scripts/rsync.sh
+scripts/replace.sh
+cmd/mongodb/aggregatedFuncs-p2svpn-array.json
+cmd/mongodb/aggregatedFuncs-p2svpn.json

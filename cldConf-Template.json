@@ -1,0 +1,103 @@
+{
+  "cloudini": {
+    "encodeConfig": false
+  },
+  "azure": {
+    "multiTenantAuth": {
+      "tenants": {
+        "ENV1": {
+          "tenantName": "",
+          "tenantId": "",
+          "costExportsLocation": "https://ACCOUNTNAME.blob.core.windows.net/BLOB_CONTAINER",
+          "reader": {
+            "clientId": "",
+            "clientSecret": ""
+          },
+          "writer": {
+            "clientId": "",
+            "clientSecret": ""
+          }
+        },
+        "ENV2": {
+          "tenantName": "",
+          "default": true,
+          "tenantId": "",
+          "costExportsLocation": "https://ACCOUNTNAME.blob.core.windows.net/BLOB_CONTAINER",
+          "reader": {
+            "clientId": "",
+            "clientSecret": ""
+          },
+          "writer": {
+            "clientId": "",
+            "clientSecret": ""
+          }
+        },
+        "ENV3": {
+          "tenantName": "",
+          "tenantId": "",
+          "costExportsLocation": "https://ACCOUNTNAME.blob.core.windows.net/BLOB_CONTAINER",
+          "reader": {
+            "clientId": "",
+            "clientSecret": ""
+          },
+          "writer": {
+            "clientId": "",
+            "clientSecret": ""
+          }
+        }
+      }
+    }
+  },
+  "citrixCloud": {
+    "environments": {
+      "ENV1": {
+        "customerId": "",
+        "clientId": "",
+        "clientSecret": ""
+      }
+    }
+  },
+  "sophos": {
+    "environments": {
+      "ENV1": {
+        "hosts": [
+          "sophos-host-1",
+          "sophos-host-2",
+          "sophos-host-3",
+          "sophos-host-4"
+        ],
+        "api_user": "",
+        "api_key": ""
+      },
+      "ENV2": {
+        "hosts": [
+          "sophos-host-1",
+          "sophos-host-2",
+          "sophos-host-3",
+          "sophos-host-4"
+        ],
+        "api_user": "",
+        "api_key": ""
+      }
+    }
+  },
+  "domains": {
+    "ONE": "",
+    "TWO": "",
+    "THREE": "",
+    "FOUR": ""
+  },
+  "proxyConfig": {
+    "default": {
+      "server": "",
+      "port": "",
+      "enabled": true,
+      "overrides": "localhost;127.0.0.;10.;192.168.*;*.azure.net;*.azure.com;*.windows.net;*.visualstudio.com;*.microsoft.com"
+    },
+    "other": {
+      "server": "127.0.0.1",
+      "port": "3128",
+      "enabled": true
+    }
+  }
+}
