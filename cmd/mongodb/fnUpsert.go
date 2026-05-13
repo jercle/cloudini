@@ -1607,7 +1607,7 @@ func InsertCitrixMonitorData(machineData map[string]citrix.MonitorMachine, metri
 		}
 		resMetrics, err = collMetrics.BulkWrite(ctx, metricUpdates, &bulkWriteOpts)
 		if err != nil {
-			if !strings.Contains(err.Error(), "E11000 duplicate key") {
+			if !strings.Contains(err.Error(), "E11000 duplicate key") && !strings.Contains(err.Error(), "Duplicate key violation") {
 				lib.CheckFatalError(err)
 			}
 		}
@@ -1624,7 +1624,7 @@ func InsertCitrixMonitorData(machineData map[string]citrix.MonitorMachine, metri
 		}
 		resResUtil, err = collResUtil.BulkWrite(ctx, resUtilUpdates, &bulkWriteOpts)
 		if err != nil {
-			if !strings.Contains(err.Error(), "E11000 duplicate key") {
+			if !strings.Contains(err.Error(), "E11000 duplicate key") && !strings.Contains(err.Error(), "Duplicate key violation") {
 				lib.CheckFatalError(err)
 			}
 		}
@@ -1645,7 +1645,7 @@ func InsertCitrixMonitorData(machineData map[string]citrix.MonitorMachine, metri
 		}
 		resLoadIndexes, err = collLoadIndexes.BulkWrite(ctx, loadIndexesUpdates, &bulkWriteOpts)
 		if err != nil {
-			if !strings.Contains(err.Error(), "E11000 duplicate key") {
+			if !strings.Contains(err.Error(), "E11000 duplicate key") && !strings.Contains(err.Error(), "Duplicate key violation") {
 				lib.CheckFatalError(err)
 			}
 		}

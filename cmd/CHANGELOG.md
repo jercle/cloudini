@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.64]
+* Minor fix handling ignoring duplicate _id for Citrix Monitor metrics
+
 ## [0.3.63]
 * Fix up error handling for azure http methods
 * Tweak adding of LinkToFilteredSearchResultsAPI to Azure Alerts
