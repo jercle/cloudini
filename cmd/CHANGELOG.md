@@ -1,6 +1,7 @@
 # Change Log
 
 ## [0.3.63]
+* Fix up error handling for azure http methods
 * Tweak adding of LinkToFilteredSearchResultsAPI to Azure Alerts
 
 ## [0.3.62]

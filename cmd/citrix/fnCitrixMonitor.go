@@ -1,11 +1,9 @@
 package citrix
 
 import (
-	"encoding/json/jsontext"
 	"encoding/json/v2"
 	"fmt"
 	"net/url"
-	"os"
 	"strconv"
 	"time"
 
@@ -22,8 +20,9 @@ func GetAllMachineMetrics(creds lib.CitrixCloudAccountConfig, tenantName string,
 	// date, err := time.Parse("2006-01-02T15:04:05.000Z", "2026-05-01T00:04:05.000Z")
 	// lib.CheckFatalError(err)
 	// formattedDate := date.Format("2006-01-02T15:04:05.000Z")
-	formattedDate := time.Now().Add(-630 * time.Minute).Format("2006-01-02T15:04:05.000Z")
 	// formattedDate := time.Now().Add(-11 * time.Hour).Format("2006-01-02T15:04:05.000Z")
+
+	formattedDate := time.Now().Add(-630 * time.Minute).Format("2006-01-02T15:04:05.000Z")
 	filterString := "$filter=CollectedDate gt " + formattedDate + "&$orderby=CollectedDate desc"
 	// filterString := "$orderby=CollectedDate desc"
 	urlString := "https://api.cloud.com/monitorodata/MachineMetric?" + url.PathEscape(filterString)
@@ -76,11 +75,12 @@ func GetAllMachineMetrics(creds lib.CitrixCloudAccountConfig, tenantName string,
 
 func GetAllMachineResourceUtilisation(creds lib.CitrixCloudAccountConfig, tenantName string, tokenData lib.CitrixTokenData) []MachineResourceUtilisation {
 	// formattedDate := time.Now().Add(-24 * time.Hour).Format("2006-01-02T15:04:05.000Z")
-	formattedDate := time.Now().Add(-630 * time.Minute).Format("2006-01-02T15:04:05.000Z")
 	// formattedDate := time.Now().Add(-11 * time.Hour).Format("2006-01-02T15:04:05.000Z")
 	// date, err := time.Parse("2006-01-02T15:04:05.000Z", "2026-05-01T00:04:05.000Z")
 	// lib.CheckFatalError(err)
 	// formattedDate := date.Format("2006-01-02T15:04:05.000Z")
+
+	formattedDate := time.Now().Add(-630 * time.Minute).Format("2006-01-02T15:04:05.000Z")
 	filterString := "$filter=CollectedDate gt " + formattedDate + "&$orderby=CollectedDate desc"
 	// filterString := "$orderby=CollectedDate desc"
 	urlString := "https://api.cloud.com/monitorodata/ResourceUtilization?" + url.PathEscape(filterString)
@@ -138,11 +138,11 @@ func GetAllMachineLoadIndexes(creds lib.CitrixCloudAccountConfig, tenantName str
 	// date, err := time.Parse("2006-01-02T15:04:05.000Z", "2026-05-01T00:04:05.000Z")
 	// lib.CheckFatalError(err)
 	// formattedDate := date.Format("2006-01-02T15:04:05.000Z")
-	formattedDate := time.Now().Add(-630 * time.Minute).Format("2006-01-02T15:04:05.000Z")
 	// formattedDate := time.Now().Add(-11 * time.Hour).Format("2006-01-02T15:04:05.000Z")
-	filterString := "$filter=CreatedDate gt " + formattedDate + "&$orderby=CreatedDate desc"
-
 	// filterString := "$filter=CreatedDate gt 2026-04-01:04:05.000Z&$orderby=CreatedDate desc"
+
+	formattedDate := time.Now().Add(-630 * time.Minute).Format("2006-01-02T15:04:05.000Z")
+	filterString := "$filter=CreatedDate gt " + formattedDate + "&$orderby=CreatedDate desc"
 	// filterString := "$orderby=CreatedDate desc"
 	// filterString := ""
 	urlString := "https://api.cloud.com/monitorodata/LoadIndexes?" + url.PathEscape(filterString)
@@ -199,9 +199,10 @@ func GetAllMonitorMachines(creds lib.CitrixCloudAccountConfig, tenantName string
 	// formattedDate := time.Now().Add(-10 * time.Hour).Add(-30 * time.Minute).Format("2006-01-02T15:04:05.000Z")
 	// formattedDate := time.Now().Add(-12 * time.Hour).Format("2006-01-02T15:04:05.000Z")
 	// filterString := "$filter=CreatedDate gt " + formattedDate + "&$orderby=CreatedDate desc"
-
 	// filterString := "$filter=CurrentPowerState eq 3 and LifecycleState eq 0&$expand=CurrentLoadIndex&$select=CurrentPowerState,AgentVersion,IPAddress,DnsName,Id,IsInMaintenanceMode,AssociatedUserNames,CurrentSessionCount,FaultState,CurrentRegistrationState,Name,CurrentLoadIndexID"
-	filterString := "$expand=CurrentLoadIndex&$select=CurrentPowerState,LifecycleState,AgentVersion,IPAddress,DnsName,Id,IsInMaintenanceMode,FaultState,AssociatedUserNames,CurrentSessionCount,FaultState,CurrentRegistrationState,Name,CurrentLoadIndexID"
+	// filterString := "$expand=CurrentLoadIndex&$select=CurrentPowerState,LifecycleState,AgentVersion,IPAddress,DnsName,Id,IsInMaintenanceMode,FaultState,AssociatedUserNames,CurrentSessionCount,FaultState,CurrentRegistrationState,Name,CurrentLoadIndexID"
+
+	filterString := "$select=CurrentPowerState,LifecycleState,AgentVersion,IPAddress,DnsName,Id,IsInMaintenanceMode,FaultState,AssociatedUserNames,CurrentSessionCount,FaultState,CurrentRegistrationState,Name,CurrentLoadIndexID"
 	urlString := "https://api.cloud.com/monitorodata/Machines?" + url.PathEscape(filterString)
 
 	res, err := HttpGet(urlString, creds.CustomerId, creds.SiteId, tokenData)
@@ -244,7 +245,7 @@ func GetAllMonitorMachines(creds lib.CitrixCloudAccountConfig, tenantName string
 
 	}
 
-	jsonStr, _ := json.Marshal(machines, jsontext.WithIndent("  "))
-	os.WriteFile("main-citrix-monitorMachines-"+tenantName+".json", jsonStr, 0644)
+	// jsonStr, _ := json.Marshal(machines, jsontext.WithIndent("  "))
+	// os.WriteFile("main-citrix-monitorMachines-"+tenantName+".json", jsonStr, 0644)
 	return machines
 }

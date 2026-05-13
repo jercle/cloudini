@@ -1172,7 +1172,9 @@ func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Coll
 	)
 
 	fmt.Println("Fetching Citrix Monitor data...")
-	s.Start()
+	// s.Start()
+
+	startTime := time.Now()
 
 	for tName, tConf := range citrixEnvs {
 		wg.Go(func() {
@@ -1263,7 +1265,7 @@ func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Coll
 
 	// var processedMachines []citrix.MonitorMachine
 
-	s.Stop()
+	// s.Stop()
 	fmt.Println("Upserting Citrix Monitor data to database...")
 	s.Start()
 	// UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
@@ -1276,6 +1278,8 @@ func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Coll
 	lib.JsonMarshalAndPrint(resMetrics)
 	lib.JsonMarshalAndPrint(resResUtil)
 	lib.JsonMarshalAndPrint(resLoadIndexes)
+	elapsed := time.Since(startTime)
+	fmt.Println(elapsed)
 }
 
 func UpdateKeyVaultSecrets(coll *mongo.Collection) {

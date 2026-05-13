@@ -364,18 +364,18 @@ func KeyVaultAddSubnetForAllInConfiguredTenants(subnetId string, configuredTenan
 					vnetRules = append(vnetRules, newSubnetRule)
 					update.Properties.NetworkAcls.VirtualNetworkRules = removeDuplicateVnetRules(vnetRules)
 
-					accessPolicies := kv.Properties.AccessPolicies
-					newAccessPol := KeyVaultAccessPolicy{
-						TenantID: token.TenantId,
-						ObjectID: "5eba0ebd-73b1-4cc4-924e-2397c9824635",
-						Permissions: KeyVaultAccessPolicyPermissions{
-							Certificates: []string{"get", "list"},
-							Keys:         []string{"get", "list"},
-							Secrets:      []string{"get", "list"},
-						},
-					}
-					accessPolicies = append(accessPolicies, newAccessPol)
-					update.Properties.AccessPolicies = removeDuplicateAccessPolicies(accessPolicies)
+					// accessPolicies := kv.Properties.AccessPolicies
+					// newAccessPol := KeyVaultAccessPolicy{
+					// 	TenantID: token.TenantId,
+					// 	ObjectID: "",
+					// 	Permissions: KeyVaultAccessPolicyPermissions{
+					// 		Certificates: []string{"get", "list"},
+					// 		Keys:         []string{"get", "list"},
+					// 		Secrets:      []string{"get", "list"},
+					// 	},
+					// }
+					// accessPolicies = append(accessPolicies, newAccessPol)
+					// update.Properties.AccessPolicies = removeDuplicateAccessPolicies(accessPolicies)
 
 					bodyStr, err := json.Marshal(update)
 					resBody, _, err := HttpPatchErrLogToCache(urlString, string(bodyStr), token)

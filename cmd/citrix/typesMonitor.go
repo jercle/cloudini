@@ -3,6 +3,9 @@ package citrix
 import (
 	"encoding/json"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/bsontype"
 )
 
 type MachineMetricResponse struct {
@@ -65,7 +68,8 @@ type MachineLoadIndex struct {
 	CreatedDate        time.Time `json:"CreatedDate,omitempty,omitzero" bson:"CreatedDate,omitempty,omitzero"`
 	Disk               any       `json:"Disk,omitempty,omitzero" bson:"Disk,omitempty,omitzero"`
 	EffectiveLoadIndex float64   `json:"EffectiveLoadIndex,omitempty,omitzero" bson:"EffectiveLoadIndex,omitempty,omitzero"`
-	ID                 float64   `json:"Id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
+	ID                 float64   `json:"Id,omitempty,omitzero" bson:"Id,omitempty,omitzero"`
+	MongoID            string    `json:"_id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
 	MachineID          string    `json:"MachineId,omitempty,omitzero" bson:"MachineId,omitempty,omitzero"`
 	Memory             *float64  `json:"Memory,omitempty,omitzero" bson:"Memory,omitempty,omitzero"`
 	ModifiedDate       time.Time `json:"ModifiedDate,omitempty,omitzero" bson:"ModifiedDate,omitempty,omitzero"`
@@ -132,6 +136,10 @@ func (s CurrentPowerState) MarshalJSON() ([]byte, error) {
 	return json.Marshal(s.String())
 }
 
+func (s CurrentPowerState) MarshalBSONValue() (bsontype.Type, []byte, error) {
+	return bson.MarshalValue(s.String())
+}
+
 type CurrentPowerState int
 
 //
@@ -158,6 +166,9 @@ func (s CurrentRegistrationState) String() string {
 
 func (s CurrentRegistrationState) MarshalJSON() ([]byte, error) {
 	return json.Marshal(s.String())
+}
+func (s CurrentRegistrationState) MarshalBSONValue() (bsontype.Type, []byte, error) {
+	return bson.MarshalValue(s.String())
 }
 
 type CurrentRegistrationState int
@@ -189,6 +200,9 @@ func (s LifecycleState) String() string {
 
 func (s LifecycleState) MarshalJSON() ([]byte, error) {
 	return json.Marshal(s.String())
+}
+func (s LifecycleState) MarshalBSONValue() (bsontype.Type, []byte, error) {
+	return bson.MarshalValue(s.String())
 }
 
 type LifecycleState int
@@ -230,6 +244,9 @@ func (s FaultState) String() string {
 func (s FaultState) MarshalJSON() ([]byte, error) {
 	return json.Marshal(s.String())
 }
+func (s FaultState) MarshalBSONValue() (bsontype.Type, []byte, error) {
+	return bson.MarshalValue(s.String())
+}
 
 type FaultState int
 
@@ -243,17 +260,17 @@ type MonitorMachine struct {
 	Metrics                  *MachineMetric              `json:"metrics,omitempty,omitzero" bson:"metrics,omitempty,omitzero"`
 	ResourceUtilisation      *MachineResourceUtilisation `json:"resourceUtilisation,omitempty,omitzero" bson:"resourceUtilisation,omitempty,omitzero"`
 	AssociatedUserNames      string                      `json:"AssociatedUserNames,omitempty,omitzero" bson:"AssociatedUserNames,omitempty,omitzero"`
-	CurrentLoadIndex         MachineLoadIndex            `json:"CurrentLoadIndex" bson:"CurrentLoadIndex"`
+	CurrentLoadIndex         *MachineLoadIndex           `json:"CurrentLoadIndex,omitempty,omitzero" bson:"CurrentLoadIndex,omitempty,omitzero"`
 	CurrentLoadIndexID       float64                     `json:"CurrentLoadIndexId,omitempty,omitzero" bson:"CurrentLoadIndexId,omitempty,omitzero"`
-	CurrentPowerState        CurrentPowerState           `json:"CurrentPowerState,omitempty,omitzero" bson:"CurrentPowerState,omitempty,omitzero"`
-	CurrentRegistrationState CurrentRegistrationState    `json:"CurrentRegistrationState,omitempty,omitzero" bson:"CurrentRegistrationState,omitempty,omitzero"`
+	CurrentPowerState        CurrentPowerState           `json:"CurrentPowerState" bson:"CurrentPowerState"`
+	CurrentRegistrationState CurrentRegistrationState    `json:"CurrentRegistrationState" bson:"CurrentRegistrationState"`
 	CurrentSessionCount      float64                     `json:"CurrentSessionCount,omitempty,omitzero" bson:"CurrentSessionCount,omitempty,omitzero"`
 	DnsName                  string                      `json:"DnsName,omitempty,omitzero" bson:"DnsName,omitempty,omitzero"`
-	FaultState               FaultState                  `json:"FaultState,omitempty,omitzero" bson:"FaultState,omitempty,omitzero"`
+	FaultState               FaultState                  `json:"FaultState" bson:"FaultState"`
 	IpAddress                string                      `json:"IPAddress,omitempty,omitzero" bson:"IPAddress,omitempty,omitzero"`
 	ID                       string                      `json:"Id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
 	IsInMaintenanceMode      bool                        `json:"IsInMaintenanceMode,omitempty,omitzero" bson:"IsInMaintenanceMode,omitempty,omitzero"`
-	LifecycleState           LifecycleState              `json:"LifecycleState,omitempty,omitzero" bson:"LifecycleState,omitempty,omitzero"`
+	LifecycleState           LifecycleState              `json:"LifecycleState" bson:"LifecycleState"`
 	Name                     string                      `json:"Name,omitempty,omitzero" bson:"Name,omitempty,omitzero"`
 	PoweredOnDate            time.Time                   `json:"PoweredOnDate,omitempty,omitzero" bson:"PoweredOnDate,omitempty,omitzero"`
 	// AssociatedUserFullNames      string     `json:"AssociatedUserFullNames,omitempty,omitzero" bson:"AssociatedUserFullNames,omitempty,omitzero"`

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -1586,43 +1587,68 @@ func InsertCitrixMonitorData(machineData map[string]citrix.MonitorMachine, metri
 		machineUpdates = append(machineUpdates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 	resMachines, err := collMachines.BulkWrite(ctx, machineUpdates, nil)
+	// if err != nil {
+	// 	lib.JsonMarshalAndPrint()
+	// }
 	lib.CheckFatalError(err)
+
+	bulkWriteOpts := options.BulkWriteOptions{
+		Ordered: new(false),
+	}
 
 	if len(metricsData) > 0 {
 		var metricUpdates []mongo.WriteModel
 		for _, m := range metricsData {
 			// metricUpdates = append(metricUpdates, mongo.NewUpdateOneModel().SetDocument(m))
-			filter := bson.D{{"MachineId", m.MachineID}, {"CollectedDate", m.CollectedDate}, {"tenantName", m.TenantName}}
-			update := bson.D{{"$set", m}}
-			metricUpdates = append(metricUpdates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+			// filter := bson.D{{"MachineId", m.MachineID}, {"CollectedDate", m.CollectedDate}, {"tenantName", m.TenantName}}
+			// update := bson.D{{"$set", m}}
+			// metricUpdates = append(metricUpdates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+			metricUpdates = append(metricUpdates, mongo.NewInsertOneModel().SetDocument(m))
 		}
-		resMetrics, err = collMetrics.BulkWrite(ctx, metricUpdates, nil)
-		lib.CheckFatalError(err)
+		resMetrics, err = collMetrics.BulkWrite(ctx, metricUpdates, &bulkWriteOpts)
+		if err != nil {
+			if !strings.Contains(err.Error(), "E11000 duplicate key") {
+				lib.CheckFatalError(err)
+			}
+		}
 	}
 
 	if len(resUtil) > 0 {
 		var resUtilUpdates []mongo.WriteModel
 		for _, m := range resUtil {
 			// resUtilUpdates = append(resUtilUpdates, mongo.NewUpdateOneModel().SetDocument(m))
-			filter := bson.D{{"MachineId", m.MachineID}, {"CollectedDate", m.CollectedDate}, {"tenantName", m.TenantName}}
-			update := bson.D{{"$set", m}}
-			resUtilUpdates = append(resUtilUpdates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+			// filter := bson.D{{"MachineId", m.MachineID}, {"CollectedDate", m.CollectedDate}, {"tenantName", m.TenantName}}
+			// update := bson.D{{"$set", m}}
+			// resUtilUpdates = append(resUtilUpdates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+			resUtilUpdates = append(resUtilUpdates, mongo.NewInsertOneModel().SetDocument(m))
 		}
-		resResUtil, err = collResUtil.BulkWrite(ctx, resUtilUpdates, nil)
-		lib.CheckFatalError(err)
+		resResUtil, err = collResUtil.BulkWrite(ctx, resUtilUpdates, &bulkWriteOpts)
+		if err != nil {
+			if !strings.Contains(err.Error(), "E11000 duplicate key") {
+				lib.CheckFatalError(err)
+			}
+		}
 	}
 
 	if len(loadIndexes) > 0 {
 		var loadIndexesUpdates []mongo.WriteModel
 		for _, m := range loadIndexes {
+			curr := m
+			curr.MongoID = m.TenantName + "-" + strconv.Itoa(int(m.ID))
 			// loadIndexesUpdates = append(loadIndexesUpdates, mongo.NewUpdateOneModel().SetDocument(m))
-			filter := bson.D{{Key: "_id", Value: m.ID}}
+			// filter := bson.D{{Key: "_id", Value: m.ID}}
 			// filter := bson.D{{Key: "MachineId", Value: m.MachineID}, {Key: "CreatedDate", Value: m.CreatedDate}, {Key: "tenantName", Value: m.TenantName}}
-			update := bson.D{{Key: "$set", Value: m}}
-			loadIndexesUpdates = append(loadIndexesUpdates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+			// update := bson.D{{Key: "$set", Value: m}}
+			// loadIndexesUpdates = append(loadIndexesUpdates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+			loadIndexesUpdates = append(loadIndexesUpdates, mongo.NewInsertOneModel().SetDocument(curr))
+
 		}
-		resLoadIndexes, err = collLoadIndexes.BulkWrite(ctx, loadIndexesUpdates, nil)
-		lib.CheckFatalError(err)
+		resLoadIndexes, err = collLoadIndexes.BulkWrite(ctx, loadIndexesUpdates, &bulkWriteOpts)
+		if err != nil {
+			if !strings.Contains(err.Error(), "E11000 duplicate key") {
+				lib.CheckFatalError(err)
+			}
+		}
 	}
 
 	// return resMachines, resMetrics, resResUtil
