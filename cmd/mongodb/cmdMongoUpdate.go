@@ -282,7 +282,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateFrADGroups, "updateFrADGroups", "a", false, "Get AD groups and update database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateB2CUsers, "updateB2CUsers", "b", false, "Updates B2C users")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAzureResVcpuCountsCostData, "updateAzureResVcpuCountsCostData", "c", false, "Gets latest cost data and all resources, transforms and relates them, then updates database")
-	cmdMongoUpdate.Flags().BoolVarP(&updateCitrixData, "updateCitrixData", "d", false, "Fetches Citrix Cloud Policy Defs and upserts to MongoDB")
+	cmdMongoUpdate.Flags().BoolVarP(&updateCitrixData, "updateCitrixData", "d", false, "Fetches Citrix Cloud Policy Defs and Machine Metrics and upserts to MongoDB")
 	cmdMongoUpdate.Flags().BoolVarP(&updateEntraItems, "updateEntraItems", "e", false, "Gets all App Registrations from configured Azure tenants and finds expiring credentials, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateIntuneManagedDevices, "updateIntuneManagedDevices", "f", false, "Get all Intune Managed Devices, then upsert into database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAllGalleryImagesAndUpdateWithUsedByCitrix, "updateAllGalleryImagesAndUpdateWithUsedByCitrix", "g", false, "Gets all gallery images in configured tenants, then checks agains Citrix and updates in database")

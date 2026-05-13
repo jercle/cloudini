@@ -218,10 +218,10 @@ func HttpPatch(urlString string, body string, mat lib.AzureMultiAuthToken) ([]by
 	bodyReader := bytes.NewReader([]byte(body))
 
 	req, err := http.NewRequest(http.MethodPatch, urlString, bodyReader)
-	lib.CheckFatalError(err)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	// lib.CheckFatalError(err)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
@@ -229,10 +229,10 @@ func HttpPatch(urlString string, body string, mat lib.AzureMultiAuthToken) ([]by
 	// fmt.Println(body)
 
 	res, err := http.DefaultClient.Do(req)
-	lib.CheckFatalError(err)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	// lib.CheckFatalError(err)
+	if err != nil {
+		return nil, nil, err
+	}
 
 	responseBody, err := io.ReadAll(res.Body)
 
@@ -294,18 +294,18 @@ func HttpPatchErrLogToCache(urlString string, body string, mat lib.AzureMultiAut
 		return responseBody, resHeader, err
 	case 403:
 		date := time.Now().Format(time.RFC3339)
-		_, _, cachePath := lib.InitConfig(nil)
+		// _, _, cachePath := lib.InitConfig(nil)
 		// fmt.Println(res.Status, urlString)
-		f, e := os.OpenFile(cachePath+"/403.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if e != nil {
-			// log.Fatal(e)
-			log.Println(date + " - PATCH - " + res.Status + " - " + urlString + "\n")
-		}
-		defer f.Close()
-		if _, e := f.WriteString(date + " - PATCH - " + res.Status + " - " + urlString + "\n"); e != nil {
-			log.Println(e)
-			// log.Fatal(e)
-		}
+		// f, e := os.OpenFile(cachePath+"/403.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		// if e != nil {
+		// log.Fatal(e)
+		log.Println(date + " - PATCH - " + res.Status + " - " + urlString + "\n")
+		// }
+		// defer f.Close()
+		// if _, e := f.WriteString(date + " - PATCH - " + res.Status + " - " + urlString + "\n"); e != nil {
+		// log.Println(e)
+		// log.Fatal(e)
+		// }
 		return responseBody, resHeader, err
 	}
 
