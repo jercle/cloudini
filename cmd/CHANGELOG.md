@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.3.66]
+* Bugfix: Handling no documents in result for metrics/resourceUtilisation/loadIndexes
+
+## [0.3.65]
+* Adding functionality to aggregate citrix data prior to putting monitor machines into database
+
 ## [0.3.64]
 * Minor fix handling ignoring duplicate _id for Citrix Monitor metrics
 

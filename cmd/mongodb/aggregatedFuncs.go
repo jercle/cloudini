@@ -1435,6 +1435,7 @@ func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Coll
 					}
 					// lib.JsonMarshalAndPrint(m)
 					// lib.CheckFatalError(err)
+					fmt.Println(m.DnsName + " - No Load Index")
 				}
 				curr := m
 				curr.CurrentLoadIndex = &fetchedLoadIndex
@@ -1456,8 +1457,12 @@ func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Coll
 				var fetchedMetric citrix.MachineMetric
 				err := collMetrics.FindOne(context.TODO(), filter, findOptions).Decode(&fetchedMetric)
 				if err != nil {
-					lib.JsonMarshalAndPrint(m)
-					lib.CheckFatalError(err)
+					if !strings.Contains(err.Error(), "no documents in result") {
+						lib.JsonMarshalAndPrint(m)
+					}
+					fmt.Println(m.DnsName + " - No Metrics")
+					// lib.JsonMarshalAndPrint(m)
+					// lib.CheckFatalError(err)
 				}
 
 				var curr citrix.MonitorMachine
@@ -1487,6 +1492,9 @@ func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Coll
 					if !strings.Contains(err.Error(), "no documents in result") {
 						lib.JsonMarshalAndPrint(m)
 					}
+					fmt.Println(m.DnsName + " - No Resource Utilisation Data")
+					// lib.JsonMarshalAndPrint(m)
+					// lib.CheckFatalError(err)
 				}
 				// curr := m
 				// curr.ResourceUtilisation = &fetchedResUtil
