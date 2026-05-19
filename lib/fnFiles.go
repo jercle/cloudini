@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
 	"io"
@@ -139,6 +140,40 @@ func ReadFileUTF16(filename string) ([]byte, error) {
 
 	// Make a Reader that uses utf16bom:
 	unicodeReader := transform.NewReader(bytes.NewReader(raw), utf16bom)
+
+	// decode and print:
+	decoded, err := io.ReadAll(unicodeReader)
+	return decoded, err
+}
+
+func ReadFileUTF16SkipFirstLine(filePath string) ([]byte, error) {
+
+	osFile, _ := os.Open(filePath)
+	defer osFile.Close()
+
+	scanner := bufio.NewScanner(osFile)
+
+	// Skip the first line
+	if scanner.Scan() {
+		_ = scanner.Text() // Discard the first line
+	}
+
+	var file []byte
+
+	// Process the remaining lines
+	for scanner.Scan() {
+		line := scanner.Bytes()
+		file = append(file, line...)
+		// do something with line
+	}
+
+	// Make an tranformer that converts MS-Win default to UTF8:
+	win16be := unicode.UTF16(unicode.BigEndian, unicode.IgnoreBOM)
+	// Make a transformer that is like win16be, but abides by BOM:
+	utf16bom := unicode.BOMOverride(win16be.NewDecoder())
+
+	// Make a Reader that uses utf16bom:
+	unicodeReader := transform.NewReader(bytes.NewReader(file), utf16bom)
 
 	// decode and print:
 	decoded, err := io.ReadAll(unicodeReader)

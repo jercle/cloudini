@@ -14,6 +14,7 @@ import (
 var (
 	updateAllGalleryImagesAndUpdateWithUsedByCitrix bool
 	updateCitrixData                                bool
+	aggregateCitrixDataBeforeInsert                 bool
 	updateAzureResVcpuCountsCostData                bool
 	updateAzureResourceRelations                    bool
 	costDataMonth                                   string
@@ -138,7 +139,7 @@ var cmdMongoUpdate = &cobra.Command{
 				// citrixEnvs := *config.CitrixCloud.Environments
 				// envCreds := citrixEnvs[config.CitrixCloud.General.PolicyDefinitionsEnvironment]
 				// UpdateCitrixPolicySettingDefs(citrixPolicySettingDefinitions, envCreds)
-				UpdateCitrixDataNew(citrixMonitorMachinesColl, citrixMonitorMetricsColl, citrixMonitorResUtilColl, citrixMonitorLoadIndexesColl, citrixPolicySettingDefinitions)
+				UpdateCitrixDataNew(citrixMonitorMachinesColl, citrixMonitorMetricsColl, citrixMonitorResUtilColl, citrixMonitorLoadIndexesColl, citrixPolicySettingDefinitions, aggregateCitrixDataBeforeInsert)
 			})
 		}
 
@@ -283,6 +284,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateB2CUsers, "updateB2CUsers", "b", false, "Updates B2C users")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAzureResVcpuCountsCostData, "updateAzureResVcpuCountsCostData", "c", false, "Gets latest cost data and all resources, transforms and relates them, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateCitrixData, "updateCitrixData", "d", false, "Fetches Citrix Cloud Policy Defs and Machine Metrics and upserts to MongoDB")
+	cmdMongoUpdate.Flags().BoolVar(&aggregateCitrixDataBeforeInsert, "aggregateCitrixData", false, "Used with --updateCitrixData, but will aggregate machine and metric data prior to database insert")
 	cmdMongoUpdate.Flags().BoolVarP(&updateEntraItems, "updateEntraItems", "e", false, "Gets all App Registrations from configured Azure tenants and finds expiring credentials, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateIntuneManagedDevices, "updateIntuneManagedDevices", "f", false, "Get all Intune Managed Devices, then upsert into database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAllGalleryImagesAndUpdateWithUsedByCitrix, "updateAllGalleryImagesAndUpdateWithUsedByCitrix", "g", false, "Gets all gallery images in configured tenants, then checks agains Citrix and updates in database")

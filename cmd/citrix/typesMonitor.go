@@ -128,7 +128,7 @@ func (s CurrentPowerState) String() string {
 	case VirtualMachineNotFound:
 		return "VirtualMachineNotFound"
 	default:
-		return "Unknown"
+		return "DefaultUnknown"
 	}
 }
 
@@ -139,6 +139,41 @@ func (s CurrentPowerState) MarshalJSON() ([]byte, error) {
 func (s CurrentPowerState) MarshalBSONValue() (bsontype.Type, []byte, error) {
 	return bson.MarshalValue(s.String())
 }
+
+// func (s *CurrentPowerState) UnmarshalJSON(data []byte) error {
+// 	var name string
+// 	if err := json.Unmarshal(data, &name); err != nil {
+// 		return err
+// 	}
+// 	switch name {
+// 	case "Unknown":
+// 		*s = PowerStateUnknown
+// 	case "Unavailable":
+// 		*s = Unavailable
+// 	case "Off":
+// 		*s = Off
+// 	case "On":
+// 		*s = On
+// 	case "Suspended":
+// 		*s = Suspended
+// 	case "TurningOn":
+// 		*s = TurningOn
+// 	case "TurningOff":
+// 		*s = TurningOff
+// 	case "Suspending":
+// 		*s = Suspending
+// 	case "Resuming":
+// 		*s = Resuming
+// 	case "Unmanaged":
+// 		*s = Unmanaged
+// 	case "NotSupported":
+// 		*s = NotSupported
+// 	case "VirtualMachineNotFound":
+// 		*s = VirtualMachineNotFound
+// 	}
+
+// 	return nil
+// }
 
 type CurrentPowerState int
 

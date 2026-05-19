@@ -21,6 +21,7 @@ import (
 	"github.com/jercle/cloudini/lib"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(imageGalleryImagesColl *mongo.Collection, machineCatalogsColl *mongo.Collection, tokenReq lib.AllTenantTokens) {
@@ -1013,144 +1014,151 @@ func UpdateFrADGroups(coll *mongo.Collection) {
 //
 //
 
-func UpdateCitrixData(collMachines *mongo.Collection, collPolicySettingDefs *mongo.Collection) {
+// func UpdateCitrixData(collMachines *mongo.Collection, collPolicySettingDefs *mongo.Collection) {
+// 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+// 	config := lib.GetCldConfig(nil)
+
+// 	citrixEnvs := *config.CitrixCloud.Environments
+
+// 	// fmt.Println("Fetching Citrix Policy Definitions...")
+// 	// s.Start()
+// 	// tokenData, err := citrix.GetToken(citrixConf, nil)
+// 	// lib.CheckFatalError(err)
+// 	// settingDefs := citrix.GetPolicySettingDefinitions(citrixConf, tokenData)
+// 	// s.Stop()
+// 	// fmt.Println("Fetching Citrix Policy Definitions in database...")
+// 	// s.Start()
+// 	// UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
+// 	// s.Stop()
+
+// 	var (
+// 		allMachines    []citrix.MonitorMachine
+// 		allMetrics     []citrix.MachineMetric
+// 		allResUtil     []citrix.MachineResourceUtilisation
+// 		allLoadIndexes []citrix.MachineLoadIndex
+// 		wg             sync.WaitGroup
+// 		mut            sync.Mutex
+// 	)
+
+// 	fmt.Println("Fetching Citrix Monitor data...")
+// 	s.Start()
+
+// 	for tName, tConf := range citrixEnvs {
+// 		wg.Go(func() {
+// 			tokenData, err := citrix.GetToken(tConf, nil)
+// 			lib.CheckFatalError(err)
+// 			machines := citrix.GetAllMonitorMachines(tConf, tName, tokenData)
+// 			mut.Lock()
+// 			allMachines = append(allMachines, machines...)
+// 			mut.Unlock()
+
+// 			resUtil := citrix.GetAllMachineResourceUtilisation(tConf, tName, tokenData)
+// 			mut.Lock()
+// 			allResUtil = append(allResUtil, resUtil...)
+// 			mut.Unlock()
+
+// 			loadIndexes := citrix.GetAllMachineLoadIndexes(tConf, tName, tokenData)
+// 			mut.Lock()
+// 			allLoadIndexes = append(allLoadIndexes, loadIndexes...)
+// 			mut.Unlock()
+
+// 			metrics := citrix.GetAllMachineMetrics(tConf, tName, tokenData)
+// 			mut.Lock()
+// 			allMetrics = append(allMetrics, metrics...)
+// 			mut.Unlock()
+// 		})
+// 	}
+// 	wg.Wait()
+
+// 	fmt.Println("allMetrics")
+// 	fmt.Println(len(allMetrics))
+// 	fmt.Println("allResUtil")
+// 	fmt.Println(len(allResUtil))
+// 	fmt.Println("allLoadIndexes")
+// 	fmt.Println(len(allLoadIndexes))
+
+// 	machinesById := make(map[string]citrix.MonitorMachine)
+
+// 	for _, m := range allMachines {
+// 		if m.ID == "" {
+// 			lib.JsonMarshalAndPrint(m)
+// 			os.Exit(0)
+// 		}
+// 		if data, ok := machinesById[m.ID]; ok {
+// 			// currVersion := imagesById[imageId].ImageVersions[data.OutputImgVersion]
+// 			// currVersion.AzDoBuildData = data
+// 			// imagesById[imageId].ImageVersions[data.OutputImgVersion] = currVersion
+// 			lib.JsonMarshalAndPrint(m)
+// 			mStr, _ := json.MarshalIndent(data, "", "  ")
+// 			os.WriteFile("main-ctx-monitor-existing.json", mStr, 0644)
+// 			newStr, _ := json.MarshalIndent(m, "", "  ")
+// 			os.WriteFile("main-ctx-monitor-new.json", newStr, 0644)
+// 			os.Exit(0)
+// 		} else {
+// 			curr := m
+// 			curr.LastDbSync = time.Now().Local()
+// 			machinesById[m.ID] = curr
+// 		}
+// 		// if machinesById[m.ID] != nil {
+
+// 		// }
+// 		// machinesById[m.ID] = m
+// 	}
+
+// 	// for _, m := range allMetrics {
+// 	// 	if machinesById[m.MachineID].Metrics == nil {
+// 	// 		curr := machinesById[m.MachineID]
+// 	// 		curr.Metrics = &m
+// 	// 		machinesById[m.MachineID] = curr
+// 	// 	} else if m.CollectedDate.After(machinesById[m.MachineID].Metrics.CollectedDate) {
+// 	// 		if m.MachineID == "" {
+// 	// 			lib.JsonMarshalAndPrint(m)
+// 	// 			os.Exit(0)
+// 	// 		}
+// 	// 		curr := machinesById[m.MachineID]
+// 	// 		curr.Metrics = &m
+// 	// 		machinesById[m.MachineID] = curr
+// 	// 	}
+// 	// }
+
+// 	// for _, ru := range allResUtil {
+// 	// 	if machinesById[ru.MachineID].ResourceUtilisation == nil {
+// 	// 		curr := machinesById[ru.MachineID]
+// 	// 		curr.ResourceUtilisation = &ru
+// 	// 		machinesById[ru.MachineID] = curr
+// 	// 	} else if ru.CollectedDate.After(machinesById[ru.MachineID].ResourceUtilisation.CollectedDate) {
+// 	// 		if ru.MachineID == "" {
+// 	// 			lib.JsonMarshalAndPrint(ru)
+// 	// 			os.Exit(0)
+// 	// 		}
+// 	// 		curr := machinesById[ru.MachineID]
+// 	// 		curr.ResourceUtilisation = &ru
+// 	// 		machinesById[ru.MachineID] = curr
+// 	// 	}
+// 	// }
+
+// 	// var processedMachines []citrix.MonitorMachine
+
+// 	s.Stop()
+// 	fmt.Println("Upserting Citrix Monitor data to database...")
+// 	// s.Start()
+// 	// UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
+// 	// coll.Drop(context.TODO())
+// 	// results := InsertCitrixMonitorData(machinesById, collMachines)
+// 	// DeleteAllDocumentsInCollection(imageGalleryImagesColl)
+// 	// UpsertImageGalleryImages(galleryImagesWithVersions, imageGalleryImagesColl)
+// 	// s.Stop()
+// 	// lib.JsonMarshalAndPrint(results)
+// }
+
+func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Collection, collResUtil *mongo.Collection, collLoadIndexes *mongo.Collection, collPolicySettingDefs *mongo.Collection, aggregateCitrixDataBeforeInsert bool) {
 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 
 	config := lib.GetCldConfig(nil)
 
 	citrixEnvs := *config.CitrixCloud.Environments
-
-	// fmt.Println("Fetching Citrix Policy Definitions...")
-	// s.Start()
-	// tokenData, err := citrix.GetToken(citrixConf, nil)
-	// lib.CheckFatalError(err)
-	// settingDefs := citrix.GetPolicySettingDefinitions(citrixConf, tokenData)
-	// s.Stop()
-	// fmt.Println("Fetching Citrix Policy Definitions in database...")
-	// s.Start()
-	// UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
-	// s.Stop()
-
-	var (
-		allMachines []citrix.MonitorMachine
-		allMetrics  []citrix.MachineMetric
-		allResUtil  []citrix.MachineResourceUtilisation
-		// allLoadIndexes []citrix.MachineLoadIndex
-		wg  sync.WaitGroup
-		mut sync.Mutex
-	)
-
-	fmt.Println("Fetching Citrix Monitor data...")
-	s.Start()
-
-	for tName, tConf := range citrixEnvs {
-		wg.Go(func() {
-			tokenData, err := citrix.GetToken(tConf, nil)
-			lib.CheckFatalError(err)
-			machines := citrix.GetAllMonitorMachines(tConf, tName, tokenData)
-			mut.Lock()
-			allMachines = append(allMachines, machines...)
-			mut.Unlock()
-
-			resUtil := citrix.GetAllMachineResourceUtilisation(tConf, tName, tokenData)
-			mut.Lock()
-			allResUtil = append(allResUtil, resUtil...)
-			mut.Unlock()
-
-			// loadIndexes := citrix.GetAllMachineLoadIndexes(tConf, tokenData)
-			// mut.Lock()
-			// allLoadIndexes = append(allLoadIndexes, loadIndexes...)
-			// mut.Unlock()
-
-			metrics := citrix.GetAllMachineMetrics(tConf, tName, tokenData)
-			mut.Lock()
-			allMetrics = append(allMetrics, metrics...)
-			mut.Unlock()
-		})
-	}
-	wg.Wait()
-
-	machinesById := make(map[string]citrix.MonitorMachine)
-
-	for _, m := range allMachines {
-		if m.ID == "" {
-			lib.JsonMarshalAndPrint(m)
-			os.Exit(0)
-		}
-		if data, ok := machinesById[m.ID]; ok {
-			// currVersion := imagesById[imageId].ImageVersions[data.OutputImgVersion]
-			// currVersion.AzDoBuildData = data
-			// imagesById[imageId].ImageVersions[data.OutputImgVersion] = currVersion
-			lib.JsonMarshalAndPrint(m)
-			mStr, _ := json.MarshalIndent(data, "", "  ")
-			os.WriteFile("main-ctx-monitor-existing.json", mStr, 0644)
-			newStr, _ := json.MarshalIndent(m, "", "  ")
-			os.WriteFile("main-ctx-monitor-new.json", newStr, 0644)
-			os.Exit(0)
-		} else {
-			curr := m
-			curr.LastDbSync = time.Now().Local()
-			machinesById[m.ID] = curr
-		}
-		// if machinesById[m.ID] != nil {
-
-		// }
-		// machinesById[m.ID] = m
-	}
-
-	// for _, m := range allMetrics {
-	// 	if machinesById[m.MachineID].Metrics == nil {
-	// 		curr := machinesById[m.MachineID]
-	// 		curr.Metrics = &m
-	// 		machinesById[m.MachineID] = curr
-	// 	} else if m.CollectedDate.After(machinesById[m.MachineID].Metrics.CollectedDate) {
-	// 		if m.MachineID == "" {
-	// 			lib.JsonMarshalAndPrint(m)
-	// 			os.Exit(0)
-	// 		}
-	// 		curr := machinesById[m.MachineID]
-	// 		curr.Metrics = &m
-	// 		machinesById[m.MachineID] = curr
-	// 	}
-	// }
-
-	// for _, ru := range allResUtil {
-	// 	if machinesById[ru.MachineID].ResourceUtilisation == nil {
-	// 		curr := machinesById[ru.MachineID]
-	// 		curr.ResourceUtilisation = &ru
-	// 		machinesById[ru.MachineID] = curr
-	// 	} else if ru.CollectedDate.After(machinesById[ru.MachineID].ResourceUtilisation.CollectedDate) {
-	// 		if ru.MachineID == "" {
-	// 			lib.JsonMarshalAndPrint(ru)
-	// 			os.Exit(0)
-	// 		}
-	// 		curr := machinesById[ru.MachineID]
-	// 		curr.ResourceUtilisation = &ru
-	// 		machinesById[ru.MachineID] = curr
-	// 	}
-	// }
-
-	// var processedMachines []citrix.MonitorMachine
-
-	s.Stop()
-	fmt.Println("Upserting Citrix Monitor data to database...")
-	// s.Start()
-	// UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
-	// coll.Drop(context.TODO())
-	// results := InsertCitrixMonitorData(machinesById, collMachines)
-	// DeleteAllDocumentsInCollection(imageGalleryImagesColl)
-	// UpsertImageGalleryImages(galleryImagesWithVersions, imageGalleryImagesColl)
-	// s.Stop()
-	// lib.JsonMarshalAndPrint(results)
-}
-
-func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Collection, collResUtil *mongo.Collection, collLoadIndexes *mongo.Collection, collPolicySettingDefs *mongo.Collection) {
-	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
-
-	config := lib.GetCldConfig(nil)
-
-	citrixEnvs := *config.CitrixCloud.Environments
-
+	_ = citrixEnvs
 	// fmt.Println("Fetching Citrix Policy Definitions...")
 	// s.Start()
 	// tokenData, err := citrix.GetToken(citrixConf, nil)
@@ -1170,6 +1178,8 @@ func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Coll
 		wg             sync.WaitGroup
 		mut            sync.Mutex
 	)
+	_ = wg
+	_ = mut
 
 	fmt.Println("Fetching Citrix Monitor data...")
 	// s.Start()
@@ -1203,76 +1213,300 @@ func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Coll
 	}
 	wg.Wait()
 
+	// machinesJson, _ := json.Marshal(allMachines)
+	// os.WriteFile("dev/main-citrix-allMachines.json", machinesJson, 0644)
+	// MetricsJson, _ := json.Marshal(allMetrics)
+	// os.WriteFile("dev/main-citrix-allMetrics.json", MetricsJson, 0644)
+	// ResUtilJson, _ := json.Marshal(allResUtil)
+	// os.WriteFile("dev/main-citrix-allResUtil.json", ResUtilJson, 0644)
+	// LoadIndexesJson, _ := json.Marshal(allLoadIndexes)
+	// os.WriteFile("dev/main-citrix-allLoadIndexes.json", LoadIndexesJson, 0644)
+
+	// MachinesFile, err := os.ReadFile("dev/main-citrix-allMachines.json")
+	// lib.CheckFatalError(err)
+	// json.Unmarshal(MachinesFile, &allMachines)
+	// MetricsFile, err := os.ReadFile("dev/main-citrix-allMetrics.json")
+	// lib.CheckFatalError(err)
+	// json.Unmarshal(MetricsFile, &allMetrics)
+	// ResUtilFile, err := os.ReadFile("dev/main-citrix-allResUtil.json")
+	// lib.CheckFatalError(err)
+	// json.Unmarshal(ResUtilFile, &allResUtil)
+	// LoadIndexesFile, err := os.ReadFile("dev/main-citrix-allLoadIndexes.json")
+	// lib.CheckFatalError(err)
+	// json.Unmarshal(LoadIndexesFile, &allLoadIndexes)
+	// fmt.Println(len(allMachines))
+	// fmt.Println(len(allMetrics))
+	// fmt.Println(len(allResUtil))
+	// fmt.Println(len(allLoadIndexes))
+	// os.Exit(0)
+
 	machinesById := make(map[string]citrix.MonitorMachine)
 
-	for _, m := range allMachines {
-		if m.ID == "" {
-			lib.JsonMarshalAndPrint(m)
-			os.Exit(0)
+	if !aggregateCitrixDataBeforeInsert {
+		for _, m := range allMachines {
+			if m.ID == "" {
+				lib.JsonMarshalAndPrint(m)
+				os.Exit(0)
+			}
+			if data, ok := machinesById[m.ID]; ok {
+				lib.JsonMarshalAndPrint(m)
+				mStr, _ := json.MarshalIndent(data, "", "  ")
+				os.WriteFile("main-ctx-monitor-existing.json", mStr, 0644)
+				newStr, _ := json.MarshalIndent(m, "", "  ")
+				os.WriteFile("main-ctx-monitor-new.json", newStr, 0644)
+				os.Exit(0)
+			} else {
+				curr := m
+				curr.LastDbSync = time.Now().Local()
+				machinesById[m.ID] = curr
+			}
 		}
-		if data, ok := machinesById[m.ID]; ok {
-			// currVersion := imagesById[imageId].ImageVersions[data.OutputImgVersion]
-			// currVersion.AzDoBuildData = data
-			// imagesById[imageId].ImageVersions[data.OutputImgVersion] = currVersion
-			lib.JsonMarshalAndPrint(m)
-			mStr, _ := json.MarshalIndent(data, "", "  ")
-			os.WriteFile("main-ctx-monitor-existing.json", mStr, 0644)
-			newStr, _ := json.MarshalIndent(m, "", "  ")
-			os.WriteFile("main-ctx-monitor-new.json", newStr, 0644)
-			os.Exit(0)
-		} else {
-			curr := m
-			curr.LastDbSync = time.Now().Local()
-			machinesById[m.ID] = curr
-		}
-		// if machinesById[m.ID] != nil {
+	} else {
 
-		// }
-		// machinesById[m.ID] = m
+		// fmt.Println("aggregateCitrixData")
+		machinesMissingLoadIndex := make(map[string]citrix.MonitorMachine)
+		machinesMissingLoadIndexNoCurrLoadIndexId := make(map[string]citrix.MonitorMachine)
+		machinesMissingMetrics := make(map[string]citrix.MonitorMachine)
+		machinesMissingResUtil := make(map[string]citrix.MonitorMachine)
+
+		metricsByTenantAndMachineId := make(map[string]citrix.MachineMetric)
+		for _, m := range allMetrics {
+			if _, ok := metricsByTenantAndMachineId[m.TenantName+"-"+m.MachineID]; ok {
+				// fmt.Println(`if _, ok := metricsByTenantAndMachineId[m.TenantName+"-"+m.MachineID]; ok {`)
+				break
+			} else {
+				metricsByTenantAndMachineId[m.TenantName+"-"+m.MachineID] = m
+			}
+		}
+		resUtilByTenantAndMachineId := make(map[string]citrix.MachineResourceUtilisation)
+		for _, m := range allResUtil {
+			if _, ok := resUtilByTenantAndMachineId[m.TenantName+"-"+m.MachineID]; ok {
+				break
+			} else {
+				resUtilByTenantAndMachineId[m.TenantName+"-"+m.MachineID] = m
+			}
+		}
+
+		loadIndexesByTenantAndMachineId := make(map[string]citrix.MachineLoadIndex)
+		loadIndexesById := make(map[float64]citrix.MachineLoadIndex)
+		for _, m := range allLoadIndexes {
+			if _, ok := loadIndexesByTenantAndMachineId[m.TenantName+"-"+m.MachineID]; ok {
+				break
+			} else {
+				loadIndexesByTenantAndMachineId[m.TenantName+"-"+m.MachineID] = m
+				loadIndexesById[m.ID] = m
+			}
+		}
+		// lib.JsonMarshalAndPrint(loadIndexesByTenantAndMachineId)
+
+		for _, m := range allMachines {
+
+			if m.ID == "" {
+				lib.JsonMarshalAndPrint(m)
+				os.Exit(0)
+			}
+			if data, ok := machinesById[m.ID]; ok {
+				// fmt.Println("if data, ok := machinesById[m.ID]; ok {")
+				lib.JsonMarshalAndPrint(m)
+				mStr, _ := json.MarshalIndent(data, "", "  ")
+				os.WriteFile("main-ctx-monitor-existing.json", mStr, 0644)
+				newStr, _ := json.MarshalIndent(m, "", "  ")
+				os.WriteFile("main-ctx-monitor-new.json", newStr, 0644)
+				os.Exit(0)
+			} else {
+				// fmt.Println("if data, ok := machinesById[m.ID]; ok { ELSE")
+				curr := m
+				curr.LastDbSync = time.Now().Local()
+				machinesById[m.ID] = curr
+				// lib.JsonMarshalAndPrint(curr)
+				if m.CurrentPowerState.String() != "On" || m.LifecycleState.String() != "Active" {
+					// fmt.Println(`if m.CurrentPowerState.String() != "On" || m.LifecycleState.String() != "Active" {`)
+					// fmt.Println(m.CurrentPowerState.String())
+					// fmt.Println(m.LifecycleState.String())
+					continue
+				}
+
+				// lib.JsonMarshalAndPrint(m)
+				// var matchedMetric citrix.MachineMetric
+				// var matchedResUtil citrix.MachineResourceUtilisation
+				// var matchedLoadIndex citrix.MachineLoadIndex
+				if m.CurrentLoadIndex != nil {
+					// fmt.Println("if m.CurrentLoadIndex != nil {")
+					if data, ok := loadIndexesById[m.CurrentLoadIndexID]; ok {
+						// fmt.Println("if data, ok := loadIndexesById[m.CurrentLoadIndexID]; ok {")
+						curr.CurrentLoadIndex = &data
+						// } else if data, ok := loadIndexesByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok {
+						// 	curr.CurrentLoadIndex = &data
+					} else {
+						// fmt.Println("if data, ok := loadIndexesById[m.CurrentLoadIndexID]; ok { ELSE")
+						if m.CurrentLoadIndexID == 0 {
+							// fmt.Println("if m.CurrentLoadIndexID == 0 {")
+							if data, ok := loadIndexesByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok {
+								// fmt.Println(`if data, ok := loadIndexesByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok {`)
+								curr.CurrentLoadIndex = &data
+								// } else if data, ok := loadIndexesByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok {
+								// 	curr.CurrentLoadIndex = &data
+							} else {
+								// fmt.Println(`if data, ok := loadIndexesByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok { ELSE`)
+								machinesMissingLoadIndexNoCurrLoadIndexId[m.TenantName+"-"+m.ID] = m
+							}
+						} else {
+							// fmt.Println("if m.CurrentLoadIndexID == 0 { ELSE")
+							machinesMissingLoadIndex[m.ID] = m
+						}
+					}
+				} else {
+					// fmt.Println("if m.CurrentLoadIndex != nil { ELSE")
+					if m.CurrentLoadIndexID == 0 {
+						// fmt.Println("if m.CurrentLoadIndexID == 0 {")
+						if data, ok := loadIndexesByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok {
+							// fmt.Println(`if data, ok := loadIndexesByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok {`)
+							curr.CurrentLoadIndex = &data
+							// } else if data, ok := loadIndexesByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok {
+							// 	curr.CurrentLoadIndex = &data
+						} else {
+							// fmt.Println(`if data, ok := loadIndexesByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok { ELSE`)
+							machinesMissingLoadIndexNoCurrLoadIndexId[m.TenantName+"-"+m.ID] = m
+						}
+					} else {
+						// fmt.Println("if m.CurrentLoadIndexID == 0 { ELSE")
+						machinesMissingLoadIndex[m.ID] = m
+					}
+				}
+
+				if data, ok := metricsByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok {
+					// fmt.Println(`if data, ok := metricsByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok {`)
+					curr.Metrics = &data
+				} else {
+					// fmt.Println(`if data, ok := metricsByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok { ELSE`)
+					machinesMissingMetrics[m.ID] = m
+				}
+
+				if data, ok := resUtilByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok {
+					// fmt.Println(`if data, ok := resUtilByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok {`)
+					curr.ResourceUtilisation = &data
+				} else {
+					// fmt.Println(`if data, ok := resUtilByTenantAndMachineId[m.TenantName+"-"+m.ID]; ok { ELSE`)
+					machinesMissingResUtil[m.ID] = m
+				}
+
+			}
+		}
+
+		if len(machinesMissingLoadIndex) > 0 {
+			// fmt.Println("if len(machinesMissingLoadIndex) > 0 {")
+			for _, m := range machinesMissingLoadIndex {
+				// fmt.Println("for _, m := range machinesMissingLoadIndex {")
+				filter := bson.D{
+					{Key: "_id", Value: tenantName + "-" + strconv.Itoa(int(m.CurrentLoadIndexID))},
+				}
+				var fetchedLoadIndex citrix.MachineLoadIndex
+				err := collLoadIndexes.FindOne(context.TODO(), filter, nil).Decode(&fetchedLoadIndex)
+				if err != nil {
+					// fmt.Println("if err != nil {")
+					if strings.Contains(err.Error(), "no documents in result") {
+						machinesMissingLoadIndexNoCurrLoadIndexId[m.TenantName+"-"+m.ID] = m
+						// fmt.Println(m.ID)
+					} else {
+						lib.CheckFatalError(err)
+					}
+				} else {
+					curr := m
+					curr.CurrentLoadIndex = &fetchedLoadIndex
+					// lib.JsonMarshalAndPrint(fetchedLoadIndex)
+					machinesById[m.ID] = curr
+				}
+			}
+		}
+		if len(machinesMissingLoadIndexNoCurrLoadIndexId) > 0 {
+			// fmt.Println("if len(machinesMissingLoadIndexNoCurrLoadIndexId) > 0 {")
+			for _, m := range machinesMissingLoadIndexNoCurrLoadIndexId {
+				filter := bson.D{
+					// {Key: "_id", Value: m.TenantName + "-" + strconv.Itoa(int(m.CurrentLoadIndexID))},
+					{Key: "MachineId", Value: m.ID},
+					{Key: "tenantName", Value: m.TenantName},
+				}
+				findOptions := options.FindOne().SetSort(bson.D{{Key: "CreatedDate", Value: -1}})
+				var fetchedLoadIndex citrix.MachineLoadIndex
+				err := collLoadIndexes.FindOne(context.TODO(), filter, findOptions).Decode(&fetchedLoadIndex)
+				if err != nil {
+					if !strings.Contains(err.Error(), "no documents in result") {
+						lib.JsonMarshalAndPrint(m)
+					}
+					// lib.JsonMarshalAndPrint(m)
+					// lib.CheckFatalError(err)
+				}
+				curr := m
+				curr.CurrentLoadIndex = &fetchedLoadIndex
+				// lib.JsonMarshalAndPrint(fetchedLoadIndex)
+				machinesById[m.ID] = curr
+			}
+		}
+
+		if len(machinesMissingMetrics) > 0 {
+			// fmt.Println("if len(machinesMissingMetrics) > 0 {")
+			for _, m := range machinesMissingMetrics {
+
+				filter := bson.D{
+					{Key: "MachineId", Value: m.ID},
+					{Key: "tenantName", Value: m.TenantName},
+				}
+				findOptions := options.FindOne().SetSort(bson.D{{Key: "CollectedDate", Value: -1}})
+
+				var fetchedMetric citrix.MachineMetric
+				err := collMetrics.FindOne(context.TODO(), filter, findOptions).Decode(&fetchedMetric)
+				if err != nil {
+					lib.JsonMarshalAndPrint(m)
+					lib.CheckFatalError(err)
+				}
+
+				var curr citrix.MonitorMachine
+				if data, ok := machinesById[m.ID]; ok {
+					curr = data
+				} else {
+					curr = m
+				}
+				curr.Metrics = &fetchedMetric
+				machinesById[m.ID] = curr
+			}
+		}
+
+		if len(machinesMissingResUtil) > 0 {
+			// fmt.Println("if len(machinesMissingResUtil) > 0 {")
+			for _, m := range machinesMissingResUtil {
+
+				filter := bson.D{
+					{Key: "MachineId", Value: m.ID},
+					{Key: "tenantName", Value: m.TenantName},
+				}
+				findOptions := options.FindOne().SetSort(bson.D{{Key: "CollectedDate", Value: -1}})
+
+				var fetchedResUtil citrix.MachineResourceUtilisation
+				err := collResUtil.FindOne(context.TODO(), filter, findOptions).Decode(&fetchedResUtil)
+				if err != nil {
+					if !strings.Contains(err.Error(), "no documents in result") {
+						lib.JsonMarshalAndPrint(m)
+					}
+				}
+				// curr := m
+				// curr.ResourceUtilisation = &fetchedResUtil
+				// machinesById[m.ID] = curr
+				var curr citrix.MonitorMachine
+				if data, ok := machinesById[m.ID]; ok {
+					curr = data
+				} else {
+					curr = m
+				}
+				curr.ResourceUtilisation = &fetchedResUtil
+				machinesById[m.ID] = curr
+			}
+		}
 	}
 
-	// for _, m := range allMetrics {
-	// 	if machinesById[m.MachineID].Metrics == nil {
-	// 		curr := machinesById[m.MachineID]
-	// 		curr.Metrics = &m
-	// 		machinesById[m.MachineID] = curr
-	// 	} else if m.CollectedDate.After(machinesById[m.MachineID].Metrics.CollectedDate) {
-	// 		if m.MachineID == "" {
-	// 			lib.JsonMarshalAndPrint(m)
-	// 			os.Exit(0)
-	// 		}
-	// 		curr := machinesById[m.MachineID]
-	// 		curr.Metrics = &m
-	// 		machinesById[m.MachineID] = curr
-	// 	}
-	// }
-
-	// for _, ru := range allResUtil {
-	// 	if machinesById[ru.MachineID].ResourceUtilisation == nil {
-	// 		curr := machinesById[ru.MachineID]
-	// 		curr.ResourceUtilisation = &ru
-	// 		machinesById[ru.MachineID] = curr
-	// 	} else if ru.CollectedDate.After(machinesById[ru.MachineID].ResourceUtilisation.CollectedDate) {
-	// 		if ru.MachineID == "" {
-	// 			lib.JsonMarshalAndPrint(ru)
-	// 			os.Exit(0)
-	// 		}
-	// 		curr := machinesById[ru.MachineID]
-	// 		curr.ResourceUtilisation = &ru
-	// 		machinesById[ru.MachineID] = curr
-	// 	}
-	// }
-
-	// var processedMachines []citrix.MonitorMachine
-
-	// s.Stop()
 	fmt.Println("Upserting Citrix Monitor data to database...")
 	s.Start()
-	// UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
-	// coll.Drop(context.TODO())
+
 	resMachines, resMetrics, resResUtil, resLoadIndexes := InsertCitrixMonitorData(machinesById, allMetrics, allResUtil, allLoadIndexes, collMachines, collMetrics, collResUtil, collLoadIndexes)
-	// DeleteAllDocumentsInCollection(imageGalleryImagesColl)
-	// UpsertImageGalleryImages(galleryImagesWithVersions, imageGalleryImagesColl)
 	s.Stop()
 	lib.JsonMarshalAndPrint(resMachines)
 	lib.JsonMarshalAndPrint(resMetrics)
