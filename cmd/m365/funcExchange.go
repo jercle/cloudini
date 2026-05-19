@@ -12,10 +12,19 @@ import (
 )
 
 func GetMailboxStorageUsed(token lib.AzureMultiAuthToken) (mbDetails []MailboxUsageDetail, err error) {
-	urlBase := "https://graph.microsoft.com/beta/"
+	urlBase := "https://graph.microsoft.com/v1.0/"
+	// urlString := urlBase + url.QueryEscape("reports/microsoft.graph.getMailboxUsageDetail(period='D7')")
 	urlString := urlBase + "/reports/getMailboxUsageDetail(period='D7')"
+
+	// https://graph.microsoft.com/v1.0/reports/getMailboxUsageDetail(period=
+	// https://graph.microsoft.com/v1.0/reports/getMailboxUsageDetail(period='D7')
+
 	res, err := azure.HttpGet(urlString, token)
-	lib.CheckFatalError(err)
+	if err != nil {
+		// fmt.Println(token.TenantName)
+		// fmt.Println(urlString)
+		lib.CheckFatalError(err)
+	}
 
 	bytesReader := bytes.NewReader(res)
 	var csvData []MailboxUsageDetail

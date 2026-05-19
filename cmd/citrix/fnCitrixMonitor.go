@@ -22,7 +22,7 @@ func GetAllMachineMetrics(creds lib.CitrixCloudAccountConfig, tenantName string,
 	// formattedDate := date.Format("2006-01-02T15:04:05.000Z")
 	// formattedDate := time.Now().Add(-11 * time.Hour).Format("2006-01-02T15:04:05.000Z")
 
-	formattedDate := time.Now().Add(-630 * time.Minute).Format("2006-01-02T15:04:05.000Z")
+	formattedDate := time.Now().Add(-730 * time.Minute).Format("2006-01-02T15:04:05.000Z")
 	filterString := "$filter=CollectedDate gt " + formattedDate + "&$orderby=CollectedDate desc"
 	// filterString := "$orderby=CollectedDate desc"
 	urlString := "https://api.cloud.com/monitorodata/MachineMetric?" + url.PathEscape(filterString)
@@ -213,7 +213,11 @@ func GetAllMonitorMachines(creds lib.CitrixCloudAccountConfig, tenantName string
 
 	var resData MonitorMachinesResponse
 	err = json.Unmarshal(res, &resData)
-	lib.CheckFatalError(err)
+	// lib.CheckFatalError(err)
+	if err != nil {
+		lib.JsonMarshalAndPrint(resData)
+		lib.CheckFatalError(err)
+	}
 
 	// machines := resData.Value
 

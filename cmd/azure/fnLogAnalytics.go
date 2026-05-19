@@ -366,7 +366,8 @@ func GetLogAnalyticsWorkbookQuery(resourceId string, token *lib.AzureMultiAuthTo
 	lib.CheckFatalError(err)
 	query := serializedData.Items[1].Content.Query
 	// jsonStr1, _ := json.Marshal(serializedData)
-	// os.WriteFile("/home/jercle/git/cld/cmd/azure/fnLogAnalytics.json", jsonStr1, 0644)
+	// os.WriteFile("/home/jercle/git/cld/cmd/azure/fnLogAnalytics-serializedData.json", jsonStr1, 0644)
+	// os.WriteFile("/home/jercle/git/cld/cmd/azure/fnLogAnalytics-query.json", []byte(query), 0644)
 	// lib.JsonMarshalAndPrint(serializedData)
 	// for i, query := range serializedData.Items {
 	// 	fmt.Println(strconv.Itoa(i), query.Name)
