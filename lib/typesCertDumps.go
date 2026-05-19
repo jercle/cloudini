@@ -20,6 +20,7 @@ type ServerCertFile struct {
 //
 
 type CertAuthorityCertInfo struct {
+	ExistsInEnvironment            bool                              `json:"existsInEnvironment,omitempty,omitzero" bson:"existsInEnvironment,omitempty,omitzero"`
 	ID                             string                            `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
 	LastDBSync                     *time.Time                        `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
 	LastServerSync                 time.Time                         `json:"lastServerSync,omitempty,omitzero" bson:"lastServerSync,omitempty,omitzero"`
@@ -313,6 +314,7 @@ type ServerCertInfoRaw struct {
 //
 
 type FormattedServerCertInfo struct {
+	ExistsInEnvironment   bool                              `json:"existsInEnvironment,omitempty,omitzero" bson:"existsInEnvironment,omitempty,omitzero"`
 	IssuerName            string                            `json:"issuerName,omitempty,omitzero" bson:"issuerName,omitempty,omitzero"`
 	IssuerRDN             string                            `json:"issuerRDN,omitempty,omitzero" bson:"issuerRDN,omitempty,omitzero"`
 	DNSNames              []string                          `json:"dnsNames,omitempty,omitzero" bson:"dnsNames,omitempty,omitzero"`
@@ -340,7 +342,7 @@ type FormattedServerCertInfo struct {
 	Thumbprint            string                            `json:"thumbprint,omitempty,omitzero" bson:"thumbprint,omitempty,omitzero"`
 	ParentPath            *string                           `json:"parentPath,omitempty,omitzero" bson:"parentPath,omitempty,omitzero"`
 	RelatedCertAuthData   *CertAuthorityCertInfo            `json:"relatedCertAuthData,omitempty,omitzero" bson:"relatedCertAuthData,omitempty,omitzero"`
-	Id                    string                            `json:"id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
+	ID                    string                            `json:"id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
 	LastDBSync            *time.Time                        `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
 	ServerSyncTime        time.Time                         `json:"serverSyncTime,omitempty,omitzero" bson:"serverSyncTime,omitempty,omitzero"`
 	PulledFromServer      *string                           `json:"pulledFromServer,omitempty,omitzero" bson:"pulledFromServer,omitempty,omitzero"`

@@ -1143,6 +1143,7 @@ func UpsertServerCertificatesNew(serverCertInfo []lib.FormattedServerCertInfo, c
 		return nil
 	}
 	ctx := context.TODO()
+	ctx2 := context.TODO()
 
 	var updates []mongo.WriteModel
 
@@ -1153,32 +1154,28 @@ func UpsertServerCertificatesNew(serverCertInfo []lib.FormattedServerCertInfo, c
 
 		timeNow := time.Now()
 		curr.LastDBSync = &timeNow
-		// filter := bson.D{{"_id", curr.Id}}
-		// update := bson.D{{"$set", curr}}
+		curr.ExistsInEnvironment = true
+		filter := bson.D{{Key: "_id", Value: curr.ID}}
+		update := bson.D{{Key: "$set", Value: curr}}
 
 		// .SetUpsert(true)
-		// updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
-		updates = append(updates, mongo.NewInsertOneModel().SetDocument(curr))
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+		// updates = append(updates, mongo.NewInsertOneModel().SetDocument(curr))
 	}
 
-	// var opts options.BulkWriteOptions
-	// opts.SetOrdered(false)
+	var currIds []string
+	for _, c := range serverCertInfo {
+		currIds = append(currIds, c.ID)
+	}
 
-	// chunkSize := 100
-	// var chunks [][]mongo.WriteModel
-	// for i := 0; i < len(updates); i += chunkSize {
-	// 	end := i + chunkSize
-	// 	if end > len(updates) {
-	// 		end = len(updates)
-	// 	}
-	// 	chunks = append(chunks, updates[i:end])
-	// }
-
-	// for _, chunk := range chunks {
-	// 	res, err := coll.BulkWrite(ctx, chunk, &opts)
-	// 	results = append(results, *res)
-	// 	lib.CheckFatalError(err)
-	// }
+	notCurrentFilter := bson.M{
+		"_id": bson.M{
+			"$nin": currIds,
+		},
+		"existsInEnvironment": true,
+	}
+	notCurrentUpdate := bson.D{{Key: "$set", Value: bson.M{"existsInEnvironment": false}}}
+	coll.UpdateMany(ctx2, notCurrentFilter, notCurrentUpdate)
 
 	results, err := coll.BulkWrite(ctx, updates, nil)
 	lib.CheckFatalError(err)
@@ -1194,69 +1191,71 @@ func UpsertServerCertificatesNew(serverCertInfo []lib.FormattedServerCertInfo, c
 	// fmt.Println(string(jsonStr))
 	return
 }
-func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.Collection) (results []mongo.BulkWriteResult) {
-	if len(serverCertInfo) == 0 {
-		fmt.Println("No apps in slice")
-		return nil
-	}
-	ctx := context.TODO()
 
-	var updates []mongo.WriteModel
+// func UpsertServerCertificates(serverCertInfo []lib.ServerCertInfo, coll *mongo.Collection) (results []mongo.BulkWriteResult) {
+// 	if len(serverCertInfo) == 0 {
+// 		fmt.Println("No apps in slice")
+// 		return nil
+// 	}
+// 	ctx := context.TODO()
 
-	// fmt.Println(len(serverCertInfo))
+// 	var updates []mongo.WriteModel
 
-	for _, cert := range serverCertInfo {
-		curr := cert
+// 	// fmt.Println(len(serverCertInfo))
 
-		timeNow := time.Now()
-		curr.LastDBSync = &timeNow
-		filter := bson.D{{"_id", curr.SerialNumber}}
-		update := bson.D{{"$set", curr}}
+// 	for _, cert := range serverCertInfo {
+// 		curr := cert
 
-		// .SetUpsert(true)
-		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
-	}
+// 		timeNow := time.Now()
+// 		curr.LastDBSync = &timeNow
+// 		filter := bson.D{{"_id", curr.SerialNumber}}
+// 		update := bson.D{{"$set", curr}}
 
-	var opts options.BulkWriteOptions
-	opts.SetOrdered(false)
+// 		// .SetUpsert(true)
+// 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+// 	}
 
-	chunkSize := 100
-	var chunks [][]mongo.WriteModel
-	for i := 0; i < len(updates); i += chunkSize {
-		end := i + chunkSize
-		if end > len(updates) {
-			end = len(updates)
-		}
-		chunks = append(chunks, updates[i:end])
-	}
+// 	var opts options.BulkWriteOptions
+// 	opts.SetOrdered(false)
 
-	for _, chunk := range chunks {
-		res, err := coll.BulkWrite(ctx, chunk, &opts)
-		results = append(results, *res)
-		lib.CheckFatalError(err)
-	}
+// 	chunkSize := 100
+// 	var chunks [][]mongo.WriteModel
+// 	for i := 0; i < len(updates); i += chunkSize {
+// 		end := i + chunkSize
+// 		if end > len(updates) {
+// 			end = len(updates)
+// 		}
+// 		chunks = append(chunks, updates[i:end])
+// 	}
 
-	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
-	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
-	// fmt.Printf("Number of documents matched: %d\n", )
-	// fmt.Printf("Number of documents inserted: %d\n", results.UpsertedCount)
-	// fmt.Printf("Number of documents replaced or updated: %d\n", results.ModifiedCount)
-	// fmt.Printf("Number of documents deleted: %d\n", results.DeletedCount)
-	// fmt.Println("Upserted IDs:")
-	// jsonStr, _ := json.MarshalIndent(results.UpsertedIDs, "", "  ")
-	// fmt.Println(string(jsonStr))
-	return results
-}
+// 	for _, chunk := range chunks {
+// 		res, err := coll.BulkWrite(ctx, chunk, &opts)
+// 		results = append(results, *res)
+// 		lib.CheckFatalError(err)
+// 	}
+
+// 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
+// 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
+// 	// fmt.Printf("Number of documents matched: %d\n", )
+// 	// fmt.Printf("Number of documents inserted: %d\n", results.UpsertedCount)
+// 	// fmt.Printf("Number of documents replaced or updated: %d\n", results.ModifiedCount)
+// 	// fmt.Printf("Number of documents deleted: %d\n", results.DeletedCount)
+// 	// fmt.Println("Upserted IDs:")
+// 	// jsonStr, _ := json.MarshalIndent(results.UpsertedIDs, "", "  ")
+// 	// fmt.Println(string(jsonStr))
+// 	return results
+// }
 
 //
 //
 
-func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Collection) (results []mongo.BulkWriteResult) {
+func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
 	if len(caCertInfo) == 0 {
 		fmt.Println("No apps in slice")
 		return nil
 	}
 	ctx := context.TODO()
+	ctx2 := context.TODO()
 
 	var updates []mongo.WriteModel
 
@@ -1267,6 +1266,7 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 
 		timeNow := time.Now()
 		curr.LastDBSync = &timeNow
+		curr.ExistsInEnvironment = true
 		filter := bson.D{{"_id", curr.SerialNumber}}
 		update := bson.D{{"$set", curr}}
 
@@ -1274,24 +1274,22 @@ func UpsertCACertificates(caCertInfo []lib.CertAuthorityCertInfo, coll *mongo.Co
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
-	var opts options.BulkWriteOptions
-	opts.SetOrdered(false)
-
-	chunkSize := 100
-	var chunks [][]mongo.WriteModel
-	for i := 0; i < len(updates); i += chunkSize {
-		end := i + chunkSize
-		if end > len(updates) {
-			end = len(updates)
-		}
-		chunks = append(chunks, updates[i:end])
+	var currIds []string
+	for _, c := range caCertInfo {
+		currIds = append(currIds, c.ID)
 	}
 
-	for _, chunk := range chunks {
-		res, err := coll.BulkWrite(ctx, chunk, &opts)
-		results = append(results, *res)
-		lib.CheckFatalError(err)
+	notCurrentFilter := bson.M{
+		"_id": bson.M{
+			"$nin": currIds,
+		},
+		"existsInEnvironment": true,
 	}
+	notCurrentUpdate := bson.D{{Key: "$set", Value: bson.M{"existsInEnvironment": false}}}
+	coll.UpdateMany(ctx2, notCurrentFilter, notCurrentUpdate)
+
+	results, err := coll.BulkWrite(ctx, updates, nil)
+	lib.CheckFatalError(err)
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)

@@ -503,10 +503,10 @@ func UpdateAllCertInfo(certsCaCertInfo *mongo.Collection, serverCertsInfoColl *m
 
 	fmt.Println("Clearing collections")
 	// clearOpts := options.DeleteOptions{}
-	err := serverCertsInfoColl.Drop(context.TODO())
-	lib.CheckFatalError(err)
-	err = certsCaCertInfo.Drop(context.TODO())
-	lib.CheckFatalError(err)
+	// err := serverCertsInfoColl.Drop(context.TODO())
+	// lib.CheckFatalError(err)
+	// err := certsCaCertInfo.Drop(context.TODO())
+	// lib.CheckFatalError(err)
 	// _, err := serverCertsInfoColl.DeleteMany(context.TODO(), bson.D{{}}, nil)
 	// lib.CheckFatalError(err)
 	// lib.JsonMarshalAndPrint(delResult)
