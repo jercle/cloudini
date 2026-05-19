@@ -167,7 +167,7 @@ func GetServerCertInfoFromFileNew(path string) (formattedCerts []FormattedServer
 		parentPathJoined := strings.Join(parentPathSpl, "/")
 		fc.ParentPath = &parentPathJoined
 
-		fc.Id = fc.IssuerName + "_" + fc.Serial
+		fc.ID = fc.IssuerName + "_" + fc.Serial
 
 		formattedCerts = append(formattedCerts, fc)
 
