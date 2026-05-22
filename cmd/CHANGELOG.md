@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.68]
+* Bugfix: Citrix Machine Catalogs not injecting TenantName
+
 ## [0.3.66]
 * Bugfix: Handling no documents in result for metrics/resourceUtilisation/loadIndexes
 
