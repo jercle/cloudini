@@ -646,7 +646,7 @@ func UpsertResourceSKUs(skus []lib.AzureResourceSku, collection *mongo.Collectio
 //
 //
 
-func UpsertCitrixMachineCatalogs(machineCatalogs citrix.MachineCatalogs, coll *mongo.Collection) (results []mongo.BulkWriteResult) {
+func UpsertCitrixMachineCatalogs(tenantName string, machineCatalogs citrix.MachineCatalogs, coll *mongo.Collection) (results []mongo.BulkWriteResult) {
 	if len(machineCatalogs) == 0 {
 		fmt.Println("No apps in slice")
 		return nil
@@ -657,6 +657,7 @@ func UpsertCitrixMachineCatalogs(machineCatalogs citrix.MachineCatalogs, coll *m
 
 	for _, mc := range machineCatalogs {
 		curr := mc
+		curr.TenantName = tenantName
 		curr.LastDBSync = time.Now()
 		filter := bson.D{{"_id", mc.ID}}
 		update := bson.D{{"$set", curr}}

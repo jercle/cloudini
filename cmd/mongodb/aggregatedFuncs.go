@@ -44,16 +44,16 @@ func UpdateAllGalleryImagesAndUpdateWithUsedByCitrix(imageGalleryImagesColl *mon
 		lib.CheckFatalError(err)
 	}
 
-	for envName, envCreds := range citrixEnvs {
+	for tenantName, envCreds := range citrixEnvs {
 		tokenData, err := citrix.GetToken(envCreds, nil)
 		lib.CheckFatalError(err)
-		fmt.Println("Fetching Machine Catalogs for " + envName + "...")
+		fmt.Println("Fetching Machine Catalogs for " + tenantName + "...")
 		s.Start()
 		machineCatalogs := citrix.ListMachineCatalogs(envCreds, tokenData)
 		s.Stop()
 		fmt.Println("Updating Citrix Machine Catalogs in database...")
 		s.Start()
-		UpsertCitrixMachineCatalogs(machineCatalogs, machineCatalogsColl)
+		UpsertCitrixMachineCatalogs(tenantName, machineCatalogs, machineCatalogsColl)
 		mcMasterImageVersions := machineCatalogs.ListImageVersions()
 		s.Stop()
 		fmt.Println("Updating Azure Images used by Citrix in database...")
