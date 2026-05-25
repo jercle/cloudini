@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.69]
+* Bugfix: Handling of Subject and Issuer for Microsoft Certs
+
 ## [0.3.68]
 * Bugfix: Citrix Machine Catalogs not injecting TenantName
 

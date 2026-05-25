@@ -126,7 +126,6 @@ func GetServerCertInfoFromFileNew(path string) (formattedCerts []FormattedServer
 	hostnameLower := strings.ToLower(tNameAndHostname[1])
 
 	for _, cert := range fileData {
-
 		parsedCert, err := x509.ParseCertificate(cert.RawData)
 
 		if err != nil {
@@ -148,6 +147,20 @@ func GetServerCertInfoFromFileNew(path string) (formattedCerts []FormattedServer
 			fc.SignatureAlgorithm = cert.SignatureAlgorithm.FriendlyName
 			fc.KeyUsage = cert.EnhancedKeyUsageList
 		}
+
+		if fc.IssuerName == "" {
+			fc.IssuerName = cert.Issuer
+		}
+		if fc.IssuerRDN == "" {
+			fc.IssuerRDN = cert.Issuer
+		}
+		if fc.SubjectName == "" {
+			fc.SubjectName = cert.Subject
+		}
+		if fc.SubjectRDN == "" {
+			fc.SubjectRDN = cert.Subject
+		}
+
 		fc.SerialWindows = cert.SerialNumber
 		fc.ServerSyncTime = time.Time(cert.ServerSyncTime)
 
