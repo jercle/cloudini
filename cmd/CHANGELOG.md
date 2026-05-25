@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.4.0]
+* Update deps
+* Update to Go 1.26.3
+
 ## [0.3.69]
 * Bugfix: Handling of Subject and Issuer for Microsoft Certs
 
