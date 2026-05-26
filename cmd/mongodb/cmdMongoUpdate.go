@@ -19,6 +19,7 @@ var (
 	updateAzureResourceRelations                    bool
 	costDataMonth                                   string
 	updateEntraItems                                bool
+	getAllAppRegCreds                               bool
 	updateEntraPimItems                             bool
 	updateIpAddresses                               bool
 	updateM365Data                                  bool
@@ -154,6 +155,7 @@ var cmdMongoUpdate = &cobra.Command{
 				appRegOpts := UpdateEntraItemsOptions{
 					EntraAppRegColl:              entraAppRegColl,
 					EntraAppRegCredsExpiringColl: entraAppRegCredsExpiringColl,
+					GetAllCreds:                  getAllAppRegCreds,
 				}
 				UpdateEntraItems(appRegOpts, tokenReq)
 			})
@@ -286,6 +288,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateCitrixData, "updateCitrixData", "d", false, "Fetches Citrix Cloud Policy Defs and Machine Metrics and upserts to MongoDB")
 	cmdMongoUpdate.Flags().BoolVar(&aggregateCitrixDataBeforeInsert, "aggregateCitrixData", false, "Used with --updateCitrixData, but will aggregate machine and metric data prior to database insert")
 	cmdMongoUpdate.Flags().BoolVarP(&updateEntraItems, "updateEntraItems", "e", false, "Gets all App Registrations from configured Azure tenants and finds expiring credentials, then updates database")
+	cmdMongoUpdate.Flags().BoolVar(&getAllAppRegCreds, "getAllAppRegCreds", false, "Gets all App Reg creds, not just those expiring within 60 days")
 	cmdMongoUpdate.Flags().BoolVarP(&updateIntuneManagedDevices, "updateIntuneManagedDevices", "f", false, "Get all Intune Managed Devices, then upsert into database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAllGalleryImagesAndUpdateWithUsedByCitrix, "updateAllGalleryImagesAndUpdateWithUsedByCitrix", "g", false, "Gets all gallery images in configured tenants, then checks agains Citrix and updates in database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateIpAddresses, "updateIpAddresses", "i", false, "Gets all App Registrations from configured Azure tenants and finds expiring credentials, then updates database")

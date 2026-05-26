@@ -727,7 +727,7 @@ func UpsertCitrixPolicySettingDefs(settingDefs []citrix.PolicySettingDefinition,
 //
 //
 
-func UpsertMultipleEntraApps[T azure.EntraApplication | azure.EntraExpiringCredential](apps []T, collection *mongo.Collection) (results []mongo.BulkWriteResult) {
+func UpsertMultipleEntraApps[T azure.EntraApplication | azure.EntraExpiringCredential](apps []T, collection *mongo.Collection) *mongo.BulkWriteResult {
 	if len(apps) == 0 {
 		fmt.Println("No apps in slice")
 		return nil
@@ -770,24 +770,27 @@ func UpsertMultipleEntraApps[T azure.EntraApplication | azure.EntraExpiringCrede
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
-	var opts options.BulkWriteOptions
-	opts.SetOrdered(false)
+	// var opts options.BulkWriteOptions
+	// opts.SetOrdered(false)
 
-	chunkSize := 100
-	var chunks [][]mongo.WriteModel
-	for i := 0; i < len(updates); i += chunkSize {
-		end := i + chunkSize
-		if end > len(updates) {
-			end = len(updates)
-		}
-		chunks = append(chunks, updates[i:end])
-	}
+	// chunkSize := 100
+	// var chunks [][]mongo.WriteModel
+	// for i := 0; i < len(updates); i += chunkSize {
+	// 	end := i + chunkSize
+	// 	if end > len(updates) {
+	// 		end = len(updates)
+	// 	}
+	// 	chunks = append(chunks, updates[i:end])
+	// }
 
-	for _, chunk := range chunks {
-		res, err := collection.BulkWrite(ctx, chunk, &opts)
-		results = append(results, *res)
-		lib.CheckFatalError(err)
-	}
+	results, err := collection.BulkWrite(ctx, updates, nil)
+	lib.CheckFatalError(err)
+
+	// for _, chunk := range chunks {
+	// 	res, err := collection.BulkWrite(ctx, chunk, &opts)
+	// 	results = append(results, *res)
+	// 	lib.CheckFatalError(err)
+	// }
 
 	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)

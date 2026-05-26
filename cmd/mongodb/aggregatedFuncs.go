@@ -387,7 +387,7 @@ func UpdateEntraItems(opts UpdateEntraItemsOptions, tokenReq lib.AllTenantTokens
 
 	fmt.Println("Fetching all App Registrations...")
 	s.Start()
-	allAppRegistrations, appRegExpiringCreds := azure.GetAppRegDataForAllConfiguredTenants("")
+	allAppRegistrations, appRegExpiringCreds := azure.GetAppRegDataForAllConfiguredTenants("", opts.GetAllCreds)
 	s.Stop()
 
 	allAppRegistrationsStr, _ := json.MarshalIndent(allAppRegistrations, "", "  ")
@@ -402,7 +402,7 @@ func UpdateEntraItems(opts UpdateEntraItemsOptions, tokenReq lib.AllTenantTokens
 	UpsertMultipleEntraApps(allAppRegistrations, opts.EntraAppRegColl)
 	s.Stop()
 
-	fmt.Println("Updating App Registrations with expired or expiring credentials in database...")
+	fmt.Println("Updating App Registrations credential expirations in database...")
 	s.Start()
 	DeleteAllDocumentsInCollection(opts.EntraAppRegCredsExpiringColl)
 	UpsertMultipleEntraApps(appRegExpiringCreds, opts.EntraAppRegCredsExpiringColl)
