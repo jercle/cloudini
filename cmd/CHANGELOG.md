@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.4.2]
+* Update: Add IPAddressesAllResourceTypes.AllIpAddresses field and associated functionality
+
 ## [0.4.1]
 * Update: Add flag to enable fetching all Entra expiring App Reg creds, not just those expiring within 60 days
 * Update deps

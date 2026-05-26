@@ -102,7 +102,7 @@ func UpdateAllAzureResourceIPAddresses(ipAddressesColl *mongo.Collection, ipAddr
 		}
 		vnets = append(vnets, res)
 	}
-	ipAddressBlocks := azure.GetIpAddressBlocksForCidrFromVNets(cidrsToCheck, vnets)
+	ipAddressBlocks := azure.GetIpAddressBlocksForCidrFromVNetsNew(cidrsToCheck, vnets)
 	s.Stop()
 
 	fmt.Println("Updating IP Address Blocks in database...")
