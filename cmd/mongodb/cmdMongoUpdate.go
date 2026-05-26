@@ -123,6 +123,42 @@ var cmdMongoUpdate = &cobra.Command{
 		tokenReq, err := azure.GetAllTenantSPTokens(lib.AzureMultiAuthTokenRequestOptions{}, nil)
 		lib.CheckFatalError(err)
 
+		if updateAll || updateAzureResVcpuCountsCostData {
+			opts := UpdateAllAzureResourcesAndVcpuCountsOptions{
+				SkuListSubscription:         config.Azure.SkuListSubscription,
+				SkuListAuth:                 config.Azure.MultiTenantAuth.Tenants[config.Azure.SkuListAuthTenant],
+				Location:                    config.Azure.ResourceLocation,
+				CostDataMonth:               costDataMonth,
+				CostDataBlobPrefix:          config.Azure.CostDataBlobPrefix,
+				AzResSKUColl:                azResSKUColl,
+				AzResVcpuCountsColl:         azResVcpuCountsColl,
+				AzResTenantsColl:            azResTenantsColl,
+				AzResResourceListColl:       azResResourceListColl,
+				AzResGrpsListColl:           azResGrpsListColl,
+				AzStorageAcctMinTlsVersions: azStorageAcctMinTlsVersions,
+				EnvOptCostingTenantsColl:    envOptCostingTenantsColl,
+				EnvOptCostingSubsColl:       envOptCostingSubsColl,
+				EnvOptCostingResGrpsColl:    envOptCostingResGrpsColl,
+				EnvOptCostingResourcesColl:  envOptCostingResourcesColl,
+				EnvOptCostingMetersColl:     envOptCostingMetersColl,
+			}
+			transformedData := UpdateAllAzureResourcesVcpuCountsCostData(opts, tokenReq)
+
+			if updateAzureResourceRelations {
+				UpdateAzureResourceRelations(transformedData, opts)
+			}
+		}
+
+		if updateResources {
+			opts := UpdateAllAzureResourcesAndVcpuCountsOptions{
+				SkuListSubscription:   config.Azure.SkuListSubscription,
+				SkuListAuth:           config.Azure.MultiTenantAuth.Tenants[config.Azure.SkuListAuthTenant],
+				Location:              config.Azure.ResourceLocation,
+				AzResResourceListColl: azResResourceListColl,
+			}
+			UpdateAllAzureResources(opts, tokenReq)
+		}
+
 		if updateAll || updateIpAddresses {
 			wg.Go(func() {
 				UpdateAllAzureResourceIPAddresses(ipamIpAddresses, ipamIpAddressBlocks, tokenReq)
@@ -169,43 +205,6 @@ var cmdMongoUpdate = &cobra.Command{
 				}
 				UpdateEntraPimItems(opts)
 			})
-		}
-
-		// Longest running, so keep last
-		if updateAll || updateAzureResVcpuCountsCostData {
-			opts := UpdateAllAzureResourcesAndVcpuCountsOptions{
-				SkuListSubscription:         config.Azure.SkuListSubscription,
-				SkuListAuth:                 config.Azure.MultiTenantAuth.Tenants[config.Azure.SkuListAuthTenant],
-				Location:                    config.Azure.ResourceLocation,
-				CostDataMonth:               costDataMonth,
-				CostDataBlobPrefix:          config.Azure.CostDataBlobPrefix,
-				AzResSKUColl:                azResSKUColl,
-				AzResVcpuCountsColl:         azResVcpuCountsColl,
-				AzResTenantsColl:            azResTenantsColl,
-				AzResResourceListColl:       azResResourceListColl,
-				AzResGrpsListColl:           azResGrpsListColl,
-				AzStorageAcctMinTlsVersions: azStorageAcctMinTlsVersions,
-				EnvOptCostingTenantsColl:    envOptCostingTenantsColl,
-				EnvOptCostingSubsColl:       envOptCostingSubsColl,
-				EnvOptCostingResGrpsColl:    envOptCostingResGrpsColl,
-				EnvOptCostingResourcesColl:  envOptCostingResourcesColl,
-				EnvOptCostingMetersColl:     envOptCostingMetersColl,
-			}
-			transformedData := UpdateAllAzureResourcesVcpuCountsCostData(opts, tokenReq)
-
-			if updateAzureResourceRelations {
-				UpdateAzureResourceRelations(transformedData, opts)
-			}
-		}
-
-		if updateResources {
-			opts := UpdateAllAzureResourcesAndVcpuCountsOptions{
-				SkuListSubscription:   config.Azure.SkuListSubscription,
-				SkuListAuth:           config.Azure.MultiTenantAuth.Tenants[config.Azure.SkuListAuthTenant],
-				Location:              config.Azure.ResourceLocation,
-				AzResResourceListColl: azResResourceListColl,
-			}
-			UpdateAllAzureResources(opts, tokenReq)
 		}
 
 		// if updateADUsers {
