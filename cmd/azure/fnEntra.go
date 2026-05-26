@@ -11,7 +11,7 @@ import (
 	"github.com/jercle/cloudini/lib"
 )
 
-func GetAppRegDataForAllConfiguredTenants(outputPath string) (allAppRegistrations []EntraApplication, expiringCreds []EntraExpiringCredential) {
+func GetAppRegDataForAllConfiguredTenants(outputPath string, getAllAppRegCreds bool) (allAppRegistrations []EntraApplication, expiringCreds []EntraExpiringCredential) {
 	config := lib.GetCldConfig(nil)
 	azConfTenants := config.Azure.MultiTenantAuth.Tenants
 	tokenReq, err := GetAllTenantSPTokens(lib.AzureMultiAuthTokenRequestOptions{
@@ -32,7 +32,7 @@ func GetAppRegDataForAllConfiguredTenants(outputPath string) (allAppRegistration
 			entraAppsProcessed = append(entraAppsProcessed, currApp)
 		}
 		allAppRegistrations = append(allAppRegistrations, entraAppsProcessed...)
-		tenantExpiringCreds := GetAppRegExpiringCredData(entraAppsProcessed, 30)
+		tenantExpiringCreds := GetAppRegExpiringCredData(entraAppsProcessed, 60, getAllAppRegCreds)
 		expiringCreds = append(expiringCreds, tenantExpiringCreds...)
 	}
 
@@ -241,14 +241,14 @@ func GetB2CUserByObjectId(objectId string, token *lib.AzureMultiAuthToken) (user
 //
 //
 
-func GetAppRegExpiringCredData(apps []EntraApplication, daysUntilExpired int) (expiringCredentials []EntraExpiringCredential) {
+func GetAppRegExpiringCredData(apps []EntraApplication, daysUntilExpired int, getAllAppRegCreds bool) (expiringCredentials []EntraExpiringCredential) {
 	for _, app := range apps {
 
 		currApp := app
 		if app.PasswordCredentials != nil {
 			for _, cred := range *currApp.PasswordCredentials {
 				daysUntilExpiry := time.Until(cred.EndDateTime).Hours() / 24
-				if int(daysUntilExpiry) < daysUntilExpired {
+				if getAllAppRegCreds || int(daysUntilExpiry) < daysUntilExpired {
 					var curr EntraExpiringCredential
 					curr.AppRegAppID = app.AppID
 					curr.AppRegCreatedDateTime = app.CreatedDateTime

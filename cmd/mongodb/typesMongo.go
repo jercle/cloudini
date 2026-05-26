@@ -39,6 +39,7 @@ type UpdateAllAzureResourcesAndVcpuCountsOptions struct {
 type UpdateEntraItemsOptions struct {
 	EntraAppRegColl              *mongo.Collection
 	EntraAppRegCredsExpiringColl *mongo.Collection
+	GetAllCreds                  bool
 }
 
 type UpdateEntraPimItemsOptions struct {

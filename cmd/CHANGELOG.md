@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.4.1]
+* Update: Add flag to enable fetching all Entra expiring App Reg creds, not just those expiring within 60 days
+* Update deps
+
 ## [0.4.0]
 * Update deps
 * Update to Go 1.26.3
