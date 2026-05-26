@@ -90,6 +90,7 @@ type AzureResourceManagedClusterAgentPoolMachine struct {
 //
 
 type IPAddressesAllResourceTypes struct {
+	AllIpAddresses        []string  `json:"allIpAddresses" bson:"allIpAddresses"`
 	AssociatedNics        []string  `json:"associatedNics,omitempty,omitzero" bson:"associatedNics,omitempty,omitzero"`
 	AssociatedResourceIDs []string  `json:"associatedResourceIDs,omitempty,omitzero" bson:"associatedResourceIDs,omitempty,omitzero"`
 	AttachedTo            string    `json:"attachedTo,omitempty,omitzero" bson:"attachedTo,omitempty,omitzero"`
@@ -128,6 +129,7 @@ func (t *IPAddressesAllResourceTypes) UnmarshalJSON(data []byte) error {
 	}
 
 	var nicJson struct {
+		AllIpAddresses        []string  `json:"allIpAddresses" bson:"allIpAddresses"`
 		AssociatedNics        []string  `json:"associatedNics,omitempty,omitzero" bson:"associatedNics,omitempty,omitzero"`
 		AssociatedResourceIDs []string  `json:"associatedResourceIDs,omitempty,omitzero" bson:"associatedResourceIDs,omitempty,omitzero"`
 		AttachedTo            string    `json:"attachedTo,omitempty,omitzero" bson:"attachedTo,omitempty,omitzero"`
@@ -194,6 +196,7 @@ func (t *IPAddressesAllResourceTypes) UnmarshalJSON(data []byte) error {
 	}
 
 	*t = IPAddressesAllResourceTypes{
+		AllIpAddresses:        nicJson.AllIpAddresses,
 		AssociatedNics:        nicJson.AssociatedNics,
 		AssociatedResourceIDs: nicJson.AssociatedResourceIDs,
 		AttachedTo:            nicJson.AttachedTo,

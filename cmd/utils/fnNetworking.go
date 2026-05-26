@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"math"
 	"math/big"
+	"math/bits"
 	"net"
+	"net/netip"
 	"strconv"
 )
 
@@ -174,4 +176,40 @@ func ipToInt(ip net.IP) (*big.Int, int) {
 	} else {
 		panic(fmt.Errorf("Unsupported address length %d", len(ip)))
 	}
+}
+
+func GetLargestCIDR(startIP, endIP string) (netip.Prefix, error) {
+	start, err := netip.ParseAddr(startIP)
+	if err != nil {
+		return netip.Prefix{}, fmt.Errorf("invalid start IP: %w", err)
+	}
+	end, err := netip.ParseAddr(endIP)
+	if err != nil {
+		return netip.Prefix{}, fmt.Errorf("invalid end IP: %w", err)
+	}
+
+	if start.Is4() != end.Is4() {
+		return netip.Prefix{}, fmt.Errorf("mixed IP families are not allowed")
+	}
+
+	startBytes := start.AsSlice()
+	endBytes := end.AsSlice()
+
+	var diffMask byte
+	var bitLen = len(startBytes) * 8
+	var prefixLen = bitLen
+
+	for i := range startBytes {
+		if startBytes[i] != endBytes[i] {
+			diffMask = startBytes[i] ^ endBytes[i]
+			// Count leading zeros of the XOR difference to see where they diverge
+			prefixLen = (i * 8) + bits.LeadingZeros8(diffMask)
+			break
+		}
+	}
+
+	// Calculate base network address for the CIDR
+	mask := netip.PrefixFrom(start, prefixLen).Masked()
+
+	return netip.PrefixFrom(mask.Addr(), prefixLen), nil
 }

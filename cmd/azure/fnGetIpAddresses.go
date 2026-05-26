@@ -34,7 +34,7 @@ func GetIPAddressesAll(queries map[string]string, outputFile string, token *lib.
 
 		typeLower := strings.ToLower(resource.Type)
 
-		if len(resource.PublicIps) == 0 && len(resource.PrivateIps) == 0 && len(resource.Cidrs) == 0 {
+		if len(resource.PublicIps) == 0 && len(resource.AllIpAddresses) == 0 && len(resource.PrivateIps) == 0 && len(resource.Cidrs) == 0 {
 			continue
 		}
 
@@ -42,6 +42,7 @@ func GetIPAddressesAll(queries map[string]string, outputFile string, token *lib.
 		case "microsoft.containerservice/managedclusters":
 			ipAddresses := GetManagedClusterIPAddresses(resource, token)
 			allIpAddresses = append(allIpAddresses, ipAddresses...)
+			// allIpAddresses = append(allIpAddresses, resource)
 		case "microsoft.network/virtualnetworks":
 			for _, s := range resource.Subnets {
 				var snet IPAddressesAllResourceTypes
@@ -200,7 +201,8 @@ func GetIPAddressesQueries(selectedQueries *[]string) map[string]string {
 | extend attachedTo = dynamic_to_json(coalesce(bareMetalServer.id, privateLinkService.id, privateEndpoint.id, virtualMachine.id))
 | join kind=leftouter  (resources | project id, publicIp = properties.ipAddress) on $left.publicIpId == $right.['id']
 | project name, resourceGroup, subscriptionId, tenantId, id, privateIp = ipconfig.properties.privateIPAddress, publicIpId = tostring(ipconfig.properties.publicIPAddress.id), publicIp, type, tags, isAttached, attachedTo
-| summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp)  by id, name, resourceGroup, subscriptionId, tenantId, type, tags = dynamic_to_json(tags), isAttached, attachedTo`
+| summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp)  by id, name, resourceGroup, subscriptionId, tenantId, type, tags = dynamic_to_json(tags), isAttached, attachedTo
+| extend allIpAddresses = array_concat(privateIps, publicIps)`
 
 	const GetIPAddressesQueryVirtualMachines = `Resources
 | where type =~ 'microsoft.compute/virtualmachines'
@@ -220,7 +222,8 @@ func GetIPAddressesQueries(selectedQueries *[]string) map[string]string {
     | summarize associatedNics = make_list(nicId), privateIps = make_list(privateIp), publicIps = make_list(publicIp) by vmId
     )
     on vmId
-| project id, name = vmName, type, privateIps, publicIps, tenantId, subscriptionId, associatedNics, tags = dynamic_to_json(tags)`
+| project id, name = vmName, type, privateIps, publicIps, tenantId, subscriptionId, associatedNics, tags = dynamic_to_json(tags)
+| extend allIpAddresses = array_concat(privateIps, publicIps)`
 
 	const GetIPAddressesQueryLoadBalancers = `Resources
 | where type =~ 'microsoft.network/loadbalancers'
@@ -233,18 +236,21 @@ func GetIPAddressesQueries(selectedQueries *[]string) map[string]string {
     )
     on publicIpId
 | project-away publicIpId, publicIpId1
-| summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp) by id = lbId, name = lbName, type, tenantId, subscriptionId, tags = dynamic_to_json(tags)`
+| summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp) by id = lbId, name = lbName, type, tenantId, subscriptionId, tags = dynamic_to_json(tags)
+| extend allIpAddresses = array_concat(privateIps, publicIps)`
 
 	const GetIPAddressesQueryManagedEnvironments = `Resources
 | where type =~ 'microsoft.app/managedenvironments'
-| project id, name, type, tenantId, resourceGroup, subscriptionId, publicNetworkAccess = properties.publicNetworkAccess, privateIps = pack_array(properties.staticIp), tags = dynamic_to_json(tags)`
+| project id, name, type, tenantId, resourceGroup, subscriptionId, publicNetworkAccess = properties.publicNetworkAccess, privateIps = pack_array(properties.staticIp), tags = dynamic_to_json(tags)
+| extend allIpAddresses = array_concat(privateIps)`
 
 	const GetIPAddressesQueryBastionHosts = `Resources
 | where type =~ 'microsoft.network/bastionhosts'
 | mv-expand ipconfig = properties.ipConfigurations
 | project id, name, type, tenantId, resourceGroup, subscriptionId, publicIpId = tostring(ipconfig.properties.publicIPAddress.id), tags = dynamic_to_json(tags)
 | join kind=leftouter  (resources | project id, publicIp = properties.ipAddress) on $left.publicIpId == $right.['id']
-| summarize publicIps = make_list(publicIp), publicIpIds = make_list(publicIpId)  by id, name, resourceGroup, subscriptionId, tenantId, type, tags`
+| summarize publicIps = make_list(publicIp), publicIpIds = make_list(publicIpId)  by id, name, resourceGroup, subscriptionId, tenantId, type, tags
+| extend allIpAddresses = array_concat(publicIps)`
 
 	const GetIPAddressesQueryPrivateEndpoints = `resources
 | where type =~ 'microsoft.network/privateendpoints'
@@ -256,27 +262,38 @@ func GetIPAddressesQueries(selectedQueries *[]string) map[string]string {
     | project peId  = tolower(tostring(properties.privateEndpoint.id)), privateIp = ipconfig.properties.privateIPAddress, nicId = id
     )
     on peId
-| summarize associatedNics = make_list(nicId), privateIps = make_list(privateIp) by id, name, type, tenantId, subscriptionId, tags = dynamic_to_json(tags)`
+| summarize associatedNics = make_list(nicId), privateIps = make_list(privateIp) by id, name, type, tenantId, subscriptionId, tags = dynamic_to_json(tags)
+| extend allIpAddresses = array_concat(privateIps)`
 
-	const GetIPAddressesQueryPublicIPs = `
-resources
+	const GetIPAddressesQueryPublicIPs = `resources
 | where type =~ 'microsoft.network/publicipaddresses'
 | extend ipConfig = properties.ipConfiguration.id
 | extend isAttached = isnotnull(ipConfig)
-| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), publicIps = iff(isnotnull(properties.ipAddress), pack_array(properties.ipAddress), dynamic([])) , isAttached`
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), publicIps = iff(isnotnull(properties.ipAddress), pack_array(properties.ipAddress), dynamic([])) , isAttached
+| extend allIpAddresses = array_concat(publicIps)`
+
 	const GetIPAddressesQueryWebSites = `Resources
 | where type =~ 'microsoft.web/sites'
 | extend possibleInboundIps = split(properties.possibleInboundIpAddresses, ',')
 | extend possibleOutboundIps = split(properties.possibleOutboundIpAddresses, ',')
 | extend inboundIps = split(properties.inboundIpAddress, ',')
 | extend outboundIps = split(properties.outboundIpAddresses, ',')
-| extend privateIps = array_concat(possibleInboundIps, possibleOutboundIps)
-| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), privateIps, possibleInboundIps, possibleOutboundIps, inboundIps, outboundIps`
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), possibleInboundIps, possibleOutboundIps, inboundIps, outboundIps, privateIps = array_concat(possibleInboundIps, possibleOutboundIps)
+| summarize allIpAddresses = make_set(array_concat(possibleInboundIps, possibleOutboundIps, inboundIps, outboundIps)) by id, name, type, tenantId, subscriptionId, resourceGroup, tags, possibleInboundIps = dynamic_to_json(possibleInboundIps), possibleOutboundIps = dynamic_to_json(possibleOutboundIps), inboundIps = dynamic_to_json(inboundIps), outboundIps = dynamic_to_json(outboundIps), privateIps = dynamic_to_json(privateIps)
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags, possibleInboundIps = parse_json(possibleInboundIps), possibleOutboundIps = parse_json(possibleOutboundIps), inboundIps = parse_json(inboundIps), outboundIps = parse_json(outboundIps), privateIps = parse_json(privateIps)`
 
 	const GetIPAddressesQueryManagedClusters = `Resources
 | where type =~ 'microsoft.containerservice/managedclusters'
-| mv-expand agentPools = properties.agentPoolProfiles
-| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags)`
+| mv-expand outboundIp = properties.networkProfile.loadBalancerProfile.effectiveOutboundIPs
+| extend publicIpId = tostring(outboundIp.id)
+| join kind=leftouter (
+    Resources
+    | where type =~ 'microsoft.network/publicipaddresses'
+    | project publicIpId = id, publicIp = properties.ipAddress
+    )
+    on publicIpId
+| summarize publicIps = make_list(publicIp), publicIpIds = make_list(publicIpId)  by id, name, resourceGroup, subscriptionId, tenantId, type, tags = dynamic_to_json(tags)
+| extend allIpAddresses = array_concat(publicIps)`
 
 	const GetIPAddressesQueryFirewalls = `Resources
 | where type =~ 'microsoft.network/azurefirewalls'
@@ -289,7 +306,8 @@ resources
 | extend pubIpId = tostring(ipConfig.properties.publicIPAddress.id), privateIp = iff(isnull(privateIp), ipConfig.properties.privateIPAddress, privateIp)
 | join kind=leftouter  (resources | project pubIpId = id, publicIp = properties.ipAddress) on pubIpId
 | extend publicIp = iff(isnull(publicIp), publicIp1, publicIp)
-| summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp) by id, name, resourceGroup, tenantId, subscriptionId, type, tags = dynamic_to_json(tags)`
+| summarize privateIps = make_list(privateIp), publicIps = make_list(publicIp) by id, name, resourceGroup, tenantId, subscriptionId, type, tags = dynamic_to_json(tags)
+| extend allIpAddresses = array_concat(privateIps, publicIps)`
 
 	const GetIPAddressesQueryP2SVPNGateways = `Resources
 | where type =~ 'microsoft.network/p2svpngateways'
@@ -299,7 +317,8 @@ resources
 
 	const GetIPAddressesQueryVirtualHubs = `Resources
 | where type =~ 'microsoft.network/virtualhubs'
-| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), privateIps = properties.virtualRouterIps, cidrs = pack_array(properties.addressPrefix)`
+| project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), privateIps = properties.virtualRouterIps, cidrs = pack_array(properties.addressPrefix)
+| extend allIpAddresses = array_concat(privateIps)`
 
 	const GetIPAddressesQueryVirtualNetworks = `Resources
 | where type =~ 'microsoft.network/virtualnetworks'
@@ -312,6 +331,18 @@ resources
 	const GetIPAddressesQueryIPGroups = `Resources
 | where type =~ 'microsoft.network/ipgroups'
 | project id, name, type, tenantId, subscriptionId, resourceGroup, tags = dynamic_to_json(tags), cidrs = properties.ipAddresses`
+
+	const GetIPAddressesQueryContainerApps = `Resources
+| where ['type'] =~ 'microsoft.app/containerapps'
+| project id, name, type, tenantId, subscriptionId, outboundIps = properties.outboundIpAddresses, managedEnvironmentId = properties.managedEnvironmentId, tags = dynamic_to_json(tags)
+| extend allIpAddresses = array_concat(outboundIps)`
+
+	const GetIPAddressesQueryNetAppVolumes = `Resources
+| where type =~ 'microsoft.netapp/netappaccounts/capacitypools/volumes'
+| mv-expand mountTargets = properties.mountTargets
+| extend ipAddress = mountTargets.ipAddress
+| summarize privateIps = make_list(ipAddress) by id, name, type, tenantId, subscriptionId, tags = dynamic_to_json(tags)
+| extend allIpAddresses = array_concat(privateIps)`
 
 	// const GetIPAddressesQuery = ``
 	queries := make(map[string]string)
@@ -330,6 +361,8 @@ resources
 	queries["GetIPAddressesQueryVirtualMachines"] = GetIPAddressesQueryVirtualMachines
 	queries["GetIPAddressesQueryVirtualNetworks"] = GetIPAddressesQueryVirtualNetworks
 	queries["GetIPAddressesQueryWebSites"] = GetIPAddressesQueryWebSites
+	queries["GetIPAddressesQueryContainerApps"] = GetIPAddressesQueryContainerApps
+	queries["GetIPAddressesQueryNetAppVolumes"] = GetIPAddressesQueryNetAppVolumes
 
 	if selectedQueries != nil {
 		return lib.SelectMapStringFieldsFromArrayOfKeys(queries, *selectedQueries)
@@ -386,6 +419,7 @@ func GetManagedClusterIPAddresses(clusterIpObject IPAddressesAllResourceTypes, t
 			machineIpObject := IPAddressesAllResourceTypes{
 				ID:                    machine.ID,
 				PrivateIps:            machineIPs,
+				AllIpAddresses:        machineIPs,
 				Name:                  machine.Name,
 				ResourceGroup:         clusterIpObject.ResourceGroup,
 				SubscriptionID:        clusterIpObject.SubscriptionID,
@@ -399,6 +433,7 @@ func GetManagedClusterIPAddresses(clusterIpObject IPAddressesAllResourceTypes, t
 		apIpObject := IPAddressesAllResourceTypes{
 			ID:                    ap.ID,
 			PrivateIps:            apIPs,
+			AllIpAddresses:        apIPs,
 			Name:                  ap.Name,
 			ResourceGroup:         clusterIpObject.ResourceGroup,
 			SubscriptionID:        clusterIpObject.SubscriptionID,
@@ -414,6 +449,7 @@ func GetManagedClusterIPAddresses(clusterIpObject IPAddressesAllResourceTypes, t
 
 	ipAddrObject := clusterIpObject
 	ipAddrObject.PrivateIps = allIPs
+	ipAddrObject.AllIpAddresses = allIPs
 	ipAddrObject.AssociatedResourceIDs = append(ipAddrObject.AssociatedResourceIDs, associatedIDs...)
 	ipAddresses = append(ipAddresses, ipAddrObject)
 
@@ -747,6 +783,104 @@ func IpRangeToCidr(start, end string) ([]string, error) {
 //
 //
 
+func GetIpAddressBlocksForCidrFromVNetsNew(cidrsToCheck []lib.IpamCidrBlockToCheck, vnets []IPAddressesAllResourceTypes) (allAddressBlocks []IpAddressBlocksByBlockTag) {
+	for _, cidr := range cidrsToCheck {
+		lastFoundVnet := ""
+		var currentRange IpAddressBlock
+
+		ipsInCidr, err := GetIPsFromCIDR(cidr.CidrBlock)
+		lib.CheckFatalError(err)
+
+		var ipAddressBlocks []IpAddressBlock
+
+		for i, ip := range ipsInCidr {
+			if i == 0 {
+				// currentRange = append(currentRange, ip.String())
+				currentRange.FirstIp = ip.String()
+			}
+
+			found := false
+			foundVnet := ""
+			for _, vnet := range vnets {
+				_, vnetIpNet, err := net.ParseCIDR(vnet.Cidrs[0])
+				lib.CheckFatalError(err)
+				if vnetIpNet.Contains(ip) {
+					found = true
+					foundVnet = vnet.Name
+					break
+				}
+			}
+
+			if found {
+				if i == 0 {
+					lastFoundVnet = foundVnet
+				}
+				if lastFoundVnet != foundVnet {
+					cidrBlock, err := IpRangeToCidr(currentRange.FirstIp, currentRange.LastIp)
+					lib.CheckFatalError(err)
+					currentRange.CidrBlocks = cidrBlock
+					ipAddressBlocks = append(ipAddressBlocks, currentRange)
+					currentRange = IpAddressBlock{
+						FirstIp:         ip.String(),
+						VNetName:        foundVnet,
+						AllocatedToVnet: true,
+						// IpAddresses:     []net.IP{ip},
+					}
+					lastFoundVnet = foundVnet
+				} else {
+					currentRange.VNetName = foundVnet
+					currentRange.LastIp = ip.String()
+					currentRange.AllocatedToVnet = true
+					lastFoundVnet = foundVnet
+
+					if i == len(ipsInCidr)-1 {
+						cidrBlock, err := IpRangeToCidr(currentRange.FirstIp, currentRange.LastIp)
+						lib.CheckFatalError(err)
+						currentRange.CidrBlocks = cidrBlock
+						ipAddressBlocks = append(ipAddressBlocks, currentRange)
+					}
+				}
+			} else {
+				if lastFoundVnet != "" {
+					cidrBlock, err := IpRangeToCidr(currentRange.FirstIp, currentRange.LastIp)
+					lib.CheckFatalError(err)
+					currentRange.CidrBlocks = cidrBlock
+					ipAddressBlocks = append(ipAddressBlocks, currentRange)
+					currentRange = IpAddressBlock{
+						FirstIp:         ip.String(),
+						VNetName:        "",
+						AllocatedToVnet: false,
+						// IpAddresses:     []net.IP{ip},
+					}
+					lastFoundVnet = ""
+				} else {
+					// currentRange.IpAddresses = append(currentRange.IpAddresses, ip)
+					currentRange.VNetName = ""
+					currentRange.LastIp = ip.String()
+					currentRange.AllocatedToVnet = false
+
+					lastFoundVnet = ""
+
+					if i == len(ipsInCidr)-1 {
+						cidrBlock, err := IpRangeToCidr(currentRange.FirstIp, currentRange.LastIp)
+						lib.CheckFatalError(err)
+						currentRange.CidrBlocks = cidrBlock
+						ipAddressBlocks = append(ipAddressBlocks, currentRange)
+					}
+				}
+			}
+		}
+
+		byBlockTag := IpAddressBlocksByBlockTag{
+			BlockTag:      cidr.BlockTag,
+			AddressBlocks: ipAddressBlocks,
+		}
+
+		allAddressBlocks = append(allAddressBlocks, byBlockTag)
+	}
+
+	return
+}
 func GetIpAddressBlocksForCidrFromVNets(cidrsToCheck []lib.IpamCidrBlockToCheck, vnets []IPAddressesAllResourceTypes) (allAddressBlocks []IpAddressBlocksByBlockTag) {
 	for _, cidr := range cidrsToCheck {
 		lastFoundVnet := ""
