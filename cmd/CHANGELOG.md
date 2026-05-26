@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.4.3]
+* Bugfix: Change ordering of Mongo Update commands
+
 ## [0.4.2]
 * Update: Add IPAddressesAllResourceTypes.AllIpAddresses field and associated functionality
 
