@@ -829,3 +829,68 @@ func ListManagementGroups(token *lib.AzureMultiAuthToken) ([]ManagementGroup, er
 }
 
 //
+//
+
+func GetTenantResourceChanges(workspaceId string, query string, token *lib.AzureMultiAuthToken) (resourceChanges []ResourceChange) {
+	res := RunLogAnalyticsQuery(workspaceId, query, *token)
+
+	var resChanges []ResourceChangeRaw
+
+	resStr, _ := json.Marshal(res.Tables[0].Rows)
+	err := json.Unmarshal(resStr, &resChanges)
+	lib.CheckFatalError(err)
+
+	for _, c := range resChanges {
+		curr := c
+		curr.Changes = ""
+		changes := make(map[string]ResourceChangePropChange)
+		err := json.Unmarshal([]byte(c.Changes), &changes)
+		if err != nil {
+			lib.JsonMarshalAndPrint(c)
+			lib.CheckFatalError(err)
+		}
+
+		jsonStr, _ := json.Marshal(curr)
+		var processed ResourceChange
+		err = json.Unmarshal(jsonStr, &processed)
+		lib.CheckFatalError(err)
+		processed.Changes = changes
+		resourceChanges = append(resourceChanges, processed)
+	}
+
+	return
+}
+
+//
+//
+
+func GetResourceChangesForAllConfiguredTenants() (resourceChanges []ResourceChange) {
+	config := lib.GetCldConfig(nil)
+	tenants := config.Azure.MultiTenantAuth.Tenants
+
+	var (
+		wg  sync.WaitGroup
+		mux sync.Mutex
+	)
+
+	for tName, tData := range tenants {
+		if tData.GetWorkbookAlerts {
+			wg.Go(func() {
+				workspaceId := config.Azure.LogAnalytics.TenantWorkspaceIds[tName]
+				query := config.Azure.LogAnalytics.ResourceChangesQueries[tName]
+				// fmt.Println(tName)
+				token, err := GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
+					TenantName: tName,
+					Scope:      "loganalytics",
+				}, nil)
+				lib.CheckFatalError(err)
+				tenantResChanges := GetTenantResourceChanges(workspaceId, query, token)
+				mux.Lock()
+				resourceChanges = append(resourceChanges, tenantResChanges...)
+				mux.Unlock()
+			})
+		}
+	}
+	wg.Wait()
+	return
+}

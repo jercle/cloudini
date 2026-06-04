@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.4.4]
+* Add azure/GetResourceChanges
+* Update deps
+* Update to Go 1.26.4
+
 ## [0.4.3]
 * Bugfix: Change ordering of Mongo Update commands
 

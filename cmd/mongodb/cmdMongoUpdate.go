@@ -28,9 +28,10 @@ var (
 	updateADUsers                                   bool
 	updateB2CUsers                                  bool
 	updateWebsiteCertInfo                           bool
-	updateSupportAlerts                             bool
 	updateFrADGroups                                bool
 	updateKeyVaultSecrets                           bool
+	updateResourceChanges                           bool
+	// updateSupportAlerts                             bool
 	// updateAWSMonitoringData                         bool
 	updateAll                  bool
 	updateResources            bool
@@ -84,6 +85,7 @@ var cmdMongoUpdate = &cobra.Command{
 		azResVcpuCountsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResVcpuCounts)
 		// azResP2SVpnConnections := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResP2SVpnConnections)
 		azResIntuneManagedDevices := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResIntuneManagedDevices)
+		azResResourceChanges := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResResChanges)
 		// azResIpAddresses := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzResIPAddresses)
 		azStorageAcctMinTlsVersions := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzStorageAcctMinTlsVersions)
 		azKeyVaultSecretsColl := c.Database(mongoConf.DbAzRes).Collection(mongoConf.CollAzKeyVaultSecrets)
@@ -113,7 +115,7 @@ var cmdMongoUpdate = &cobra.Command{
 		envOptCostingTenantsColl := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptCostingTenants)
 		envOptM365LicenseCounts := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptM365LicenseCounts)
 		// collEnvOptM365LicenseCounts
-		genSupportAlertsColl := c.Database(mongoConf.DbGeneral).Collection(mongoConf.CollGenSupportAlerts)
+		// genSupportAlertsColl := c.Database(mongoConf.DbGeneral).Collection(mongoConf.CollGenSupportAlerts)
 
 		ipamIpAddressBlocks := c.Database(mongoConf.DbIpam).Collection(mongoConf.CollIpamIpAddressBlocks)
 		ipamIpAddresses := c.Database(mongoConf.DbIpam).Collection(mongoConf.CollIpamIpAddresses)
@@ -231,9 +233,17 @@ var cmdMongoUpdate = &cobra.Command{
 			})
 		}
 
-		if updateAll || updateSupportAlerts {
+		// if updateAll || updateSupportAlerts {
+		// 	wg.Go(func() {
+		// 		// UpdateSupportAlerts(genSupportAlertsColl)
+
+		// 	})
+		// }
+
+		if updateAll || updateResourceChanges {
 			wg.Go(func() {
-				UpdateSupportAlerts(genSupportAlertsColl)
+				// UpdateSupportAlerts(genSupportAlertsColl)
+				UpdateResourceChanges(azResResourceChanges)
 
 			})
 		}
@@ -296,7 +306,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateM365Data, "updateM365Data", "o", false, "Updates O365 data")
 	cmdMongoUpdate.Flags().BoolVarP(&updateEntraPimItems, "updateEntraPimItems", "p", false, "Gets all PIM assignments and eligibilities, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateResources, "updateResources", "r", false, "Updates Database with current Azure resources")
-	cmdMongoUpdate.Flags().BoolVarP(&updateSupportAlerts, "updateSupportAlerts", "s", false, "Updates Support alerts")
+	cmdMongoUpdate.Flags().BoolVarP(&updateResourceChanges, "updateResourceChanges", "s", false, "Gets resource changes from LA and updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&showExecutionTime, "showExecutionTime", "t", false, "Prints execution time when complete")
 	cmdMongoUpdate.Flags().BoolVarP(&updateWebsiteCertInfo, "updateWebsiteCertInfo", "w", false, "Updates Website Cert info from configured URLs in database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAllCertInfo, "updateAllCertInfo", "x", false, "Update server certificates and expiries")
