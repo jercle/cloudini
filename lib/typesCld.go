@@ -135,6 +135,7 @@ type MongoDBConfig struct {
 	CollAzResVcpuCounts             string `json:"collAzResVcpuCounts,omitempty"`
 	CollAzResIPAddresses            string `json:"collAzResIPAddresses,omitempty"`
 	CollAzResP2SVpnConnections      string `json:"collAzResP2SVpnConnections,omitempty"`
+	CollAzResResChanges             string `json:"collAzResResChanges,omitempty"`
 	CollAzResIntuneManagedDevices   string `json:"collAzResIntuneManagedDevices,omitempty"`
 	CollAzStorageAcctMinTlsVersions string `json:"collAzStorageAcctMinTlsVersions,omitempty"`
 	CollAzKeyVaultSecrets           string `json:"collAzKeyVaultSecrets,omitempty"`
@@ -190,6 +191,7 @@ type AzureConfig struct {
 	MultiTenantAuth struct {
 		Tenants CldConfigTenants `json:"tenants,omitempty" fake:"-"`
 	} `json:"multiTenantAuth,omitempty"`
+	LogAnalytics               LogAnalyticsConfig  `json:"logAnalytics,omitempty"`
 	TenantMap                  map[string]string   `json:"tenantMap,omitempty"`
 	CustomSubIdToTenantNameMap map[string][]string `json:"customSubIdToTenantNameMap,omitempty"`
 	TenantAliases              map[string]string   `json:"tenantAliases,omitempty"`
@@ -254,5 +256,11 @@ type TokenCache map[string]string
 type SupportAlertsConfig struct {
 	DefaultTenant     string            `json:"defaultTenant,omitempty"`
 	TenantWorkbookIds map[string]string `json:"tenantWorkbookIds,omitempty"`
+	// WorkbookId string `json:"workbookId,omitempty"`
+}
+
+type LogAnalyticsConfig struct {
+	ResourceChangesQueries map[string]string `json:"resourceChangesQueries,omitempty"`
+	TenantWorkspaceIds     map[string]string `json:"tenantWorkspaceIds,omitempty"`
 	// WorkbookId string `json:"workbookId,omitempty"`
 }

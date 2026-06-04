@@ -1478,6 +1478,9 @@ func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Coll
 
 		if len(machinesMissingResUtil) > 0 {
 			// fmt.Println("if len(machinesMissingResUtil) > 0 {")
+			// fmt.Println(len(machinesMissingResUtil))
+			// jsonStr, _ := json.MarshalIndent(machinesMissingResUtil, "", "  ")
+			// os.WriteFile("/home/jercle/git/cld/dev/main-mongo-machinesMissingResUtil.json", jsonStr, 0644)
 			for _, m := range machinesMissingResUtil {
 
 				filter := bson.D{
@@ -1532,11 +1535,33 @@ func UpdateKeyVaultSecrets(coll *mongo.Collection) {
 	allSecrets := azure.KeyVaultListSecretsAndCertsForAllConfiguredTenants()
 	s.Stop()
 
-	fmt.Println("Upserting Citrix Monitor data to database...")
+	fmt.Println("Upserting secret IDs to database...")
 	s.Start()
 
-	results := UpsertKeyVaultSecrets(allSecrets, coll)
+	// results := UpsertKeyVaultSecrets(allSecrets, coll)
+	UpsertKeyVaultSecrets(allSecrets, coll)
 
 	s.Stop()
-	lib.JsonMarshalAndPrint(results)
+	// lib.JsonMarshalAndPrint(results)
+}
+
+//
+//
+
+func UpdateResourceChanges(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	fmt.Println("Fetching all resource changes...")
+	s.Start()
+	allResChanges := azure.GetResourceChangesForAllConfiguredTenants()
+	s.Stop()
+
+	fmt.Println("Upserting resource changes to database...")
+	s.Start()
+
+	UpsertResourceChanges(allResChanges, coll)
+	// results := UpsertResourceChanges(allResChanges, coll)
+
+	s.Stop()
+	// lib.JsonMarshalAndPrint(results)
 }

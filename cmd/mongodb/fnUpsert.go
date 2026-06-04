@@ -1674,3 +1674,28 @@ func UpsertKeyVaultSecrets(allSecrets []azure.KeyVaultSecretStored, coll *mongo.
 
 	return
 }
+
+//
+//
+
+func UpsertResourceChanges(resourceChanges []azure.ResourceChange, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+	for _, doc := range resourceChanges {
+		// filter := bson.D{{"_id", doc.ID}}
+		// update := bson.D{{"$set", doc}}
+		// updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+		updates = append(updates, mongo.NewInsertOneModel().SetDocument(doc))
+
+	}
+	results, err := coll.BulkWrite(ctx, updates, nil)
+	// lib.CheckFatalError(err)
+	if err != nil {
+		if !strings.Contains(err.Error(), "E11000 duplicate key") && !strings.Contains(err.Error(), "Duplicate key violation") {
+			lib.CheckFatalError(err)
+		}
+	}
+
+	return
+}
