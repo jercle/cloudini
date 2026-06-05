@@ -1680,6 +1680,9 @@ func UpsertKeyVaultSecrets(allSecrets []azure.KeyVaultSecretStored, coll *mongo.
 
 func UpsertResourceChanges(resourceChanges []azure.ResourceChange, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
 	ctx := context.TODO()
+	if len(resourceChanges) == 0 {
+		return
+	}
 
 	var updates []mongo.WriteModel
 	for _, doc := range resourceChanges {
