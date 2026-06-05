@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.4.5]
+* Change db action of resource changes to be upsert instead of insert
+
 ## [0.4.4]
 * Add azure/GetResourceChanges
 * Update deps
