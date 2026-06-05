@@ -41,3 +41,4 @@ scripts/rsync.sh
 scripts/replace.sh
 cmd/mongodb/aggregatedFuncs-p2svpn-array.json
 cmd/mongodb/aggregatedFuncs-p2svpn.json
+.env.leave
