@@ -602,3 +602,75 @@ func GetEntraUserByObjectId(objectId string, token *lib.AzureMultiAuthToken, sel
 
 	return
 }
+
+//
+//
+
+func GetTenantIdentityChanges(workspaceId string, query string, token *lib.AzureMultiAuthToken) (identityChanges []IdentityChange) {
+	res := RunLogAnalyticsQuery(workspaceId, query, *token)
+
+	// var resChanges []ResourceChangeRaw
+
+	resStr, _ := json.Marshal(res.Tables[0].Rows)
+	// fmt.Println(string(resStr))
+	err := json.Unmarshal(resStr, &identityChanges)
+	lib.CheckFatalError(err)
+
+	// for _, c := range resChanges {
+	// curr := c
+	// curr.Changes = ""
+	// changes := make(map[string]ResourceChangePropChange)
+	// err := json.Unmarshal([]byte(c.Changes), &changes)
+	// if err != nil {
+	// 	lib.JsonMarshalAndPrint(c)
+	// 	lib.CheckFatalError(err)
+	// }
+
+	// jsonStr, _ := json.Marshal(curr)
+	// var processed ResourceChange
+	// err = json.Unmarshal(jsonStr, &processed)
+	// lib.CheckFatalError(err)
+	// processed.Changes = changes
+	// identityChanges = append(identityChanges, processed)
+	// }
+	// resChange
+
+	return
+}
+
+//
+//
+
+func GetIdentityChangesForAllConfiguredTenants() (identityChanges []IdentityChange) {
+	config := lib.GetCldConfig(nil)
+	tenants := config.Azure.MultiTenantAuth.Tenants
+
+	var (
+		wg  sync.WaitGroup
+		mux sync.Mutex
+	)
+
+	for tName, tData := range tenants {
+		// if tName != "RED" {
+		// 	continue
+		// }
+		if tData.GetWorkbookAlerts {
+			wg.Go(func() {
+				workspaceId := config.Azure.LogAnalytics.TenantWorkspaceIds[tName]
+				query := config.Azure.LogAnalytics.IdentityChangesQuery
+				// fmt.Println(tName)
+				token, err := GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
+					TenantName: tName,
+					Scope:      "loganalytics",
+				}, nil)
+				lib.CheckFatalError(err)
+				tenantIdentityChanges := GetTenantIdentityChanges(workspaceId, query, token)
+				mux.Lock()
+				identityChanges = append(identityChanges, tenantIdentityChanges...)
+				mux.Unlock()
+			})
+		}
+	}
+	wg.Wait()
+	return
+}

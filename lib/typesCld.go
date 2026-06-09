@@ -156,6 +156,7 @@ type MongoDBConfig struct {
 	CollEntraRoleEligibilityScheduleInstances string `json:"collEntraRoleEligibilityScheduleInstances,omitempty"`
 	CollEntraB2CUsers                         string `json:"collEntraB2CUsers,omitempty"`
 	CollEntraFrGroups                         string `json:"collEntraFrGroups,omitempty"`
+	CollEntraIdentityChanges                  string `json:"collEntraIdentityChanges,omitempty"`
 
 	CollEnvOptCosting           string `json:"collEnvOptCosting,omitempty"`
 	CollEnvOptCostingMeters     string `json:"collEnvOptCostingMeters,omitempty"`
@@ -260,6 +261,7 @@ type SupportAlertsConfig struct {
 }
 
 type LogAnalyticsConfig struct {
+	IdentityChangesQuery   string            `json:"identityChangesQuery,omitempty"`
 	ResourceChangesQueries map[string]string `json:"resourceChangesQueries,omitempty"`
 	TenantWorkspaceIds     map[string]string `json:"tenantWorkspaceIds,omitempty"`
 	// WorkbookId string `json:"workbookId,omitempty"`

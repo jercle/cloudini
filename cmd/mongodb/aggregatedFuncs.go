@@ -1565,3 +1565,21 @@ func UpdateResourceChanges(coll *mongo.Collection) {
 	s.Stop()
 	// lib.JsonMarshalAndPrint(results)
 }
+
+func UpdateIdentityChanges(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	fmt.Println("Fetching all resource changes...")
+	s.Start()
+	allChanges := azure.GetIdentityChangesForAllConfiguredTenants()
+	s.Stop()
+
+	fmt.Println("Upserting resource changes to database...")
+	s.Start()
+
+	UpsertIdentityChanges(allChanges, coll)
+	// results := UpsertResourceChanges(allChanges, coll)
+
+	s.Stop()
+	// lib.JsonMarshalAndPrint(results)
+}

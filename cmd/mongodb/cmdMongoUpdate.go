@@ -31,6 +31,7 @@ var (
 	updateFrADGroups                                bool
 	updateKeyVaultSecrets                           bool
 	updateResourceChanges                           bool
+	updateIdentityChanges                           bool
 	// updateSupportAlerts                             bool
 	// updateAWSMonitoringData                         bool
 	updateAll                  bool
@@ -106,6 +107,7 @@ var cmdMongoUpdate = &cobra.Command{
 		entraRoleEligibilityScheduleInstancesColl := c.Database(mongoConf.DbEntra).Collection(mongoConf.CollEntraRoleEligibilityScheduleInstances)
 		entraB2CUsersColl := c.Database(mongoConf.DbEntra).Collection(mongoConf.CollEntraB2CUsers)
 		entraFrGroupsColl := c.Database(mongoConf.DbEntra).Collection(mongoConf.CollEntraFrGroups)
+		entraIdentityChangesColl := c.Database(mongoConf.DbEntra).Collection(mongoConf.CollEntraIdentityChanges)
 
 		// envOptCostingColl := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptCosting)
 		envOptCostingMetersColl := c.Database(mongoConf.DbEnvironmentOptimisation).Collection(mongoConf.CollEnvOptCostingMeters)
@@ -244,7 +246,13 @@ var cmdMongoUpdate = &cobra.Command{
 			wg.Go(func() {
 				// UpdateSupportAlerts(genSupportAlertsColl)
 				UpdateResourceChanges(azResResourceChanges)
+			})
+		}
 
+		if updateAll || updateIdentityChanges {
+			wg.Go(func() {
+				// UpdateSupportAlerts(genSupportAlertsColl)
+				UpdateIdentityChanges(entraIdentityChangesColl)
 			})
 		}
 
@@ -304,6 +312,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateKeyVaultSecrets, "updateKeyVaultSecrets", "k", false, "Gets all KV secret names, upserts to database.")
 	cmdMongoUpdate.Flags().StringVarP(&costDataMonth, "costDataMonth", "m", "", "Which month to get cost data from - defaults to whatever month it was yesterday. Use with 'updateAzureResVcpuCountsCostData' Format: YYYYMM")
 	cmdMongoUpdate.Flags().BoolVarP(&updateM365Data, "updateM365Data", "o", false, "Updates O365 data")
+	cmdMongoUpdate.Flags().BoolVarP(&updateIdentityChanges, "updateIdentityChanges", "n", false, "Gets identity changes from LA and updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateEntraPimItems, "updateEntraPimItems", "p", false, "Gets all PIM assignments and eligibilities, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateResources, "updateResources", "r", false, "Updates Database with current Azure resources")
 	cmdMongoUpdate.Flags().BoolVarP(&updateResourceChanges, "updateResourceChanges", "s", false, "Gets resource changes from LA and updates database")
