@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.4.7]
+* Add azure/GetIdentityChanges
+
+## [0.4.6]
+* Breakfix: Add handling of empty slice for UpsertResourceChanges
+
 ## [0.4.5]
 * Change db action of resource changes to be upsert instead of insert
 

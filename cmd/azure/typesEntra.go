@@ -800,3 +800,18 @@ type EntraUser struct {
 	UserPrincipalName string  `json:"userPrincipalName,omitempty,omitzero" bson:"userPrincipalName,omitempty,omitzero"`
 	UserType          string  `json:"userType,omitempty,omitzero" bson:"userType,omitempty,omitzero"`
 }
+
+//
+//
+
+type IdentityChange struct {
+	TimeGenerated time.Time `json:"TimeGenerated,omitempty,omitzero" bson:"TimeGenerated,omitempty,omitzero"`
+	ActionType    string    `json:"actionType,omitempty,omitzero" bson:"actionType,omitempty,omitzero"`
+	ActorAccount  *string   `json:"actorAccount,omitempty,omitzero" bson:"actorAccount,omitempty,omitzero"`
+	Domain        string    `json:"domain,omitempty,omitzero" bson:"domain,omitempty,omitzero"`
+	FromGroup     *string   `json:"fromGroup,omitempty,omitzero" bson:"fromGroup,omitempty,omitzero"`
+	ReportID      string    `json:"reportId,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
+	TargetAccount string    `json:"targetAccount,omitempty,omitzero" bson:"targetAccount,omitempty,omitzero"`
+	TargetGroup   *string   `json:"targetGroup,omitempty,omitzero" bson:"targetGroup,omitempty,omitzero"`
+	ToGroup       *string   `json:"toGroup,omitempty,omitzero" bson:"toGroup,omitempty,omitzero"`
+}

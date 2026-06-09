@@ -391,7 +391,8 @@ func RunLogAnalyticsQuery(workspaceId string, query string, token lib.AzureMulti
 	urlString := "https://api.loganalytics.azure.com/v1/workspaces/" + workspaceId + "/query"
 
 	queryStr, _ := json.Marshal(query)
-	jsonBody := `{"query":` + string(queryStr) + `, "timespan": "PT24H"}`
+	jsonBody := `{"query":` + string(queryStr) + "}"
+	// jsonBody := `{"query":` + string(queryStr) + `, "timespan": "PT24H"}`
 
 	res, _, err := HttpPost(urlString, jsonBody, token)
 	lib.CheckFatalError(err)

@@ -105,46 +105,45 @@ func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthToke
 		tokenRequestOptions.Scopes = []string{"cfa8b339-82a2-471a-a3c9-0fc0be7a4093/.default"}
 	// case "acr":
 	// tokenRequestOptions.Scopes = []string{}
-
-	// encodedData := b64.StdEncoding.EncodeToString([]byte(options.ClientID + ":" + options.ClientSecret))
-	// urlString := "https://" +
-	// 	options.AzureContainerRepositoryName +
-	// 	".azurecr.io/oauth2/token?service=" +
-	// 	options.AzureContainerRepositoryName +
-	// 	".azurecr.io&scope=repository:*:*"
-	// req, err := http.NewRequest(http.MethodGet, urlString, nil)
-	// lib.CheckFatalError(err)
-
-	// req.Header.Add("Content-Type", "application/json")
-	// req.Header.Add("Authorization", "Basic "+encodedData)
-
-	// res, err := http.DefaultClient.Do(req)
-	// lib.CheckFatalError(err)
-
-	// responseBody, err := io.ReadAll(res.Body)
-	// lib.CheckFatalError(err)
-	// defer res.Body.Close()
-
-	// var token lib.AcrAccessToken
-	// json.Unmarshal(responseBody, &token)
-
-	// tokenData := lib.AzureTokenData{
-	// 	Token: token.AccessToken,
-	// }
-
-	// if !options.NoCache {
-	// 	if mut != nil {
-	// 		mut.Lock()
-	// 	}
-	// 	lib.CacheSaveToken(tokenData, "az"+strings.ToLower(options.TenantName)+options.Scope, cldConfigOpts)
-	// 	if mut != nil {
-	// 		mut.Unlock()
-	// 	}
-	// }
-	// return &tokenData, nil
-
 	default:
 		tokenRequestOptions.Scopes = []string{"https://management.core.windows.net/.default"}
+
+		// encodedData := b64.StdEncoding.EncodeToString([]byte(options.ClientID + ":" + options.ClientSecret))
+		// urlString := "https://" +
+		// 	options.AzureContainerRepositoryName +
+		// 	".azurecr.io/oauth2/token?service=" +
+		// 	options.AzureContainerRepositoryName +
+		// 	".azurecr.io&scope=repository:*:*"
+		// req, err := http.NewRequest(http.MethodGet, urlString, nil)
+		// lib.CheckFatalError(err)
+
+		// req.Header.Add("Content-Type", "application/json")
+		// req.Header.Add("Authorization", "Basic "+encodedData)
+
+		// res, err := http.DefaultClient.Do(req)
+		// lib.CheckFatalError(err)
+
+		// responseBody, err := io.ReadAll(res.Body)
+		// lib.CheckFatalError(err)
+		// defer res.Body.Close()
+
+		// var token lib.AcrAccessToken
+		// json.Unmarshal(responseBody, &token)
+
+		// tokenData := lib.AzureTokenData{
+		// 	Token: token.AccessToken,
+		// }
+
+		// if !options.NoCache {
+		// 	if mut != nil {
+		// 		mut.Lock()
+		// 	}
+		// 	lib.CacheSaveToken(tokenData, "az"+strings.ToLower(options.TenantName)+options.Scope, cldConfigOpts)
+		// 	if mut != nil {
+		// 		mut.Unlock()
+		// 	}
+		// }
+		// return &tokenData, nil
 	}
 	tokenRequestOptions.EnableCAE = true
 
