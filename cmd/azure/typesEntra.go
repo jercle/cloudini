@@ -805,13 +805,14 @@ type EntraUser struct {
 //
 
 type IdentityChange struct {
-	TimeGenerated time.Time `json:"TimeGenerated,omitempty,omitzero" bson:"TimeGenerated,omitempty,omitzero"`
-	ActionType    string    `json:"actionType,omitempty,omitzero" bson:"actionType,omitempty,omitzero"`
-	ActorAccount  *string   `json:"actorAccount,omitempty,omitzero" bson:"actorAccount,omitempty,omitzero"`
-	Domain        string    `json:"domain,omitempty,omitzero" bson:"domain,omitempty,omitzero"`
-	FromGroup     *string   `json:"fromGroup,omitempty,omitzero" bson:"fromGroup,omitempty,omitzero"`
-	ReportID      string    `json:"reportId,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
-	TargetAccount string    `json:"targetAccount,omitempty,omitzero" bson:"targetAccount,omitempty,omitzero"`
-	TargetGroup   *string   `json:"targetGroup,omitempty,omitzero" bson:"targetGroup,omitempty,omitzero"`
-	ToGroup       *string   `json:"toGroup,omitempty,omitzero" bson:"toGroup,omitempty,omitzero"`
+	Timestamp        time.Time `json:"timestamp,omitempty,omitzero" bson:"timestamp,omitempty,omitzero"`
+	ActionType       string    `json:"actionType,omitempty,omitzero" bson:"actionType,omitempty,omitzero"`
+	ActorAccount     string    `json:"actorAccount,omitempty,omitzero" bson:"actorAccount,omitempty,omitzero"`
+	TenantName       string    `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
+	ReportID         string    `json:"reportId,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
+	TargetAccount    string    `json:"targetAccount,omitempty,omitzero" bson:"targetAccount,omitempty,omitzero"`
+	MembershipChange string    `json:"membershipChange,omitempty,omitzero" bson:"membershipChange,omitempty,omitzero"`
+	TargetGroup      string    `json:"targetGroup,omitempty,omitzero" bson:"targetGroup,omitempty,omitzero"`
+	Target           string    `json:"target,omitempty,omitzero" bson:"target,omitempty,omitzero"`
+	TargetType       string    `json:"targetType,omitempty,omitzero" bson:"targetType,omitempty,omitzero"`
 }

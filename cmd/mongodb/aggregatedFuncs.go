@@ -758,8 +758,9 @@ func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, t
 	startTime = time.Now()
 	UpdateResourcesNotExistInAzure(allResourcesSlice, opts.AzResResourceListColl)
 	elapsed = time.Since(startTime)
-	os.RemoveAll(cachePath + "/allResourcesSlice.json")
-	os.RemoveAll(cachePath + "/allResources.json")
+
+	// os.RemoveAll(cachePath + "/allResourcesSlice.json")
+	// os.RemoveAll(cachePath + "/allResources.json")
 	s.Stop()
 	fmt.Println(elapsed)
 }
@@ -1569,16 +1570,15 @@ func UpdateResourceChanges(coll *mongo.Collection) {
 func UpdateIdentityChanges(coll *mongo.Collection) {
 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 
-	fmt.Println("Fetching all resource changes...")
+	fmt.Println("Fetching all identity changes...")
 	s.Start()
 	allChanges := azure.GetIdentityChangesForAllConfiguredTenants()
 	s.Stop()
 
-	fmt.Println("Upserting resource changes to database...")
+	fmt.Println("Upserting identity changes to database...")
 	s.Start()
 
 	UpsertIdentityChanges(allChanges, coll)
-	// results := UpsertResourceChanges(allChanges, coll)
 
 	s.Stop()
 	// lib.JsonMarshalAndPrint(results)

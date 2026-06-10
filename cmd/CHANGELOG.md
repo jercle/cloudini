@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.4.8]
+* azure/GetIdentityChanges type changes
+
 ## [0.4.7]
 * Add azure/GetIdentityChanges
 
