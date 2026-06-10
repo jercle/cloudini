@@ -172,7 +172,8 @@ type MongoDBConfig struct {
 	CollIpamIpAddressBlocks string `json:"collIpamIpAddressBlocks,omitempty"`
 	CollIpamIpAddresses     string `json:"collIpamIpAddresses,omitempty"`
 
-	CollM365MailboxStatistics string `json:"collM365MailboxStatistics,omitempty"`
+	CollM365MailboxStatistics      string `json:"collM365MailboxStatistics,omitempty"`
+	CollExchangeOnlineDmarcReports string `json:"collExchangeOnlineDmarcReports,omitempty"`
 }
 
 // type ServerList []string
@@ -192,17 +193,29 @@ type AzureConfig struct {
 	MultiTenantAuth struct {
 		Tenants CldConfigTenants `json:"tenants,omitempty" fake:"-"`
 	} `json:"multiTenantAuth,omitempty"`
-	LogAnalytics               LogAnalyticsConfig  `json:"logAnalytics,omitempty"`
-	TenantMap                  map[string]string   `json:"tenantMap,omitempty"`
-	CustomSubIdToTenantNameMap map[string][]string `json:"customSubIdToTenantNameMap,omitempty"`
-	TenantAliases              map[string]string   `json:"tenantAliases,omitempty"`
-	CostDataBlobPrefix         string              `json:"costDataBlobPrefix,omitempty"`
-	SkuListSubscription        string              `json:"skuListSubscription,omitempty"`
-	SkuListAuthTenant          string              `json:"skuListAuthTenant,omitempty"`
-	ResourceLocation           string              `json:"resourceLocation,omitempty"`
-	VirtualMachines            map[string]string   `json:"virtualMachines,omitempty"`
-	SupportAlerts              SupportAlertsConfig `json:"supportAlerts,omitempty"`
-	Ipam                       IpamConfig          `json:"ipam,omitempty"`
+	LogAnalytics               LogAnalyticsConfig   `json:"logAnalytics,omitempty"`
+	TenantMap                  map[string]string    `json:"tenantMap,omitempty"`
+	CustomSubIdToTenantNameMap map[string][]string  `json:"customSubIdToTenantNameMap,omitempty"`
+	TenantAliases              map[string]string    `json:"tenantAliases,omitempty"`
+	CostDataBlobPrefix         string               `json:"costDataBlobPrefix,omitempty"`
+	SkuListSubscription        string               `json:"skuListSubscription,omitempty"`
+	SkuListAuthTenant          string               `json:"skuListAuthTenant,omitempty"`
+	ResourceLocation           string               `json:"resourceLocation,omitempty"`
+	VirtualMachines            map[string]string    `json:"virtualMachines,omitempty"`
+	SupportAlerts              SupportAlertsConfig  `json:"supportAlerts,omitempty"`
+	Ipam                       IpamConfig           `json:"ipam,omitempty"`
+	ExchangeOnlineConfig       ExchangeOnlineConfig `json:"exchangeOnline,omitempty"`
+}
+
+type ExchangeOnlineConfig struct {
+	DmarcReportsConfig DmarcReportsConfig `json:"dmarcReports,omitempty"`
+}
+
+type DmarcReportsConfig struct {
+	ClientId     string `json:"clientId,omitempty"`
+	ClientSecret string `json:"clientSecret,omitempty"`
+	TenantId     string `json:"tenantId,omitempty"`
+	Mailbox      string `json:"mailbox,omitempty"`
 }
 
 type IpamConfig struct {
@@ -261,7 +274,7 @@ type SupportAlertsConfig struct {
 }
 
 type LogAnalyticsConfig struct {
-	IdentityChangesQuery   string            `json:"identityChangesQuery,omitempty"`
+	IdentityChangesQueries map[string]string `json:"identityChangesQueries,omitempty"`
 	ResourceChangesQueries map[string]string `json:"resourceChangesQueries,omitempty"`
 	TenantWorkspaceIds     map[string]string `json:"tenantWorkspaceIds,omitempty"`
 	// WorkbookId string `json:"workbookId,omitempty"`

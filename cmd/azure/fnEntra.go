@@ -657,7 +657,7 @@ func GetIdentityChangesForAllConfiguredTenants() (identityChanges []IdentityChan
 		if tData.GetWorkbookAlerts {
 			wg.Go(func() {
 				workspaceId := config.Azure.LogAnalytics.TenantWorkspaceIds[tName]
-				query := config.Azure.LogAnalytics.IdentityChangesQuery
+				query := config.Azure.LogAnalytics.IdentityChangesQueries[tName]
 				// fmt.Println(tName)
 				token, err := GetTenantSPToken(lib.AzureMultiAuthTokenRequestOptions{
 					TenantName: tName,
