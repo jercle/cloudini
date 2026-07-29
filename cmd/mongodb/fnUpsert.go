@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -273,8 +274,16 @@ func UpsertMonthlyTenantSubResGrpCosts(
 	fmt.Println("Upserting Tenant data...")
 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 	s.Start()
+	// if len(updateTenants) > 0 {
 	results.UpdateTenants, err = costingTenantsColl.BulkWrite(ctx, updateTenants)
-	lib.CheckFatalError(err)
+	// lib.CheckFatalError(err)
+	if err != nil {
+		// fmt.Println(currTenant)
+		jsonStr, _ := json.Marshal(updateTenants)
+		os.WriteFile("UpsertMonthlyTenantSubResGrpCosts-updateTenants.json", jsonStr, 0644)
+		lib.JsonMarshalAndPrint(err)
+	}
+	// }
 	results.UpdateTenantsCostData, err = costingTenantsColl.BulkWrite(ctx, updateTenantsCostData)
 	lib.CheckFatalError(err)
 	s.Stop()
@@ -439,6 +448,432 @@ func UpsertMonthlyTenantSubResGrpCosts(
 	// s.Stop()
 	return results
 }
+
+// func UpsertOnlyCostData(
+// 	costData lib.AggregatedCostData,
+// 	costExportMonth string,
+// 	costingTenantsColl *mongo.Collection,
+// 	costingSubsColl *mongo.Collection,
+// 	costingResGrpsColl *mongo.Collection,
+// 	costingResourcesColl *mongo.Collection,
+// 	costingMetersColl *mongo.Collection,
+// 	tenantsColl *mongo.Collection,
+// ) (results UpsertMonthlyTenantSubResGrpCostsResults) {
+// 	var (
+// 		tenants                   []MongoDbAzureTenant
+// 		updateTenants             []mongo.WriteModel
+// 		updateTenantsCostData     []mongo.WriteModel
+// 		mongoTenantsCostData      []lib.MongoDbCostTenant
+// 		tenantsProcessedUpdates   []mongo.WriteModel
+// 		updateSubs                []mongo.WriteModel
+// 		updateSubsCostData        []mongo.WriteModel
+// 		mongoSubsCostData         []lib.MongoDbCostSubscription
+// 		subsProcessedUpdates      []mongo.WriteModel
+// 		updateResGrps             []mongo.WriteModel
+// 		updateResGrpsCostData     []mongo.WriteModel
+// 		mongoResGrpsCostData      []lib.MongoDbCostResourceGroup
+// 		resGrpsProcessedUpdates   []mongo.WriteModel
+// 		updateResources           []mongo.WriteModel
+// 		updateResourcesCostData   []mongo.WriteModel
+// 		mongoResourcesCostData    []lib.MongoDbCostResourceGroup
+// 		resourcesProcessedUpdates []mongo.WriteModel
+// 		updateMeters              []mongo.WriteModel
+// 		updateMetersCostData      []mongo.WriteModel
+// 		mongoMetersCostData       []lib.MongoDbCostMeter
+// 		metersProcessedUpdates    []mongo.WriteModel
+// 	)
+
+// 	_ = tenantsProcessedUpdates
+// 	_ = subsProcessedUpdates
+// 	_ = resGrpsProcessedUpdates
+// 	_ = resourcesProcessedUpdates
+// 	_ = metersProcessedUpdates
+
+// 	ctx := context.TODO()
+// 	rsp, err := tenantsColl.Find(ctx, bson.D{{}})
+// 	lib.CheckFatalError(err)
+// 	err = rsp.All(ctx, &tenants)
+// 	lib.CheckFatalError(err)
+
+// 	tenantAliases := make(map[string]string)
+
+// 	for _, tData := range tenants {
+// 		for _, alias := range tData.Aliases {
+// 			tenantAliases[alias] = tData.TenantName
+// 		}
+// 	}
+// 	// var allRes []lib.MongoDbCostResource
+
+// 	for tenantName, tenantData := range costData {
+
+// 		matchName := ""
+// 		alias, ok := tenantAliases[tenantName]
+// 		if ok {
+// 			matchName = alias
+// 		} else {
+// 			matchName = tenantName
+// 		}
+// 		var tenantDetails MongoDbAzureTenant
+// 		for _, t := range tenants {
+// 			if strings.EqualFold(t.TenantName, matchName) {
+// 				tenantDetails = t
+// 			}
+// 		}
+
+// 		var currTenant lib.MongoDbCostTenant
+// 		var tcd lib.MongoDbCostData
+// 		tcd.CostPerDay = tenantData.CostPerDay
+// 		tcd.MonthTotalCost = tenantData.MonthTotalCost
+// 		currTenant.CostGroups = tenantData.CostGroups
+// 		currTenant.TenantName = tenantName
+// 		currTenant.TenantId = tenantDetails.TenantId
+// 		currTenant.LastDBSync = time.Now()
+
+// 		for subName, subData := range tenantData.Subscriptions {
+// 			var currSub lib.MongoDbCostSubscription
+// 			var scd lib.MongoDbCostData
+// 			scd.CostPerDay = subData.CostPerDay
+// 			scd.MonthTotalCost = subData.MonthTotalCost
+
+// 			currSub.CostGroups = subData.CostGroups
+// 			currSub.TenantId = currTenant.TenantId
+// 			currSub.TenantName = tenantName
+// 			currSub.SubscriptionId = tenantDetails.Subscriptions[strings.ToLower(subName)].SubscriptionID
+// 			currSub.SubscriptionName = subName
+// 			currSub.LastDBSync = time.Now()
+
+// 			for rgName, rgData := range subData.ResourceGroups {
+// 				var currResGrp lib.MongoDbCostResourceGroup
+// 				var rgcd lib.MongoDbCostData
+// 				rgcd.CostPerDay = rgData.CostPerDay
+// 				rgcd.MonthTotalCost = rgData.MonthTotalCost
+
+// 				currResGrp.CostGroups = rgData.CostGroups
+// 				currResGrp.TenantId = currSub.TenantId
+// 				currResGrp.TenantName = currSub.TenantName
+// 				currResGrp.SubscriptionId = currSub.SubscriptionId
+// 				currResGrp.SubscriptionName = currSub.SubscriptionName
+// 				currResGrp.Name = rgName
+// 				currResGrp.MongoId = strings.ToLower(tenantName + "_" + currResGrp.SubscriptionId + "_" + currResGrp.Name)
+// 				currResGrp.LastDBSync = time.Now()
+
+// 				for resName, resData := range rgData.Resources {
+// 					var currRes lib.MongoDbCostResource
+// 					var rcd lib.MongoDbCostData
+// 					rcd.CostPerDay = resData.CostPerDay
+// 					rcd.MonthTotalCost = resData.MonthTotalCost
+
+// 					resourceRef := strings.ToLower(rgName) + "_" + strings.ToLower(resName)
+
+// 					ctxDelGrp := ctxDelGrpsByResGrpAndName[resourceRef]
+// 					resType := ""
+
+// 					currRes.CostGroups = resData.CostGroups
+// 					currRes.TenantId = currSub.TenantId
+// 					currRes.TenantName = currSub.TenantName
+// 					currRes.SubscriptionId = currSub.SubscriptionId
+// 					currRes.SubscriptionName = currSub.SubscriptionName
+// 					currRes.ResourceGroupName = rgName
+// 					currRes.ResGrpMongoId = currResGrp.MongoId
+// 					currRes.Name = resName
+// 					currRes.CitrixDeliveryGroup = ctxDelGrp
+// 					currRes.ResourceType = resData.ResourceType
+// 					currRes.MongoId = strings.ToLower(tenantName + "_" + currRes.SubscriptionId + "_" + currRes.ResourceGroupName + "_" + resName)
+// 					currRes.LastDBSync = time.Now()
+
+// 					for _, meterData := range resData.MeterData {
+// 						var currMeter lib.MongoDbCostMeter
+// 						var mcd lib.MongoDbCostData
+// 						mcd.CostPerDay = meterData.CostPerDay
+// 						// mcd.UsageQuantityPerDay = meterData.quan
+// 						mcd.MonthTotalCost = meterData.MonthTotalCost
+// 						mcd.ResourceRate = meterData.ResourceRate
+// 						mcd.UnitOfMeasure = meterData.UnitOfMeasure
+
+// 						currMeter.TenantId = currSub.TenantId
+// 						currMeter.TenantName = currSub.TenantName
+// 						currMeter.SubscriptionId = currSub.SubscriptionId
+// 						currMeter.SubscriptionName = currSub.SubscriptionName
+// 						currMeter.ResourceGroupName = rgName
+// 						currMeter.ResGrpMongoId = currResGrp.MongoId
+// 						currMeter.ResourceMongoId = currRes.MongoId
+// 						currMeter.ResourceMeterIdentifier = meterData.ResourceMeterIdentifier
+// 						currMeter.MeterCategory = meterData.MeterCategory
+// 						currMeter.ProductName = meterData.ProductName
+// 						currMeter.ConsumedService = meterData.ConsumedService
+// 						currMeter.MeterName = meterData.MeterName
+// 						currMeter.ResourceType = meterData.ResourceType
+// 						currMeter.LastDBSync = time.Now()
+// 						currMeter.ResourceName = resName
+
+// 						resType = currMeter.ResourceType
+
+// 						// TODO: Add the below, but unique items
+// 						// currTenant.RelatedCostMeters = append(currTenant.RelatedCostMeters, meterData.ResourceMeterIdentifier)
+// 						// currSub.RelatedCostMeters = append(currSub.RelatedCostMeters, meterData.ResourceMeterIdentifier)
+// 						// currResGrp.RelatedCostMeters = append(currResGrp.RelatedCostMeters, meterData.ResourceMeterIdentifier)
+// 						// currRes.RelatedCostMeters = append(currRes.RelatedCostMeters, meterData.ResourceMeterIdentifier)
+
+// 						filterMeter := bson.D{{"_id", currMeter.ResourceMeterIdentifier}}
+// 						updateMeter := bson.D{{"$set", currMeter}}
+// 						updateMeters = append(updateMeters, mongo.NewUpdateOneModel().SetFilter(filterMeter).SetUpdate(updateMeter).SetUpsert(true))
+// 						updateMeterCostData := bson.D{{"$set", bson.D{{"costData." + costExportMonth, mcd}}}}
+// 						updateMetersCostData = append(updateMetersCostData, mongo.NewUpdateOneModel().SetFilter(filterMeter).SetUpdate(updateMeterCostData).SetUpsert(true))
+// 					}
+
+// 					currRes.ResourceType = resType
+
+// 					if strings.Contains(currRes.Name, "dtw") {
+// 						if currRes.ResourceType == "microsoft.compute/disks" {
+// 							nameSpl := strings.Split(currRes.Name, "-")
+// 							vmName := strings.Join(nameSpl[:len(nameSpl)-2], "-")
+// 							resourceRef := strings.ToLower(rgName) + "_" + strings.ToLower(vmName)
+// 							dg := ctxDelGrpsByResGrpAndName[resourceRef]
+
+// 							if dg == "" {
+// 								// lib.JsonMarshalAndPrint(currRes)
+// 								// fmt.Println(resourceRef)
+// 								// os.Exit(0)
+// 								// dg = currRes.ResourceGroupName + "_" + vmName + " - Unknown Del Grp - Resource Likely Deleted"
+// 								dg = "UNKNOWN_DG-" + currRes.TenantName + "\\" + vmName
+// 							}
+// 							currRes.CitrixDeliveryGroup = dg
+
+// 						} else if currRes.ResourceType == "microsoft.network/networkinterfaces" {
+// 							nameSpl := strings.Split(currRes.Name, "-")
+// 							vmName := strings.Join(nameSpl[:len(nameSpl)-2], "-")
+// 							resourceRef := strings.ToLower(rgName) + "_" + strings.ToLower(vmName)
+// 							dg := ctxDelGrpsByResGrpAndName[resourceRef]
+
+// 							if dg == "" {
+// 								// dg = currRes.ResourceGroupName + "_" + vmName + " - Unknown Del Grp - Resource Likely Deleted"
+// 								dg = "UNKNOWN_DG-" + currRes.TenantName + "\\" + vmName
+// 								// dg = "Unknown - Resource Likely Deleted"
+// 							}
+// 							currRes.CitrixDeliveryGroup = dg
+// 						} else if currRes.ResourceType == "microsoft.compute/virtualmachines" {
+// 							resourceRef := strings.ToLower(rgName) + "_" + strings.ToLower(currRes.Name)
+// 							dg := ctxDelGrpsByResGrpAndName[resourceRef]
+
+// 							if dg == "" {
+// 								// dg = currRes.ResourceGroupName + "_" + currRes.Name + " - Unknown Del Grp - Resource Likely Deleted"
+// 								dg = "UNKNOWN_DG-" + currRes.TenantName + "\\" + currRes.Name
+// 								// dg = "Unknown - Resource Likely Deleted"
+// 							}
+// 							currRes.CitrixDeliveryGroup = dg
+// 						} else if currRes.ResourceType == "microsoft.compute/snapshots" {
+// 							currRes.CitrixDeliveryGroup = "UNKNOWN_DG-" + currRes.TenantName + "\\" + currRes.Name
+// 						}
+
+// 					}
+
+// 					// allRes = append(allRes, currRes)
+
+// 					filterRes := bson.D{{"_id", currRes.MongoId}}
+// 					updateRes := bson.D{{"$set", currRes}}
+// 					updateResources = append(updateResources, mongo.NewUpdateOneModel().SetFilter(filterRes).SetUpdate(updateRes).SetUpsert(true))
+// 					updateResCostData := bson.D{{"$set", bson.D{{"costData." + costExportMonth, rcd}}}}
+// 					updateResourcesCostData = append(updateResourcesCostData, mongo.NewUpdateOneModel().SetFilter(filterRes).SetUpdate(updateResCostData).SetUpsert(true))
+// 				}
+
+// 				filterResGrp := bson.D{{"_id", currResGrp.MongoId}}
+// 				updateResGrp := bson.D{{"$set", currResGrp}}
+// 				updateResGrps = append(updateResGrps, mongo.NewUpdateOneModel().SetFilter(filterResGrp).SetUpdate(updateResGrp).SetUpsert(true))
+// 				updateResGrpCostData := bson.D{{"$set", bson.D{{"costData." + costExportMonth, rgcd}}}}
+// 				updateResGrpsCostData = append(updateResGrpsCostData, mongo.NewUpdateOneModel().SetFilter(filterResGrp).SetUpdate(updateResGrpCostData).SetUpsert(true))
+// 			}
+
+// 			filterSub := bson.D{{"_id", currSub.SubscriptionId}}
+// 			updateSub := bson.D{{"$set", currSub}}
+// 			updateSubs = append(updateSubs, mongo.NewUpdateOneModel().SetFilter(filterSub).SetUpdate(updateSub).SetUpsert(true))
+// 			updateSubCostData := bson.D{{"$set", bson.D{{"costData." + costExportMonth, scd}}}}
+// 			updateSubsCostData = append(updateSubsCostData, mongo.NewUpdateOneModel().SetFilter(filterSub).SetUpdate(updateSubCostData).SetUpsert(true))
+// 		}
+
+// 		filterTenant := bson.D{{"_id", currTenant.TenantName}}
+// 		updateTenant := bson.D{{"$set", currTenant}}
+// 		updateTenants = append(updateTenants, mongo.NewUpdateOneModel().SetFilter(filterTenant).SetUpdate(updateTenant).SetUpsert(true))
+// 		updateTenantCostData := bson.D{{"$set", bson.D{{"costData." + costExportMonth, tcd}}}}
+// 		updateTenantsCostData = append(updateTenantsCostData, mongo.NewUpdateOneModel().SetFilter(filterTenant).SetUpdate(updateTenantCostData).SetUpsert(true))
+// 	}
+
+// 	fmt.Println("Upserting Tenant data...")
+// 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+// 	s.Start()
+// 	// if len(updateTenants) > 0 {
+// 	results.UpdateTenants, err = costingTenantsColl.BulkWrite(ctx, updateTenants)
+// 	// lib.CheckFatalError(err)
+// 	if err != nil {
+// 		// fmt.Println(currTenant)
+// 		jsonStr, _ := json.Marshal(updateTenants)
+// 		os.WriteFile("UpsertMonthlyTenantSubResGrpCosts-updateTenants.json", jsonStr, 0644)
+// 		lib.JsonMarshalAndPrint(err)
+// 	}
+// 	// }
+// 	results.UpdateTenantsCostData, err = costingTenantsColl.BulkWrite(ctx, updateTenantsCostData)
+// 	lib.CheckFatalError(err)
+// 	s.Stop()
+
+// 	fmt.Println("Upserting Subscription data...")
+// 	s.Start()
+// 	results.UpdateSubs, err = costingSubsColl.BulkWrite(ctx, updateSubs)
+// 	lib.CheckFatalError(err)
+// 	results.UpdateSubsCostData, err = costingSubsColl.BulkWrite(ctx, updateSubsCostData)
+// 	lib.CheckFatalError(err)
+// 	s.Stop()
+
+// 	fmt.Println("Upserting Resource Group data...")
+// 	s.Start()
+// 	results.UpdateResGrps, err = costingResGrpsColl.BulkWrite(ctx, updateResGrps)
+// 	lib.CheckFatalError(err)
+// 	results.UpdateResGrpsCostData, err = costingResGrpsColl.BulkWrite(ctx, updateResGrpsCostData)
+// 	lib.CheckFatalError(err)
+// 	s.Stop()
+
+// 	fmt.Println("Upserting Resource data...")
+// 	s.Start()
+// 	results.UpdateResources, err = costingResourcesColl.BulkWrite(ctx, updateResources)
+// 	lib.CheckFatalError(err)
+// 	results.UpdateResourcesCostData, err = costingResourcesColl.BulkWrite(ctx, updateResourcesCostData)
+// 	lib.CheckFatalError(err)
+// 	s.Stop()
+
+// 	fmt.Println("Upserting cost meter data...")
+// 	s.Start()
+// 	results.UpdateMeters, err = costingMetersColl.BulkWrite(ctx, updateMeters)
+// 	lib.CheckFatalError(err)
+// 	results.UpdateMetersCostData, err = costingMetersColl.BulkWrite(ctx, updateMetersCostData)
+// 	lib.CheckFatalError(err)
+// 	s.Stop()
+
+// 	fmt.Println("Pulling all cost data from database for sync...")
+// 	s.Start()
+// 	rsp, err = costingTenantsColl.Find(ctx, bson.D{{}})
+// 	lib.CheckFatalError(err)
+// 	err = rsp.All(ctx, &mongoTenantsCostData)
+// 	lib.CheckFatalError(err)
+// 	rsp, err = costingSubsColl.Find(ctx, bson.D{{}})
+// 	lib.CheckFatalError(err)
+// 	err = rsp.All(ctx, &mongoSubsCostData)
+// 	lib.CheckFatalError(err)
+// 	rsp, err = costingResGrpsColl.Find(ctx, bson.D{{}})
+// 	lib.CheckFatalError(err)
+// 	err = rsp.All(ctx, &mongoResGrpsCostData)
+// 	lib.CheckFatalError(err)
+// 	rsp, err = costingResourcesColl.Find(ctx, bson.D{{}})
+// 	lib.CheckFatalError(err)
+// 	err = rsp.All(ctx, &mongoResourcesCostData)
+// 	lib.CheckFatalError(err)
+// 	rsp, err = costingMetersColl.Find(ctx, bson.D{{}})
+// 	lib.CheckFatalError(err)
+// 	err = rsp.All(ctx, &mongoMetersCostData)
+// 	lib.CheckFatalError(err)
+// 	s.Stop()
+
+// 	fmt.Println("Updating monthly cost values...")
+// 	s.Start()
+// 	for _, tenantData := range mongoTenantsCostData {
+// 		currTenant := tenantData
+// 		lifetimeCost := float64(0)
+// 		for _, costData := range tenantData.CostData {
+// 			lifetimeCost += costData.MonthTotalCost
+// 		}
+// 		// currTenant.LifetimeTotalCost = lifetimeCost
+// 		// tenantsProcessed = append(tenantsProcessed)
+// 		filterTenant := bson.D{{"_id", currTenant.TenantName}}
+
+// 		updateTenant := bson.D{{"$set", bson.D{{"lifetimeTotalCost", lifetimeCost}}}}
+// 		tenantsProcessedUpdates = append(tenantsProcessedUpdates, mongo.NewUpdateOneModel().SetFilter(filterTenant).SetUpdate(updateTenant).SetUpsert(true))
+// 	}
+// 	for _, subData := range mongoSubsCostData {
+// 		currSub := subData
+// 		lifetimeCost := float64(0)
+// 		for _, costData := range subData.CostData {
+
+// 			// fmt.Println(costMeterId)
+// 			// os.Exit(0)
+// 			lifetimeCost += costData.MonthTotalCost
+// 		}
+// 		// currSub.LifetimeTotalCost = lifetimeCost
+// 		// subsProcessed = append(subsProcessed)
+// 		filterSub := bson.D{{"_id", currSub.SubscriptionId}}
+
+// 		updateSub := bson.D{{"$set", bson.D{{"lifetimeTotalCost", lifetimeCost}}}}
+// 		subsProcessedUpdates = append(subsProcessedUpdates, mongo.NewUpdateOneModel().SetFilter(filterSub).SetUpdate(updateSub).SetUpsert(true))
+// 	}
+// 	for _, resGrpData := range mongoResGrpsCostData {
+// 		currResGrp := resGrpData
+// 		lifetimeCost := float64(0)
+// 		for _, costData := range resGrpData.CostData {
+// 			lifetimeCost += costData.MonthTotalCost
+// 		}
+// 		// currResGrp.LifetimeTotalCost = lifetimeCost
+// 		// resGrpsProcessed = append(resGrpsProcessed)
+
+// 		filterResGrp := bson.D{{"_id", currResGrp.MongoId}}
+
+// 		updateResGrp := bson.D{{"$set", bson.D{{"lifetimeTotalCost", lifetimeCost}}}}
+// 		resGrpsProcessedUpdates = append(resGrpsProcessedUpdates, mongo.NewUpdateOneModel().SetFilter(filterResGrp).SetUpdate(updateResGrp).SetUpsert(true))
+// 	}
+// 	for _, resData := range mongoResourcesCostData {
+// 		currRes := resData
+// 		lifetimeCost := float64(0)
+// 		for _, costData := range resData.CostData {
+// 			lifetimeCost += costData.MonthTotalCost
+// 		}
+// 		currRes.LifetimeTotalCost = lifetimeCost
+// 		// resGrpsProcessed = append(resGrpsProcessed)
+
+// 		filterRes := bson.D{{"_id", currRes.MongoId}}
+
+// 		updateRes := bson.D{{"$set", bson.D{{"lifetimeTotalCost", lifetimeCost}}}}
+// 		resourcesProcessedUpdates = append(resourcesProcessedUpdates, mongo.NewUpdateOneModel().SetFilter(filterRes).SetUpdate(updateRes).SetUpsert(true))
+// 	}
+// 	for _, meterData := range mongoMetersCostData {
+// 		currMeter := meterData
+// 		lifetimeCost := float64(0)
+// 		for _, costData := range meterData.CostData {
+// 			lifetimeCost += costData.MonthTotalCost
+// 		}
+// 		currMeter.LifetimeTotalCost = lifetimeCost
+// 		// resGrpsProcessed = append(resGrpsProcessed)
+
+// 		filterMeter := bson.D{{"_id", meterData.ResourceMeterIdentifier}}
+
+// 		updateMeter := bson.D{{"$set", bson.D{{"lifetimeTotalCost", lifetimeCost}}}}
+// 		metersProcessedUpdates = append(metersProcessedUpdates, mongo.NewUpdateOneModel().SetFilter(filterMeter).SetUpdate(updateMeter).SetUpsert(true))
+// 	}
+// 	s.Stop()
+
+// 	fmt.Println("Pushing processed data back to database...")
+// 	s.Start()
+// 	results.UpdateTenantsProcessedUpdates, err = costingTenantsColl.BulkWrite(ctx, tenantsProcessedUpdates)
+// 	lib.CheckFatalError(err)
+
+// 	results.UpdateSubsProcessedUpdates, err = costingSubsColl.BulkWrite(ctx, subsProcessedUpdates)
+// 	lib.CheckFatalError(err)
+
+// 	results.UpdateResGrpsProcessedUpdates, err = costingResGrpsColl.BulkWrite(ctx, resGrpsProcessedUpdates)
+// 	lib.CheckFatalError(err)
+
+// 	results.UpdateResourcesProcessedUpdates, err = costingResGrpsColl.BulkWrite(ctx, resGrpsProcessedUpdates)
+// 	lib.CheckFatalError(err)
+// 	s.Stop()
+// 	// // fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
+// 	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
+// 	// // fmt.Printf("Number of documents matched: %d\n", )
+// 	// fmt.Printf("Number of documents inserted: %d\n", results.UpsertedCount)
+// 	// fmt.Printf("Number of documents replaced or updated: %d\n", results.ModifiedCount)
+// 	// fmt.Printf("Number of documents deleted: %d\n", results.DeletedCount)
+// 	// fmt.Println("Upserted IDs:")
+
+// 	// jsonStr, _ := json.MarshalIndent(results, "", "  ")
+// 	// fmt.Println(string(jsonStr))
+
+// 	// os.WriteFile("cost-exports/UpsertMonthlyTenantSubResGrpCosts-"+costExportMonth+".json", jsonStr, 0644)
+// 	// s.Stop()
+// 	return results
+// }
 
 //
 //

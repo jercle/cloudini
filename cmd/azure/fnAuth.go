@@ -90,61 +90,8 @@ func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthToke
 	// jsonBytes, _ := json.MarshalIndent(options, "", "  ")
 	// fmt.Println(string(jsonBytes))
 
-	switch options.Scope {
-	case "defender":
-		tokenRequestOptions.Scopes = []string{"https://api.securitycenter.microsoft.com/.default"}
-	case "graph":
-		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
-	case "storage":
-		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
-	case "monitor":
-		tokenRequestOptions.Scopes = []string{"https://monitor.azure.com/.default"}
-	case "loganalytics":
-		tokenRequestOptions.Scopes = []string{"https://api.loganalytics.io/.default"}
-	case "keyvault":
-		tokenRequestOptions.Scopes = []string{"cfa8b339-82a2-471a-a3c9-0fc0be7a4093/.default"}
-	// case "acr":
-	// tokenRequestOptions.Scopes = []string{}
-	default:
-		tokenRequestOptions.Scopes = []string{"https://management.core.windows.net/.default"}
+	tokenRequestOptions.Scopes = GetAuthScopeString(options.Scope)
 
-		// encodedData := b64.StdEncoding.EncodeToString([]byte(options.ClientID + ":" + options.ClientSecret))
-		// urlString := "https://" +
-		// 	options.AzureContainerRepositoryName +
-		// 	".azurecr.io/oauth2/token?service=" +
-		// 	options.AzureContainerRepositoryName +
-		// 	".azurecr.io&scope=repository:*:*"
-		// req, err := http.NewRequest(http.MethodGet, urlString, nil)
-		// lib.CheckFatalError(err)
-
-		// req.Header.Add("Content-Type", "application/json")
-		// req.Header.Add("Authorization", "Basic "+encodedData)
-
-		// res, err := http.DefaultClient.Do(req)
-		// lib.CheckFatalError(err)
-
-		// responseBody, err := io.ReadAll(res.Body)
-		// lib.CheckFatalError(err)
-		// defer res.Body.Close()
-
-		// var token lib.AcrAccessToken
-		// json.Unmarshal(responseBody, &token)
-
-		// tokenData := lib.AzureTokenData{
-		// 	Token: token.AccessToken,
-		// }
-
-		// if !options.NoCache {
-		// 	if mut != nil {
-		// 		mut.Lock()
-		// 	}
-		// 	lib.CacheSaveToken(tokenData, "az"+strings.ToLower(options.TenantName)+options.Scope, cldConfigOpts)
-		// 	if mut != nil {
-		// 		mut.Unlock()
-		// 	}
-		// }
-		// return &tokenData, nil
-	}
 	tokenRequestOptions.EnableCAE = true
 
 	var tokenResponse azcore.AccessToken
@@ -200,20 +147,35 @@ func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthToke
 	return &token, nil
 }
 
+func GetAuthScopeString(scope string) (mappedScope []string) {
+	switch scope {
+	case "graph":
+		mappedScope = []string{"https://graph.microsoft.com/.default"}
+	case "storage":
+		mappedScope = []string{"https://storage.azure.com/.default"}
+	case "monitor":
+		mappedScope = []string{"https://monitor.azure.com//.default"}
+	case "defender":
+		mappedScope = []string{"https://api.securitycenter.microsoft.com/.default"}
+	case "loganalytics":
+		mappedScope = []string{"https://api.loganalytics.io/.default"}
+	case "keyvault":
+		mappedScope = []string{"cfa8b339-82a2-471a-a3c9-0fc0be7a4093/.default"}
+	case "m365":
+		mappedScope = []string{"https://outlook.office365.com/.default"}
+	default:
+		mappedScope = []string{"https://management.core.windows.net/.default"}
+	}
+
+	return
+}
+
 func GetServicePrincipalMultiAuthToken(spDetails lib.AzureMultiAuthTokenRequestOptions) (*lib.AzureMultiAuthToken, error) {
 	ctx := context.Background()
 	var tokenRequestOptions policy.TokenRequestOptions
 
-	switch spDetails.Scope {
-	case "graph":
-		tokenRequestOptions.Scopes = []string{"https://graph.microsoft.com/.default"}
-	case "storage":
-		tokenRequestOptions.Scopes = []string{"https://storage.azure.com/.default"}
-	case "monitor":
-		tokenRequestOptions.Scopes = []string{"https://monitor.azure.com//.default"}
-	default:
-		tokenRequestOptions.Scopes = []string{"https://management.core.windows.net/.default"}
-	}
+	tokenRequestOptions.Scopes = GetAuthScopeString(spDetails.Scope)
+
 	tokenRequestOptions.EnableCAE = true
 
 	cred, err := azidentity.NewClientSecretCredential(spDetails.TenantID, spDetails.ClientID, spDetails.ClientSecret, nil)
@@ -473,7 +435,10 @@ func GetTenantSPToken(options lib.AzureMultiAuthTokenRequestOptions, cldConfOpts
 	}
 
 	tokenData, err := GetServicePrincipalToken(tenant.TenantID, options, cldConfOpts, nil)
-	lib.CheckFatalError(err)
+	// lib.CheckFatalError(err)
+	if err != nil {
+		return nil, err
+	}
 
 	mat := lib.AzureMultiAuthToken{
 		TenantId:   tenant.TenantID,

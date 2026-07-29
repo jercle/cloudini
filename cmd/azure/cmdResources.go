@@ -11,6 +11,7 @@ var (
 	getRoleDefById string
 	// onlyShowId       bool
 	// onlyShowName     bool
+	vmId string
 )
 
 // configCmd represents the subs command
@@ -37,26 +38,28 @@ var resourcesCmd = &cobra.Command{
 
 		// }
 
-		if getRoleDefByName != "" {
-			tName := ""
-			if tenantName != "" {
-				tName = tenantName
-			} else {
-				activeSub, err := GetActiveCliSub()
-				lib.CheckFatalError(err)
-				for _, tConf := range config.Azure.MultiTenantAuth.Tenants {
-					if tConf.TenantID == activeSub.TenantID {
-						tName = tConf.TenantName
-					}
+		tName := ""
+		if tenantName != "" {
+			tName = tenantName
+		} else {
+			activeSub, err := GetActiveCliSub()
+			lib.CheckFatalError(err)
+			for _, tConf := range config.Azure.MultiTenantAuth.Tenants {
+				if tConf.TenantID == activeSub.TenantID {
+					tName = tConf.TenantName
 				}
 			}
-			opts := lib.AzureMultiAuthTokenRequestOptions{
-				TenantName: tName,
-			}
+		}
+		opts := lib.AzureMultiAuthTokenRequestOptions{
+			TenantName: tName,
+		}
+
+		if vmId != "" {
+
 			token, err := GetTenantSPToken(opts, nil)
 			lib.CheckFatalError(err)
 
-			_ = token
+			GetAzureVmById(vmId, token)
 
 			// roleDefs, err := ListRoleDefinitions(*token)
 			// lib.CheckFatalError(err)
@@ -83,6 +86,7 @@ func init() {
 	azCmd.AddCommand(resourcesCmd)
 	resourcesCmd.Flags().StringVar(&getRoleDefByName, "getRoleDefByName", "", "Get  Role Definition details by Role Def name")
 	resourcesCmd.Flags().StringVar(&getRoleDefById, "getRoleDefById", "", "Get  Role Definition details by Role Def ID")
+	resourcesCmd.Flags().StringVar(&vmId, "vmId", "", "Get Azure VM By Id")
 	resourcesCmd.Flags().StringVarP(&tenantName, "tenantName", "n", "", "Tenant name to use configured auth. Defaults to Tenant of current active Az CLI subscription")
 	resourcesCmd.Flags().BoolVar(&onlyShowId, "onlyId", false, "Flag to only print the Role Def ID for 'getRoleDefByName'")
 	resourcesCmd.Flags().BoolVar(&onlyShowName, "onlyName", false, "Flag to only print the Role Def Name for 'getRoleDefById'")

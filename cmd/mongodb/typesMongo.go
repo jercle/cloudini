@@ -36,6 +36,18 @@ type UpdateAllAzureResourcesAndVcpuCountsOptions struct {
 	AzResGrpsListColl           *mongo.Collection
 }
 
+type UpdateOnlyCostDataOptions struct {
+	Location                   string
+	CostDataMonth              string
+	CostDataBlobPrefix         string
+	EnvOptCostingTenantsColl   *mongo.Collection
+	EnvOptCostingSubsColl      *mongo.Collection
+	EnvOptCostingResGrpsColl   *mongo.Collection
+	EnvOptCostingResourcesColl *mongo.Collection
+	EnvOptCostingMetersColl    *mongo.Collection
+	AzResTenantsColl           *mongo.Collection
+}
+
 type UpdateEntraItemsOptions struct {
 	EntraAppRegColl              *mongo.Collection
 	EntraAppRegCredsExpiringColl *mongo.Collection

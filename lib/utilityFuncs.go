@@ -15,6 +15,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/schollz/progressbar/v3"
 )
 
@@ -623,4 +624,23 @@ func HttpBearerGet(urlString string, bearerToken string) ([]byte, error) {
 
 func LoggerJson() *slog.Logger {
 	return slog.New(slog.NewJSONHandler(os.Stdout, nil))
+}
+
+func JwtIsExpiredUnverified(tokenString string) bool {
+	token, _, err := new(jwt.Parser).ParseUnverified(tokenString, jwt.MapClaims{})
+	if err != nil {
+		fmt.Println("Error parsing token structure:", err)
+		return true
+	}
+
+	// Extract standard claims
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		if exp, err := claims.GetExpirationTime(); err == nil && exp != nil {
+			// Compare token expiration time with the current local time
+			// fmt.Println(time.Now().After(exp.Time))
+			return time.Now().After(exp.Time)
+		}
+	}
+
+	return true // Assume expired/invalid if no exp claim exists
 }

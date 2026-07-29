@@ -804,6 +804,48 @@ type EntraUser struct {
 //
 //
 
+type EntraGroup struct {
+	Odata_Context                 string    `json:"@odata.context,omitempty,omitzero" bson:"@odata.context,omitempty,omitzero"`
+	Classification                any       `json:"classification,omitempty,omitzero" bson:"classification,omitempty,omitzero"`
+	CreatedDateTime               time.Time `json:"createdDateTime,omitempty,omitzero" bson:"createdDateTime,omitempty,omitzero"`
+	CreationOptions               []any     `json:"creationOptions,omitempty,omitzero" bson:"creationOptions,omitempty,omitzero"`
+	DeletedDateTime               any       `json:"deletedDateTime,omitempty,omitzero" bson:"deletedDateTime,omitempty,omitzero"`
+	Description                   string    `json:"description,omitempty,omitzero" bson:"description,omitempty,omitzero"`
+	DisplayName                   string    `json:"displayName,omitempty,omitzero" bson:"displayName,omitempty,omitzero"`
+	ExpirationDateTime            any       `json:"expirationDateTime,omitempty,omitzero" bson:"expirationDateTime,omitempty,omitzero"`
+	GroupTypes                    []any     `json:"groupTypes,omitempty,omitzero" bson:"groupTypes,omitempty,omitzero"`
+	ID                            string    `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
+	InfoCatalogs                  []any     `json:"infoCatalogs,omitempty,omitzero" bson:"infoCatalogs,omitempty,omitzero"`
+	IsAssignableToRole            any       `json:"isAssignableToRole,omitempty,omitzero" bson:"isAssignableToRole,omitempty,omitzero"`
+	Mail                          string    `json:"mail,omitempty,omitzero" bson:"mail,omitempty,omitzero"`
+	MailEnabled                   bool      `json:"mailEnabled,omitempty,omitzero" bson:"mailEnabled,omitempty,omitzero"`
+	MailNickname                  string    `json:"mailNickname,omitempty,omitzero" bson:"mailNickname,omitempty,omitzero"`
+	MembershipRule                any       `json:"membershipRule,omitempty,omitzero" bson:"membershipRule,omitempty,omitzero"`
+	MembershipRuleProcessingState any       `json:"membershipRuleProcessingState,omitempty,omitzero" bson:"membershipRuleProcessingState,omitempty,omitzero"`
+	OnPremisesDomainName          string    `json:"onPremisesDomainName,omitempty,omitzero" bson:"onPremisesDomainName,omitempty,omitzero"`
+	OnPremisesLastSyncDateTime    time.Time `json:"onPremisesLastSyncDateTime,omitempty,omitzero" bson:"onPremisesLastSyncDateTime,omitempty,omitzero"`
+	OnPremisesNetBiosName         string    `json:"onPremisesNetBiosName,omitempty,omitzero" bson:"onPremisesNetBiosName,omitempty,omitzero"`
+	OnPremisesProvisioningErrors  []any     `json:"onPremisesProvisioningErrors,omitempty,omitzero" bson:"onPremisesProvisioningErrors,omitempty,omitzero"`
+	OnPremisesSamAccountName      string    `json:"onPremisesSamAccountName,omitempty,omitzero" bson:"onPremisesSamAccountName,omitempty,omitzero"`
+	OnPremisesSecurityIdentifier  string    `json:"onPremisesSecurityIdentifier,omitempty,omitzero" bson:"onPremisesSecurityIdentifier,omitempty,omitzero"`
+	OnPremisesSyncEnabled         bool      `json:"onPremisesSyncEnabled,omitempty,omitzero" bson:"onPremisesSyncEnabled,omitempty,omitzero"`
+	PreferredDataLocation         any       `json:"preferredDataLocation,omitempty,omitzero" bson:"preferredDataLocation,omitempty,omitzero"`
+	PreferredLanguage             any       `json:"preferredLanguage,omitempty,omitzero" bson:"preferredLanguage,omitempty,omitzero"`
+	ProxyAddresses                []string  `json:"proxyAddresses,omitempty,omitzero" bson:"proxyAddresses,omitempty,omitzero"`
+	RenewedDateTime               time.Time `json:"renewedDateTime,omitempty,omitzero" bson:"renewedDateTime,omitempty,omitzero"`
+	ResourceBehaviorOptions       []any     `json:"resourceBehaviorOptions,omitempty,omitzero" bson:"resourceBehaviorOptions,omitempty,omitzero"`
+	ResourceProvisioningOptions   []any     `json:"resourceProvisioningOptions,omitempty,omitzero" bson:"resourceProvisioningOptions,omitempty,omitzero"`
+	SecurityEnabled               bool      `json:"securityEnabled,omitempty,omitzero" bson:"securityEnabled,omitempty,omitzero"`
+	SecurityIdentifier            string    `json:"securityIdentifier,omitempty,omitzero" bson:"securityIdentifier,omitempty,omitzero"`
+	ServiceProvisioningErrors     []any     `json:"serviceProvisioningErrors,omitempty,omitzero" bson:"serviceProvisioningErrors,omitempty,omitzero"`
+	Theme                         any       `json:"theme,omitempty,omitzero" bson:"theme,omitempty,omitzero"`
+	UniqueName                    any       `json:"uniqueName,omitempty,omitzero" bson:"uniqueName,omitempty,omitzero"`
+	Visibility                    any       `json:"visibility,omitempty,omitzero" bson:"visibility,omitempty,omitzero"`
+}
+
+//
+//
+
 type IdentityChange struct {
 	Timestamp        time.Time `json:"timestamp,omitempty,omitzero" bson:"timestamp,omitempty,omitzero"`
 	ActionType       string    `json:"actionType,omitempty,omitzero" bson:"actionType,omitempty,omitzero"`

@@ -93,6 +93,56 @@ func ListEntraAppRegistrations(token *lib.AzureMultiAuthToken) []EntraApplicatio
 			currApp := app
 			currApp.LastAzureSync = time.Now()
 			currApp.TenantName = token.TenantName
+			currApp.Type = "appRegistration"
+			// currApp.PortalUrl = "https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/Overview/appId/" + app.AppID + "/isMSAApp~/false"
+			entraApps = append(entraApps, currApp)
+		}
+	}
+
+	return entraApps
+}
+
+func ListEntraServicePrincipals(token *lib.AzureMultiAuthToken) []EntraApplication {
+	var (
+		resData   EntraListApplicationsResponse
+		entraApps []EntraApplication
+		nextLink  string
+	)
+
+	urlString := "https://graph.microsoft.com/beta/servicePrincipals"
+
+	res, err := HttpGet(urlString, *token)
+	lib.CheckFatalError(err)
+
+	json.Unmarshal(res, &resData)
+
+	for _, app := range resData.Value {
+		currApp := app
+		currApp.LastAzureSync = time.Now()
+		currApp.TenantName = token.TenantName
+		entraApps = append(entraApps, currApp)
+	}
+
+	// entraApps = append(entraApps, resData.Value...)
+
+	nextLink = resData.NextLink
+	// count := 1
+	// fmt.Println(string(res))
+	// os.WriteFile("outputs/entraApps-"+strconv.Itoa(count)+".json", res, 0644)
+
+	for nextLink != "" {
+		// count++
+		var currentSet EntraListApplicationsResponse
+		response, _ := HttpGet(nextLink, *token)
+		// os.WriteFile("outputs/entraApps-"+strconv.Itoa(count)+".json", response, 0644)
+		json.Unmarshal(response, &currentSet)
+		nextLink = currentSet.NextLink
+		// entraApps = append(entraApps, currentSet.Value...)
+		for _, app := range currentSet.Value {
+			currApp := app
+			currApp.LastAzureSync = time.Now()
+			currApp.TenantName = token.TenantName
+			currApp.Type = "servicePrincipal"
 			// currApp.PortalUrl = "https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/Overview/appId/" + app.AppID + "/isMSAApp~/false"
 			entraApps = append(entraApps, currApp)
 		}
@@ -583,7 +633,7 @@ func GetAllEntraUsersForTenant(token *lib.AzureMultiAuthToken, selects *[]string
 //
 //
 
-func GetEntraUserByObjectId(objectId string, token *lib.AzureMultiAuthToken, selects *[]string, apiVersion *string) (user EntraUser) {
+func GetEntraUserByObjectId(objectId string, token *lib.AzureMultiAuthToken, selects *[]string, apiVersion *string) (user *EntraUser, err error) {
 	baseGraphUrl := "https://graph.microsoft.com/"
 	apiVers := "v1.0"
 	if apiVersion != nil {
@@ -596,9 +646,42 @@ func GetEntraUserByObjectId(objectId string, token *lib.AzureMultiAuthToken, sel
 	urlString := baseGraphUrl + apiVers + endpoint
 
 	res, resErr := HttpGet(urlString, *token)
-	lib.CheckHttpGetError(resErr)
-	err := json.Unmarshal(res, &user)
-	lib.CheckFatalError(err)
+	if resErr != nil {
+		return nil, resErr
+	}
+
+	err = json.Unmarshal(res, &user)
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}
+
+//
+//
+
+func GetEntraGroupByObjectId(objectId string, token *lib.AzureMultiAuthToken, selects *[]string, apiVersion *string) (user *EntraGroup, err error) {
+	baseGraphUrl := "https://graph.microsoft.com/"
+	apiVers := "v1.0"
+	if apiVersion != nil {
+		apiVers = *apiVersion
+	}
+	endpoint := "/groups/" + objectId
+	if selects != nil {
+		endpoint += "?$select=" + strings.Join(*selects, ",")
+	}
+	urlString := baseGraphUrl + apiVers + endpoint
+
+	res, resErr := HttpGet(urlString, *token)
+	if resErr != nil {
+		return nil, resErr
+	}
+
+	err = json.Unmarshal(res, &user)
+	if err != nil {
+		return nil, err
+	}
 
 	return
 }

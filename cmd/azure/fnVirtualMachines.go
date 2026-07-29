@@ -145,6 +145,20 @@ func GetAzureVm(subscriptionId string, resourceGroupName string, vmName string, 
 //
 //
 
+func GetAzureVmById(vmId string, mat *lib.AzureMultiAuthToken) {
+	urlString := "https://management.azure.com" +
+		vmId +
+		"/instanceView?api-version=2024-03-01"
+
+	res, err := HttpGet(urlString, *mat)
+	lib.CheckFatalError(err)
+
+	fmt.Println(string(res))
+}
+
+//
+//
+
 func StopAzureVm(resourceId string, mat *lib.AzureMultiAuthToken) {
 	resourceIdSplit := strings.Split(resourceId, "/")
 	subscriptionId := resourceIdSplit[2]

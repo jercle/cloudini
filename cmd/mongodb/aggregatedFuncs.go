@@ -299,6 +299,17 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	tempBlobDir := cachePath + "/costexports"
 	costExportsOutfilePath := tempBlobDir + "/" + costExportMonth
 
+	// fmt.Println("tempBlobDir", tempBlobDir)
+	// fmt.Println("costExportsOutfilePath", costExportsOutfilePath)
+	// lib.JsonMarshalAndPrint(lib.DownloadAllConfiguredTenantCostExportsForMonthOptions{
+	// 	BlobPrefix:        opts.CostDataBlobPrefix + "/" + costExportMonth,
+	// 	OutfilePath:       costExportsOutfilePath,
+	// 	OutfileNamePrefix: "cost-export",
+	// 	CostExportMonth:   costExportMonth,
+	// 	SuppressSteps:     true,
+	// })
+	// os.Exit(0)
+
 	fmt.Println("Getting cost export data for " + costExportMonth + "...")
 	s.Start()
 	azure.DownloadAllConfiguredTenantCostExportsForMonth(lib.DownloadAllConfiguredTenantCostExportsForMonthOptions{
@@ -309,6 +320,8 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 		SuppressSteps:     true,
 	}, nil)
 	s.Stop()
+
+	// os.Exit(0)
 
 	fmt.Println("Combining cost export data")
 	s.Start()
@@ -348,6 +361,88 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 
 	return transformedData
 }
+
+// func UpdateOnlyCostData(opts UpdateOnlyCostDataOptions, tokenReq lib.AllTenantTokens) lib.AggregatedCostData {
+// 	var costExportMonth string
+
+// 	if opts.CostDataMonth == "" {
+// 		costExportMonth = time.Now().AddDate(0, 0, -1).Format("200601")
+// 	} else {
+// 		costExportMonth = opts.CostDataMonth
+// 	}
+
+// 	config := lib.GetCldConfig(nil)
+// 	_, _, cachePath := lib.InitConfig(nil)
+// 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+// 	fmt.Println("Getting and upserting all tenant and subscription details...")
+// 	s.Start()
+// 	UpsertTenantAndSubs(opts.AzResTenantsColl, &tokenReq)
+// 	s.Stop()
+
+// 	tempBlobDir := cachePath + "/costexports"
+// 	costExportsOutfilePath := tempBlobDir + "/" + costExportMonth
+
+// 	// fmt.Println("tempBlobDir", tempBlobDir)
+// 	// fmt.Println("costExportsOutfilePath", costExportsOutfilePath)
+// 	// lib.JsonMarshalAndPrint(lib.DownloadAllConfiguredTenantCostExportsForMonthOptions{
+// 	// 	BlobPrefix:        opts.CostDataBlobPrefix + "/" + costExportMonth,
+// 	// 	OutfilePath:       costExportsOutfilePath,
+// 	// 	OutfileNamePrefix: "cost-export",
+// 	// 	CostExportMonth:   costExportMonth,
+// 	// 	SuppressSteps:     true,
+// 	// })
+// 	// os.Exit(0)
+
+// 	fmt.Println("Getting cost export data for " + costExportMonth + "...")
+// 	s.Start()
+// 	azure.DownloadAllConfiguredTenantCostExportsForMonth(lib.DownloadAllConfiguredTenantCostExportsForMonthOptions{
+// 		BlobPrefix:        opts.CostDataBlobPrefix + "/" + costExportMonth,
+// 		OutfilePath:       costExportsOutfilePath,
+// 		OutfileNamePrefix: "cost-export",
+// 		CostExportMonth:   costExportMonth,
+// 		SuppressSteps:     true,
+// 	}, nil)
+// 	s.Stop()
+
+// 	os.Exit(0)
+
+// 	fmt.Println("Combining cost export data")
+// 	s.Start()
+// 	combinedCostData := azure.CombineCostExportCSVData(costExportsOutfilePath)
+// 	s.Stop()
+
+// 	fmt.Println("Transforming cost export data")
+// 	transformedData := azure.TransformCostDataNew(combinedCostData, 1, 2)
+// 	transformedDataStr, _ := json.MarshalIndent(transformedData, "", "  ")
+// 	os.WriteFile(cachePath+"/transformedData.json", transformedDataStr, 0644)
+
+// 	//  os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
+// 	// file, err := os.ReadFile(cachePath + "/allResourcesSlice.json")
+// 	// lib.CheckFatalError(err)
+// 	// var processedResSlice []lib.AzureResourceDetails
+// 	// err = json.Unmarshal(file, &processedResSlice)
+
+// 	fmt.Println("Updating cost data in database")
+// 	UpsertOnlyCostData(transformedData,
+// 		costExportMonth,
+// 		opts.EnvOptCostingTenantsColl,
+// 		opts.EnvOptCostingSubsColl,
+// 		opts.EnvOptCostingResGrpsColl,
+// 		opts.EnvOptCostingResourcesColl,
+// 		opts.EnvOptCostingMetersColl,
+// 		opts.AzResTenantsColl,
+// 	)
+
+// 	fmt.Println("Deleting cached cost data")
+// 	// os.RemoveAll(cachePath + "/vCpuCountWithResources.json")
+// 	os.RemoveAll(cachePath + "/transformedData.json")
+// 	// os.RemoveAll(cachePath + "/allResourcesSlice.json")
+// 	// os.RemoveAll(cachePath + "/allResources.json")
+// 	os.RemoveAll(tempBlobDir)
+
+// 	return transformedData
+// }
 
 //
 //

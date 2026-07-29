@@ -20,31 +20,35 @@ type LDAPConectorGrpResponse struct {
 }
 
 type LDAPConnectorGroup struct {
-	ID             string                   `json:"_id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
-	MemberId       []string                 `json:"_memberId,omitempty,omitzero" bson:"memberId,omitempty,omitzero"`
-	Cn             string                   `json:"cn,omitempty,omitzero" bson:"cn,omitempty,omitzero"`
-	Description    string                   `json:"description,omitempty" bson:"description,omitempty"`
-	DisplayName    string                   `json:"displayName,omitempty" bson:"displayName,omitempty"`
-	Dn             string                   `json:"dn,omitempty,omitzero" bson:"dn,omitempty,omitzero"`
-	GroupScope     string                   `json:"groupScope,omitempty,omitzero" bson:"groupScope,omitempty,omitzero"`
-	GroupType      string                   `json:"groupType,omitempty,omitzero" bson:"groupType,omitempty,omitzero"`
-	Info           string                   `json:"info,omitempty" bson:"info,omitempty"`
-	ManagedBy      string                   `json:"managedBy,omitempty" bson:"managedBy,omitempty"`
-	Member         LDAPConnectorGroupMember `json:"member,omitempty,omitzero" bson:"member,omitempty,omitzero"`
-	MemberOf       []string                 `json:"memberOf,omitempty,omitzero" bson:"memberOf,omitempty,omitzero"`
-	ProxyAddresses []string                 `json:"proxyAddresses,omitempty,omitzero" bson:"proxyAddresses,omitempty,omitzero"`
-	SamAccountName string                   `json:"samAccountName,omitempty,omitzero" bson:"samAccountName,omitempty,omitzero"`
-	USnChanged     string                   `json:"uSNChanged,omitempty,omitzero" bson:"uSNChanged,omitempty,omitzero"`
-	USnCreated     string                   `json:"uSNCreated,omitempty,omitzero" bson:"uSNCreated,omitempty,omitzero"`
-	WhenChanged    string                   `json:"whenChanged,omitempty,omitzero" bson:"whenChanged,omitempty,omitzero"`
-	WhenCreated    string                   `json:"whenCreated,omitempty,omitzero" bson:"whenCreated,omitempty,omitzero"`
-	LastDbSync     time.Time                `json:"lastDbSync,omitempty,omitzero" bson:"lastDbSync,omitempty,omitzero"`
+	ID                string                    `json:"_id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
+	MemberId          []string                  `json:"_memberId,omitempty,omitzero" bson:"memberId,omitempty,omitzero"`
+	Cn                string                    `json:"cn,omitempty,omitzero" bson:"cn,omitempty,omitzero"`
+	Description       string                    `json:"description,omitempty" bson:"description,omitempty"`
+	DisplayName       string                    `json:"displayName,omitempty" bson:"displayName,omitempty"`
+	Dn                string                    `json:"dn,omitempty,omitzero" bson:"dn,omitempty,omitzero"`
+	GroupScope        string                    `json:"groupScope,omitempty,omitzero" bson:"groupScope,omitempty,omitzero"`
+	GroupType         string                    `json:"groupType,omitempty,omitzero" bson:"groupType,omitempty,omitzero"`
+	Info              string                    `json:"info,omitempty" bson:"info,omitempty"`
+	ManagedBy         string                    `json:"managedBy,omitempty" bson:"managedBy,omitempty"`
+	Member            LDAPConnectorGroupMembers `json:"member,omitempty,omitzero" bson:"member,omitempty,omitzero"`
+	MemberOf          []string                  `json:"memberOf,omitempty,omitzero" bson:"memberOf,omitempty,omitzero"`
+	ProxyAddresses    []string                  `json:"proxyAddresses,omitempty,omitzero" bson:"proxyAddresses,omitempty,omitzero"`
+	SamAccountName    string                    `json:"samAccountName,omitempty,omitzero" bson:"samAccountName,omitempty,omitzero"`
+	USnChanged        string                    `json:"uSNChanged,omitempty,omitzero" bson:"uSNChanged,omitempty,omitzero"`
+	USnCreated        string                    `json:"uSNCreated,omitempty,omitzero" bson:"uSNCreated,omitempty,omitzero"`
+	WhenChanged       string                    `json:"whenChanged,omitempty,omitzero" bson:"whenChanged,omitempty,omitzero"`
+	WhenCreated       string                    `json:"whenCreated,omitempty,omitzero" bson:"whenCreated,omitempty,omitzero"`
+	LastDbSync        time.Time                 `json:"lastDbSync,omitempty,omitzero" bson:"lastDbSync,omitempty,omitzero"`
+	CustomIdentifiers map[string]string         `json:"customIdentifiers,omitempty,omitzero" bson:"customIdentifiers,omitempty,omitzero"`
 }
 
-type LDAPConnectorGroupMember struct {
-	SamAccountNames    []string `json:"samAccountNames,omitempty,omitzero" bson:"samAccountNames,omitempty,omitzero"`
-	DistinguishedNames []string `json:"distinguishedNames,omitempty,omitzero" bson:"distinguishedNames,omitempty,omitzero"`
-}
+type LDAPConnectorGroupMembers map[string]string
+
+// type LDAPConnectorGroupMember struct {
+// 	SamAccountNames    []string          `json:"samAccountNames,omitempty,omitzero" bson:"samAccountNames,omitempty,omitzero"`
+// 	DistinguishedNames []string          `json:"distinguishedNames,omitempty,omitzero" bson:"distinguishedNames,omitempty,omitzero"`
+// 	NamesToDN          map[string]string `json:"namesToDN,omitempty,omitzero" bson:"namesToDN,omitempty,omitzero"`
+// }
 
 type LDAPConnectorUser struct {
 	ID                         string    `json:"_id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`

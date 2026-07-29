@@ -25,7 +25,7 @@ func HttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
 	res, err := http.DefaultClient.Do(req)
-	lib.CheckFatalError(err)
+	// lib.CheckFatalError(err)
 
 	if err != nil {
 		return nil, err
@@ -39,6 +39,9 @@ func HttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 	// lib.JsonMarshalAndPrint(res.Header)
 
 	responseBody, err := io.ReadAll(res.Body)
+
+	// fmt.Println(string(responseBody))
+	// os.Exit(0)
 
 	if res.StatusCode == 403 {
 		fmt.Println(res.Status, urlString)
@@ -143,13 +146,19 @@ func HttpPost(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byt
 	// if err != nil {
 	// 	return nil, err
 	// }
+	resHeader, _ := json.Marshal(res.Header, jsontext.WithIndent("  "))
 
+	// fmt.Println(string(resHeader))
+	// lib.JsonMarshalAndPrint(res)
 	responseBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, resHeader, err
+	}
 
 	// jsonStr, _ := json.MarshalIndent(res.Header, "", "  ")
 	// fmt.Println(string(jsonStr))
-	// fmt.Println(responseBody)
-	lib.CheckFatalError(err)
+	// fmt.Println(string(responseBody))
+	// lib.CheckFatalError(err)
 	if res.StatusCode == 404 {
 		fmt.Println(string(responseBody))
 		// lib.CheckFatalError(fmt.Errorf(res.Status))
@@ -160,8 +169,6 @@ func HttpPost(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byt
 		// lib.CheckFatalError(fmt.Errorf(res.Status))
 		return nil, nil, fmt.Errorf(res.Status)
 	}
-
-	resHeader, _ := json.Marshal(res.Header, jsontext.WithIndent("  "))
 
 	// fmt.Println()
 	// if err != nil {
