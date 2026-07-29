@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func (g *LDAPConnectorGroupMember) UnmarshalJSON(data []byte) error {
+func (g *LDAPConnectorGroupMembers) UnmarshalJSON(data []byte) error {
 	if string(data) == "null" || string(data) == `""` {
 		return nil
 	}
