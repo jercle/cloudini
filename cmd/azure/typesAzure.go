@@ -202,6 +202,7 @@ type EntraApplication struct {
 	} `json:"spa,omitempty" bson:"spa,omitempty"`
 	Tags                 *[]string `json:"tags" bson:"tags"`
 	TenantName           string    `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
+	Type                 string    `json:"type,omitempty" bson:"type,omitempty"`
 	TenantId             string    `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
 	TokenEncryptionKeyID *string   `json:"tokenEncryptionKeyId,omitempty" bson:"tokenEncryptionKeyId,omitempty"`
 	UniqueName           any       `json:"uniqueName,omitempty" bson:"uniqueName,omitempty"`

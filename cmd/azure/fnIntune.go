@@ -73,7 +73,8 @@ func GetDeviceInformation(deviceId string, token *lib.AzureMultiAuthToken) (mana
 	}
 	var loggedInUsersProcessed []ManagedDeviceUserLoggedOn
 	for _, user := range managedDevice.UsersLoggedOn {
-		userDetails := GetEntraUserByObjectId(user.UserID, token, &userDataSelects, nil)
+		userDetails, err := GetEntraUserByObjectId(user.UserID, token, &userDataSelects, nil)
+		lib.CheckErrorNonFatal(err)
 		// userJson, _ := json.Marshal(userDetails)
 		// var loggedInUser ManagedDeviceUserLoggedOn
 		// err := json.Unmarshal(userJson, &loggedInUser)

@@ -397,6 +397,9 @@ func RunLogAnalyticsQuery(workspaceId string, query string, token lib.AzureMulti
 	res, _, err := HttpPost(urlString, jsonBody, token)
 	lib.CheckFatalError(err)
 
+	// err = os.WriteFile("main-la-query-raw.json", res, 0644)
+	// err = os.WriteFile("main-la-query-rawHeader.json", resHeader, 0644)
+
 	var resData RunLogAnalyticsQueryResponseRaw
 	err = json.Unmarshal(res, &resData)
 	lib.CheckFatalError(err)

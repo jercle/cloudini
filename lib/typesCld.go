@@ -1,6 +1,11 @@
 package lib
 
-import "time"
+import (
+	"encoding/xml"
+	"fmt"
+	"strconv"
+	"time"
+)
 
 type CldConfigRoot struct {
 	// Cloudini     *CloudiniConfig         `json:"cloudini,omitempty"`
@@ -278,4 +283,38 @@ type LogAnalyticsConfig struct {
 	ResourceChangesQueries map[string]string `json:"resourceChangesQueries,omitempty"`
 	TenantWorkspaceIds     map[string]string `json:"tenantWorkspaceIds,omitempty"`
 	// WorkbookId string `json:"workbookId,omitempty"`
+}
+
+type UnixTimestamp struct {
+	time.Time
+}
+
+func (ut *UnixTimestamp) UnmarshalJSON(b []byte) error {
+	// Parse the bytes as a base-10 64-bit integer
+	ts, err := strconv.ParseInt(string(b), 10, 64)
+	if err != nil {
+		return err
+	}
+
+	// Assign the parsed time to the embedded time.Time
+	// Note: Use ts/1000 if your incoming payload is in milliseconds
+	ut.Time = time.Unix(ts, 0)
+	return nil
+}
+
+func (t *UnixTimestamp) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	var s string
+	if err := d.DecodeElement(&s, &start); err != nil {
+		return err
+	}
+
+	// Parse the string timestamp into an int64 integer
+	seconds, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		return fmt.Errorf("invalid unix timestamp %q: %w", s, err)
+	}
+
+	// Update the embedded time.Time value
+	t.Time = time.Unix(seconds, 0)
+	return nil
 }

@@ -1139,6 +1139,10 @@ func DownloadAllConfiguredTenantCostExportsForMonth(opts lib.DownloadAllConfigur
 			blobList.Filter(lib.BlobListFilterOptions{FilterPrefix: opts.BlobPrefix})
 			blobList.SortByCreateDate("descending")
 
+			// lib.JsonMarshalAndPrint(blobList)
+			// lib.JsonMarshalAndPrint(options)
+			// os.Exit(0)
+
 			cred, err := GetTenantAzCred(tenant.TenantName, false, cldConfOpts)
 			lib.CheckFatalError(err)
 			fileName := opts.OutfilePath + "/" + opts.OutfileNamePrefix + "__" + tenant.TenantName + ".csv"

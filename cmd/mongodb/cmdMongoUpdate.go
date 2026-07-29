@@ -16,22 +16,23 @@ var (
 	updateCitrixData                                bool
 	aggregateCitrixDataBeforeInsert                 bool
 	updateAzureResVcpuCountsCostData                bool
-	updateAzureResourceRelations                    bool
-	costDataMonth                                   string
-	updateEntraItems                                bool
-	getAllAppRegCreds                               bool
-	updateEntraPimItems                             bool
-	updateIpAddresses                               bool
-	updateM365Data                                  bool
-	updateAllCertInfo                               bool
-	showExecutionTime                               bool
-	updateADUsers                                   bool
-	updateB2CUsers                                  bool
-	updateWebsiteCertInfo                           bool
-	updateFrADGroups                                bool
-	updateKeyVaultSecrets                           bool
-	updateResourceChanges                           bool
-	updateIdentityChanges                           bool
+	// updateOnlyCostData                              bool
+	updateAzureResourceRelations bool
+	costDataMonth                string
+	updateEntraItems             bool
+	getAllAppRegCreds            bool
+	updateEntraPimItems          bool
+	updateIpAddresses            bool
+	updateM365Data               bool
+	updateAllCertInfo            bool
+	showExecutionTime            bool
+	updateADUsers                bool
+	updateB2CUsers               bool
+	updateWebsiteCertInfo        bool
+	updateFrADGroups             bool
+	updateKeyVaultSecrets        bool
+	updateResourceChanges        bool
+	updateIdentityChanges        bool
 	// updateSupportAlerts                             bool
 	// updateAWSMonitoringData                         bool
 	updateAll                  bool
@@ -152,6 +153,24 @@ var cmdMongoUpdate = &cobra.Command{
 				UpdateAzureResourceRelations(transformedData, opts)
 			}
 		}
+		// if updateAll || updateOnlyCostData {
+		// 	opts := UpdateOnlyCostDataOptions{
+		// 		Location:                   config.Azure.ResourceLocation,
+		// 		CostDataMonth:              costDataMonth,
+		// 		CostDataBlobPrefix:         config.Azure.CostDataBlobPrefix,
+		// 		AzResTenantsColl:           azResTenantsColl,
+		// 		EnvOptCostingTenantsColl:   envOptCostingTenantsColl,
+		// 		EnvOptCostingSubsColl:      envOptCostingSubsColl,
+		// 		EnvOptCostingResGrpsColl:   envOptCostingResGrpsColl,
+		// 		EnvOptCostingResourcesColl: envOptCostingResourcesColl,
+		// 		EnvOptCostingMetersColl:    envOptCostingMetersColl,
+		// 	}
+		// 	UpdateOnlyCostData(opts, tokenReq)
+
+		// 	// if updateAzureResourceRelations {
+		// 	// 	UpdateAzureResourceRelations(transformedData, opts)
+		// 	// }
+		// }
 
 		if updateResources {
 			opts := UpdateAllAzureResourcesAndVcpuCountsOptions{
@@ -302,6 +321,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&updateFrADGroups, "updateFrADGroups", "a", false, "Get AD groups and update database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateB2CUsers, "updateB2CUsers", "b", false, "Updates B2C users")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAzureResVcpuCountsCostData, "updateAzureResVcpuCountsCostData", "c", false, "Gets latest cost data and all resources, transforms and relates them, then updates database")
+	// cmdMongoUpdate.Flags().BoolVarP(&updateOnlyCostData, "updateOnlyCostData", "z", false, "Gets latest cost data, transforms the data, then updates database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateCitrixData, "updateCitrixData", "d", false, "Fetches Citrix Cloud Policy Defs and Machine Metrics and upserts to MongoDB")
 	cmdMongoUpdate.Flags().BoolVar(&aggregateCitrixDataBeforeInsert, "aggregateCitrixData", false, "Used with --updateCitrixData, but will aggregate machine and metric data prior to database insert")
 	cmdMongoUpdate.Flags().BoolVarP(&updateEntraItems, "updateEntraItems", "e", false, "Gets all App Registrations from configured Azure tenants and finds expiring credentials, then updates database")

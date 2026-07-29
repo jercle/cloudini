@@ -26,6 +26,12 @@ func CheckFatalError(err error) {
 		log.Fatalln(file+":"+strconv.Itoa(no)+":0", err)
 	}
 }
+func CheckErrorNonFatal(err error) {
+	if err != nil {
+		_, file, no, _ := runtime.Caller(1)
+		fmt.Println(file+":"+strconv.Itoa(no)+":0", err)
+	}
+}
 
 func CheckFatalErrorWithSpinner(err error, s *spinner.Spinner) {
 	if err != nil {
