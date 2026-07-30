@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.4.10]
+* azure/GetIdentityChanges type changes
+* Update to go 1.26.5
+* Update deps
+
 ## [0.4.8]
 * azure/GetIdentityChanges type changes
 
