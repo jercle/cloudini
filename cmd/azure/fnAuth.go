@@ -125,6 +125,10 @@ func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthToke
 		cred, err := azidentity.NewClientSecretCredential(tenantId, options.ClientID, options.ClientSecret, nil)
 		lib.CheckFatalError(err)
 		tokenResponse, err = cred.GetToken(ctx, tokenRequestOptions)
+		// if err != nil {
+		// 	fmt.Println(tenantId)
+		// 	lib.JsonMarshalAndPrint(options)
+		// }
 		lib.CheckFatalError(err)
 	}
 
