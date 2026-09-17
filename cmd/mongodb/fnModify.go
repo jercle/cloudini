@@ -55,7 +55,12 @@ func MarkImageGalleryImagesUsedByCitrix(machineCatalogs map[string]citrix.Machin
 		if err != nil {
 			lib.JsonMarshalAndPrint(filter)
 		}
-		lib.CheckFatalError(err)
+		// lib.CheckFatalError(err)
+		if err != nil {
+			if strings.Contains(err.Error(), "no documents in result") {
+				continue
+			}
+		}
 		currImg := galleryImage
 
 		currImg.UsedByCitrix = false
@@ -82,6 +87,7 @@ func MarkImageGalleryImagesUsedByCitrix(machineCatalogs map[string]citrix.Machin
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
 
+	fmt.Println(len(updates))
 	results, err := collection.BulkWrite(ctx, updates)
 	lib.CheckFatalError(err)
 
