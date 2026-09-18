@@ -52,7 +52,7 @@ var cldVersion = versioninfo.Short()
 // rootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:     "cld",
-	Version: cliVersion,
+	Version: version,
 	Short:   "A brief description of your application",
 	Long: `This CLI has been created to add additional functionality
 to Azure CLI such as data
