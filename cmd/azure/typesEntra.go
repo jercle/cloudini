@@ -857,4 +857,9 @@ type IdentityChange struct {
 	TargetGroup      string    `json:"targetGroup,omitempty,omitzero" bson:"targetGroup,omitempty,omitzero"`
 	Target           string    `json:"target,omitempty,omitzero" bson:"target,omitempty,omitzero"`
 	TargetType       string    `json:"targetType,omitempty,omitzero" bson:"targetType,omitempty,omitzero"`
+	// Other            jsontext.Value `json:",unknown"`
+	// Other map[string]json.RawMessage `json:",inline"`
+	// ExtraFields jsontext.Value `json:",inline"`
+	// Extra jsontext.Value `json:",unknown"`
+	// Extra map[string]any `json:",embed"`
 }

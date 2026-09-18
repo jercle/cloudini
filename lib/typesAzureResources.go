@@ -2617,7 +2617,7 @@ type AzureResourceWorkspaceCapping struct {
 
 type AzureResourceProperties struct {
 	// Other any `json:",unknown" bson:",unknown"`
-	Other map[string]any `json:",unknown" bson:",unknown"`
+	Other map[string]any `json:",embed" bson:",embed"`
 	// Other any `json:"other" bson:"other"`
 	// AccountURL                      string         `json:"AccountURL,omitempty" bson:"AccountURL,omitempty"`
 	AppID         string `json:"AppId,omitempty" bson:"AppId,omitempty"`

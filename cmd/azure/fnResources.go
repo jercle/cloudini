@@ -433,6 +433,14 @@ func GetAllTenantResources(outputFile string, token *lib.AzureMultiAuthToken) Te
 
 func BuildVnetAndSubnet(res lib.AzureResourceDetails) (vnet lib.AzureResourceDetails, subnets []lib.AzureResourceDetails) {
 	vnet = res
+	defer func() {
+		if r := recover(); r != nil {
+			// fmt.Printf("Caught a panic: %v\n", r)
+			lib.JsonMarshalAndPrint(res)
+			os.Exit(0)
+			// lib.CheckFatalError(fmt.Errorf(r))
+		}
+	}()
 
 	snets := vnet.Properties.Other["subnets"].([]interface{})
 

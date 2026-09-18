@@ -17,22 +17,22 @@ var (
 	aggregateCitrixDataBeforeInsert                 bool
 	updateAzureResVcpuCountsCostData                bool
 	// updateOnlyCostData                              bool
-	updateAzureResourceRelations bool
-	costDataMonth                string
-	updateEntraItems             bool
-	getAllAppRegCreds            bool
-	updateEntraPimItems          bool
-	updateIpAddresses            bool
-	updateM365Data               bool
-	updateAllCertInfo            bool
-	showExecutionTime            bool
-	updateADUsers                bool
-	updateB2CUsers               bool
-	updateWebsiteCertInfo        bool
-	updateFrADGroups             bool
-	updateKeyVaultSecrets        bool
-	updateResourceChanges        bool
-	updateIdentityChanges        bool
+	// updateAzureResourceRelations bool
+	costDataMonth         string
+	updateEntraItems      bool
+	getAllAppRegCreds     bool
+	updateEntraPimItems   bool
+	updateIpAddresses     bool
+	updateM365Data        bool
+	updateAllCertInfo     bool
+	showExecutionTime     bool
+	updateADUsers         bool
+	updateB2CUsers        bool
+	updateWebsiteCertInfo bool
+	updateFrADGroups      bool
+	updateKeyVaultSecrets bool
+	updateResourceChanges bool
+	updateIdentityChanges bool
 	// updateSupportAlerts                             bool
 	// updateAWSMonitoringData                         bool
 	updateAll                  bool
@@ -94,10 +94,10 @@ var cmdMongoUpdate = &cobra.Command{
 
 		citrixMachineCatalogsColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMachineCatalogs)
 		citrixPolicySettingDefinitions := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixPolicySettingDefinitions)
-		citrixMonitorMachinesColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMonitorMachines)
-		citrixMonitorMetricsColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMonitorMetrics)
-		citrixMonitorResUtilColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMonitorResUtil)
-		citrixMonitorLoadIndexesColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMonitorLoadIndexes)
+		// citrixMonitorMachinesColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMonitorMachines)
+		// citrixMonitorMetricsColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMonitorMetrics)
+		// citrixMonitorResUtilColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMonitorResUtil)
+		// citrixMonitorLoadIndexesColl := c.Database(mongoConf.DbCitrix).Collection(mongoConf.CollCitrixMonitorLoadIndexes)
 
 		certsCaCertInfo := c.Database(mongoConf.DbCertificates).Collection(mongoConf.CollCertsCaCertInfo)
 		certsServerCertInfo := c.Database(mongoConf.DbCertificates).Collection(mongoConf.CollCertsServerCertInfo)
@@ -147,11 +147,12 @@ var cmdMongoUpdate = &cobra.Command{
 				EnvOptCostingResourcesColl:  envOptCostingResourcesColl,
 				EnvOptCostingMetersColl:     envOptCostingMetersColl,
 			}
-			transformedData := UpdateAllAzureResourcesVcpuCountsCostData(opts, tokenReq)
+			UpdateAllAzureResourcesVcpuCountsCostData(opts, tokenReq)
+			// transformedData := UpdateAllAzureResourcesVcpuCountsCostData(opts, tokenReq)
 
-			if updateAzureResourceRelations {
-				UpdateAzureResourceRelations(transformedData, opts)
-			}
+			// if updateAzureResourceRelations {
+			// 	UpdateAzureResourceRelations(transformedData, opts)
+			// }
 		}
 		// if updateAll || updateOnlyCostData {
 		// 	opts := UpdateOnlyCostDataOptions{
@@ -172,7 +173,7 @@ var cmdMongoUpdate = &cobra.Command{
 		// 	// }
 		// }
 
-		if updateResources {
+		if updateResources && !updateAzureResVcpuCountsCostData {
 			opts := UpdateAllAzureResourcesAndVcpuCountsOptions{
 				SkuListSubscription:   config.Azure.SkuListSubscription,
 				SkuListAuth:           config.Azure.MultiTenantAuth.Tenants[config.Azure.SkuListAuthTenant],
@@ -196,10 +197,10 @@ var cmdMongoUpdate = &cobra.Command{
 
 		if updateAll || updateCitrixData {
 			wg.Go(func() {
-				// citrixEnvs := *config.CitrixCloud.Environments
-				// envCreds := citrixEnvs[config.CitrixCloud.General.PolicyDefinitionsEnvironment]
-				// UpdateCitrixPolicySettingDefs(citrixPolicySettingDefinitions, envCreds)
-				UpdateCitrixDataNew(citrixMonitorMachinesColl, citrixMonitorMetricsColl, citrixMonitorResUtilColl, citrixMonitorLoadIndexesColl, citrixPolicySettingDefinitions, aggregateCitrixDataBeforeInsert)
+				citrixEnvs := *config.CitrixCloud.Environments
+				envCreds := citrixEnvs[config.CitrixCloud.General.PolicyDefinitionsEnvironment]
+				UpdateCitrixPolicySettingDefs(citrixPolicySettingDefinitions, envCreds)
+				// UpdateCitrixDataNew(citrixMonitorMachinesColl, citrixMonitorMetricsColl, citrixMonitorResUtilColl, citrixMonitorLoadIndexesColl, citrixPolicySettingDefinitions, aggregateCitrixDataBeforeInsert)
 			})
 		}
 
@@ -339,7 +340,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&showExecutionTime, "showExecutionTime", "t", false, "Prints execution time when complete")
 	cmdMongoUpdate.Flags().BoolVarP(&updateWebsiteCertInfo, "updateWebsiteCertInfo", "w", false, "Updates Website Cert info from configured URLs in database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAllCertInfo, "updateAllCertInfo", "x", false, "Update server certificates and expiries")
-	cmdMongoUpdate.Flags().BoolVar(&updateAzureResourceRelations, "updateAzureResourceRelations", false, "Gets all resources from cost data and database, aggregates and finds relations, then updates database. This can only be used in conjunction with 'updateAzureResVcpuCountsCostData'")
+	// cmdMongoUpdate.Flags().BoolVar(&updateAzureResourceRelations, "updateAzureResourceRelations", false, "Gets all resources from cost data and database, aggregates and finds relations, then updates database. This can only be used in conjunction with 'updateAzureResVcpuCountsCostData'")
 	// cmdMongoUpdate.Flags().BoolVarP(&updateAWSMonitoringData, "updateAWSMonitoringData", "l", false, "Updates Database with AWS Monitoring data")
 
 	cmdMongoUpdate.Flags().BoolVar(&updateAll, "updateAll", false, "Updates all data as if providing all available flags. Currently excludes updateAzureResourceRelations and updateWebsiteCertInfo")

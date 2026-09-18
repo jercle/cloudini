@@ -32,7 +32,8 @@ func UpsertMonthlyTenantSubResGrpCosts(
 	costingMetersColl *mongo.Collection,
 	tenantsColl *mongo.Collection,
 	allResourcesColl *mongo.Collection,
-) (results UpsertMonthlyTenantSubResGrpCostsResults) {
+) {
+	// ) (results UpsertMonthlyTenantSubResGrpCostsResults) {
 	var (
 		tenants                   []MongoDbAzureTenant
 		updateTenants             []mongo.WriteModel
@@ -275,7 +276,7 @@ func UpsertMonthlyTenantSubResGrpCosts(
 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 	s.Start()
 	// if len(updateTenants) > 0 {
-	results.UpdateTenants, err = costingTenantsColl.BulkWrite(ctx, updateTenants)
+	_, err = costingTenantsColl.BulkWrite(ctx, updateTenants)
 	// lib.CheckFatalError(err)
 	if err != nil {
 		// fmt.Println(currTenant)
@@ -284,47 +285,55 @@ func UpsertMonthlyTenantSubResGrpCosts(
 		lib.JsonMarshalAndPrint(err)
 	}
 	// }
-	results.UpdateTenantsCostData, err = costingTenantsColl.BulkWrite(ctx, updateTenantsCostData)
+	_, err = costingTenantsColl.BulkWrite(ctx, updateTenantsCostData)
 	lib.CheckFatalError(err)
 	s.Stop()
 
 	fmt.Println("Upserting Subscription data...")
 	s.Start()
-	results.UpdateSubs, err = costingSubsColl.BulkWrite(ctx, updateSubs)
+	_, err = costingSubsColl.BulkWrite(ctx, updateSubs)
 	lib.CheckFatalError(err)
-	results.UpdateSubsCostData, err = costingSubsColl.BulkWrite(ctx, updateSubsCostData)
+	_, err = costingSubsColl.BulkWrite(ctx, updateSubsCostData)
 	lib.CheckFatalError(err)
 	s.Stop()
 
 	fmt.Println("Upserting Resource Group data...")
 	s.Start()
-	results.UpdateResGrps, err = costingResGrpsColl.BulkWrite(ctx, updateResGrps)
+	_, err = costingResGrpsColl.BulkWrite(ctx, updateResGrps)
 	lib.CheckFatalError(err)
-	results.UpdateResGrpsCostData, err = costingResGrpsColl.BulkWrite(ctx, updateResGrpsCostData)
+	_, err = costingResGrpsColl.BulkWrite(ctx, updateResGrpsCostData)
 	lib.CheckFatalError(err)
 	s.Stop()
 
 	fmt.Println("Upserting Resource data...")
 	s.Start()
-	results.UpdateResources, err = costingResourcesColl.BulkWrite(ctx, updateResources)
+	_, err = costingResourcesColl.BulkWrite(ctx, updateResources)
 	lib.CheckFatalError(err)
-	results.UpdateResourcesCostData, err = costingResourcesColl.BulkWrite(ctx, updateResourcesCostData)
+	_, err = costingResourcesColl.BulkWrite(ctx, updateResourcesCostData)
 	lib.CheckFatalError(err)
 	s.Stop()
 
 	fmt.Println("Upserting cost meter data...")
 	s.Start()
-	results.UpdateMeters, err = costingMetersColl.BulkWrite(ctx, updateMeters)
+	_, err = costingMetersColl.BulkWrite(ctx, updateMeters)
 	lib.CheckFatalError(err)
-	results.UpdateMetersCostData, err = costingMetersColl.BulkWrite(ctx, updateMetersCostData)
+	_, err = costingMetersColl.BulkWrite(ctx, updateMetersCostData)
 	lib.CheckFatalError(err)
 	s.Stop()
 
-	fmt.Println("Pulling all cost data from database for sync...")
+	updateTenantsCostData = nil
+	updateTenants = nil
+	updateSubs = nil
+	updateSubsCostData = nil
+	updateResGrps = nil
+	updateResources = nil
+	updateResourcesCostData = nil
+	updateMeters = nil
+	updateMetersCostData = nil
+
+	fmt.Println("Pulling all cost data from database and updating values..")
 	s.Start()
-	rsp, err = costingTenantsColl.Find(ctx, bson.D{{}})
-	lib.CheckFatalError(err)
-	err = rsp.All(ctx, &mongoTenantsCostData)
+
 	lib.CheckFatalError(err)
 	rsp, err = costingSubsColl.Find(ctx, bson.D{{}})
 	lib.CheckFatalError(err)
@@ -342,10 +351,13 @@ func UpsertMonthlyTenantSubResGrpCosts(
 	lib.CheckFatalError(err)
 	err = rsp.All(ctx, &mongoMetersCostData)
 	lib.CheckFatalError(err)
-	s.Stop()
+	// s.Stop()
 
-	fmt.Println("Updating monthly cost values...")
-	s.Start()
+	// fmt.Println("Updating monthly cost values...")
+	// s.Start()
+	rsp, err = costingTenantsColl.Find(ctx, bson.D{{}})
+	lib.CheckFatalError(err)
+	err = rsp.All(ctx, &mongoTenantsCostData)
 	for _, tenantData := range mongoTenantsCostData {
 		currTenant := tenantData
 		lifetimeCost := float64(0)
@@ -359,6 +371,11 @@ func UpsertMonthlyTenantSubResGrpCosts(
 		updateTenant := bson.D{{"$set", bson.D{{"lifetimeTotalCost", lifetimeCost}}}}
 		tenantsProcessedUpdates = append(tenantsProcessedUpdates, mongo.NewUpdateOneModel().SetFilter(filterTenant).SetUpdate(updateTenant).SetUpsert(true))
 	}
+	_, err = costingTenantsColl.BulkWrite(ctx, tenantsProcessedUpdates)
+	mongoTenantsCostData = nil
+	tenantsProcessedUpdates = nil
+	lib.CheckFatalError(err)
+
 	for _, subData := range mongoSubsCostData {
 		currSub := subData
 		lifetimeCost := float64(0)
@@ -375,6 +392,11 @@ func UpsertMonthlyTenantSubResGrpCosts(
 		updateSub := bson.D{{"$set", bson.D{{"lifetimeTotalCost", lifetimeCost}}}}
 		subsProcessedUpdates = append(subsProcessedUpdates, mongo.NewUpdateOneModel().SetFilter(filterSub).SetUpdate(updateSub).SetUpsert(true))
 	}
+	_, err = costingSubsColl.BulkWrite(ctx, subsProcessedUpdates)
+	lib.CheckFatalError(err)
+	mongoSubsCostData = nil
+	subsProcessedUpdates = nil
+
 	for _, resGrpData := range mongoResGrpsCostData {
 		currResGrp := resGrpData
 		lifetimeCost := float64(0)
@@ -389,6 +411,11 @@ func UpsertMonthlyTenantSubResGrpCosts(
 		updateResGrp := bson.D{{"$set", bson.D{{"lifetimeTotalCost", lifetimeCost}}}}
 		resGrpsProcessedUpdates = append(resGrpsProcessedUpdates, mongo.NewUpdateOneModel().SetFilter(filterResGrp).SetUpdate(updateResGrp).SetUpsert(true))
 	}
+	_, err = costingResGrpsColl.BulkWrite(ctx, resGrpsProcessedUpdates)
+	lib.CheckFatalError(err)
+	mongoResGrpsCostData = nil
+	resGrpsProcessedUpdates = nil
+
 	for _, resData := range mongoResourcesCostData {
 		currRes := resData
 		lifetimeCost := float64(0)
@@ -403,6 +430,11 @@ func UpsertMonthlyTenantSubResGrpCosts(
 		updateRes := bson.D{{"$set", bson.D{{"lifetimeTotalCost", lifetimeCost}}}}
 		resourcesProcessedUpdates = append(resourcesProcessedUpdates, mongo.NewUpdateOneModel().SetFilter(filterRes).SetUpdate(updateRes).SetUpsert(true))
 	}
+	_, err = costingResourcesColl.BulkWrite(ctx, resourcesProcessedUpdates)
+	lib.CheckFatalError(err)
+	mongoResourcesCostData = nil
+	resourcesProcessedUpdates = nil
+
 	for _, meterData := range mongoMetersCostData {
 		currMeter := meterData
 		lifetimeCost := float64(0)
@@ -417,36 +449,11 @@ func UpsertMonthlyTenantSubResGrpCosts(
 		updateMeter := bson.D{{"$set", bson.D{{"lifetimeTotalCost", lifetimeCost}}}}
 		metersProcessedUpdates = append(metersProcessedUpdates, mongo.NewUpdateOneModel().SetFilter(filterMeter).SetUpdate(updateMeter).SetUpsert(true))
 	}
+	_, err = costingMetersColl.BulkWrite(ctx, metersProcessedUpdates)
+	lib.CheckFatalError(err)
+	mongoMetersCostData = nil
+	metersProcessedUpdates = nil
 	s.Stop()
-
-	fmt.Println("Pushing processed data back to database...")
-	s.Start()
-	results.UpdateTenantsProcessedUpdates, err = costingTenantsColl.BulkWrite(ctx, tenantsProcessedUpdates)
-	lib.CheckFatalError(err)
-
-	results.UpdateSubsProcessedUpdates, err = costingSubsColl.BulkWrite(ctx, subsProcessedUpdates)
-	lib.CheckFatalError(err)
-
-	results.UpdateResGrpsProcessedUpdates, err = costingResGrpsColl.BulkWrite(ctx, resGrpsProcessedUpdates)
-	lib.CheckFatalError(err)
-
-	results.UpdateResourcesProcessedUpdates, err = costingResGrpsColl.BulkWrite(ctx, resGrpsProcessedUpdates)
-	lib.CheckFatalError(err)
-	s.Stop()
-	// // fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
-	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
-	// // fmt.Printf("Number of documents matched: %d\n", )
-	// fmt.Printf("Number of documents inserted: %d\n", results.UpsertedCount)
-	// fmt.Printf("Number of documents replaced or updated: %d\n", results.ModifiedCount)
-	// fmt.Printf("Number of documents deleted: %d\n", results.DeletedCount)
-	// fmt.Println("Upserted IDs:")
-
-	// jsonStr, _ := json.MarshalIndent(results, "", "  ")
-	// fmt.Println(string(jsonStr))
-
-	// os.WriteFile("cost-exports/UpsertMonthlyTenantSubResGrpCosts-"+costExportMonth+".json", jsonStr, 0644)
-	// s.Stop()
-	return results
 }
 
 // func UpsertOnlyCostData(
@@ -967,6 +974,7 @@ func UpsertTenantAndSubs(tenantsColl *mongo.Collection, tokenReq *lib.AllTenantT
 		// fmt.Println(string(jsonStr))
 		// UpsertResource()
 	}
+	allSubs = nil
 	results, err := tenantsColl.BulkWrite(ctx, updates)
 	lib.CheckFatalError(err)
 	return
@@ -1296,49 +1304,21 @@ func UpsertVcpuCounts(vcpuCountData lib.VCpuCountByTenant, collection *mongo.Col
 //
 
 // func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) {
-func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesListColl *mongo.Collection) (results []mongo.BulkWriteResult) {
-	// for _, res := range resources {
-	// 	if res.Type == "microsoft.network/virtualnetworks/subnets" {
-	// 		lib.JsonMarshalAndPrint(res)
-	// 	}
-	// }
-	// os.Exit(0)
+func UpsertMultipleResources(resources *[]lib.AzureResourceDetails, resourcesListColl *mongo.Collection) (results []mongo.BulkWriteResult) {
 	ctx := context.TODO()
 
 	var updates []mongo.WriteModel
 
-	for _, res := range resources {
+	for _, res := range *resources {
 		resource := res
-		// if !strings.EqualFold(resource.Type, "microsoft.compute/virtualmachines") {
-		// 	resource.Properties.Sku = nil
-		// }
 		resource.LastDBSync = time.Now()
 		resource.ID = strings.ToLower(res.ID)
 		filter := bson.D{{"_id", resource.ID}}
 		update := bson.D{{"$set", resource}}
-
-		// .SetUpsert(true)
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
-		// 	_, err := resourcesListColl.UpdateOne(ctx, filter, update, nil)
-		// 	lib.CheckFatalError(err)
-		// 	if err != nil {
-		// 		// fmt.Println(err)
-		// 		_, _, cachePath := lib.InitConfig(nil)
-		// 		_ = updates
-		// 		allResStr, _ := json.MarshalIndent(resources, "", "  ")
-		// 		os.WriteFile(cachePath+"/mongo.updateOne-error.resources.json", allResStr, 0644)
-		// 		jsonStr, _ := json.MarshalIndent(res, "", "  ")
-		// 		os.WriteFile(cachePath+"/mongo.updateOne-error.err.json", jsonStr, 0644)
-		// 		// fmt.Println(string(jsonStr))
-		// 		fmt.Println(res.ID)
-		// 		lib.CheckFatalError(err)
-		// 		// os.Exit(1)
-		// 	}
 	}
 
-	// results, err := resourcesListColl.BulkWrite(ctx, updates)
-	// lib.CheckFatalError(err)
-	// return results
+	resources = nil
 
 	if len(updates) > 0 {
 		var opts options.BulkWriteOptions
@@ -1365,27 +1345,17 @@ func UpsertMultipleResources(resources []lib.AzureResourceDetails, resourcesList
 		return results
 	}
 
-	// fmt.Printf("Number of documents inserted: %d\n", results.InsertedCount)
-	// fmt.Printf("Number of documents matched: %d\n", results.MatchedCount)
-	// fmt.Printf("Number of documents matched: %d\n", )
-	// fmt.Printf("Number of documents inserted: %d\n", results.UpsertedCount)
-	// fmt.Printf("Number of documents replaced or updated: %d\n", results.ModifiedCount)
-	// fmt.Printf("Number of documents deleted: %d\n", results.DeletedCount)
-	// fmt.Println("Upserted IDs:")
-	// jsonStr, _ := json.MarshalIndent(results.UpsertedIDs, "", "  ")
-	// fmt.Println(string(jsonStr))
-
 }
 
 //
 //
 
-func UpsertMultipleResGrps(resGrps []azure.ResourceGroup, resourcesListColl *mongo.Collection) *mongo.BulkWriteResult {
+func UpsertMultipleResGrps(resGrps *[]azure.ResourceGroup, resourcesListColl *mongo.Collection) *mongo.BulkWriteResult {
 	ctx := context.TODO()
 
 	var updates []mongo.WriteModel
 
-	for _, res := range resGrps {
+	for _, res := range *resGrps {
 		rg := res
 		rg.LastDBSync = time.Now()
 		rg.ID = strings.ToLower(res.ID)
