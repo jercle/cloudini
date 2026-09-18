@@ -21,14 +21,18 @@ builds:
       - linux
       - windows
       - darwin
-    # ldflags:
-    #   - -X main.version={{.version}}
+    # ldflags: -s -w -X main.Version=v{{ .Version }} -X main.CommitSHA={{ .Commit }} -X main.CommitDate={{ .CommitDate }}
+      # - -X main.commit=$(git rev-parse --short HEAD)
+      # - -s -w -X main.build={{.Version}}
+      # - -s -w
+      # - -X main.version={{.Version}}
+      # - -X main.Version={{.Version}}
 
 env:
   - GOEXPERIMENT=jsonv2
 
 signs:
-  - artifacts: checksum
+  - artifacts: all
     # stdin: "{{ .Env.GPG_PASSWORD }}"
     stdin_file: ./gpg_pwd
 

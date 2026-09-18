@@ -1,9 +1,6 @@
 package main
 
 import (
-	"context"
-	"os"
-
 	"github.com/jercle/cloudini/cmd"
 	_ "github.com/jercle/cloudini/cmd/ado"
 	_ "github.com/jercle/cloudini/cmd/azure"
@@ -15,8 +12,6 @@ import (
 	_ "github.com/jercle/cloudini/cmd/mongodb"
 	_ "github.com/jercle/cloudini/cmd/utils"
 	_ "github.com/jercle/cloudini/cmd/web"
-
-	"github.com/charmbracelet/fang"
 )
 
 var (
@@ -27,10 +22,13 @@ var (
 
 func main() {
 	// defer lib.TimeTrack(time.Now(), "main")
-
+	// info, _ := debug.ReadBuildInfo()
+	// fmt.Println(info)
+	// lib.JsonMarshalAndPrint(info.Main.Sum)
 	// cmd.Execute()
-
-	if err := fang.Execute(context.Background(), cmd.RootCmd); err != nil {
-		os.Exit(1)
-	}
+	cmd.RootCmd.Execute()
+	// fang.Execute()
+	// if err := fang.Execute(context.TODO(), cmd.RootCmd); err != nil {
+	// 	os.Exit(1)
+	// }
 }
