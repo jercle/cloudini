@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.4.12]
+* Further optimizations in mongo updates
+
 ## [0.4.11]
 * Optimizations in mongo updates
 * Update to go 1.27.1

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
@@ -153,20 +154,12 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	s.Start()
 	resourceSKUs := azure.GetAzureResourceSKUsForSubscription(resSkuOpts)
 	s.Stop()
-	// resourceSKUsStr, _ := json.Marshal(resourceSKUs)
-	// os.WriteFile("resourceSKUs2.json", resourceSKUsStr, 0644)
-	// fmt.Println("saved resourceSKUs2.json")
-	// os.Exit(0)
+
 	fmt.Println("Updating Azure Resource SKUs in database...")
 	s.Start()
 	UpsertResourceSKUs(resourceSKUs, opts.AzResSKUColl)
 	s.Stop()
 	resourceSKUs = nil
-
-	// fmt.Println("Getting full list of SKUs from database...")
-	// s.Start()
-	// resourceSKUs = GetResourceSKUs(opts.AzResSKUColl)
-	// s.Stop()
 
 	fmt.Println("Fetching all Azure Resources...")
 	s.Start()
@@ -175,10 +168,6 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	s.Stop()
 	elapsed := time.Since(startTime)
 	fmt.Println(elapsed)
-
-	// allResFile, err := os.ReadFile(cachePath + "/allResourcesSlice.json")
-	// var allResourcesSlice []lib.AzureResourceDetails
-	// json.Unmarshal(allResFile, &allResourcesSlice)
 
 	citrixEnvs := *config.CitrixCloud.Environments
 
@@ -190,20 +179,13 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 		citrixMachines = append(citrixMachines, machines...)
 	}
 
-	// jsonStrCtx, err := json.MarshalIndent(citrixMachines, "", "  ")
-	// os.WriteFile("citrixMachines.json", jsonStrCtx, 0644)
-	// os.Exit(0)
-
-	// ctxFile, err := os.ReadFile("citrixMachines.json")
-	// lib.CheckFatalError(err)
-	// json.Unmarshal(ctxFile, &citrixMachines)
-
 	ctxDelGrpsByResGrpAndName := make(map[string]string)
 
 	for _, m := range citrixMachines {
 		ctxDelGrpsByResGrpAndName[m.AzureResourceGroup+"_"+m.Name] = m.DeliveryGroup.Name
 	}
 	citrixMachines = nil
+	debug.FreeOSMemory()
 
 	for i, r := range allResourcesSlice {
 		if r.Type == "microsoft.compute/virtualmachines" {
@@ -232,6 +214,7 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	fmt.Println(elapsed)
 	s.Stop()
 	allResourcesSlice = nil
+	debug.FreeOSMemory()
 
 	fmt.Println("Fetching all Azure Resource Groups...")
 	s.Start()
@@ -246,6 +229,7 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	UpsertMultipleResGrps(&allResGrps, opts.AzResGrpsListColl)
 	s.Stop()
 	allResGrps = nil
+	debug.FreeOSMemory()
 
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
@@ -269,20 +253,10 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	allResources = nil
 	vCpuCountWithResources = nil
 	vCpuCountWithResourcesStr = nil
+	debug.FreeOSMemory()
 
 	tempBlobDir := cachePath + "/costexports"
 	costExportsOutfilePath := tempBlobDir + "/" + costExportMonth
-
-	// fmt.Println("tempBlobDir", tempBlobDir)
-	// fmt.Println("costExportsOutfilePath", costExportsOutfilePath)
-	// lib.JsonMarshalAndPrint(lib.DownloadAllConfiguredTenantCostExportsForMonthOptions{
-	// 	BlobPrefix:        opts.CostDataBlobPrefix + "/" + costExportMonth,
-	// 	OutfilePath:       costExportsOutfilePath,
-	// 	OutfileNamePrefix: "cost-export",
-	// 	CostExportMonth:   costExportMonth,
-	// 	SuppressSteps:     true,
-	// })
-	// os.Exit(0)
 
 	fmt.Println("Getting cost export data for " + costExportMonth + "...")
 	s.Start()
@@ -295,8 +269,6 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	}, nil)
 	s.Stop()
 
-	// os.Exit(0)
-
 	fmt.Println("Combining cost export data")
 	s.Start()
 	combinedCostData := azure.CombineCostExportCSVData(costExportsOutfilePath)
@@ -308,12 +280,7 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	os.WriteFile(cachePath+"/transformedData.json", transformedDataStr, 0644)
 	transformedDataStr = nil
 	combinedCostData = nil
-
-	//  os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
-	// file, err := os.ReadFile(cachePath + "/allResourcesSlice.json")
-	// lib.CheckFatalError(err)
-	// var processedResSlice []lib.AzureResourceDetails
-	// err = json.Unmarshal(file, &processedResSlice)
+	debug.FreeOSMemory()
 
 	fmt.Println("Updating cost data in database")
 	UpsertMonthlyTenantSubResGrpCosts(transformedData,
@@ -329,6 +296,7 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	)
 	ctxDelGrpsByResGrpAndName = nil
 	transformedData = nil
+	debug.FreeOSMemory()
 
 	fmt.Println("Deleting cached cost data")
 	os.RemoveAll(cachePath + "/vCpuCountWithResources.json")
