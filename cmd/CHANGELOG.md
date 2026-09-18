@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.4.11]
+* Optimizations in mongo updates
+* Update to go 1.27.1
+  * Fix API changes, mainly around json
+
 ## [0.4.10]
 * azure/GetIdentityChanges type changes
 * Update to go 1.26.5

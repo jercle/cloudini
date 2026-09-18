@@ -694,11 +694,17 @@ func GetTenantIdentityChanges(workspaceId string, query string, token *lib.Azure
 
 	// var resChanges []ResourceChangeRaw
 
+	// fmt.Println(query)
+
 	resStr, _ := json.Marshal(res.Tables[0].Rows)
 	// fmt.Println(string(resStr))
+
+	// lib.JsonMarshalAndPrint(opts)
+
 	err := json.Unmarshal(resStr, &identityChanges)
 	lib.CheckFatalError(err)
 
+	lib.JsonMarshalAndPrint(identityChanges)
 	// for _, c := range resChanges {
 	// curr := c
 	// curr.Changes = ""

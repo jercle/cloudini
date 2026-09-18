@@ -161,11 +161,12 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	s.Start()
 	UpsertResourceSKUs(resourceSKUs, opts.AzResSKUColl)
 	s.Stop()
+	resourceSKUs = nil
 
-	fmt.Println("Getting full list of SKUs from database...")
-	s.Start()
-	resourceSKUs = GetResourceSKUs(opts.AzResSKUColl)
-	s.Stop()
+	// fmt.Println("Getting full list of SKUs from database...")
+	// s.Start()
+	// resourceSKUs = GetResourceSKUs(opts.AzResSKUColl)
+	// s.Stop()
 
 	fmt.Println("Fetching all Azure Resources...")
 	s.Start()
@@ -202,6 +203,7 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	for _, m := range citrixMachines {
 		ctxDelGrpsByResGrpAndName[m.AzureResourceGroup+"_"+m.Name] = m.DeliveryGroup.Name
 	}
+	citrixMachines = nil
 
 	for i, r := range allResourcesSlice {
 		if r.Type == "microsoft.compute/virtualmachines" {
@@ -213,45 +215,10 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 		}
 	}
 
-	// // lib.JsonMarshalAndPrint(vmDiskDelGrpByDiskId)
-	// // os.Exit(0)
-
-	// // for _, r := range allResourcesSlice {
-	// // 	if r.Type == "microsoft.compute/virtualmachines" {
-	// // 		continue
-	// // 	} else if r.Type == "microsoft.compute/disks" {
-	// // 		fmt.Println(r.CitrixVmDeliveryGroup)
-	// // 	} else if r.Type == "microsoft.network/networkinterfaces" {
-	// // 	}
-	// // }
-
-	// allResourcesSliceStr, _ := json.MarshalIndent(processedResSlice, "", "  ")
-	// os.WriteFile(cachePath+"/allResourcesSliceProcessed.json", allResourcesSliceStr, 0644)
-	// allResourcesStr, _ := json.MarshalIndent(allResources, "", "  ")
-	// os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
-	// os.Exit(0)
-
-	// // jsonStr, _ := json.MarshalIndent(allResourcesSlice)
-
-	// fmt.Println("Getting then updating all storage accounts with minimum TLS versions...")
-	// s.Start()
-	// startTime = time.Now()
-	// stgAccountsOptions := lib.GetAllResourcesForAllConfiguredTenantsOptions{
-	// 	GetAllStorageAccountsInTlsCheck: true,
-	// 	SuppressSteps:                   true,
-	// }
-	// stgAccounts := azure.CheckStorageAccountTlsVersionsForAllConfiguredTenants(&stgAccountsOptions, tokenReq)
-	// UpsertStorageAccountMinTlsVersions(stgAccounts, opts.AzStorageAcctMinTlsVersions)
-	// s.Stop()
-	// elapsed = time.Since(startTime)
-	// fmt.Println(elapsed)
-
-	// // for _, res :=
-
 	fmt.Println("Updating Azure Resources in database...")
 	s.Start()
 	startTime = time.Now()
-	UpsertMultipleResources(allResourcesSlice, opts.AzResResourceListColl)
+	UpsertMultipleResources(&allResourcesSlice, opts.AzResResourceListColl)
 	s.Stop()
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
@@ -260,10 +227,11 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	fmt.Println("Updating 'existsInAzure' value for all resources in database...")
 	s.Start()
 	startTime = time.Now()
-	UpdateResourcesNotExistInAzure(allResourcesSlice, opts.AzResResourceListColl)
+	UpdateResourcesNotExistInAzure(&allResourcesSlice, opts.AzResResourceListColl)
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
 	s.Stop()
+	allResourcesSlice = nil
 
 	fmt.Println("Fetching all Azure Resource Groups...")
 	s.Start()
@@ -275,8 +243,10 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	fmt.Println("Updating Azure Resource Groups in database...")
 	s.Start()
 	startTime = time.Now()
-	UpsertMultipleResGrps(allResGrps, opts.AzResGrpsListColl)
+	UpsertMultipleResGrps(&allResGrps, opts.AzResGrpsListColl)
 	s.Stop()
+	allResGrps = nil
+
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
 
@@ -295,6 +265,10 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	s.Start()
 	UpsertVcpuCounts(vCpuCountWithResources, opts.AzResVcpuCountsColl)
 	s.Stop()
+
+	allResources = nil
+	vCpuCountWithResources = nil
+	vCpuCountWithResourcesStr = nil
 
 	tempBlobDir := cachePath + "/costexports"
 	costExportsOutfilePath := tempBlobDir + "/" + costExportMonth
@@ -332,6 +306,8 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	transformedData := azure.TransformCostDataNew(combinedCostData, 1, 2)
 	transformedDataStr, _ := json.MarshalIndent(transformedData, "", "  ")
 	os.WriteFile(cachePath+"/transformedData.json", transformedDataStr, 0644)
+	transformedDataStr = nil
+	combinedCostData = nil
 
 	//  os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
 	// file, err := os.ReadFile(cachePath + "/allResourcesSlice.json")
@@ -351,6 +327,8 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 		opts.AzResTenantsColl,
 		opts.AzResResourceListColl,
 	)
+	ctxDelGrpsByResGrpAndName = nil
+	transformedData = nil
 
 	fmt.Println("Deleting cached cost data")
 	os.RemoveAll(cachePath + "/vCpuCountWithResources.json")
@@ -469,7 +447,7 @@ func UpdateAzureResourceRelations(transformedData lib.AggregatedCostData, opts U
 
 	fmt.Println("Upserting all processed resources to database...")
 	s.Start()
-	UpsertMultipleResources(processedResourcesSlice, opts.AzResResourceListColl)
+	UpsertMultipleResources(&processedResourcesSlice, opts.AzResResourceListColl)
 	s.Stop()
 }
 
@@ -842,7 +820,7 @@ func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, t
 	fmt.Println("Updating Azure Resources in database...")
 	s.Start()
 	startTime = time.Now()
-	UpsertMultipleResources(allResourcesSlice, opts.AzResResourceListColl)
+	UpsertMultipleResources(&allResourcesSlice, opts.AzResResourceListColl)
 	s.Stop()
 	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
@@ -851,7 +829,7 @@ func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, t
 	fmt.Println("Updating 'existsInAzure' value for all resources in database...")
 	s.Start()
 	startTime = time.Now()
-	UpdateResourcesNotExistInAzure(allResourcesSlice, opts.AzResResourceListColl)
+	UpdateResourcesNotExistInAzure(&allResourcesSlice, opts.AzResResourceListColl)
 	elapsed = time.Since(startTime)
 
 	// os.RemoveAll(cachePath + "/allResourcesSlice.json")
@@ -1047,7 +1025,8 @@ func UpdateCitrixPolicySettingDefs(settingDefsColl *mongo.Collection, citrixConf
 	lib.CheckFatalError(err)
 	settingDefs := citrix.GetPolicySettingDefinitions(citrixConf, tokenData)
 	s.Stop()
-	fmt.Println("Fetching Citrix Policy Definitions in database...")
+	fmt.Println("Upserting Citrix Policy Definitions in database...")
+	// fmt.Println(settingDefsColl.Name())
 	s.Start()
 	UpsertCitrixPolicySettingDefs(settingDefs, settingDefsColl)
 	// DeleteAllDocumentsInCollection(imageGalleryImagesColl)

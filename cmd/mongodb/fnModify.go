@@ -328,21 +328,17 @@ func UpdateImageDataWithBuildHostLogs(buildData []lib.PackerLogBuildData, collec
 //
 //
 
-func UpdateResourcesNotExistInAzure(azureResources []lib.AzureResourceDetails, collection *mongo.Collection) (currentRes *mongo.UpdateResult, notCurrentRes *mongo.UpdateResult) {
-	// var (
-	// 	allDbRes []lib.AzureResourceDetails
-	// 	updates  []mongo.WriteModel
-	// )
+func UpdateResourcesNotExistInAzure(azureResources *[]lib.AzureResourceDetails, collection *mongo.Collection) (currentRes *mongo.UpdateResult, notCurrentRes *mongo.UpdateResult) {
+
 	ctx := context.TODO()
 	ctx2 := context.TODO()
 
 	var currResourceIds []string
 
-	for _, res := range azureResources {
+	for _, res := range *azureResources {
 		currResourceIds = append(currResourceIds, res.ID)
 	}
 
-	// currentFilter := bson.M{{"_id", }}
 	currentFilter := bson.M{
 		"_id": bson.M{
 			"$in": currResourceIds,
@@ -362,30 +358,6 @@ func UpdateResourcesNotExistInAzure(azureResources []lib.AzureResourceDetails, c
 	notCurrentUpdate := bson.D{{Key: "$set", Value: bson.M{"existsInAzure": false}}}
 	notCurrentRes, err = collection.UpdateMany(ctx2, notCurrentFilter, notCurrentUpdate)
 	lib.CheckFatalError(err)
-	// err = rsp.All(ctx, &allDbRes)
-	// lib.CheckFatalError(err)
-	// currentDbResMap := make(map[string]bool)
-	// for _, res := range azureResources {
-	// 	currentDbResMap[res.ID] = true
-	// }
-
-	// for _, res := range allDbRes {
-	// 	curr := res
-	// 	if _, ok := currentDbResMap[res.ID]; !ok {
-	// 		curr.ExistsInAzure = false
-	// 	} else {
-	// 		curr.ExistsInAzure = true
-	// 	}
-
-	// 	// curr.Properties.Other = ""
-
-	// 	filter := bson.D{{"_id", res.ID}}
-	// 	update := bson.D{{"$set", curr}}
-	// 	updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
-	// }
-
-	// results, err := collection.BulkWrite(ctx, updates)
-	// lib.CheckFatalError(err)
 
 	return currentRes, notCurrentRes
 }
