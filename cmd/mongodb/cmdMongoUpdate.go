@@ -12,6 +12,8 @@ import (
 )
 
 var (
+	// GoProfile bool
+
 	updateAllGalleryImagesAndUpdateWithUsedByCitrix bool
 	updateCitrixData                                bool
 	aggregateCitrixDataBeforeInsert                 bool
@@ -147,6 +149,7 @@ var cmdMongoUpdate = &cobra.Command{
 				EnvOptCostingResourcesColl:  envOptCostingResourcesColl,
 				EnvOptCostingMetersColl:     envOptCostingMetersColl,
 			}
+
 			UpdateAllAzureResourcesVcpuCountsCostData(opts, tokenReq)
 			// transformedData := UpdateAllAzureResourcesVcpuCountsCostData(opts, tokenReq)
 
@@ -340,6 +343,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&showExecutionTime, "showExecutionTime", "t", false, "Prints execution time when complete")
 	cmdMongoUpdate.Flags().BoolVarP(&updateWebsiteCertInfo, "updateWebsiteCertInfo", "w", false, "Updates Website Cert info from configured URLs in database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAllCertInfo, "updateAllCertInfo", "x", false, "Update server certificates and expiries")
+	// cmdMongoUpdate.Flags().BoolVar(&GoProfile, "go-profile", false, "Runs pprof server to see memory and cpu stats")
 	// cmdMongoUpdate.Flags().BoolVar(&updateAzureResourceRelations, "updateAzureResourceRelations", false, "Gets all resources from cost data and database, aggregates and finds relations, then updates database. This can only be used in conjunction with 'updateAzureResVcpuCountsCostData'")
 	// cmdMongoUpdate.Flags().BoolVarP(&updateAWSMonitoringData, "updateAWSMonitoringData", "l", false, "Updates Database with AWS Monitoring data")
 
