@@ -1,10 +1,12 @@
 package datatransforms
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
 
+	"github.com/jercle/cloudini/lib"
 	"golang.design/x/clipboard"
 )
 
@@ -63,7 +65,13 @@ func Generate(opts GenerateOptions) (string, error) {
 			fmt.Println(err.Error())
 			os.Exit(0)
 		}
-		generator.ObserveJSONString(string(clipboard.Read(clipboard.FmtText)))
+
+		ctx := context.TODO()
+
+		b, err := clipboard.Read(ctx, clipboard.FmtText)
+		lib.CheckFatalError(err)
+
+		generator.ObserveJSONString(string(b))
 		// } else if opts.WebApi != "" {
 		// TODO, implement getting and parsing direct from an API
 		// }
