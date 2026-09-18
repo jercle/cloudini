@@ -19,6 +19,12 @@ import (
 	"github.com/charmbracelet/fang"
 )
 
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
+
 func main() {
 	// defer lib.TimeTrack(time.Now(), "main")
 

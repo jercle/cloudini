@@ -21,6 +21,8 @@ builds:
       - linux
       - windows
       - darwin
+    ldflags:
+      - -X main.version={{.}}
 
 env:
   - GOEXPERIMENT=jsonv2
