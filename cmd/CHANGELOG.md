@@ -1,8 +1,5 @@
 # Change Log
 
-## [0.4.13]
-* Update goreleaser
-
 ## [0.4.12]
 * Further optimizations in mongo updates
 
