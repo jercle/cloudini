@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.4.13]
+* Update cert date handling
+* Update deps
+
 ## [0.4.12]
 * Further optimizations in mongo updates
 
