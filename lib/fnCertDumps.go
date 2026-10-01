@@ -65,9 +65,13 @@ func GetCertAuthCertInfoFromFile(path string) (processedItems []CertAuthorityCer
 				camelKey == "requestResolutionDate" ||
 				camelKey == "requestSubmissionDate" {
 				var valDate time.Time
-				valDate, err = time.ParseInLocation("2/1/2006 3:04 PM", val, time.Local)
+				if tNameAndHostname[0] == "DEV" {
+					valDate, err = time.Parse("2/1/2006 3:04 PM", val)
+				} else {
+					valDate, err = time.Parse("1/2/2006 3:04 PM", val)
+				}
 				if err != nil {
-					fmt.Println(path)
+					JsonMarshalAndPrint(item)
 				}
 				CheckFatalError(err)
 				curr[camelKey] = valDate
@@ -333,31 +337,15 @@ func RelateCertAuthCertsToServerCertsNew(caCertInfo []CertAuthorityCertInfo, ser
 	caCertsBySerialNumber := make(map[string]CertAuthorityCertInfo)
 	serverCertsByIsserNameAndSerial := make(map[string]FormattedServerCertInfo)
 
-	ignoredDispositions := []string{
-		"8 -- Active",
-		"9 -- Pending",
-		"16 -- CA Cert Chain",
-		"31 -- Denied",
-		"30 -- Error",
-	}
-
 	for i, caci := range caCertInfo {
-		if _, ok := caCertsBySerialNumber[caci.TenantName+"-"+caci.SerialNumber]; ok {
-			if !slices.Contains(ignoredDispositions, caci.RequestDisposition) {
-				fmt.Println(i)
-
-				jsonStr, _ := json.MarshalIndent(caCertsBySerialNumber, "", "  ")
-				os.WriteFile("/home/jercle/.config/cld/cache/caCertsBySerialNumber.json", jsonStr, 0644)
-				jsonStrCurr, _ := json.MarshalIndent(caci, "", "  ")
-				os.WriteFile("/home/jercle/.config/cld/cache/curr.json", jsonStrCurr, 0644)
-
-				CheckFatalError(fmt.Errorf("whoopsie! caCertsBySerialNumber"))
-			}
-
+		if _, ok := caCertsBySerialNumber[caci.SerialNumber]; ok {
+			fmt.Println("whoopsie! caCertsBySerialNumber")
+			fmt.Println(i)
+			os.Exit(1)
 		}
 		curr := caci
 		curr.SerialNumber = strings.ToLower(caci.SerialNumber)
-		caCertsBySerialNumber[caci.TenantName+"-"+curr.SerialNumber] = curr
+		caCertsBySerialNumber[curr.SerialNumber] = curr
 	}
 
 	for _, sci := range serverCertInfo {
@@ -430,14 +418,13 @@ func RelateCertAuthCertsToServerCertsNew(caCertInfo []CertAuthorityCertInfo, ser
 			curr.TenantNames = append(curr.TenantNames, *curr.TenantName)
 		}
 
-		if relatedCertAuth, ok := caCertsBySerialNumber[*curr.TenantName+"-"+curr.Serial]; ok {
-			curr.RelatedCertAuthData = &relatedCertAuth
-		}
-
 		curr.PulledFromServer = nil
 		curr.TenantName = nil
 		curr.ParentPath = nil
 
+		if relatedCertAuth, ok := caCertsBySerialNumber[curr.Serial]; ok {
+			curr.RelatedCertAuthData = &relatedCertAuth
+		}
 		serverCertsByIsserNameAndSerial[curr.IssuerName+curr.Serial] = curr
 
 	}
@@ -460,14 +447,14 @@ func RelateCertAuthCertsToServerCerts(caCertInfo []CertAuthorityCertInfo, server
 	serverCertsBySerialNumber := make(map[string]ServerCertInfo)
 
 	for i, caci := range caCertInfo {
-		if _, ok := caCertsBySerialNumber[caci.TenantName+"-"+caci.SerialNumber]; ok {
+		if _, ok := caCertsBySerialNumber[caci.SerialNumber]; ok {
+			fmt.Println("whoopsie! caCertsBySerialNumber")
 			fmt.Println(i)
-			CheckFatalError(fmt.Errorf("whoopsie! caCertsBySerialNumber"))
 			os.Exit(1)
 		}
 		curr := caci
 		curr.SerialNumber = strings.ToLower(caci.SerialNumber)
-		caCertsBySerialNumber[curr.TenantName+"-"+curr.SerialNumber] = curr
+		caCertsBySerialNumber[curr.SerialNumber] = curr
 	}
 
 	for _, sci := range serverCertInfo {
@@ -532,14 +519,13 @@ func RelateCertAuthCertsToServerCerts(caCertInfo []CertAuthorityCertInfo, server
 		// 	curr.TenantNames = append(curr.TenantNames, tn)
 		// }
 
-		if relatedCertAuth, ok := caCertsBySerialNumber[*curr.TenantName+"-"+curr.SerialNumber]; ok {
-			curr.RelatedCertAuthData = &relatedCertAuth
-		}
-
 		curr.PulledFromServer = nil
 		curr.TenantName = nil
 		curr.ParentPath = nil
 
+		if relatedCertAuth, ok := caCertsBySerialNumber[curr.SerialNumber]; ok {
+			curr.RelatedCertAuthData = &relatedCertAuth
+		}
 		curr.ID = curr.SerialNumber
 		serverCertsBySerialNumber[curr.SerialNumber] = curr
 		// serverCertInfoWithRelations = append(serverCertInfoWithRelations, curr)
