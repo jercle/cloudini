@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
 	"github.com/jercle/cloudini/lib"
 	"go.mongodb.org/mongo-driver/bson"
@@ -361,6 +362,46 @@ func UpdateResourcesNotExistInAzure(azureResources *[]lib.AzureResourceDetails, 
 
 	return currentRes, notCurrentRes
 }
+
+//
+//
+
+func UpdateKVSecretNotExistInAzure(kvSecrets *[]azure.KeyVaultSecretStored, collection *mongo.Collection) (currentRes *mongo.UpdateResult, notCurrentRes *mongo.UpdateResult) {
+
+	ctx := context.TODO()
+	ctx2 := context.TODO()
+
+	var currResourceIds []string
+
+	for _, res := range *kvSecrets {
+		currResourceIds = append(currResourceIds, res.Id)
+	}
+
+	currentFilter := bson.M{
+		"_id": bson.M{
+			"$in": currResourceIds,
+		},
+		"existsInAzure": false,
+	}
+	currentUpdate := bson.D{{Key: "$set", Value: bson.M{"existsInAzure": true}}}
+	currentRes, err := collection.UpdateMany(ctx, currentFilter, currentUpdate)
+	lib.CheckFatalError(err)
+
+	notCurrentFilter := bson.M{
+		"_id": bson.M{
+			"$nin": currResourceIds,
+		},
+		"existsInAzure": true,
+	}
+	notCurrentUpdate := bson.D{{Key: "$set", Value: bson.M{"existsInAzure": false}}}
+	notCurrentRes, err = collection.UpdateMany(ctx2, notCurrentFilter, notCurrentUpdate)
+	lib.CheckFatalError(err)
+
+	return currentRes, notCurrentRes
+}
+
+//
+//
 
 func DeleteAllDocumentsInCollection(collection *mongo.Collection) (results *mongo.DeleteResult) {
 	filter := bson.D{{}}
