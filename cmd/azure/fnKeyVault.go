@@ -1,7 +1,6 @@
 package azure
 
 import (
-	"crypto/x509"
 	"encoding/json/v2"
 	"fmt"
 	"reflect"
@@ -15,16 +14,13 @@ import (
 	"github.com/r3labs/diff/v3"
 )
 
-func GetAllKVSecretsInTenant(token *lib.AzureMultiAuthToken, kvToken *lib.AzureMultiAuthToken) (processedSecrets []KeyVaultSecretStored) {
+func GetAllKVSecretsInTenant(token *lib.AzureMultiAuthToken, kvToken *lib.AzureMultiAuthToken) (allSecrets []KeyVaultSecretStored) {
 	subs, err := ListSubscriptions(*token)
 	lib.CheckFatalError(err)
 
 	var (
-		allSecrets []KeyVaultSecretStored
-		wg         sync.WaitGroup
-		mut        sync.Mutex
-		wg2        sync.WaitGroup
-		mut2       sync.Mutex
+		wg  sync.WaitGroup
+		mut sync.Mutex
 	)
 
 	for _, sub := range subs {
@@ -48,25 +44,6 @@ func GetAllKVSecretsInTenant(token *lib.AzureMultiAuthToken, kvToken *lib.AzureM
 	}
 
 	wg.Wait()
-
-	for _, secret := range allSecrets {
-		if secret.Type == "Certificate" {
-			wg2.Go(func() {
-				cert, err := KeyVaultGetCert(secret.Id, kvToken)
-				lib.CheckFatalError(err)
-				secret.CertInfo = *cert
-				mut2.Lock()
-				processedSecrets = append(processedSecrets, secret)
-				mut2.Unlock()
-			})
-
-		} else {
-			processedSecrets = append(processedSecrets, secret)
-
-		}
-	}
-
-	wg2.Wait()
 
 	return
 }
@@ -266,27 +243,34 @@ func KeyVaultListCerts(keyVault KeyVault, token *lib.AzureMultiAuthToken) (certs
 //
 //
 
-func KeyVaultGetCert(certId string, token *lib.AzureMultiAuthToken) (*lib.FormattedServerCertInfo, error) {
+func KeyVaultGetCert(certId string, token *lib.AzureMultiAuthToken) {
+	// func KeyVaultGetCert(keyVault KeyVault, token *lib.AzureMultiAuthToken) KeyVaultSecretStored {
 	apiVersion := "?api-version=2025-07-01"
+	// apiVersion := "?api-version=7.4"
 	urlString := certId + apiVersion
 
-	res, err := HttpGet(urlString, *token)
-	if err != nil {
-		return nil, err
-	}
+	// fmt.Println("Listing secrets for", keyVault.Name)
 
-	var cert KeyVaultCertificate
-	json.Unmarshal(res, &cert)
+	res, err := HttpGetErrLogToCache(urlString, *token)
+	lib.CheckFatalError(err)
 
-	parsedCert, err := x509.ParseCertificate(cert.Cer)
+	fmt.Println(string(res))
 
-	var fc lib.FormattedServerCertInfo
+	// var certs []KeyVaultCertificate
 
-	fc = lib.FormatCertData(parsedCert)
+	// var resData ListKeyVaultCertsResponse
+	// json.Unmarshal(res, &resData)
+	// certs = append(certs, resData.Value...)
 
-	fc.HasPrivateKey = cert.Kid != ""
+	// for resData.NextLink != "" {
+	// 	res, err := HttpGet(resData.NextLink, *token)
+	// 	lib.CheckFatalError(err)
+	// 	resData = ListKeyVaultCertsResponse{}
+	// 	json.Unmarshal(res, &resData)
+	// 	certs = append(certs, resData.Value...)
+	// }
 
-	return &fc, nil
+	return
 }
 
 //
