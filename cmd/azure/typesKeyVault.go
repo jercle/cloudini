@@ -3,6 +3,7 @@ package azure
 import (
 	"time"
 
+	"github.com/jercle/cloudini/lib"
 	"github.com/r3labs/diff/v3"
 )
 
@@ -40,7 +41,7 @@ type KeyVaultCertificate struct {
 		RecoveryLevel   string  `json:"recoveryLevel,omitempty,omitzero" bson:"recoveryLevel,omitempty,omitzero"`
 		Updated         float64 `json:"updated,omitempty,omitzero" bson:"updated,omitempty,omitzero"`
 	} `json:"attributes,omitempty,omitzero" bson:"attributes,omitempty,omitzero"`
-	Cer    string `json:"cer,omitempty,omitzero" bson:"cer,omitempty,omitzero"`
+	Cer    []byte `json:"cer,omitempty,omitzero" bson:"cer,omitempty,omitzero"`
 	ID     string `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
 	Kid    string `json:"kid,omitempty,omitzero" bson:"kid,omitempty,omitzero"`
 	Policy struct {
@@ -218,16 +219,19 @@ type T struct {
 }
 
 type KeyVaultSecretStored struct {
-	Name             string    `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
-	Id               string    `json:"id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
-	Expiration       time.Time `json:"expiration,omitempty,omitzero" bson:"expiration,omitempty,omitzero"`
-	KeyVaultId       string    `json:"keyVaultId,omitempty,omitzero" bson:"keyVaultId,omitempty,omitzero"`
-	KeyVaultName     string    `json:"keyVaultName,omitempty,omitzero" bson:"keyVaultName,omitempty,omitzero"`
-	KeyVaultUrl      string    `json:"keyVaultUrl,omitempty,omitzero" bson:"keyVaultUrl,omitempty,omitzero"`
-	TenantName       string    `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
-	SubscriptionName string    `json:"subscriptionName,omitempty,omitzero" bson:"subscriptionName,omitempty,omitzero"`
-	Type             string    `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
-	ContentType      string    `json:"contentType,omitempty,omitzero" bson:"contentType,omitempty,omitzero"`
+	Name             string                      `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
+	Id               string                      `json:"id,omitempty,omitzero" bson:"_id,omitempty,omitzero"`
+	Expiration       time.Time                   `json:"expiration,omitempty,omitzero" bson:"expiration,omitempty,omitzero"`
+	KeyVaultId       string                      `json:"keyVaultId,omitempty,omitzero" bson:"keyVaultId,omitempty,omitzero"`
+	KeyVaultName     string                      `json:"keyVaultName,omitempty,omitzero" bson:"keyVaultName,omitempty,omitzero"`
+	KeyVaultUrl      string                      `json:"keyVaultUrl,omitempty,omitzero" bson:"keyVaultUrl,omitempty,omitzero"`
+	TenantName       string                      `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
+	SubscriptionName string                      `json:"subscriptionName,omitempty,omitzero" bson:"subscriptionName,omitempty,omitzero"`
+	Type             string                      `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+	ContentType      string                      `json:"contentType,omitempty,omitzero" bson:"contentType,omitempty,omitzero"`
+	CertInfo         lib.FormattedServerCertInfo `json:"certInfo,omitempty,omitzero" bson:"certInfo,omitempty,omitzero"`
+	LastDBSync       time.Time                   `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
+	ExistsInAzure    bool                        `json:"existsInAzure" bson:"existsInAzure"`
 }
 
 type KeyVaultUpdateComparison struct {

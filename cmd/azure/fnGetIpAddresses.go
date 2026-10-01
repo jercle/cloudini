@@ -807,6 +807,7 @@ func GetIpAddressBlocksForCidrFromVNetsNew(cidrsToCheck []lib.IpamCidrBlockToChe
 				if vnetIpNet.Contains(ip) {
 					found = true
 					foundVnet = vnet.Name
+					// lib.JsonMarshalAndPrint(vnet)
 					break
 				}
 			}
