@@ -102,6 +102,8 @@ type Vnet struct {
 	VirtualNetworkPeerings []ProcessedVnetPeering `json:"virtualNetworkPeerings,omitempty,omitzero" bson:"virtualNetworkPeerings,omitempty,omitzero"`
 	Tags                   map[string]string      `json:"tags,omitempty,omitzero" bson:"tags,omitempty,omitzero"`
 	Type                   string                 `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+	TenantName             string                 `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
+	SubscriptionName       string                 `json:"subscriptionName,omitempty,omitzero" bson:"subscriptionName,omitempty,omitzero"`
 }
 
 type VirtualNetworkPeering struct {

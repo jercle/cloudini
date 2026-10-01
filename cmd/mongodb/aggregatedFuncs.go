@@ -96,13 +96,32 @@ func UpdateAllAzureResourceIPAddresses(ipAddressesColl *mongo.Collection, ipAddr
 
 	fmt.Println("Getting IP Address Blocks...")
 	s.Start()
-	var vnets []azure.IPAddressesAllResourceTypes
+	var (
+		vnets []azure.IPAddressesAllResourceTypes
+	)
+
+	vnetsMap := make(map[string]azure.IPAddressesAllResourceTypes)
+
 	for _, res := range resources {
 		if res.Type != "microsoft.network/virtualnetworks" {
 			continue
 		}
-		vnets = append(vnets, res)
+		vnetsMap[res.ID] = res
+		// vnets = append(vnets, res)
 	}
+	for _, res := range resources {
+		if res.Type != "microsoft.network/virtualnetworks/subnets" {
+			continue
+		}
+		lib.JsonMarshalAndPrint(res)
+		// vnet := vnetsMap[res.]
+		// vnets = append(vnets, res)
+	}
+
+	for _, vnet := range vnetsMap {
+		vnets = append(vnets, vnet)
+	}
+
 	ipAddressBlocks := azure.GetIpAddressBlocksForCidrFromVNetsNew(cidrsToCheck, vnets)
 	s.Stop()
 
@@ -1580,10 +1599,10 @@ func UpdateKeyVaultSecrets(coll *mongo.Collection) {
 
 	fmt.Println("Upserting secret IDs to database...")
 	s.Start()
-
 	// results := UpsertKeyVaultSecrets(allSecrets, coll)
 	UpsertKeyVaultSecrets(allSecrets, coll)
 
+	UpdateKVSecretNotExistInAzure(&allSecrets, coll)
 	s.Stop()
 	// lib.JsonMarshalAndPrint(results)
 }

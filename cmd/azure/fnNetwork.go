@@ -306,7 +306,12 @@ func ListAllSubscriptionVnets(subscriptionId string, mat lib.AzureMultiAuthToken
 	responseBody, err := io.ReadAll(res.Body)
 	lib.CheckFatalError(err)
 
-	json.Unmarshal(responseBody, &listVnets)
+	// fmt.Println(string(responseBody))
+
+	err = json.Unmarshal(responseBody, &listVnets)
+	lib.CheckFatalError(err)
+
+	// lib.JsonMarshalAndPrint(listVnets)
 
 	for _, vnet := range listVnets.Value {
 		var (
@@ -346,6 +351,9 @@ func ListAllSubscriptionVnets(subscriptionId string, mat lib.AzureMultiAuthToken
 		currentVnet.VirtualNetworkPeerings = append(currentVnet.VirtualNetworkPeerings, vnetPeerings...)
 		allVnets = append(allVnets, currentVnet)
 	}
+
+	// lib.JsonMarshalAndPrint(allVnets)
+
 	return allVnets
 }
 
