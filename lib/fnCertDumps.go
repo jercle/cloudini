@@ -618,6 +618,8 @@ func GetCertExtensionFromOID(oid string) string {
 
 		"1.3.6.1.4.1.311.25.2": "Intune AD SID",
 
+		"1.3.6.1.4.1.11129.2.4.2": "SignedCertificateTimestampList",
+
 		"1.3.6.1.5.5.7.1.1": "Certificate Authority Information Access",
 
 		"2.5.29.1":  "old Authority Key Identifier",

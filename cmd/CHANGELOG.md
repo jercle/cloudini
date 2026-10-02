@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.4.14]
+* Add SignedCertificateTimestampList OID mapping for certificates
+
 ## [0.4.13]
 * Update cert date handling
 * Update deps
