@@ -3,6 +3,7 @@
 ## [0.4.15]
 * Add ability to get all Exchange mailboxes with user perms
 * Add dependency for Exchange command for pwsh and "ExchangeOnlineManagement" module to be installed
+* Update deps
 
 ## [0.4.14]
 * Add SignedCertificateTimestampList OID mapping for certificates
