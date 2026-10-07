@@ -34,6 +34,7 @@ require (
 	github.com/google/certtostore v1.0.6
 	github.com/google/deck v1.1.0
 	github.com/google/go-cmp v0.7.0
+	github.com/google/uuid v1.6.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/iancoleman/strcase v0.3.0
 	github.com/manifoldco/promptui v0.9.0
@@ -97,7 +98,6 @@ require (
 	github.com/goccy/go-json v0.11.2 // indirect
 	github.com/golang/snappy v1.0.0 // indirect
 	github.com/google/flatbuffers v25.12.19+incompatible // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hexops/gotextdiff v1.0.3 // indirect
