@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.4.19]
+* Remove dumb testing clause I forgot to remove...
+
 ## [0.4.18]
 * Changed handling of fetching user or group for user perms in FormatMailboxPermissions
 

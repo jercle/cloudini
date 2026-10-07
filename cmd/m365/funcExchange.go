@@ -110,9 +110,6 @@ func GetEXOMailboxesWithPermissionsAllConfiguredTenants() (mailboxes []EXOMailBo
 	azTenants := config.Azure.MultiTenantAuth.Tenants
 
 	for tName, tData := range azTenants {
-		if tName != "BLUE" {
-			continue
-		}
 		if !tData.CheckExchange {
 			continue
 		}
