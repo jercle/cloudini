@@ -660,6 +660,7 @@ func UpdateM365Data(m365MailboxStatisticsColl *mongo.Collection, m365LicenseCoun
 
 	fmt.Println("Upserting mailbox stats")
 	s.Start()
+	m365MailboxStatisticsColl.Drop(context.TODO())
 	UpsertMailboxStatistics(data, m365MailboxStatisticsColl)
 	s.Stop()
 

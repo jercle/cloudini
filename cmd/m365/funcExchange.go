@@ -5,14 +5,12 @@ import (
 	_ "embed"
 	"encoding/json/v2"
 	"fmt"
-	"os"
 	"os/exec"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/gocarina/gocsv"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/lib"
 )
@@ -24,40 +22,45 @@ var psGetMailboxes string
 var psGetPerms string
 
 func GetMailboxStorageUsed(token lib.AzureMultiAuthToken) (mbDetails []MailboxUsageDetail, err error) {
-	urlBase := "https://graph.microsoft.com/v1.0/"
-	// urlString := urlBase + url.QueryEscape("reports/microsoft.graph.getMailboxUsageDetail(period='D7')")
-	urlString := urlBase + "/reports/getMailboxUsageDetail(period='D7')"
 
-	// https://graph.microsoft.com/v1.0/reports/getMailboxUsageDetail(period=
-	// https://graph.microsoft.com/v1.0/reports/getMailboxUsageDetail(period='D7')
+	// urlBase := "https://graph.microsoft.com/v1.0/"
+	urlBase := "https://graph.microsoft.com/beta/"
+
+	// urlString := urlBase + "/reports/getMailboxUsageDetail(period='D7')"
+	urlString := urlBase + "/reports/getMailboxUsageDetail(period='D7')?$format=application/json"
 
 	res, err := azure.HttpGet(urlString, token)
-	if err != nil {
-		// fmt.Println(token.TenantName)
-		// fmt.Println(urlString)
-		lib.CheckFatalError(err)
-	}
+	lib.CheckFatalError(err)
 
-	bytesReader := bytes.NewReader(res)
-	var csvData []MailboxUsageDetail
-	err = gocsv.Unmarshal(bytesReader, &csvData)
-	if err != nil {
-		_, _, cachePath := lib.InitConfig(nil)
+	var resData AzureGraphResponse[MailboxUsageDetail]
 
-		os.WriteFile(cachePath+"/GetMailboxStorageUsed-error.csv", res, 0644)
-		fmt.Println("Saved " + cachePath + "/GetMailboxStorageUsed-error.csv")
-		fmt.Println("tenant: " + token.TenantName)
-		lib.CheckFatalError(err)
-	}
+	err = json.Unmarshal(res, &resData)
+	lib.CheckFatalError(err)
 
-	for _, mb := range csvData {
+	for _, mb := range resData.Value {
 		curr := mb
 		curr.TenantName = token.TenantName
 		curr.LastAzureSync = time.Now()
 		mbDetails = append(mbDetails, curr)
 	}
 
-	// lib.JsonMarshalAndPrint(csvData)
+	nextLink := resData.NextLink
+
+	for nextLink != nil {
+		var currentSet AzureGraphResponse[MailboxUsageDetail]
+
+		currRes, _ := azure.HttpGet(*nextLink, token)
+		lib.CheckFatalError(err)
+		json.Unmarshal(currRes, &currentSet)
+		nextLink = currentSet.NextLink
+
+		for _, mb := range currentSet.Value {
+			curr := mb
+			curr.TenantName = token.TenantName
+			curr.LastAzureSync = time.Now()
+			mbDetails = append(mbDetails, curr)
+		}
+	}
 
 	return
 }
@@ -245,7 +248,10 @@ func FormatMailboxes(mailboxes []EXOMailBoxRaw, token *lib.AzureMultiAuthToken) 
 			curr.EmailAddresses = mb.EmailAddresses
 			curr.RecipientTypeDetails = mb.RecipientTypeDetails
 
-			curr.Permissions = FormatMailboxPermissions(mb.Permissions, token)
+			perms, permsMap, usersByPerm := FormatMailboxPermissions(mb.Permissions, token)
+			curr.Permissions = perms
+			curr.PermissionsMap = permsMap
+			curr.UsersByPermission = usersByPerm
 
 			mut.Lock()
 			mailboxesProcessed = append(mailboxesProcessed, curr)
@@ -261,25 +267,43 @@ func FormatMailboxes(mailboxes []EXOMailBoxRaw, token *lib.AzureMultiAuthToken) 
 //
 //
 
-func FormatMailboxPermissions(permissions []EXOMailboxUserPermissionRaw, token *lib.AzureMultiAuthToken) (processedPerms []EXOMailboxUserPermission) {
+func FormatMailboxPermissions(permissions []EXOMailboxUserPermissionRaw, token *lib.AzureMultiAuthToken) ([]EXOMailboxUserPermission, map[string][]string, map[string][]string) {
 	var (
-		wg  sync.WaitGroup
-		mut sync.Mutex
+		wg             sync.WaitGroup
+		mut            sync.Mutex
+		processedPerms []EXOMailboxUserPermission
 	)
+
+	processedPermsMap := make(map[string][]string)
+	usersByPerm := make(map[string][]string)
 
 	currPerms := make(map[string]EXOMailboxUserPermission)
 	for _, perm := range permissions {
 		wg.Go(func() {
 			var currUser string
 			if strings.HasSuffix(perm.User, token.TenantDomain) {
-				currUser = perm.User
+				currUser = strings.ReplaceAll(perm.User, token.TenantDomain, "")
 			} else {
-				group, err := azure.GetEntraGroupByObjectId(perm.User, token, &[]string{"displayName"}, nil)
-				lib.CheckFatalError(err)
-				if group != nil {
-					currUser = group.DisplayName
+				if perm.Permission == "SendOnBehalf" {
+					user, _ := azure.GetEntraUserByObjectId(perm.User, token, nil, nil)
+					if user != nil {
+						currUser = user.UserPrincipalName
+					} else {
+						group, _ := azure.GetEntraGroupByObjectId(perm.User, token, &[]string{"displayName"}, nil)
+						if group != nil {
+							currUser = group.DisplayName
+						} else {
+							currUser = perm.User
+						}
+					}
 				} else {
-					currUser = perm.User
+					group, err := azure.GetEntraGroupByObjectId(perm.User, token, &[]string{"displayName"}, nil)
+					lib.CheckFatalError(err)
+					if group != nil {
+						currUser = group.DisplayName
+					} else {
+						currUser = perm.User
+					}
 				}
 			}
 
@@ -298,6 +322,12 @@ func FormatMailboxPermissions(permissions []EXOMailboxUserPermissionRaw, token *
 				currPerm.User = currUser
 				currPerms[currUser] = currPerm
 			}
+			if _, ok := usersByPerm[perm.Permission]; !ok {
+				usersByPerm[perm.Permission] = []string{}
+			}
+
+			usersByPerm[perm.Permission] = append(usersByPerm[perm.Permission], currUser)
+
 			mut.Unlock()
 		})
 	}
@@ -305,7 +335,8 @@ func FormatMailboxPermissions(permissions []EXOMailboxUserPermissionRaw, token *
 
 	for _, perm := range currPerms {
 		processedPerms = append(processedPerms, perm)
+		processedPermsMap[perm.User] = perm.AccessRights
 	}
 
-	return
+	return processedPerms, processedPermsMap, usersByPerm
 }

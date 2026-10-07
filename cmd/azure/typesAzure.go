@@ -1,6 +1,8 @@
 package azure
 
-import "time"
+import (
+	"time"
+)
 
 type AzureRequestOptions struct {
 	SubscriptionId    string
@@ -397,6 +399,15 @@ type AzureAsyncOpUpdateResponse struct {
 	Name      string    `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
 	StartTime time.Time `json:"startTime,omitempty,omitzero" bson:"startTime,omitempty,omitzero"`
 	Status    string    `json:"status,omitempty,omitzero" bson:"status,omitempty,omitzero"`
+}
+
+//
+//
+
+type AzureGraphResponse[T interface{}] struct {
+	Context  *string `json:"@odata.context" bson:"@odata.context"`
+	NextLink *string `json:"@odata.nextLink" bson:"@odata.nextLink"`
+	Value    []T     `json:"value" bson:"value"`
 }
 
 //

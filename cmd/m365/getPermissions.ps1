@@ -24,7 +24,6 @@ foreach ($Mailbox in $Mailboxes) {
     $MailboxPermissions = @(Get-MailboxPermission -Identity $Mailbox.UserPrincipalName -ResultSize Unlimited |
         Where-Object { $_.User -ne "NT AUTHORITY\SELF" } |
         Select-Object User, IsOwner, AccessRights)
-    # Where-Object { ($_.IsInherited -eq $false) -and ($_.User -ne "NT AUTHORITY\SELF") })
 
     $UserPermissions = @(Get-RecipientPermission -Identity $Mailbox.UserPrincipalName -ResultSize Unlimited |
         Where-Object { $_.Trustee -notlike "NT AUTHORITY\SELF" } |
@@ -46,9 +45,15 @@ foreach ($Mailbox in $Mailboxes) {
             Permission = "SendAs"
         }
     }
+    foreach ($Perm in $Mailbox.GrantSendOnBehalfTo) {
+        $Mailbox.Permissions += [PSCustomObject]@{
+            User       = $Perm
+            Permission = "SendOnBehalf"
+        }
+    }
 
     $processedMailboxes += $Mailbox
 }
 Disconnect-ExchangeOnline -Confirm:$false
-# $processedMailboxes | Select-Object UserPrincipalName, Alias, DisplayName, EmailAddresses, RecipientTypeDetails, Permissions | ConvertTo-Json -Depth 4 -AsArray
-$processedMailboxes | ConvertTo-Json -Depth 4 -AsArray
+$processedMailboxes | Select-Object UserPrincipalName, Alias, DisplayName, EmailAddresses, RecipientTypeDetails, Permissions | ConvertTo-Json -Depth 4 -AsArray
+# $processedMailboxes | ConvertTo-Json -Depth 4 -AsArray
