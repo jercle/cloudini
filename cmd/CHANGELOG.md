@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.4.18]
+* Changed handling of fetching user or group for user perms in FormatMailboxPermissions
+
 ## [0.4.17]
 * Get rid of removal of domain from FormatMailboxPermissions
 

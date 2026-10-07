@@ -7,9 +7,10 @@ import (
 	"fmt"
 	"os/exec"
 	"strconv"
-	"strings"
 	"sync"
 	"time"
+
+	"github.com/google/uuid"
 
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/lib"
@@ -109,6 +110,9 @@ func GetEXOMailboxesWithPermissionsAllConfiguredTenants() (mailboxes []EXOMailBo
 	azTenants := config.Azure.MultiTenantAuth.Tenants
 
 	for tName, tData := range azTenants {
+		if tName != "BLUE" {
+			continue
+		}
 		if !tData.CheckExchange {
 			continue
 		}
@@ -281,32 +285,49 @@ func FormatMailboxPermissions(permissions []EXOMailboxUserPermissionRaw, token *
 	for _, perm := range permissions {
 		wg.Go(func() {
 			var currUser string
-			if strings.HasSuffix(perm.User, token.TenantDomain) {
-				// currUser = strings.ReplaceAll(perm.User, token.TenantDomain, "")
-				currUser = perm.User
-			} else {
-				if perm.Permission == "SendOnBehalf" {
+			uuidErr := uuid.Validate(perm.User)
+			if uuidErr == nil {
+				group, _ := azure.GetEntraGroupByObjectId(perm.User, token, &[]string{"displayName"}, nil)
+				if group != nil {
+					currUser = group.DisplayName
+				} else {
 					user, _ := azure.GetEntraUserByObjectId(perm.User, token, nil, nil)
 					if user != nil {
 						currUser = user.UserPrincipalName
 					} else {
-						group, _ := azure.GetEntraGroupByObjectId(perm.User, token, &[]string{"displayName"}, nil)
-						if group != nil {
-							currUser = group.DisplayName
-						} else {
-							currUser = perm.User
-						}
-					}
-				} else {
-					group, err := azure.GetEntraGroupByObjectId(perm.User, token, &[]string{"displayName"}, nil)
-					lib.CheckFatalError(err)
-					if group != nil {
-						currUser = group.DisplayName
-					} else {
 						currUser = perm.User
 					}
 				}
+			} else {
+				currUser = perm.User
 			}
+			// if strings.HasSuffix(perm.User, token.TenantDomain) {
+			// 	// currUser = strings.ReplaceAll(perm.User, token.TenantDomain, "")
+			// 	currUser = perm.User
+			// } else {
+			// 	if perm.Permission == "SendOnBehalf" {
+			// 		user, _ := azure.GetEntraUserByObjectId(perm.User, token, nil, nil)
+			// 		if user != nil {
+			// 			currUser = user.UserPrincipalName
+			// 		} else {
+			// 			group, _ := azure.GetEntraGroupByObjectId(perm.User, token, &[]string{"displayName"}, nil)
+			// 			if group != nil {
+			// 				currUser = group.DisplayName
+			// 			} else {
+			// 				currUser = perm.User
+			// 			}
+			// 		}
+			// 	} else {
+			// 		group, err := azure.GetEntraGroupByObjectId(perm.User, token, &[]string{"displayName"}, nil)
+			// 		lib.CheckFatalError(err)
+			// 		if group != nil {
+			// 			currUser = group.DisplayName
+			// 			fmt.Println(currUser)
+			// 		} else {
+			// 			currUser = perm.User
+			// 		}
+			// 	}
+			// }
 
 			mut.Lock()
 			if _, ok := currPerms[currUser]; ok {
