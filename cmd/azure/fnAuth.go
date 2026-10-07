@@ -392,10 +392,11 @@ func GetAllTenantSPTokens(options lib.AzureMultiAuthTokenRequestOptions, cldConf
 				lib.CheckFatalError(err)
 
 				tenantToken := lib.AzureMultiAuthToken{
-					TenantId:   tenant.TenantID,
-					ClientId:   opts.ClientID,
-					TenantName: tenant.TenantName,
-					TokenData:  *tokenData,
+					TenantId:     tenant.TenantID,
+					ClientId:     opts.ClientID,
+					TenantName:   tenant.TenantName,
+					TokenData:    *tokenData,
+					TenantDomain: azConfig.TenantMap[strings.ToLower(tenant.TenantName)],
 				}
 				mut.Lock()
 				tenantTokens = append(tenantTokens, tenantToken)
@@ -444,10 +445,18 @@ func GetTenantSPToken(options lib.AzureMultiAuthTokenRequestOptions, cldConfOpts
 		return nil, err
 	}
 
+	// mat := lib.AzureMultiAuthToken{
+	// 	TenantId:   tenant.TenantID,
+	// 	TenantName: tenant.TenantName,
+	// 	TokenData:  *tokenData,
+	// }
+
 	mat := lib.AzureMultiAuthToken{
-		TenantId:   tenant.TenantID,
-		TenantName: tenant.TenantName,
-		TokenData:  *tokenData,
+		TenantId:     tenant.TenantID,
+		ClientId:     options.ClientID,
+		TenantName:   tenant.TenantName,
+		TokenData:    *tokenData,
+		TenantDomain: config.Azure.TenantMap[strings.ToLower(tenant.TenantName)],
 	}
 
 	tenantToken = mat

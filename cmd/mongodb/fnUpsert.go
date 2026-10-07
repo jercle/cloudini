@@ -1407,6 +1407,38 @@ func UpsertMailboxStatistics(mailboxStats []m365.MailboxUsageDetail, coll *mongo
 //
 //
 
+func UpsertMailboxes(mailboxes []m365.EXOMailBox, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
+	if len(mailboxes) == 0 {
+		fmt.Println("No data in slice")
+		return nil
+	}
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+
+	// fmt.Println(len(serverCertInfo))
+
+	for _, cert := range mailboxes {
+		curr := cert
+
+		filter := bson.D{{"_id", curr.UserPrincipalName}}
+		update := bson.D{{"$set", curr}}
+
+		// .SetUpsert(true)
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+	}
+
+	res, err := coll.BulkWrite(ctx, updates, nil)
+	lib.CheckFatalError(err)
+
+	results = res
+
+	return
+}
+
+//
+//
+
 func UpsertSupportAlerts(alerts []azure.AzureAlertProcessed, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
 	if len(alerts) == 0 {
 		fmt.Println("No data in slice")

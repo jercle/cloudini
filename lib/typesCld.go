@@ -178,6 +178,7 @@ type MongoDBConfig struct {
 	CollIpamIpAddresses     string `json:"collIpamIpAddresses,omitempty"`
 
 	CollM365MailboxStatistics      string `json:"collM365MailboxStatistics,omitempty"`
+	CollM365Mailboxes              string `json:"collM365Mailboxes,omitempty"`
 	CollExchangeOnlineDmarcReports string `json:"collExchangeOnlineDmarcReports,omitempty"`
 }
 

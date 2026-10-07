@@ -18,10 +18,11 @@ type AzureMultiAuthTokenRequestOptions struct {
 }
 
 type AzureMultiAuthToken struct {
-	TenantId   string `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
-	ClientId   string `json:"clientId,omitempty" bson:"clientId,omitempty"`
-	TenantName string `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
-	TokenData  AzureTokenData
+	TenantId     string         `json:"tenantId,omitempty" bson:"tenantId,omitempty"`
+	ClientId     string         `json:"clientId,omitempty" bson:"clientId,omitempty"`
+	TenantName   string         `json:"tenantName,omitempty" bson:"tenantName,omitempty"`
+	TenantDomain string         `json:"tenantDomain,omitempty" bson:"tenantDomain,omitempty"`
+	TokenData    AzureTokenData `json:"tokenData,omitempty" bson:"tokenData,omitempty"`
 }
 
 type Request struct {

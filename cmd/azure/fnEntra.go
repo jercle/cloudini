@@ -740,9 +740,6 @@ func GetIdentityChangesForAllConfiguredTenants() (identityChanges []IdentityChan
 	)
 
 	for tName, tData := range tenants {
-		// if tName != "RED" {
-		// 	continue
-		// }
 		if tData.GetWorkbookAlerts {
 			wg.Go(func() {
 				workspaceId := config.Azure.LogAnalytics.TenantWorkspaceIds[tName]

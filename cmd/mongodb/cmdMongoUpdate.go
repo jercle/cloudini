@@ -126,6 +126,7 @@ var cmdMongoUpdate = &cobra.Command{
 		ipamIpAddresses := c.Database(mongoConf.DbIpam).Collection(mongoConf.CollIpamIpAddresses)
 
 		m365MailboxStatisticsColl := c.Database(mongoConf.DbM365).Collection(mongoConf.CollM365MailboxStatistics)
+		m365MailboxesColl := c.Database(mongoConf.DbM365).Collection(mongoConf.CollM365Mailboxes)
 
 		tokenReq, err := azure.GetAllTenantSPTokens(lib.AzureMultiAuthTokenRequestOptions{}, nil)
 		lib.CheckFatalError(err)
@@ -246,8 +247,7 @@ var cmdMongoUpdate = &cobra.Command{
 
 		if updateAll || updateM365Data {
 			wg.Go(func() {
-				UpdateM365Data(m365MailboxStatisticsColl, envOptM365LicenseCounts)
-
+				UpdateM365Data(m365MailboxStatisticsColl, envOptM365LicenseCounts, m365MailboxesColl)
 			})
 		}
 

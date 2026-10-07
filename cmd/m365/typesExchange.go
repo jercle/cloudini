@@ -24,3 +24,47 @@ type MailboxUsageDetail struct {
 	TenantName    string    `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
 	LastAzureSync time.Time `json:"lastAzureSync,omitempty,omitzero" bson:"lastAzureSync,omitempty,omitzero"`
 }
+
+//
+//
+
+type EXOMailBox struct {
+	Alias                string                     `json:"Alias,omitempty,omitzero" bson:"Alias,omitempty,omitzero"`
+	DisplayName          string                     `json:"DisplayName,omitempty,omitzero" bson:"DisplayName,omitempty,omitzero"`
+	EmailAddresses       []string                   `json:"EmailAddresses,omitempty,omitzero" bson:"EmailAddresses,omitempty,omitzero"`
+	RecipientTypeDetails string                     `json:"RecipientTypeDetails,omitempty,omitzero" bson:"RecipientTypeDetails,omitempty,omitzero"`
+	UserPrincipalName    string                     `json:"UserPrincipalName,omitempty,omitzero" bson:"UserPrincipalName,omitempty,omitzero"`
+	Permissions          []EXOMailboxUserPermission `json:"Permissions,omitempty,omitzero" bson:"Permissions,omitempty,omitzero"`
+	TenantName           string                     `json:"TenantName,omitempty,omitzero" bson:"TenantName,omitempty,omitzero"`
+}
+
+//
+//
+
+type EXOMailBoxRaw struct {
+	Alias                string                        `json:"Alias,omitempty,omitzero" bson:"Alias,omitempty,omitzero"`
+	DisplayName          string                        `json:"DisplayName,omitempty,omitzero" bson:"DisplayName,omitempty,omitzero"`
+	EmailAddresses       []string                      `json:"EmailAddresses,omitempty,omitzero" bson:"EmailAddresses,omitempty,omitzero"`
+	RecipientTypeDetails string                        `json:"RecipientTypeDetails,omitempty,omitzero" bson:"RecipientTypeDetails,omitempty,omitzero"`
+	UserPrincipalName    string                        `json:"UserPrincipalName,omitempty,omitzero" bson:"UserPrincipalName,omitempty,omitzero"`
+	Permissions          []EXOMailboxUserPermissionRaw `json:"Permissions,omitempty,omitzero" bson:"Permissions,omitempty,omitzero"`
+	TenantName           string                        `json:"TenantName,omitempty,omitzero" bson:"TenantName,omitempty,omitzero"`
+}
+
+//
+//
+
+type EXOMailboxUserPermissionRaw struct {
+	User       string `json:"User,omitempty,omitzero" bson:"User,omitempty,omitzero"`
+	IsOwner    bool   `json:"IsOwner,omitempty,omitzero" bson:"IsOwner,omitempty,omitzero"`
+	Permission string `json:"Permission,omitempty,omitzero" bson:"Permission,omitempty,omitzero"`
+}
+
+//
+//
+
+type EXOMailboxUserPermission struct {
+	User         string   `json:"User,omitempty,omitzero" bson:"User,omitempty,omitzero"`
+	IsOwner      bool     `json:"IsOwner,omitempty,omitzero" bson:"IsOwner,omitempty,omitzero"`
+	AccessRights []string `json:"AccessRights,omitempty,omitzero" bson:"AccessRights,omitempty,omitzero"`
+}

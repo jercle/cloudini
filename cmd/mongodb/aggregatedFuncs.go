@@ -650,7 +650,7 @@ func UpdateB2CUsers(coll *mongo.Collection) {
 //
 //
 
-func UpdateM365Data(m365MailboxStatisticsColl *mongo.Collection, m365LicenseCountsColl *mongo.Collection) {
+func UpdateM365Data(m365MailboxStatisticsColl *mongo.Collection, m365LicenseCountsColl *mongo.Collection, m365MailboxesColl *mongo.Collection) {
 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 
 	fmt.Println("Getting mailbox stats")
@@ -672,6 +672,21 @@ func UpdateM365Data(m365MailboxStatisticsColl *mongo.Collection, m365LicenseCoun
 	s.Start()
 	InsertM365LicenseCounts(licenseCounts, m365LicenseCountsColl)
 	s.Stop()
+
+	fmt.Println("Getting mailboxes")
+	// s.Start()
+	startTime := time.Now()
+
+	mailboxes := m365.GetEXOMailboxesWithPermissionsAllConfiguredTenants()
+	// s.Stop()
+
+	// s.Start()
+	fmt.Println("Upserting mailboxes")
+
+	UpsertMailboxes(mailboxes, m365MailboxesColl)
+	elapsed := time.Since(startTime)
+	fmt.Println(elapsed)
+	// s.Stop()
 
 	// jsonStr, _ := json.MarshalIndent(serverCertUpdates, "", "  ")
 	// fmt.Println(string(jsonStr))

@@ -26,6 +26,15 @@ func CheckFatalError(err error) {
 		log.Fatalln(file+":"+strconv.Itoa(no)+":0", err)
 	}
 }
+func FormatError(err error) error {
+	_, file, no, _ := runtime.Caller(1)
+	return fmt.Errorf(file+":"+strconv.Itoa(no)+":0", err)
+}
+func FormatErrorString(err string) error {
+	_, file, no, _ := runtime.Caller(1)
+	return fmt.Errorf("\nOriginal caller: " + file + ":" + strconv.Itoa(no) + ":0\n" + err)
+}
+
 func CheckErrorNonFatal(err error) {
 	if err != nil {
 		_, file, no, _ := runtime.Caller(1)
