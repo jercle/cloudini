@@ -282,7 +282,8 @@ func FormatMailboxPermissions(permissions []EXOMailboxUserPermissionRaw, token *
 		wg.Go(func() {
 			var currUser string
 			if strings.HasSuffix(perm.User, token.TenantDomain) {
-				currUser = strings.ReplaceAll(perm.User, token.TenantDomain, "")
+				// currUser = strings.ReplaceAll(perm.User, token.TenantDomain, "")
+				currUser = perm.User
 			} else {
 				if perm.Permission == "SendOnBehalf" {
 					user, _ := azure.GetEntraUserByObjectId(perm.User, token, nil, nil)

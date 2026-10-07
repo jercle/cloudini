@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.4.17]
+* Get rid of removal of domain from FormatMailboxPermissions
+
 ## [0.4.16]
 * Updates to handling of mailbox stats
 

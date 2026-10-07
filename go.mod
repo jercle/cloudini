@@ -30,7 +30,6 @@ require (
 	github.com/gernest/wow v0.1.0
 	github.com/github/smimesign v0.2.0
 	github.com/go-ldap/ldap/v3 v3.4.14
-	github.com/gocarina/gocsv v0.0.0-20260926200228-b2c6eb8fefab
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/google/certtostore v1.0.6
 	github.com/google/deck v1.1.0
