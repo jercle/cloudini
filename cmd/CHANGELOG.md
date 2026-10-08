@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.4.20]
+* Failing from within Alpine container
+
 ## [0.4.19]
 * Remove dumb testing clause I forgot to remove...
 

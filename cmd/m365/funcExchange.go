@@ -168,7 +168,7 @@ func GetEXOMailboxesWithPermissionsForTenant(token *lib.AzureMultiAuthToken, tok
 
 	err := getMailboxes.Run()
 	if err != nil {
-		return nil, lib.FormatErrorString(getMailboxesStdErr.String())
+		return nil, lib.FormatErrorString(token.TenantName + ": " + getMailboxesStdOut.String() + "\n\n" + getMailboxesStdErr.String())
 	}
 
 	if getMailboxesStdErr.String() != "" {
