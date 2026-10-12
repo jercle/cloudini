@@ -803,22 +803,24 @@ func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, t
 		SubscriptionId: opts.SkuListSubscription,
 		AzureAuth:      opts.SkuListAuth,
 		Location:       opts.Location,
-		SuppressSteps:  true,
+		SuppressSteps:  false,
 	}
 
 	fmt.Println("Fetching all Azure Resources...")
-	s.Start()
+	// s.Start()
 	startTime := time.Now()
-	allResources, allResourcesSlice := azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
-	s.Stop()
+	_, allResourcesSlice := azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
+	// s.Stop()
 	fmt.Println(strconv.Itoa(len(allResourcesSlice)) + " resources found")
 	elapsed := time.Since(startTime)
 	fmt.Println(elapsed)
-	allResourcesSliceStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
-	os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
-	allResourcesStr, _ := json.MarshalIndent(allResources, "", "  ")
-	os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
+	// allResourcesSliceStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
+	// os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
+	// allResourcesStr, _ := json.MarshalIndent(allResourcesMap, "", "  ")
+	// os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
 	// os.Exit(0)
+
+	// allResourcesMap = nil
 
 	fmt.Println("Updating Azure Resources in database...")
 	s.Start()
@@ -833,11 +835,14 @@ func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, t
 	s.Start()
 	startTime = time.Now()
 	UpdateResourcesNotExistInAzure(&allResourcesSlice, opts.AzResResourceListColl)
-	elapsed = time.Since(startTime)
 
-	// os.RemoveAll(cachePath + "/allResourcesSlice.json")
+	allResourcesSlice = nil
+
+	os.RemoveAll(cachePath + "/allResourcesSlice.json")
 	// os.RemoveAll(cachePath + "/allResources.json")
 	s.Stop()
+
+	elapsed = time.Since(startTime)
 	fmt.Println(elapsed)
 }
 

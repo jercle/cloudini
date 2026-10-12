@@ -184,7 +184,9 @@ var cmdMongoUpdate = &cobra.Command{
 				Location:              config.Azure.ResourceLocation,
 				AzResResourceListColl: azResResourceListColl,
 			}
-			UpdateAllAzureResources(opts, tokenReq)
+			wg.Go(func() {
+				UpdateAllAzureResources(opts, tokenReq)
+			})
 		}
 
 		if updateAll || updateIpAddresses {
@@ -300,7 +302,6 @@ var cmdMongoUpdate = &cobra.Command{
 		if updateIntuneManagedDevices {
 			wg.Go(func() {
 				UpdateIntuneManagedDevices(azResIntuneManagedDevices)
-
 			})
 		}
 

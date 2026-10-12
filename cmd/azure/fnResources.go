@@ -92,16 +92,14 @@ func GetAllResourcesForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfi
 		if azConfigs[token.TenantName].IsB2C {
 			continue
 		}
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			if !opts.SuppressSteps {
 				fmt.Println(token.TenantName + ": Fetching resources")
 			}
 			// allResources[token.TenantName] = make(map[string]SubscriptionResourceList)
 			tenantResources := GetAllTenantResources("", &token)
 			if !opts.SuppressSteps {
-				fmt.Println(token.TenantName + ": Fetch complete")
+				fmt.Println(token.TenantName + ": Fetch complete - Found " + strconv.Itoa(tenantResources.ResourceCount) + " resources")
 			}
 			// var processedTenantResources TenantResourceList
 			for sub, subResources := range tenantResources.Subscriptions {
@@ -141,7 +139,7 @@ func GetAllResourcesForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfi
 			if !opts.SuppressSteps {
 				fmt.Println(token.TenantName + ": Processing complete")
 			}
-		}()
+		})
 	}
 
 	wg.Wait()
@@ -166,7 +164,7 @@ func GetAllResourcesForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfi
 		fmt.Println("Saved to " + mapFileName + " and " + arrayFileName)
 	}
 
-	fmt.Println(len(allResourcesSlice))
+	// fmt.Println(len(allResourcesSlice))
 
 	// fmt.Println(len(allResourcesSlice))
 

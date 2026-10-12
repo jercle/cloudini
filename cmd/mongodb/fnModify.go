@@ -331,6 +331,10 @@ func UpdateImageDataWithBuildHostLogs(buildData []lib.PackerLogBuildData, collec
 
 func UpdateResourcesNotExistInAzure(azureResources *[]lib.AzureResourceDetails, collection *mongo.Collection) (currentRes *mongo.UpdateResult, notCurrentRes *mongo.UpdateResult) {
 
+	if azureResources == nil {
+		return
+	}
+
 	ctx := context.TODO()
 	ctx2 := context.TODO()
 
