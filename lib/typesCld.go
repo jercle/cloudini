@@ -121,6 +121,7 @@ type MongoDBConfig struct {
 	DbAzRes                   string `json:"dbAzureResources,omitempty"`
 	DbCertificates            string `json:"dbCertificates,omitempty"`
 	DbCitrix                  string `json:"dbCitrix,omitempty"`
+	DbDefender                string `json:"dbDefender,omitempty"`
 	DbEntra                   string `json:"dbEntra,omitempty"`
 	DbEnvironmentOptimisation string `json:"dbEnvironmentOptimisation,omitempty"`
 	DbGeneral                 string `json:"dbGeneral,omitempty"`
@@ -154,6 +155,8 @@ type MongoDBConfig struct {
 
 	CollCertsCaCertInfo     string `json:"collCertsCaCertInfo,omitempty"`
 	CollCertsServerCertInfo string `json:"collCertsServerCertInfo,omitempty"`
+
+	CollDefenderMachines string `json:"collDefenderMachines,omitempty"`
 
 	CollEntraAppReg                           string `json:"collEntraAppReg,omitempty"`
 	CollEntraAppRegCredsExpiring              string `json:"collEntraAppRegCredsExpiring,omitempty"`
@@ -254,6 +257,7 @@ type CldConfigTenantAuth struct {
 	AWSIngestWorkspaceID string                      `json:"awsIngestWorkspaceID,omitempty"`
 	AWSIngestRef         string                      `json:"awsIngestRef,omitempty"`
 	FetchIntuneDevices   bool                        `json:"fetchIntuneDevices,omitempty"`
+	CheckDefender        bool                        `json:"checkDefender,omitempty"`
 }
 
 type CldConfigClientAuthDetails struct {

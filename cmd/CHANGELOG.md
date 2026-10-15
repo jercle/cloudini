@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.4.21]
+* Add functions for MS Defender
+
 ## [0.4.20]
 * Refactor GetAllResourcesForAllConfiguredTenants
 

@@ -1,7 +1,9 @@
 package azure
 
 import (
+	"bytes"
 	json "encoding/json/v2"
+	"fmt"
 	"net"
 	"time"
 )
@@ -111,6 +113,7 @@ type IPAddressesAllResourceTypes struct {
 	ResourceGroup         string    `json:"resourceGroup,omitempty,omitzero" bson:"resourceGroup,omitempty,omitzero"`
 	SubscriptionID        string    `json:"subscriptionId,omitempty,omitzero" bson:"subscriptionId,omitempty,omitzero"`
 	SubscriptionName      string    `json:"subscriptionName,omitempty,omitzero" bson:"subscriptionName,omitempty,omitzero"`
+	ParentVnetID          string    `json:"parentVnetId,omitempty,omitzero" bson:"parentVnetId,omitempty,omitzero"`
 	Subnets               []struct {
 		Cidrs []string `json:"cidrs,omitempty,omitzero" bson:"cidrs,omitempty,omitzero"`
 		ID    string   `json:"id,omitempty,omitzero" bson:"id,omitempty,omitzero"`
@@ -121,6 +124,59 @@ type IPAddressesAllResourceTypes struct {
 	TenantID   string            `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
 	TenantName string            `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
 	Type       string            `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+}
+
+type ResourceTags struct {
+	Data map[string]string
+}
+
+func (f *ResourceTags) UnmarshalJSON(b []byte) error {
+	// Trim leading whitespace to ensure we capture the actual opening token
+	trimmed := bytes.TrimSpace(b)
+	if len(trimmed) == 0 {
+		return nil
+	}
+
+	// Case 1: The input is a JSON string literal containing escaped JSON
+	if trimmed[0] == '"' {
+		var jsonString string
+		if err := json.Unmarshal(trimmed, &jsonString); err != nil {
+			return err
+		}
+		// Unmarshal the extracted inner string into the target struct
+		return json.Unmarshal([]byte(jsonString), &f.Data)
+	}
+
+	// Case 2: The input is a raw JSON object
+	return json.Unmarshal(trimmed, &f.Data)
+}
+
+type IntOrBool struct {
+	BoolVal bool
+	IntVal  int
+	IsBool  bool
+}
+
+func (ib *IntOrBool) UnmarshalJSON(data []byte) error {
+	// First, try unmarshaling as a boolean
+	var b bool
+	if err := json.Unmarshal(data, &b); err == nil {
+		ib.BoolVal = b
+		ib.IsBool = true
+		ib.IntVal = 0
+		return nil
+	}
+
+	// Next, try unmarshaling as an integer (JSON numbers unmarshal into float64 or int via interface/number)
+	var n int
+	if err := json.Unmarshal(data, &n); err == nil {
+		ib.IntVal = n
+		ib.IsBool = false
+		ib.BoolVal = n != 0 // Optional: treat non-zero int as true if needed
+		return nil
+	}
+
+	return fmt.Errorf("cannot unmarshal %s into IntOrBool", string(data))
 }
 
 func (t *IPAddressesAllResourceTypes) UnmarshalJSON(data []byte) error {
@@ -156,28 +212,19 @@ func (t *IPAddressesAllResourceTypes) UnmarshalJSON(data []byte) error {
 			Name  string   `json:"name,omitempty,omitzero" bson:"name,omitempty,omitzero"`
 			Type  string   `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
 		} `json:"subnets,omitempty,omitzero" bson:"subnets,omitempty,omitzero"`
-		Tags       string `json:"tags" bson:"tags"`
-		TenantID   string `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
-		TenantName string `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
-		Type       string `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
+		Tags       ResourceTags `json:"tags" bson:"tags"`
+		TenantID   string       `json:"tenantId,omitempty,omitzero" bson:"tenantId,omitempty,omitzero"`
+		TenantName string       `json:"tenantName,omitempty,omitzero" bson:"tenantName,omitempty,omitzero"`
+		Type       string       `json:"type,omitempty,omitzero" bson:"type,omitempty,omitzero"`
 	}
 
 	if err := json.Unmarshal(data, &nicJson); err != nil {
 		return err
 	}
 
-	var tags map[string]string
-
 	var isAttached bool
 	if nicJson.IsAttached > 0 {
 		isAttached = true
-	}
-
-	if nicJson.Tags != "" {
-		if err := json.Unmarshal([]byte(nicJson.Tags), &tags); err != nil {
-			return err
-		}
-		nicJson.Tags = ""
 	}
 
 	var cidrs []string
@@ -218,7 +265,7 @@ func (t *IPAddressesAllResourceTypes) UnmarshalJSON(data []byte) error {
 		SubscriptionID:        nicJson.SubscriptionID,
 		SubscriptionName:      nicJson.SubscriptionName,
 		Subnets:               nicJson.Subnets,
-		Tags:                  tags,
+		Tags:                  nicJson.Tags.Data,
 		TenantID:              nicJson.TenantID,
 		TenantName:            nicJson.TenantName,
 		Type:                  nicJson.Type,
@@ -307,6 +354,7 @@ type IpAddressBlock struct {
 	FirstIp    string    `json:"firstIp" bson:"firstIp"`
 	LastIp     string    `json:"lastIp" bson:"lastIp"`
 	CidrBlocks []string  `json:"cidrBlocks" bson:"cidrBlocks"`
+	UsedBlocks []string  `json:"usedBlocks" bson:"usedBlocks"`
 	LastDBSync time.Time `json:"lastDatabaseSync,omitempty,omitzero" bson:"lastDatabaseSync,omitempty,omitzero"`
 }
 

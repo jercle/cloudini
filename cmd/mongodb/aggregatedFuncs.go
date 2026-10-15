@@ -16,6 +16,7 @@ import (
 	"github.com/jercle/cloudini/cmd/ado"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
+	"github.com/jercle/cloudini/cmd/defender"
 	"github.com/jercle/cloudini/cmd/forgerock"
 	"github.com/jercle/cloudini/cmd/m365"
 	"github.com/jercle/cloudini/cmd/web"
@@ -87,6 +88,9 @@ func UpdateAllAzureResourceIPAddresses(ipAddressesColl *mongo.Collection, ipAddr
 	// s.Start()
 	resources := azure.GetAllVMIpAddrForAllConfiguredTenants(&opts, tokenReq)
 
+	// jsonStr, _ := json.MarshalIndent(resources, "", "  ")
+	// os.WriteFile("ipResources.json", jsonStr, 0644)
+	// os.Exit(0)
 	// s.Stop()
 
 	fmt.Println("Updating all resource IPs in database...")
@@ -101,22 +105,33 @@ func UpdateAllAzureResourceIPAddresses(ipAddressesColl *mongo.Collection, ipAddr
 	)
 
 	vnetsMap := make(map[string]azure.IPAddressesAllResourceTypes)
+	snetsMap := make(map[string]azure.IPAddressesAllResourceTypes)
 
 	for _, res := range resources {
-		if res.Type != "microsoft.network/virtualnetworks" {
+
+		typeLower := strings.ToLower(res.Type)
+
+		if typeLower == "" || typeLower == "" {
+			if typeLower == "microsoft.network/virtualnetworks" {
+				vnetsMap[res.ID] = res
+			}
+			if typeLower == "microsoft.network/virtualnetworks/subnets" {
+				snetsMap[res.ID] = res
+			}
+		} else {
 			continue
 		}
-		vnetsMap[res.ID] = res
+
 		// vnets = append(vnets, res)
 	}
-	for _, res := range resources {
-		if res.Type != "microsoft.network/virtualnetworks/subnets" {
-			continue
-		}
-		lib.JsonMarshalAndPrint(res)
-		// vnet := vnetsMap[res.]
-		// vnets = append(vnets, res)
-	}
+	// for _, res := range resources {
+	// 	if res.Type != "microsoft.network/virtualnetworks/subnets" {
+	// 		continue
+	// 	}
+	// 	lib.JsonMarshalAndPrint(res)
+	// 	// vnet := vnetsMap[res.]
+	// 	// vnets = append(vnets, res)
+	// }
 
 	for _, vnet := range vnetsMap {
 		vnets = append(vnets, vnet)
@@ -1662,6 +1677,25 @@ func UpdateIdentityChanges(coll *mongo.Collection) {
 
 	UpsertIdentityChanges(allChanges, coll)
 
+	s.Stop()
+	// lib.JsonMarshalAndPrint(results)
+}
+
+//
+//
+
+func UpdateDefenderData(coll *mongo.Collection) {
+	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
+
+	fmt.Println("Fetching all machines from XDR")
+	s.Start()
+	allMachines := defender.GetMachinesForAllConfiguredTenants()
+	s.Stop()
+
+	fmt.Println("Upserting machines database...")
+	s.Start()
+	// results := UpsertKeyVaultSecrets(allSecrets, coll)
+	UpsertDefenderData(allMachines, coll)
 	s.Stop()
 	// lib.JsonMarshalAndPrint(results)
 }

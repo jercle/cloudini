@@ -55,6 +55,10 @@ func GetIPAddressesAll(queries map[string]string, outputFile string, token *lib.
 				snet.TenantName = resource.TenantName
 				snet.ResourceGroup = resource.ResourceGroup
 				snet.LastAzureSync = resource.LastAzureSync
+
+				idSpl := strings.Split(s.ID, "/")
+				snet.ParentVnetID = strings.Join(idSpl[:len(idSpl)-2], "/")
+
 				allIpAddresses = append(allIpAddresses, snet)
 			}
 			resource.Subnets = nil
@@ -882,6 +886,7 @@ func GetIpAddressBlocksForCidrFromVNetsNew(cidrsToCheck []lib.IpamCidrBlockToChe
 
 	return
 }
+
 func GetIpAddressBlocksForCidrFromVNets(cidrsToCheck []lib.IpamCidrBlockToCheck, vnets []IPAddressesAllResourceTypes) (allAddressBlocks []IpAddressBlocksByBlockTag) {
 	for _, cidr := range cidrsToCheck {
 		lastFoundVnet := ""

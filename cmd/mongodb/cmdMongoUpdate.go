@@ -28,6 +28,7 @@ var (
 	updateM365Data        bool
 	updateAllCertInfo     bool
 	showExecutionTime     bool
+	updateDefenderData    bool
 	updateADUsers         bool
 	updateB2CUsers        bool
 	updateWebsiteCertInfo bool
@@ -103,6 +104,8 @@ var cmdMongoUpdate = &cobra.Command{
 
 		certsCaCertInfo := c.Database(mongoConf.DbCertificates).Collection(mongoConf.CollCertsCaCertInfo)
 		certsServerCertInfo := c.Database(mongoConf.DbCertificates).Collection(mongoConf.CollCertsServerCertInfo)
+
+		defenderMachinesColl := c.Database(mongoConf.DbDefender).Collection(mongoConf.CollDefenderMachines)
 
 		entraAppRegColl := c.Database(mongoConf.DbEntra).Collection(mongoConf.CollEntraAppReg)
 		entraAppRegCredsExpiringColl := c.Database(mongoConf.DbEntra).Collection(mongoConf.CollEntraAppRegCredsExpiring)
@@ -310,6 +313,11 @@ var cmdMongoUpdate = &cobra.Command{
 				UpdateKeyVaultSecrets(azKeyVaultSecretsColl)
 			})
 		}
+		if updateDefenderData {
+			wg.Go(func() {
+				UpdateDefenderData(defenderMachinesColl)
+			})
+		}
 
 		wg.Wait()
 
@@ -344,6 +352,7 @@ func init() {
 	cmdMongoUpdate.Flags().BoolVarP(&showExecutionTime, "showExecutionTime", "t", false, "Prints execution time when complete")
 	cmdMongoUpdate.Flags().BoolVarP(&updateWebsiteCertInfo, "updateWebsiteCertInfo", "w", false, "Updates Website Cert info from configured URLs in database")
 	cmdMongoUpdate.Flags().BoolVarP(&updateAllCertInfo, "updateAllCertInfo", "x", false, "Update server certificates and expiries")
+	cmdMongoUpdate.Flags().BoolVarP(&updateDefenderData, "updateDefenderData", "z", false, "Gets data from Microsoft Defender / XDR")
 	// cmdMongoUpdate.Flags().BoolVar(&GoProfile, "go-profile", false, "Runs pprof server to see memory and cpu stats")
 	// cmdMongoUpdate.Flags().BoolVar(&updateAzureResourceRelations, "updateAzureResourceRelations", false, "Gets all resources from cost data and database, aggregates and finds relations, then updates database. This can only be used in conjunction with 'updateAzureResVcpuCountsCostData'")
 	// cmdMongoUpdate.Flags().BoolVarP(&updateAWSMonitoringData, "updateAWSMonitoringData", "l", false, "Updates Database with AWS Monitoring data")

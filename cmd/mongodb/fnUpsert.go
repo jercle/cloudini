@@ -13,6 +13,7 @@ import (
 	"github.com/jercle/cloudini/cmd/ad"
 	"github.com/jercle/cloudini/cmd/azure"
 	"github.com/jercle/cloudini/cmd/citrix"
+	"github.com/jercle/cloudini/cmd/defender"
 	"github.com/jercle/cloudini/cmd/forgerock"
 	"github.com/jercle/cloudini/cmd/m365"
 	"github.com/jercle/cloudini/lib"
@@ -1670,6 +1671,24 @@ func UpsertKeyVaultSecrets(allSecrets []azure.KeyVaultSecretStored, coll *mongo.
 	var updates []mongo.WriteModel
 	for _, s := range allSecrets {
 		filter := bson.D{{"_id", s.Id}}
+		update := bson.D{{"$set", s}}
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+	}
+	results, err := coll.BulkWrite(ctx, updates, nil)
+	lib.CheckFatalError(err)
+
+	return
+}
+
+//
+//
+
+func UpsertDefenderData(allMachines []defender.Machine, coll *mongo.Collection) (results *mongo.BulkWriteResult) {
+	ctx := context.TODO()
+
+	var updates []mongo.WriteModel
+	for _, s := range allMachines {
+		filter := bson.D{{"_id", s.MongoId}}
 		update := bson.D{{"$set", s}}
 		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
 	}
