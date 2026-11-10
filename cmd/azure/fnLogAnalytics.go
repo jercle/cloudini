@@ -166,7 +166,7 @@ func getAllWorkspaceTables(cred *azidentity.DefaultAzureCredential, subscription
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+token.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	if err != nil {
 
 		log.Fatal("Error fetching LA Workspace Tables")

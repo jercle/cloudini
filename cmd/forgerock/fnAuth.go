@@ -3,6 +3,7 @@ package forgerock
 import (
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -24,17 +25,17 @@ func GetTokenForConfiguredTenant(tenant string) (*lib.ForgerockToken, error) {
 
 	urlString := tConfig.UrlBase + "/am/oauth2/realms/root/access_token"
 
-	client := &http.Client{}
 	req, err := http.NewRequest(http.MethodPost, urlString, strings.NewReader(data.Encode())) // URL-encoded payload
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	res, err := client.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 
@@ -43,7 +44,7 @@ func GetTokenForConfiguredTenant(tenant string) (*lib.ForgerockToken, error) {
 	}
 	if res.StatusCode == 404 {
 		fmt.Println(string(responseBody))
-		lib.CheckFatalError(fmt.Errorf(res.Status))
+		lib.CheckFatalError(errors.New(res.Status))
 	}
 
 	var response lib.ForgerockGetTokenResponse

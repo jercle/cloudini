@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  GOEXPERIMENT: jsonv2
+
+jobs:
+  build:
+    name: Build, vet and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Build
+        run: go build -trimpath -o /dev/null .
+
+      - name: Cross-build (windows, darwin)
+        run: |
+          GOOS=windows go build -trimpath -o /dev/null .
+          GOOS=darwin go build -trimpath -o /dev/null .
+
+      # ./scripts and ./cmd/utils/windows do not load on Linux, so the package
+      # list is built explicitly rather than using ./...
+      - name: Vet
+        run: go vet $(go list ./... 2>/dev/null | grep -v -e '/scripts$' -e '/cmd/utils/windows$')
+
+      - name: Test
+        run: go test ./lib/
+
+  govulncheck:
+    name: Known vulnerabilities
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: govulncheck
+        run: go run golang.org/x/vuln/cmd/govulncheck@latest .

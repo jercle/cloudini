@@ -3,6 +3,7 @@ package lib
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go/format"
 	"io"
@@ -600,20 +601,27 @@ func SelectMapStringFieldsFromArrayOfKeys(dataMap map[string]string, keysToSelec
 
 func HttpBearerGet(urlString string, bearerToken string) ([]byte, error) {
 	req, err := http.NewRequest(http.MethodGet, urlString, nil)
-	CheckFatalError(err)
+	if err != nil {
+		return nil, err
+	}
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+bearerToken)
 
-	res, err := http.DefaultClient.Do(req)
-	CheckFatalError(err)
+	res, err := HTTPClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
 
 	if res.StatusCode == 404 {
 		jsonErr := `{"status": "` + res.Status + `", "response": ` + string(responseBody) + `}`
-		err = fmt.Errorf(jsonErr)
-		return nil, err
+		return nil, errors.New(jsonErr)
 	}
 
 	return responseBody, nil

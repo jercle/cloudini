@@ -3,6 +3,7 @@ package azure
 import (
 	"encoding/csv"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -465,7 +466,7 @@ func ProcessCostData(data lib.AggregatedCostData) (costDataByMeterIdentifer map[
 					_ = resName
 					for id, meterData := range resData.MeterData {
 						if len(initialCheck[id]) > 1 {
-							err := fmt.Errorf("Incorrect length of meterdata, check data of " + meterData.ResourceMeterIdentifier)
+							err := errors.New("Incorrect length of meterdata, check data of " + meterData.ResourceMeterIdentifier)
 							jsonStr, _ := json.MarshalIndent(initialCheck[id], "", "  ")
 							fmt.Println(string(jsonStr))
 							lib.CheckFatalError(err)
@@ -1111,7 +1112,7 @@ func DownloadAllConfiguredTenantCostExportsForMonth(opts lib.DownloadAllConfigur
 	var wg sync.WaitGroup
 
 	if _, err := os.Stat(opts.OutfilePath); err != nil {
-		os.MkdirAll(opts.OutfilePath, os.ModePerm)
+		os.MkdirAll(opts.OutfilePath, lib.OutputDirPerm)
 	}
 
 	config := lib.GetCldConfig(cldConfOpts)
@@ -1177,7 +1178,7 @@ func DownloadAllConfiguredTenantCostExportsForMonth(opts lib.DownloadAllConfigur
 // Full blob prefix becomes blobPrefix + "/" + lastMonth.Format("2006") + lastMonth.Format("01")
 func GenerateMonthlyCostReport(outputDirectory string, outputFileName string, blobPrefix string, costExportMonth string) {
 	if !lib.CheckDirExists(outputDirectory) {
-		os.MkdirAll(outputDirectory, os.ModePerm)
+		os.MkdirAll(outputDirectory, lib.OutputDirPerm)
 	}
 
 	// cldConfOpts := &lib.CldConfigOptions{

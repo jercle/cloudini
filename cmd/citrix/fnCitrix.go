@@ -3,11 +3,11 @@ package citrix
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
-	"os"
 	"time"
 
 	"github.com/jercle/cloudini/lib"
@@ -61,7 +61,7 @@ func CacheToken(tokenData lib.CitrixTokenData, cldOpts *lib.CldConfigOptions) {
 	jsonStr, err := json.MarshalIndent(tokenData, "", "  ")
 	lib.CheckFatalError(err)
 
-	os.WriteFile(cachePath+"/ctxtok.json", jsonStr, os.ModePerm)
+	lib.CheckFatalError(lib.WriteSecretFile(cachePath+"/ctxtok.json", jsonStr))
 	// fmt.Println(tokenData)
 	// fmt.Println(string(jsonStr))
 
@@ -80,14 +80,15 @@ func GetUserInfo(customerId string, tokenData lib.CitrixTokenData) (GetUserInfoR
 	req.Header.Add("Citrix-CustomerId", customerId)
 	req.Header.Add("Authorization", " CWSAuth Bearer="+tokenData.AccessToken)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 
 	if res.StatusCode == 404 {
 		fmt.Println(string(responseBody))
-		lib.CheckFatalError(fmt.Errorf(res.Status))
+		lib.CheckFatalError(errors.New(res.Status))
 	}
 
 	var userInfo GetUserInfoResponse
@@ -111,8 +112,9 @@ func HttpGet(urlString string, customerId string, siteId string, tokenData lib.C
 	req.Header.Add("Citrix-InstanceId", siteId)
 	req.Header.Add("Authorization", " CWSAuth Bearer="+tokenData.AccessToken)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 	// if err != nil {
 	// 	return nil, err
 	// }
@@ -121,7 +123,7 @@ func HttpGet(urlString string, customerId string, siteId string, tokenData lib.C
 
 	if res.StatusCode == 404 {
 		fmt.Println(string(responseBody))
-		lib.CheckFatalError(fmt.Errorf(res.Status))
+		lib.CheckFatalError(errors.New(res.Status))
 	}
 
 	// fmt.Println()
@@ -149,8 +151,9 @@ func HttpPost(urlString string, body string, creds lib.CitrixCloudAccountConfig)
 
 	fmt.Println(body)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 	// if err != nil {
 	// 	return nil, err
 	// }
@@ -163,7 +166,7 @@ func HttpPost(urlString string, body string, creds lib.CitrixCloudAccountConfig)
 	lib.CheckFatalError(err)
 	if res.StatusCode == 404 {
 		fmt.Println(string(responseBody))
-		lib.CheckFatalError(fmt.Errorf(res.Status))
+		lib.CheckFatalError(errors.New(res.Status))
 	}
 
 	resHeader, _ := json.MarshalIndent(res.Header, "", "  ")
@@ -216,8 +219,9 @@ func GetToken(creds lib.CitrixCloudAccountConfig, cldConfigOpts *lib.CldConfigOp
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Add("Accept", "application/json")
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 	lib.CheckFatalError(err)
@@ -232,7 +236,7 @@ func GetToken(creds lib.CitrixCloudAccountConfig, cldConfigOpts *lib.CldConfigOp
 		fmt.Println(string(responseBody))
 		fmt.Println("Header")
 		fmt.Println(string(resHeader))
-		lib.CheckFatalError(fmt.Errorf(res.Status))
+		lib.CheckFatalError(errors.New(res.Status))
 	}
 
 	currentTime := time.Now()

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	_ "embed"
 	"encoding/json/v2"
+	"errors"
 	"fmt"
 	"os/exec"
 	"strconv"
@@ -189,7 +190,7 @@ func GetEXOMailboxesWithPermissionsForTenant(token *lib.AzureMultiAuthToken, tok
 	getPerms.Stderr = &getPermsStdErr
 
 	if getPermsStdErr.String() != "" {
-		return nil, lib.FormatError(fmt.Errorf(getPermsStdOut.String()))
+		return nil, lib.FormatError(errors.New(getPermsStdOut.String()))
 	}
 
 	stdinPipe, err := getPerms.StdinPipe()

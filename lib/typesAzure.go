@@ -95,7 +95,7 @@ type AllTenantTokens []AzureMultiAuthToken
 
 type ListGalleryImageVersionsResponse struct {
 	Value    []GalleryImageVersionDetailed `json:"value,omitempty" bson:"value,omitempty"`
-	NextLink string                        `json:"nextLink",omitempt" bson:"nextLink",omitempt"`
+	NextLink string                        `json:"nextLink,omitempty" bson:"nextLink,omitempty"`
 }
 type GalleryImageVersionDetailed struct {
 	ID         string `json:"id,omitempty" bson:"id,omitempty"`

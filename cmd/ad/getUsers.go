@@ -18,8 +18,15 @@ func GetAllADUsers(options lib.ADDomainConfig) (users []ADUser) {
 	lib.CheckFatalError(err)
 	defer l.Close()
 
+	// Verify the domain controller's certificate before sending the bind
+	// credentials. Verification can only be turned off explicitly per domain.
 	tlsConfig := &tls.Config{
-		InsecureSkipVerify: true,
+		ServerName:         options.DomainController,
+		MinVersion:         tls.VersionTLS12,
+		InsecureSkipVerify: options.InsecureSkipVerify,
+	}
+	if options.InsecureSkipVerify {
+		fmt.Fprintln(os.Stderr, "WARNING: TLS certificate verification is disabled for "+options.DomainController)
 	}
 	err = l.StartTLS(tlsConfig)
 	if err != nil {

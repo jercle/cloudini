@@ -53,6 +53,10 @@ type ADDomainConfig struct {
 	BindUser         string `json:"bindUser,omitempty"`
 	BindPwd          string `json:"bindPwd,omitempty"`
 	BaseSearchDn     string `json:"baseSearchDn,omitempty"`
+	// InsecureSkipVerify disables verification of the domain controller's TLS
+	// certificate. Leave false unless the DC certificate cannot be trusted by
+	// the local machine; with it set, the bind password can be intercepted.
+	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty"`
 }
 
 type CitrixCloud struct {

@@ -48,7 +48,7 @@ var json2structCmd = &cobra.Command{
 		fmt.Println(code)
 
 		if outFile != "" {
-			os.WriteFile(outFile, []byte(code), os.ModePerm)
+			os.WriteFile(outFile, []byte(code), 0644)
 		}
 
 		// if saveToClipboard {

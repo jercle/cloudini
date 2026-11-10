@@ -1,6 +1,7 @@
 package azure
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -71,7 +72,7 @@ var cmdComputeGalleryImage = &cobra.Command{
 					os.Exit(0)
 				} else {
 					sortedVersions := versions.ListVersions()
-					err := fmt.Errorf("Version " + checkVersionExists + " does not exist. Available versions: " + strings.Join(sortedVersions, ", "))
+					err := errors.New("Version " + checkVersionExists + " does not exist. Available versions: " + strings.Join(sortedVersions, ", "))
 					lib.CheckFatalError(err)
 				}
 			}

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json/jsontext"
 	json "encoding/json/v2"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -24,12 +25,13 @@ func HttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	// lib.CheckFatalError(err)
 
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 
 	// fmt.Println(res)
 
@@ -51,7 +53,7 @@ func HttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 		// fmt.Println(string(responseBody))
 		// lib.CheckFatalError()
 		jsonErr := `{"status": "` + res.Status + `", "response": ` + string(responseBody) + `}`
-		err = fmt.Errorf(jsonErr)
+		err = errors.New(jsonErr)
 		return nil, err
 	}
 
@@ -76,11 +78,12 @@ func HttpGetErrLogToCache(urlString string, mat lib.AzureMultiAuthToken) ([]byte
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	// lib.CheckFatalError(err)
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 
 	// fmt.Println(res.Status)
 	// fmt.Println(res.StatusCode)
@@ -93,7 +96,7 @@ func HttpGetErrLogToCache(urlString string, mat lib.AzureMultiAuthToken) ([]byte
 	// 	// fmt.Println(string(responseBody))
 	// 	// lib.CheckFatalError()
 	// 	jsonErr := `{"status": "` + res.Status + `", "response": ` + string(responseBody) + `}`
-	// 	err = fmt.Errorf(jsonErr)
+	// 	err = errors.New(jsonErr)
 	// 	return nil, err
 	// }
 
@@ -101,7 +104,7 @@ func HttpGetErrLogToCache(urlString string, mat lib.AzureMultiAuthToken) ([]byte
 		if res.StatusCode == 403 {
 			_, _, cachePath := lib.InitConfig(nil)
 			fmt.Println(res.Status, urlString)
-			f, err := os.OpenFile(cachePath+"/403.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			f, err := os.OpenFile(cachePath+"/403.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, lib.SecretFilePerm)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -111,9 +114,7 @@ func HttpGetErrLogToCache(urlString string, mat lib.AzureMultiAuthToken) ([]byte
 				log.Fatal(err)
 			}
 		}
-		resStr, _ := json.Marshal(res)
-		err = fmt.Errorf(urlString, string(resStr))
-		return nil, err
+		return nil, fmt.Errorf("%s: %s", urlString, res.Status)
 	}
 
 	// fmt.Println()
@@ -141,8 +142,9 @@ func HttpPost(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byt
 
 	// fmt.Println(body)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 	// if err != nil {
 	// 	return nil, err
 	// }
@@ -161,13 +163,13 @@ func HttpPost(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byt
 	// lib.CheckFatalError(err)
 	if res.StatusCode == 404 {
 		fmt.Println(string(responseBody))
-		// lib.CheckFatalError(fmt.Errorf(res.Status))
-		return nil, nil, fmt.Errorf(res.Status)
+		// lib.CheckFatalError(errors.New(res.Status))
+		return nil, nil, errors.New(res.Status)
 	}
 	if res.StatusCode == 403 {
 		fmt.Println(string(responseBody))
-		// lib.CheckFatalError(fmt.Errorf(res.Status))
-		return nil, nil, fmt.Errorf(res.Status)
+		// lib.CheckFatalError(errors.New(res.Status))
+		return nil, nil, errors.New(res.Status)
 	}
 
 	// fmt.Println()
@@ -193,8 +195,9 @@ func HttpPut(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byte
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 	// if err != nil {
 	// 	return nil, err
 	// }
@@ -207,7 +210,7 @@ func HttpPut(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byte
 	lib.CheckFatalError(err)
 	if res.StatusCode == 404 {
 		fmt.Println(string(responseBody))
-		lib.CheckFatalError(fmt.Errorf(res.Status))
+		lib.CheckFatalError(errors.New(res.Status))
 	}
 
 	resHeader, _ := json.Marshal(res.Header, jsontext.WithIndent("  "))
@@ -237,11 +240,12 @@ func HttpPatch(urlString string, body string, mat lib.AzureMultiAuthToken) ([]by
 
 	// fmt.Println(body)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	// lib.CheckFatalError(err)
 	if err != nil {
 		return nil, nil, err
 	}
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 
@@ -251,7 +255,7 @@ func HttpPatch(urlString string, body string, mat lib.AzureMultiAuthToken) ([]by
 	lib.CheckFatalError(err)
 	if res.StatusCode == 404 {
 		fmt.Println(string(responseBody))
-		lib.CheckFatalError(fmt.Errorf(res.Status))
+		lib.CheckFatalError(errors.New(res.Status))
 	} else if res.StatusCode == 403 {
 		fmt.Println(res.Status, urlString)
 	}
@@ -280,8 +284,9 @@ func HttpPatchErrLogToCache(urlString string, body string, mat lib.AzureMultiAut
 
 	// fmt.Println(body)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 	// if err != nil {
 	// 	return nil, err
 	// }
@@ -299,7 +304,7 @@ func HttpPatchErrLogToCache(urlString string, body string, mat lib.AzureMultiAut
 	switch res.StatusCode {
 	case 404:
 		fmt.Println(string(responseBody))
-		lib.CheckFatalError(fmt.Errorf(res.Status))
+		lib.CheckFatalError(errors.New(res.Status))
 		return responseBody, resHeader, err
 	case 403:
 		date := time.Now().Format(time.RFC3339)

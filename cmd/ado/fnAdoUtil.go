@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/jercle/cloudini/lib"
 )
 
 var AzureDevOpsBaseUrl = "https://dev.azure.com/"
@@ -23,8 +25,7 @@ func azureDevOpsRestGet(uri string, pat string) []byte {
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", CreateBasicAuthHeaderValue("", pat))
 
-	client := &http.Client{}
-	res, err := client.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}

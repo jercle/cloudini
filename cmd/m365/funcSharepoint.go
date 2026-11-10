@@ -3,6 +3,7 @@ package m365
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -34,9 +35,14 @@ func UploadFileToSharepoint(dataDirectory string, siteId string, driveId string,
 	}
 	lib.CheckFatalError(err)
 
-	client := &http.Client{}
-	_, err = client.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
+
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		resBody, _ := io.ReadAll(res.Body)
+		lib.CheckFatalError(fmt.Errorf("upload of %s failed: %s: %s", fileName, res.Status, string(resBody)))
+	}
 
 	fmt.Println(fmt.Sprintf("Uploaded to: %s/%s", folderPath, fileName))
 }

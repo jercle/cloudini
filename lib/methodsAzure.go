@@ -270,13 +270,14 @@ func (blob *BlobItem) Download(cred *azidentity.ClientSecretCredential, fileName
 
 	path := filepath.Dir(fileName)
 	if _, err := os.Stat(path); err != nil {
-		os.MkdirAll(path, os.ModePerm)
+		CheckFatalError(os.MkdirAll(path, OutputDirPerm))
 	}
 
 	file, err := os.Create(fileName)
 	CheckFatalError(err)
 	defer file.Close()
 	_, err = client.DownloadFile(ctx, blob.ContainerName, blob.Name, file, nil)
+	CheckFatalError(err)
 }
 
 // TODO: Method to get data without saving file

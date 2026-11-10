@@ -289,7 +289,7 @@ func GetCertInfoFromFilesNew(basePath string, outputPath string) (caCertInfo []C
 
 	if outputPath != "" {
 		if _, err := os.Stat(outputPath); err != nil {
-			os.MkdirAll(outputPath, os.ModePerm)
+			os.MkdirAll(outputPath, OutputDirPerm)
 		}
 		caCertInfoStr, _ := json.MarshalIndent(caCertInfo, "", "  ")
 		serverCertInfoStr, _ := json.MarshalIndent(serverCertInfo, "", "  ")
@@ -315,7 +315,7 @@ func GetCertInfoFromFiles(basePath string, outputPath string) (caCertInfo []Cert
 
 	if outputPath != "" {
 		if _, err := os.Stat(outputPath); err != nil {
-			os.MkdirAll(outputPath, os.ModePerm)
+			os.MkdirAll(outputPath, OutputDirPerm)
 		}
 		caCertInfoStr, _ := json.MarshalIndent(caCertInfo, "", "  ")
 		serverCertInfoStr, _ := json.MarshalIndent(serverCertInfo, "", "  ")
@@ -347,9 +347,10 @@ func RelateCertAuthCertsToServerCertsNew(caCertInfo []CertAuthorityCertInfo, ser
 				fmt.Println(i)
 
 				jsonStr, _ := json.MarshalIndent(caCertsBySerialNumber, "", "  ")
-				os.WriteFile("/home/jercle/.config/cld/cache/caCertsBySerialNumber.json", jsonStr, 0644)
+				_, _, cachePath := InitConfig(nil)
+				os.WriteFile(filepath.Join(cachePath, "caCertsBySerialNumber.json"), jsonStr, SecretFilePerm)
 				jsonStrCurr, _ := json.MarshalIndent(caci, "", "  ")
-				os.WriteFile("/home/jercle/.config/cld/cache/curr.json", jsonStrCurr, 0644)
+				os.WriteFile(filepath.Join(cachePath, "curr.json"), jsonStrCurr, SecretFilePerm)
 
 				CheckFatalError(fmt.Errorf("whoopsie! caCertsBySerialNumber"))
 			}

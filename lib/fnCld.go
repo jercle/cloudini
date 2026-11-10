@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"bytes"
 	"context"
 	"crypto/aes"
 	"crypto/cipher"
@@ -14,6 +15,7 @@ import (
 	"slices"
 	"sort"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/Azure/AppConfiguration-GoProvider/azureappconfiguration"
@@ -37,12 +39,8 @@ func InitConfig(options *CldConfigOptions) (configFile string, configPath string
 	configFilePath := configPath + "/cldConf.json"
 	cachePath = configPath + "/cache"
 
-	if _, err := os.Stat(configPath); err != nil {
-		os.MkdirAll(configPath, os.ModePerm)
-	}
-	if _, err := os.Stat(cachePath); err != nil {
-		os.MkdirAll(cachePath, os.ModePerm)
-	}
+	CheckFatalError(ensureSecretDir(configPath))
+	CheckFatalError(ensureSecretDir(cachePath))
 
 	if os.Getenv("AZURE_APPCONFIG_ENDPOINT") != "" {
 		// useAzAppConfig = true
@@ -64,21 +62,14 @@ func InitConfig(options *CldConfigOptions) (configFile string, configPath string
 
 	fileStat, err := os.Stat(configFile)
 
-	if err != nil {
-		config := CldConfigRoot{}
+	if err != nil || fileStat.Size() == 0 {
+		config := CldConfigRoot{
+			Azure: &AzureConfig{},
+		}
 		config.Azure.MultiTenantAuth.Tenants = make(CldConfigTenants)
 
 		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
-		err := os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
-		CheckFatalError(err)
-	}
-
-	if fileStat.Size() == 0 {
-		config := CldConfigRoot{}
-		config.Azure.MultiTenantAuth.Tenants = make(CldConfigTenants)
-
-		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
-		err := os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
+		err := WriteSecretFile(configFile, jsonBytes)
 		CheckFatalError(err)
 	}
 
@@ -88,7 +79,7 @@ func InitConfig(options *CldConfigOptions) (configFile string, configPath string
 func SaveCldConfig(configFilePath string, config CldConfigRoot, options *CldConfigOptions) {
 	if configFilePath == "azureAppConfig" {
 		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
-		err := os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
+		err := WriteSecretFile(configFilePath, jsonBytes)
 		CheckFatalError(err)
 		return
 	}
@@ -103,10 +94,10 @@ func SaveCldConfig(configFilePath string, config CldConfigRoot, options *CldConf
 		jsonBytes, _ := json.Marshal(config)
 		encConfig, err := Encrypt(jsonBytes, options)
 		CheckFatalError(err)
-		os.WriteFile(configFilePath, encConfig, os.ModePerm)
+		CheckFatalError(WriteSecretFile(configFilePath, encConfig))
 	} else {
 		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
-		err := os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
+		err := WriteSecretFile(configFilePath, jsonBytes)
 		CheckFatalError(err)
 	}
 }
@@ -126,7 +117,7 @@ func EncryptUnencryptedConfigFile(unencryptedFile string, removeUnencryptedFile 
 	encryptedConfig, err := Encrypt(config, nil)
 	CheckFatalError(err)
 
-	os.WriteFile(configFile, encryptedConfig, os.ModePerm)
+	CheckFatalError(WriteSecretFile(configFile, encryptedConfig))
 	if removeUnencryptedFile {
 		os.Remove(unencryptedFile)
 	}
@@ -139,14 +130,14 @@ func EncryptDecryptedConfigFile(configFilePath string, outputFileName string) {
 	encryptedConfig, err := Encrypt(config, nil)
 	CheckFatalError(err)
 
-	os.WriteFile(outputFileName, encryptedConfig, os.ModePerm)
+	CheckFatalError(WriteSecretFile(outputFileName, encryptedConfig))
 }
 
 func DecryptEncryptedConfigFile(configFilePath string, outputFileName string) {
 	if configFilePath == "azureAppConfig" {
 		config := GetCldConfig(nil)
 		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
-		err := os.WriteFile(outputFileName, jsonBytes, os.ModePerm)
+		err := WriteSecretFile(outputFileName, jsonBytes)
 		CheckFatalError(err)
 		return
 	}
@@ -156,7 +147,7 @@ func DecryptEncryptedConfigFile(configFilePath string, outputFileName string) {
 	decryptedConfig, err := Decrypt(config, nil)
 	CheckFatalError(err)
 
-	os.WriteFile(outputFileName, decryptedConfig, os.ModePerm)
+	CheckFatalError(WriteSecretFile(outputFileName, decryptedConfig))
 }
 
 //
@@ -169,7 +160,7 @@ func DecryptEncryptedTokenCache(tokenCachePath string, outputFileName string) {
 	decryptedConfig, err := Decrypt(config, nil)
 	CheckFatalError(err)
 
-	os.WriteFile(outputFileName, decryptedConfig, os.ModePerm)
+	CheckFatalError(WriteSecretFile(outputFileName, decryptedConfig))
 	fmt.Println("Saved to", outputFileName)
 }
 
@@ -263,44 +254,79 @@ func Decode(s []byte) ([]byte, error) {
 	return data, err
 }
 
-var cipherBytes = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}
+// legacyCipherIV is the fixed IV used by the original AES-CFB format. It is
+// kept only so that files written by older versions can still be read.
+var legacyCipherIV = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}
 
+// encryptedV2Prefix marks data encrypted with AES-GCM and a random nonce. The
+// legacy format is plain base64, which can never contain ":".
+const encryptedV2Prefix = "cld2:"
+
+// Encrypt encrypts text with AES-GCM using a random nonce, so identical
+// plaintexts never produce the same ciphertext and any tampering or use of the
+// wrong key is detected on decryption.
 func Encrypt(text []byte, opts *CldConfigOptions) ([]byte, error) {
-	secret := GetCipherKey(opts)
-
-	block, err := aes.NewCipher([]byte(secret))
-	CheckFatalError(err)
-
-	cfb := cipher.NewCFBEncrypter(block, cipherBytes)
-	cipherText := make([]byte, len(text))
-	cfb.XORKeyStream(cipherText, text)
-	return Encode(cipherText), nil
+	return encryptWithKey([]byte(GetCipherKey(opts)), text)
 }
 
+// Decrypt decrypts data produced by Encrypt. Data written by older versions
+// (AES-CFB with a fixed IV) is still accepted and is upgraded to the current
+// format the next time it is saved.
 func Decrypt(text []byte, opts *CldConfigOptions) ([]byte, error) {
+	return decryptWithKey([]byte(GetCipherKey(opts)), text)
+}
 
-	// fmt.Println("decrypting")
-	secret := GetCipherKey(opts)
-
-	block, err := aes.NewCipher([]byte(secret))
-	CheckFatalError(err)
+func encryptWithKey(key []byte, text []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
 	if err != nil {
-		return []byte{}, err
+		return nil, err
 	}
-	// fmt.Println("decoding")
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return nil, err
+	}
+	nonce := make([]byte, gcm.NonceSize())
+	if _, err := rand.Read(nonce); err != nil {
+		return nil, err
+	}
+	sealed := gcm.Seal(nonce, nonce, text, nil)
+	return append([]byte(encryptedV2Prefix), Encode(sealed)...), nil
+}
+
+func decryptWithKey(key []byte, text []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	text = bytes.TrimSpace(text)
+
+	if bytes.HasPrefix(text, []byte(encryptedV2Prefix)) {
+		sealed, err := Decode(text[len(encryptedV2Prefix):])
+		if err != nil {
+			return nil, err
+		}
+		gcm, err := cipher.NewGCM(block)
+		if err != nil {
+			return nil, err
+		}
+		if len(sealed) < gcm.NonceSize() {
+			return nil, fmt.Errorf("encrypted data is truncated")
+		}
+		nonce, cipherText := sealed[:gcm.NonceSize()], sealed[gcm.NonceSize():]
+		plainText, err := gcm.Open(nil, nonce, cipherText, nil)
+		if err != nil {
+			return nil, fmt.Errorf("unable to decrypt: wrong key or corrupted data")
+		}
+		return plainText, nil
+	}
+
+	// Legacy format: unauthenticated AES-CFB with a fixed IV.
 	cipherText, err := Decode(text)
-	// if err != nil {
-	// jsonStr, _ := json.MarshalIndent(secret, "", "  ")
-	// fmt.Println(string(text))
-	// fmt.Println(err.Error())
-	// os.WriteFile("main-test-text", text, 0644)
-	// os.Exit(0)
-	// return []byte{}, err
-	// }
-	CheckFatalError(err)
-
-	cfb := cipher.NewCFBDecrypter(block, cipherBytes)
-
+	if err != nil {
+		return nil, err
+	}
+	cfb := cipher.NewCFBDecrypter(block, legacyCipherIV)
 	plainText := make([]byte, len(cipherText))
 	cfb.XORKeyStream(plainText, cipherText)
 
@@ -313,21 +339,17 @@ func GetCipherKey(opts *CldConfigOptions) string {
 	_, configSecret := CheckConfigEncryptionOption()
 	if configSecret != "" {
 		return configSecret
-	} else {
-		if _, err := os.Stat(cachePath + "/key"); err != nil {
-			key, err := GenerateRandomString(32, true, true, true)
-			CheckFatalError(err)
-			f, err := os.Create(cachePath + "/key")
-			CheckFatalError(err)
-			_, err = f.WriteString(key)
-			CheckFatalError(err)
-			return key
-		} else {
-			key, err := os.ReadFile(cachePath + "/key")
-			CheckFatalError(err)
-			return string(key)
-		}
 	}
+
+	keyFile := cachePath + "/key"
+	if key, err := os.ReadFile(keyFile); err == nil && len(key) > 0 {
+		return string(key)
+	}
+
+	key, err := GenerateRandomString(32, true, true, true)
+	CheckFatalError(err)
+	CheckFatalError(WriteSecretFile(keyFile, []byte(key)))
+	return key
 }
 
 func GenerateRandomString(n int, includeUpper bool, includeNumbers bool, includeSpecial bool) (string, error) {
@@ -360,51 +382,56 @@ func GenerateRandomString(n int, includeUpper bool, includeNumbers bool, include
 	return string(ret), nil
 }
 
+// tokenCacheMu serialises read-modify-write cycles on the token cache file so
+// concurrent tenant goroutines cannot overwrite each other's entries.
+var tokenCacheMu sync.Mutex
+
+// readTokenCache returns the decrypted token cache. A missing, unreadable or
+// undecryptable cache is treated as empty rather than as a fatal error.
+func readTokenCache(cacheFile string, opts *CldConfigOptions) TokenCache {
+	cacheFileData := TokenCache{}
+
+	cacheData, err := os.ReadFile(cacheFile)
+	if err != nil || len(cacheData) == 0 {
+		return cacheFileData
+	}
+	decrypted, err := Decrypt(cacheData, opts)
+	if err != nil {
+		return TokenCache{}
+	}
+	if err := json.Unmarshal(decrypted, &cacheFileData); err != nil || cacheFileData == nil {
+		return TokenCache{}
+	}
+	return cacheFileData
+}
+
 func CacheSaveToken[T AzureMultiAuthToken | AzureTokenData | CitrixTokenData](tokenData T, tokenType string, opts *CldConfigOptions) error {
 	_, _, cachePath := InitConfig(opts)
 
 	cacheFile := cachePath + "/" + "tkn"
 
-	cacheFileData := TokenCache{}
 	tokenDataStr, err := json.Marshal(tokenData)
-	tokenDataStrEncoded := Encode(tokenDataStr)
-	CheckFatalError(err)
-
-	if _, err := os.Stat(cacheFile); err != nil {
-		cacheFileData[tokenType] = string(tokenDataStrEncoded)
-		jsonStr, _ := json.MarshalIndent(cacheFileData, "", "  ")
-		encCacheStr, err := Encrypt(jsonStr, opts)
-		CheckFatalError(err)
-		f, err := os.Create(cacheFile)
-		CheckFatalError(err)
-		_, err = f.WriteString(string(encCacheStr))
-		CheckFatalError(err)
-	} else {
-		cacheData, err := os.ReadFile(cacheFile)
-		CheckFatalError(err)
-		decrypted, err := Decrypt(cacheData, opts)
-		CheckFatalError(err)
-		err = json.Unmarshal(decrypted, &cacheFileData)
-		if err != nil {
-			cacheFileData[tokenType] = string(tokenDataStrEncoded)
-			jsonStr, _ := json.MarshalIndent(cacheFileData, "", "  ")
-			encCacheStr, err := Encrypt(jsonStr, opts)
-			CheckFatalError(err)
-			os.WriteFile(cacheFile, encCacheStr, 0644)
-			return nil
-		}
-
-		cacheFileData[tokenType] = string(tokenDataStrEncoded)
-
-		jsonStr, err := json.Marshal(cacheFileData)
-		CheckFatalError(err)
-
-		encryptedCacheData, err := Encrypt(jsonStr, opts)
-		CheckFatalError(err)
-
-		os.WriteFile(cacheFile, encryptedCacheData, 0644)
+	if err != nil {
+		return err
 	}
-	return nil
+
+	tokenCacheMu.Lock()
+	defer tokenCacheMu.Unlock()
+
+	cacheFileData := readTokenCache(cacheFile, opts)
+	cacheFileData[tokenType] = string(Encode(tokenDataStr))
+
+	jsonStr, err := json.Marshal(cacheFileData)
+	if err != nil {
+		return err
+	}
+
+	encryptedCacheData, err := Encrypt(jsonStr, opts)
+	if err != nil {
+		return err
+	}
+
+	return WriteSecretFile(cacheFile, encryptedCacheData)
 }
 
 func ClearTokenCache(opts *CldConfigOptions) {
@@ -419,99 +446,45 @@ func ClearTokenCache(opts *CldConfigOptions) {
 	fmt.Println("Deleted cached token data: " + cacheFile)
 }
 
+// GetCachedToken returns the cached token stored under tokenType. It returns
+// nil when no token cache exists and a zero value token (which callers treat
+// as expired) when the cache has no usable entry for tokenType.
 func GetCachedToken[T AzureMultiAuthToken | AzureTokenData | CitrixTokenData](tokenType string, opts *CldConfigOptions) *T {
 	_, _, cachePath := InitConfig(opts)
-	// cacheFile := cachePath + "/" + tokenType + "Tok"
 	cacheFile := cachePath + "/" + "tkn"
-	cacheFileData := TokenCache{}
 
 	if _, err := os.Stat(cacheFile); err != nil {
 		return nil
 	}
 
-	// cachedEncryptedToken, err := os.ReadFile(cacheFile)
-	// CheckFatalError(err)
-	// // fmt.Println(string(cachedEncryptedToken))
+	tokenCacheMu.Lock()
+	cacheFileData := readTokenCache(cacheFile, opts)
+	tokenCacheMu.Unlock()
 
-	// cachedDecryptedToken, err := Decrypt(cachedEncryptedToken, opts)
-	// CheckFatalError(err)
-	// // fmt.Println(string(cachedDecryptedToken))
-
-	// var token T
-	// json.Unmarshal(cachedDecryptedToken, &token)
-
-	// return &token
-
-	cacheData, err := os.ReadFile(cacheFile)
-	CheckFatalError(err)
-
-	// for i, b := range cacheData {
-	// 	if i > 10934 && i < 10938 {
-	// 		fmt.Println(i)
-	// 		fmt.Println(string(b))
-	// 	}
-	// }
-	// os.Exit(0)
-	decrypted, err := Decrypt(cacheData, opts)
-	CheckFatalError(err)
-	// fmt.Println(string(cacheData))
-	// os.Exit(0)
-
-	// os.Exit(0)
-
-	// fmt.Println(string(decrypted))
-	// JsonMarshalAndPrint(opts)
-	// fmt.Println(tokenType)
-	// os.Exit(0)
-
-	err = json.Unmarshal(decrypted, &cacheFileData)
-	if err != nil {
-		var token T
-
-		return &token
-	}
+	var token T
 
 	encodedTokenStr := cacheFileData[tokenType]
 	if encodedTokenStr == "" {
-		var token T
-
-		return &token
-	} else {
-		// fmt.Println(encodedTokenStr)
-		decodedTokenStr, err := Decode([]byte(encodedTokenStr))
-		CheckFatalError(err)
-		// fmt.Println(string(decodedTokenStr))
-		var token T
-		json.Unmarshal(decodedTokenStr, &token)
-		// fmt.Println(token)
-		// _ = decodedTokenStr
 		return &token
 	}
 
-	// var token T
-	// json.Unmarshal()
-
-	// fmt.Println(cacheFileData)
-
-	// os.Exit(0)
-	// return nil
+	decodedTokenStr, err := Decode([]byte(encodedTokenStr))
+	if err != nil {
+		return &token
+	}
+	if err := json.Unmarshal(decodedTokenStr, &token); err != nil {
+		var empty T
+		return &empty
+	}
+	return &token
 }
 
-// type GenericTokenData interface {
-// 	AzureMultiAuthToken | AzureTokenData | CitrixTokenData
-// 	// IsValid IsValid
-// }
+// tokenExpirySkew is how long before its real expiry a cached token is treated
+// as expired, so a token cannot lapse part way through a long-running command.
+const tokenExpirySkew = 2 * time.Minute
 
-// Returns true if expired
 func CheckCachedTokenExpired(expiry time.Time) bool {
-	currentTime := time.Now()
-	// fmt.Println("Expiry: " + expiry.Format(time.RFC3339))
-	// fmt.Println("Current Time: " + currentTime.Format(time.RFC3339))
-
-	if currentTime.After(expiry) || currentTime.Equal(expiry) {
-		return true
-	}
-	return false
+	return !time.Now().Add(tokenExpirySkew).Before(expiry)
 }
 
 // func IsValid() bool {

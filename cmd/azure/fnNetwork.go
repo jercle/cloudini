@@ -74,8 +74,9 @@ func ListAllSubscriptionVnetsWithChan(subscriptionId string, mat lib.AzureMultiA
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 	lib.CheckFatalError(err)
@@ -142,8 +143,9 @@ func ListAllVnetIPAddressesWithChan(mat lib.AzureMultiAuthToken, vnet Vnet, publ
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 	lib.CheckFatalError(err)
@@ -222,8 +224,9 @@ func ListAllVnetIPAddresses(mat lib.AzureMultiAuthToken, vnet Vnet) IPAddressLis
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 	lib.CheckFatalError(err)
@@ -300,8 +303,9 @@ func ListAllSubscriptionVnets(subscriptionId string, mat lib.AzureMultiAuthToken
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 	lib.CheckFatalError(err)

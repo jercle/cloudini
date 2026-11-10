@@ -9,7 +9,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"sync"
@@ -63,10 +65,6 @@ func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthToke
 		options.Scope = "default"
 	}
 
-	if mut != nil {
-		mut.Lock()
-	}
-
 	readOrWrite := "read"
 
 	if options.GetWriteToken {
@@ -74,6 +72,9 @@ func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthToke
 	}
 
 	if !options.NoCache {
+		if mut != nil {
+			mut.Lock()
+		}
 		cachedToken = lib.GetCachedToken[lib.AzureTokenData]("az"+strings.ToLower(options.TenantName)+options.Scope+readOrWrite, cldConfigOpts)
 		if mut != nil {
 			mut.Unlock()
@@ -107,16 +108,24 @@ func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthToke
 		// lib.CheckFatalError(err)
 		// cert, key, err := azidentity.ParseCertificates(certData, []byte(certPwd))
 		// lib.CheckFatalError(err)
-		keyFile, err := os.ReadFile("/home/jercle/.config/cld/key.pem")
+		_, configPath, _ := lib.InitConfig(cldConfigOpts)
+		keyFile, err := os.ReadFile(filepath.Join(configPath, "key.pem"))
 		lib.CheckFatalError(err)
 		block, _ := pem.Decode(keyFile)
+		if block == nil {
+			return nil, fmt.Errorf("no PEM data found in %s", filepath.Join(configPath, "key.pem"))
+		}
 		privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 		lib.CheckFatalError(err)
-		certFile, err := os.ReadFile("/home/jercle/.config/cld/cert.pem")
-		certBlock, _ := pem.Decode(certFile)
-		certData, err := x509.ParseCertificate(certBlock.Bytes)
-		cert := []*x509.Certificate{certData}
+		certFile, err := os.ReadFile(filepath.Join(configPath, "cert.pem"))
 		lib.CheckFatalError(err)
+		certBlock, _ := pem.Decode(certFile)
+		if certBlock == nil {
+			return nil, fmt.Errorf("no PEM data found in %s", filepath.Join(configPath, "cert.pem"))
+		}
+		certData, err := x509.ParseCertificate(certBlock.Bytes)
+		lib.CheckFatalError(err)
+		cert := []*x509.Certificate{certData}
 		cred, err := azidentity.NewClientCertificateCredential(tenantId, options.ClientID, cert, privateKey, &opts)
 		lib.CheckFatalError(err)
 		tokenResponse, err = cred.GetToken(ctx, tokenRequestOptions)
@@ -142,7 +151,7 @@ func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthToke
 		if mut != nil {
 			mut.Lock()
 		}
-		lib.CacheSaveToken(token, "az"+strings.ToLower(options.TenantName)+options.Scope, cldConfigOpts)
+		lib.CacheSaveToken(token, "az"+strings.ToLower(options.TenantName)+options.Scope+readOrWrite, cldConfigOpts)
 		if mut != nil {
 			mut.Unlock()
 		}
@@ -225,9 +234,6 @@ func GetAzCliToken() lib.AzureMultiAuthToken {
 		log.Error("Unable to obtain Azure token", err, err)
 	}
 
-	// azidentity.NewInteractiveBrowserCredential()
-	azidentity.NewInteractiveBrowserCredential(nil)
-
 	tokenResponse, err := cliCred.GetToken(ctx, tokenRequestOptions)
 	if err != nil {
 		log.Error("Unable to obtain Azure token", err, err)
@@ -260,17 +266,23 @@ func GetLogAnalyticsToken() (*lib.TokenRequestResponse, error) {
 	authDetails.AZURE_CLIENT_ID = os.Getenv("AZURE_CLIENT_ID")
 	authDetails.AZURE_CLIENT_SECRET = os.Getenv("AZURE_CLIENT_SECRET")
 	urlString := "https://login.microsoftonline.com/" + authDetails.AZURE_TENANT_ID + "/oauth2/token"
-	tokenReqStr := "grant_type=client_credentials&client_id=" + authDetails.AZURE_CLIENT_ID + "&resource=https://api.loganalytics.io&client_secret=" + authDetails.AZURE_CLIENT_SECRET
+	tokenReqStr := url.Values{
+		"grant_type":    {"client_credentials"},
+		"client_id":     {authDetails.AZURE_CLIENT_ID},
+		"resource":      {"https://api.loganalytics.io"},
+		"client_secret": {authDetails.AZURE_CLIENT_SECRET},
+	}.Encode()
 
 	req, err := http.NewRequest(http.MethodPost, urlString, bytes.NewBufferString(tokenReqStr))
 	lib.CheckFatalError(err)
 
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 	if res.StatusCode == 400 {
@@ -307,8 +319,7 @@ func GetAzureEnvVariables(requiredEnvVars lib.AzureAuthRequirements) *lib.AzureA
 func GetToken(tenantName string, cldConfigOpts *lib.CldConfigOptions) lib.AzureMultiAuthToken {
 	cachedToken := lib.GetCachedToken[lib.AzureMultiAuthToken]("azMA-"+tenantName, cldConfigOpts)
 	// fmt.Println(cachedToken)
-	isExpired := lib.CheckCachedTokenExpired(cachedToken.TokenData.ExpiresOn)
-	if !isExpired {
+	if cachedToken != nil && !lib.CheckCachedTokenExpired(cachedToken.TokenData.ExpiresOn) {
 		return *cachedToken
 	}
 

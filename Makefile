@@ -9,7 +9,9 @@ endif
 
 GIT_TAG := $(shell git describe --tags --exact-match --abbrev=0 2>/dev/null || echo "")
 
-LDFLAGS    := -X main.gitTag=$(GIT_TAG)
+# -s -w strips symbol and debug tables (smaller binary); -trimpath removes
+# local filesystem paths from the binary.
+LDFLAGS    := -s -w -X main.gitTag=$(GIT_TAG)
 
 all: $(TARGET)
 
@@ -23,7 +25,7 @@ version:
 	@echo VERSION: $(VERSION)
 
 $(TARGET): clean
-	CGO_ENABLED=0 go build -o $(BIN) -ldflags "$(LDFLAGS)"
+	CGO_ENABLED=0 GOEXPERIMENT=jsonv2 go build -trimpath -o $(BIN) -ldflags "$(LDFLAGS)"
 
 clean:
 	-rm -f $(BIN)

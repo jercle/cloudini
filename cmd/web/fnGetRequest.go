@@ -11,8 +11,8 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/jercle/cloudini/lib"
 	"github.com/TylerBrock/colorjson"
+	"github.com/jercle/cloudini/lib"
 	"github.com/tidwall/pretty"
 )
 
@@ -28,12 +28,16 @@ func Get(opts Request) {
 		log.Fatal("Invalid URL")
 	}
 
-	res, error := http.Get(opts.Url)
-	if error != nil {
-		log.Fatal(error)
+	res, err := lib.HTTPClient.Get(opts.Url)
+	if err != nil {
+		log.Fatal(err)
 	}
+	defer res.Body.Close()
 
-	body, _ := io.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	var jsonObject map[string]interface{}
 	json.Unmarshal([]byte(body), &jsonObject)
@@ -44,7 +48,7 @@ func Get(opts Request) {
 	fmt.Println(string(jsonString))
 
 	if opts.Outfile != "" {
-		err = os.WriteFile(opts.Outfile, pretty.Pretty(body), os.ModePerm)
+		err = os.WriteFile(opts.Outfile, pretty.Pretty(body), lib.OutputFilePerm)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -59,12 +63,12 @@ func SimpleGetRequestWithToken(urlString string, token string) []byte {
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 	lib.CheckFatalError(err)
-	defer res.Body.Close()
 
 	return responseBody
 }
@@ -76,12 +80,12 @@ func SimpleGetRequest(urlString string, token string) []byte {
 
 	req.Header.Add("Content-Type", "application/json")
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	lib.CheckFatalError(err)
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 	lib.CheckFatalError(err)
-	defer res.Body.Close()
 
 	return responseBody
 }

@@ -14,8 +14,8 @@ import (
 	// "log"
 	"os"
 
-	"github.com/jercle/cloudini/lib"
 	"github.com/charmbracelet/log"
+	"github.com/jercle/cloudini/lib"
 	"github.com/manifoldco/promptui"
 )
 
@@ -139,7 +139,7 @@ func ListSubscriptions(token lib.AzureMultiAuthToken) ([]lib.FetchedSubscription
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+token.TokenData.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	if err != nil {
 		// log.Fatal("Error fetching list of Subscriptions")
 		return nil, err

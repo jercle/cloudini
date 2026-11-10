@@ -3,13 +3,13 @@ package lib
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 )
 
 func (config *CldConfigRoot) Save(options *CldConfigOptions) {
 	configFile, _, _ := InitConfig(options)
-	jsonBytes, _ := json.MarshalIndent(config, "", "  ")
-	os.WriteFile(configFile, jsonBytes, os.ModePerm)
+	jsonBytes, err := json.MarshalIndent(config, "", "  ")
+	CheckFatalError(err)
+	CheckFatalError(WriteSecretFile(configFile, jsonBytes))
 }
 
 func (config *CldConfigRoot) Show() {

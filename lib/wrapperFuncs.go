@@ -28,11 +28,11 @@ func CheckFatalError(err error) {
 }
 func FormatError(err error) error {
 	_, file, no, _ := runtime.Caller(1)
-	return fmt.Errorf(file+":"+strconv.Itoa(no)+":0", err)
+	return fmt.Errorf("%s:%d:0 %w", file, no, err)
 }
 func FormatErrorString(err string) error {
 	_, file, no, _ := runtime.Caller(1)
-	return fmt.Errorf("\nOriginal caller: " + file + ":" + strconv.Itoa(no) + ":0\n" + err)
+	return fmt.Errorf("\nOriginal caller: %s:%d:0\n%s", file, no, err)
 }
 
 func CheckErrorNonFatal(err error) {

@@ -42,3 +42,15 @@ scripts/replace.sh
 cmd/mongodb/aggregatedFuncs-p2svpn-array.json
 cmd/mongodb/aggregatedFuncs-p2svpn.json
 .env.leave
+
+# Local build output
+/bin/
+/cld
+/cloudini
+
+# Never commit real config, keys or certificates
+cldConf.json
+/*.pem
+/*.key
+/*.pfx
+/*.p12

@@ -148,7 +148,10 @@ func ReadFileUTF16(filename string) ([]byte, error) {
 
 func ReadFileUTF16SkipFirstLine(filePath string) ([]byte, error) {
 
-	osFile, _ := os.Open(filePath)
+	osFile, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
 	defer osFile.Close()
 
 	scanner := bufio.NewScanner(osFile)

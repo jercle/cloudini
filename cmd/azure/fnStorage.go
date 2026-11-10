@@ -37,10 +37,11 @@ func StorageBlobHttpGet(options StorageAccountUploadBlobOptions, mat lib.AzureMu
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 	req.Header.Add("x-ms-version", "2023-11-03")
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 	if err != nil {
@@ -63,10 +64,11 @@ func StorageBlobHttpGetFromSAS(blobSAS string) ([]byte, error) {
 	// req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 	// req.Header.Add("x-ms-version", "2023-11-03")
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := lib.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 
 	responseBody, err := io.ReadAll(res.Body)
 	if err != nil {

@@ -36,6 +36,11 @@ func GetWebsiteCertificate(siteUrl string, proxy *string) (certMinimal WebsiteCe
 		// TODO handle me
 		panic(err)
 	}
+	defer resp.Body.Close()
+
+	if resp.TLS == nil || len(resp.TLS.PeerCertificates) == 0 {
+		panic("no TLS certificate presented by " + siteUrl + " (is it an https:// URL?)")
+	}
 
 	cert := resp.TLS.PeerCertificates[0]
 	// certs := resp.TLS.PeerCertificates

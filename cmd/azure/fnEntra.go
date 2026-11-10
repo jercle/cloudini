@@ -38,7 +38,7 @@ func GetAppRegDataForAllConfiguredTenants(outputPath string, getAllAppRegCreds b
 
 	if outputPath != "" {
 		if _, err := os.Stat(outputPath); err != nil {
-			os.MkdirAll(outputPath, os.ModePerm)
+			os.MkdirAll(outputPath, lib.OutputDirPerm)
 		}
 		expiringCredsStr, _ := json.Marshal(expiringCreds, jsontext.WithIndent("  "))
 		os.WriteFile(outputPath+"/entraApps-ALL-expiringCredentials.json", expiringCredsStr, 0644)
