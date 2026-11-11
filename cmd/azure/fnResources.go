@@ -85,7 +85,10 @@ func GetAllResourcesForAllConfiguredTenants(opts *lib.GetAllResourcesForAllConfi
 
 	allResources = make(map[string]TenantResourceList)
 
-	resSkus := GetAzureResourceSKUsForSubscription(*opts)
+	resSkus := opts.ResourceSkus
+	if resSkus == nil {
+		resSkus = GetAzureResourceSKUsForSubscription(*opts)
+	}
 	vcpuSkus := GetSkusWithVcpus(resSkus)
 
 	for _, token := range tokens {

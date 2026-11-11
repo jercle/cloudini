@@ -246,6 +246,11 @@ type GetAllResourcesForAllConfiguredTenantsOptions struct {
 	SuppressSteps                   bool
 	GetAllStorageAccountsInTlsCheck bool
 	SelectedIPAddressQueries        *[]string
+
+	// Optional. Resource SKUs that have already been fetched with
+	// azure.GetAzureResourceSKUsForSubscription, so that
+	// azure.GetAllResourcesForAllConfiguredTenants does not fetch them again
+	ResourceSkus []AzureResourceSku
 }
 
 //

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
@@ -155,7 +154,6 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 
 	config := lib.GetCldConfig(nil)
 	_, _, cachePath := lib.InitConfig(nil)
-	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 
 	resSkuOpts := lib.GetAllResourcesForAllConfiguredTenantsOptions{
 		SubscriptionId: opts.SkuListSubscription,
@@ -164,158 +162,176 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 		SuppressSteps:  true,
 	}
 
-	fmt.Println("Getting and upserting all tenant and subscription details...")
-	s.Start()
-	UpsertTenantAndSubs(opts.AzResTenantsColl, &tokenReq)
-	s.Stop()
-
-	fmt.Println("Getting Azure Resource SKUs...")
-	s.Start()
-	resourceSKUs := azure.GetAzureResourceSKUsForSubscription(resSkuOpts)
-	s.Stop()
-
-	fmt.Println("Updating Azure Resource SKUs in database...")
-	s.Start()
-	UpsertResourceSKUs(resourceSKUs, opts.AzResSKUColl)
-	s.Stop()
-	resourceSKUs = nil
-
-	fmt.Println("Fetching all Azure Resources...")
-	s.Start()
-	startTime := time.Now()
-	allResources, allResourcesSlice := azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
-	s.Stop()
-	elapsed := time.Since(startTime)
-	fmt.Println(elapsed)
-
-	citrixEnvs := *config.CitrixCloud.Environments
-
-	var citrixMachines []citrix.CitrixMachine
-	for _, tConf := range citrixEnvs {
-		tokenData, err := citrix.GetToken(tConf, nil)
-		lib.CheckFatalError(err)
-		machines := citrix.GetAllMachines(tConf, tokenData)
-		citrixMachines = append(citrixMachines, machines...)
-	}
-
-	ctxDelGrpsByResGrpAndName := make(map[string]string)
-
-	for _, m := range citrixMachines {
-		ctxDelGrpsByResGrpAndName[m.AzureResourceGroup+"_"+m.Name] = m.DeliveryGroup.Name
-	}
-	citrixMachines = nil
-	debug.FreeOSMemory()
-
-	for i, r := range allResourcesSlice {
-		if r.Type == "microsoft.compute/virtualmachines" {
-			curr := r
-			delGrp := ctxDelGrpsByResGrpAndName[r.ResourceGroup+"_"+r.Name]
-			curr.CitrixVmDeliveryGroup = delGrp
-			curr.ID = strings.ToLower(r.ID)
-			allResourcesSlice[i] = curr
-		}
-	}
-
-	fmt.Println("Updating Azure Resources in database...")
-	s.Start()
-	startTime = time.Now()
-	UpsertMultipleResources(&allResourcesSlice, opts.AzResResourceListColl)
-	s.Stop()
-	elapsed = time.Since(startTime)
-	fmt.Println(elapsed)
-
-	fmt.Println("")
-	fmt.Println("Updating 'existsInAzure' value for all resources in database...")
-	s.Start()
-	startTime = time.Now()
-	UpdateResourcesNotExistInAzure(&allResourcesSlice, opts.AzResResourceListColl)
-	elapsed = time.Since(startTime)
-	fmt.Println(elapsed)
-	s.Stop()
-	allResourcesSlice = nil
-	debug.FreeOSMemory()
-
-	fmt.Println("Fetching all Azure Resource Groups...")
-	s.Start()
-	startTime = time.Now()
-	allResGrps := azure.GetAllResGrpsForAllConfiguredTenants(&resSkuOpts, tokenReq)
-	s.Stop()
-	elapsed = time.Since(startTime)
-	fmt.Println(elapsed)
-	fmt.Println("Updating Azure Resource Groups in database...")
-	s.Start()
-	startTime = time.Now()
-	UpsertMultipleResGrps(&allResGrps, opts.AzResGrpsListColl)
-	s.Stop()
-	allResGrps = nil
-	debug.FreeOSMemory()
-
-	elapsed = time.Since(startTime)
-	fmt.Println(elapsed)
-
-	fmt.Println("Getting vCPU Counts...")
-	s.Start()
-	_,
-		_,
-		_,
-		_,
-		_,
-		vCpuCountWithResources := azure.GetVcpuCountForAllConfiguredTenants(allResources, nil, config.Azure.MultiTenantAuth.Tenants)
-	s.Stop()
-	vCpuCountWithResourcesStr, _ := json.MarshalIndent(vCpuCountWithResources, "", "  ")
-	os.WriteFile(cachePath+"/vCpuCountWithResources.json", vCpuCountWithResourcesStr, 0644)
-	fmt.Println("Updating vCPU Counts in database...")
-	s.Start()
-	UpsertVcpuCounts(vCpuCountWithResources, opts.AzResVcpuCountsColl)
-	s.Stop()
-
-	allResources = nil
-	vCpuCountWithResources = nil
-	vCpuCountWithResourcesStr = nil
-	debug.FreeOSMemory()
-
 	tempBlobDir := cachePath + "/costexports"
 	costExportsOutfilePath := tempBlobDir + "/" + costExportMonth
 
-	fmt.Println("Getting cost export data for " + costExportMonth + "...")
-	s.Start()
-	azure.DownloadAllConfiguredTenantCostExportsForMonth(lib.DownloadAllConfiguredTenantCostExportsForMonthOptions{
-		BlobPrefix:        opts.CostDataBlobPrefix + "/" + costExportMonth,
-		OutfilePath:       costExportsOutfilePath,
-		OutfileNamePrefix: "cost-export",
-		CostExportMonth:   costExportMonth,
-		SuppressSteps:     true,
-	}, nil)
-	s.Stop()
+	// The stages below run at the same time, so each one prints a single line with
+	// how long it took when it finishes, instead of using a spinner.
+	totalStart := time.Now()
+	stage := func(name string, fn func()) {
+		startTime := time.Now()
+		fn()
+		fmt.Printf("%s (%s)\n", name, time.Since(startTime).Round(time.Millisecond))
+	}
 
-	fmt.Println("Combining cost export data")
-	s.Start()
-	combinedCostData := azure.CombineCostExportCSVData(costExportsOutfilePath)
-	s.Stop()
-
-	fmt.Println("Transforming cost export data")
-	transformedData := azure.TransformCostDataNew(combinedCostData, 1, 2)
-	transformedDataStr, _ := json.MarshalIndent(transformedData, "", "  ")
-	os.WriteFile(cachePath+"/transformedData.json", transformedDataStr, 0644)
-	transformedDataStr = nil
-	combinedCostData = nil
-	debug.FreeOSMemory()
-
-	fmt.Println("Updating cost data in database")
-	UpsertMonthlyTenantSubResGrpCosts(transformedData,
-		ctxDelGrpsByResGrpAndName,
-		costExportMonth,
-		opts.EnvOptCostingTenantsColl,
-		opts.EnvOptCostingSubsColl,
-		opts.EnvOptCostingResGrpsColl,
-		opts.EnvOptCostingResourcesColl,
-		opts.EnvOptCostingMetersColl,
-		opts.AzResTenantsColl,
-		opts.AzResResourceListColl,
+	var (
+		wg                        sync.WaitGroup
+		ctxDelGrpsByResGrpAndName = make(map[string]string)
+		citrixDone                = make(chan struct{})
+		transformedData           lib.AggregatedCostData
 	)
-	ctxDelGrpsByResGrpAndName = nil
-	transformedData = nil
-	debug.FreeOSMemory()
+	run := func(fn func()) {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			fn()
+		}()
+	}
+
+	fmt.Println("Updating tenants, subscriptions, resource SKUs, resources, resource groups and vCPU counts, and getting cost export data for " + costExportMonth + "...")
+
+	// Tenant and subscription details. The cost data upsert reads these back.
+	run(func() {
+		stage("Upserted all tenant and subscription details", func() {
+			UpsertTenantAndSubs(opts.AzResTenantsColl, &tokenReq)
+		})
+	})
+
+	// Citrix machines, used to set the delivery group on VMs and on cost data
+	run(func() {
+		defer close(citrixDone)
+		stage("Fetched Citrix machines", func() {
+			var (
+				citrixWg    sync.WaitGroup
+				citrixMutex sync.Mutex
+			)
+			for _, tConf := range *config.CitrixCloud.Environments {
+				citrixWg.Add(1)
+				go func() {
+					defer citrixWg.Done()
+					tokenData, err := citrix.GetToken(tConf, nil)
+					lib.CheckFatalError(err)
+					machines := citrix.GetAllMachines(tConf, tokenData)
+
+					citrixMutex.Lock()
+					for _, m := range machines {
+						ctxDelGrpsByResGrpAndName[m.AzureResourceGroup+"_"+m.Name] = m.DeliveryGroup.Name
+					}
+					citrixMutex.Unlock()
+				}()
+			}
+			citrixWg.Wait()
+		})
+	})
+
+	// Cost exports. Each tenant's CSV is aggregated while it is read, so the rows
+	// are never all held in memory.
+	run(func() {
+		stage("Downloaded cost export data for "+costExportMonth, func() {
+			azure.DownloadAllConfiguredTenantCostExportsForMonth(lib.DownloadAllConfiguredTenantCostExportsForMonthOptions{
+				BlobPrefix:        opts.CostDataBlobPrefix + "/" + costExportMonth,
+				OutfilePath:       costExportsOutfilePath,
+				OutfileNamePrefix: "cost-export",
+				CostExportMonth:   costExportMonth,
+				SuppressSteps:     true,
+			}, nil)
+		})
+		stage("Aggregated cost export data", func() {
+			var err error
+			transformedData, err = azure.AggregateCostExportCSVFiles(costExportsOutfilePath)
+			lib.CheckFatalError(err)
+		})
+	})
+
+	// Resource SKUs, resources, vCPU counts and resource groups. The Resource Graph
+	// queries are kept one after the other so they do not compete for the same
+	// request quota.
+	run(func() {
+		stage("Fetched Azure Resource SKUs", func() {
+			resSkuOpts.ResourceSkus = azure.GetAzureResourceSKUsForSubscription(resSkuOpts)
+		})
+
+		var skuWg sync.WaitGroup
+		skuWg.Add(1)
+		go func() {
+			defer skuWg.Done()
+			stage("Updated Azure Resource SKUs in database", func() {
+				UpsertResourceSKUs(resSkuOpts.ResourceSkus, opts.AzResSKUColl)
+			})
+		}()
+
+		var (
+			allResources      map[string]azure.TenantResourceList
+			allResourcesSlice []lib.AzureResourceDetails
+		)
+		stage("Fetched all Azure Resources", func() {
+			allResources, allResourcesSlice = azure.GetAllResourcesForAllConfiguredTenants(&resSkuOpts, tokenReq)
+		})
+
+		// The vCPU counts only need the fetched resources, so they are worked out and
+		// upserted while the resources themselves are being written
+		var vcpuWg sync.WaitGroup
+		vcpuWg.Add(1)
+		go func() {
+			defer vcpuWg.Done()
+			stage("Updated vCPU Counts in database", func() {
+				_,
+					_,
+					_,
+					_,
+					_,
+					vCpuCountWithResources := azure.GetVcpuCountForAllConfiguredTenants(allResources, nil, config.Azure.MultiTenantAuth.Tenants)
+				allResources = nil
+				UpsertVcpuCounts(vCpuCountWithResources, opts.AzResVcpuCountsColl)
+			})
+		}()
+
+		<-citrixDone
+		for i := range allResourcesSlice {
+			r := &allResourcesSlice[i]
+			if r.Type == "microsoft.compute/virtualmachines" {
+				r.CitrixVmDeliveryGroup = ctxDelGrpsByResGrpAndName[r.ResourceGroup+"_"+r.Name]
+			}
+			// Documents are stored with a lowercase _id, so the IDs used for the
+			// 'existsInAzure' check below need to be lowercase as well
+			r.ID = strings.ToLower(r.ID)
+		}
+
+		stage("Updated Azure Resources in database", func() {
+			UpsertMultipleResources(&allResourcesSlice, opts.AzResResourceListColl)
+		})
+		stage("Updated 'existsInAzure' value for all resources in database", func() {
+			UpdateResourcesNotExistInAzure(&allResourcesSlice, opts.AzResResourceListColl)
+		})
+		allResourcesSlice = nil
+
+		var allResGrps []azure.ResourceGroup
+		stage("Fetched all Azure Resource Groups", func() {
+			allResGrps = azure.GetAllResGrpsForAllConfiguredTenants(&resSkuOpts, tokenReq)
+		})
+		stage("Updated Azure Resource Groups in database", func() {
+			UpsertMultipleResGrps(&allResGrps, opts.AzResGrpsListColl)
+		})
+
+		skuWg.Wait()
+		vcpuWg.Wait()
+	})
+
+	wg.Wait()
+
+	stage("Updated cost data in database", func() {
+		UpsertMonthlyTenantSubResGrpCosts(transformedData,
+			ctxDelGrpsByResGrpAndName,
+			costExportMonth,
+			opts.EnvOptCostingTenantsColl,
+			opts.EnvOptCostingSubsColl,
+			opts.EnvOptCostingResGrpsColl,
+			opts.EnvOptCostingResourcesColl,
+			opts.EnvOptCostingMetersColl,
+			opts.AzResTenantsColl,
+			opts.AzResResourceListColl,
+		)
+	})
 
 	fmt.Println("Deleting cached cost data")
 	os.RemoveAll(cachePath + "/vCpuCountWithResources.json")
@@ -323,6 +339,8 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 	os.RemoveAll(cachePath + "/allResourcesSlice.json")
 	os.RemoveAll(cachePath + "/allResources.json")
 	os.RemoveAll(tempBlobDir)
+
+	fmt.Println("Finished in", time.Since(totalStart).Round(time.Millisecond))
 
 	return transformedData
 }
