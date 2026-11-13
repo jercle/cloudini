@@ -158,7 +158,7 @@ func GetAuthScopeString(scope string) (mappedScope []string) {
 	case "storage":
 		mappedScope = []string{"https://storage.azure.com/.default"}
 	case "monitor":
-		mappedScope = []string{"https://monitor.azure.com//.default"}
+		mappedScope = []string{"https://monitor.azure.com/.default"}
 	case "defender":
 		mappedScope = []string{"https://api.securitycenter.microsoft.com/.default"}
 	case "loganalytics":
@@ -167,6 +167,8 @@ func GetAuthScopeString(scope string) (mappedScope []string) {
 		mappedScope = []string{"cfa8b339-82a2-471a-a3c9-0fc0be7a4093/.default"}
 	case "m365":
 		mappedScope = []string{"https://outlook.office365.com/.default"}
+	case "intune":
+		mappedScope = []string{"https://api.manage.microsoft.com/.default"}
 	default:
 		mappedScope = []string{"https://management.core.windows.net/.default"}
 	}

@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"uuid"
 
 	"github.com/jercle/cloudini/lib"
 )
@@ -23,9 +24,11 @@ func HttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
+	req.Header.Add("x-ms-client-request-id", string(uuid.New().String()))
+	req.Header.Add("x-ms-client-session-id", string(uuid.New().String()))
 
 	res, err := http.DefaultClient.Do(req)
-	// lib.CheckFatalError(err)
+	lib.CheckFatalError(err)
 
 	if err != nil {
 		return nil, err
@@ -37,6 +40,7 @@ func HttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 	// fmt.Println(res.StatusCode)
 
 	// lib.JsonMarshalAndPrint(res.Header)
+	// os.Exit(0)
 
 	responseBody, err := io.ReadAll(res.Body)
 
@@ -59,6 +63,40 @@ func HttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 	// if err != nil {
 	// 	return nil, err
 	// }
+
+	return responseBody, nil
+}
+
+//
+//
+
+func HttpDelete(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
+	req, err := http.NewRequest(http.MethodDelete, urlString, nil)
+	lib.CheckFatalError(err)
+
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
+	req.Header.Add("x-ms-client-request-id", string(uuid.New().String()))
+	req.Header.Add("x-ms-client-session-id", string(uuid.New().String()))
+
+	res, err := http.DefaultClient.Do(req)
+	lib.CheckFatalError(err)
+
+	if err != nil {
+		return nil, err
+	}
+
+	responseBody, err := io.ReadAll(res.Body)
+
+	if res.StatusCode == 403 {
+		fmt.Println(res.Status, urlString)
+	}
+
+	if res.StatusCode == 404 {
+		jsonErr := `{"status": "` + res.Status + `", "response": ` + string(responseBody) + `}`
+		err = fmt.Errorf(jsonErr)
+		return nil, err
+	}
 
 	return responseBody, nil
 }

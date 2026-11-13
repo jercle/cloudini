@@ -18,6 +18,7 @@ var (
 	updateCitrixData                                bool
 	aggregateCitrixDataBeforeInsert                 bool
 	updateAzureResVcpuCountsCostData                bool
+	dataSnapshot                                    bool
 	// updateOnlyCostData                              bool
 	// updateAzureResourceRelations bool
 	costDataMonth         string
@@ -304,6 +305,7 @@ var cmdMongoUpdate = &cobra.Command{
 
 		if updateIntuneManagedDevices {
 			wg.Go(func() {
+				fmt.Println(azResIntuneManagedDevices.Database().Name())
 				UpdateIntuneManagedDevices(azResIntuneManagedDevices)
 			})
 		}
@@ -315,7 +317,7 @@ var cmdMongoUpdate = &cobra.Command{
 		}
 		if updateDefenderData {
 			wg.Go(func() {
-				UpdateDefenderData(defenderMachinesColl)
+				UpdateDefenderData(defenderMachinesColl, dataSnapshot)
 			})
 		}
 
@@ -356,6 +358,8 @@ func init() {
 	// cmdMongoUpdate.Flags().BoolVar(&GoProfile, "go-profile", false, "Runs pprof server to see memory and cpu stats")
 	// cmdMongoUpdate.Flags().BoolVar(&updateAzureResourceRelations, "updateAzureResourceRelations", false, "Gets all resources from cost data and database, aggregates and finds relations, then updates database. This can only be used in conjunction with 'updateAzureResVcpuCountsCostData'")
 	// cmdMongoUpdate.Flags().BoolVarP(&updateAWSMonitoringData, "updateAWSMonitoringData", "l", false, "Updates Database with AWS Monitoring data")
+
+	cmdMongoUpdate.Flags().BoolVar(&dataSnapshot, "dataSnapshot", false, "Saves a snapshot of data to [CollectionName]-PointInTime")
 
 	cmdMongoUpdate.Flags().BoolVar(&updateAll, "updateAll", false, "Updates all data as if providing all available flags. Currently excludes updateAzureResourceRelations and updateWebsiteCertInfo")
 

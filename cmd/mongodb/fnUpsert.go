@@ -1698,6 +1698,49 @@ func UpsertDefenderData(allMachines []defender.Machine, coll *mongo.Collection) 
 	return
 }
 
+func UpsertDefenderPointInTime(coll *mongo.Collection) (err error) {
+	ctx := context.TODO()
+
+	mainCollName := coll.Name()
+	pitColl := coll.Database().Collection(mainCollName + "-PointInTime")
+
+	// var objects []T
+
+	var machines []defender.Machine
+
+	rsp, err := coll.Find(ctx, bson.D{{}})
+	lib.CheckFatalError(err)
+	err = rsp.All(ctx, &machines)
+	lib.CheckFatalError(err)
+
+	pitSnap := defender.PointInTimeSnap{
+		TimeSnapped: time.Now(),
+		IsSnap:      true,
+	}
+
+	var updates []mongo.WriteModel
+
+	for _, m := range machines {
+		currId := pitSnap.TimeSnapped.Format(time.RFC3339) + "_" + m.MongoId
+		pitSnap.ObjectReferences = append(pitSnap.ObjectReferences, currId)
+
+		m.MongoId = currId
+
+		filter := bson.D{{"_id", m.MongoId}}
+		update := bson.D{{"$set", m}}
+		updates = append(updates, mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(update).SetUpsert(true))
+	}
+
+	_, err = pitColl.InsertOne(context.TODO(), pitSnap)
+	lib.CheckFatalError(err)
+
+	_, err = pitColl.BulkWrite(ctx, updates, nil)
+	lib.CheckFatalError(err)
+	// lib.JsonMarshalAndPrint(result)
+
+	return
+}
+
 //
 //
 

@@ -1684,18 +1684,22 @@ func UpdateIdentityChanges(coll *mongo.Collection) {
 //
 //
 
-func UpdateDefenderData(coll *mongo.Collection) {
+func UpdateDefenderData(coll *mongo.Collection, pointInTimeSnap bool) {
 	s := spinner.New(spinner.CharSets[43], 100*time.Millisecond)
 
-	fmt.Println("Fetching all machines from XDR")
-	s.Start()
-	allMachines := defender.GetMachinesForAllConfiguredTenants()
-	s.Stop()
+	if pointInTimeSnap {
+		fmt.Println("Fetching all machines from database, then creating and upserting snapshot")
+		UpsertDefenderPointInTime(coll)
+	} else {
+		fmt.Println("Fetching all machines from XDR")
+		s.Start()
+		allMachines := defender.GetMachinesForAllConfiguredTenants()
+		s.Stop()
 
-	fmt.Println("Upserting machines database...")
-	s.Start()
-	// results := UpsertKeyVaultSecrets(allSecrets, coll)
-	UpsertDefenderData(allMachines, coll)
-	s.Stop()
-	// lib.JsonMarshalAndPrint(results)
+		fmt.Println("Upserting machines database...")
+		s.Start()
+		UpsertDefenderData(allMachines, coll)
+		s.Stop()
+	}
+
 }
