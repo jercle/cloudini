@@ -22,9 +22,8 @@ func HttpGet(urlString string, mat lib.AzureMultiAuthToken) ([]byte, error) {
 	// }
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := doRequestWithTokenRefresh(req, mat.TokenData)
 	// lib.CheckFatalError(err)
 
 	if err != nil {
@@ -74,9 +73,8 @@ func HttpGetErrLogToCache(urlString string, mat lib.AzureMultiAuthToken) ([]byte
 	// }
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := doRequestWithTokenRefresh(req, mat.TokenData)
 	// lib.CheckFatalError(err)
 	if err != nil {
 		return nil, err
@@ -137,11 +135,10 @@ func HttpPost(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byt
 	// }
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
 	// fmt.Println(body)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := doRequestWithTokenRefresh(req, mat.TokenData)
 	lib.CheckFatalError(err)
 	// if err != nil {
 	// 	return nil, err
@@ -191,9 +188,8 @@ func HttpPut(urlString string, body string, mat lib.AzureMultiAuthToken) ([]byte
 	// }
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := doRequestWithTokenRefresh(req, mat.TokenData)
 	lib.CheckFatalError(err)
 	// if err != nil {
 	// 	return nil, err
@@ -233,11 +229,10 @@ func HttpPatch(urlString string, body string, mat lib.AzureMultiAuthToken) ([]by
 	}
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
 	// fmt.Println(body)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := doRequestWithTokenRefresh(req, mat.TokenData)
 	// lib.CheckFatalError(err)
 	if err != nil {
 		return nil, nil, err
@@ -276,11 +271,10 @@ func HttpPatchErrLogToCache(urlString string, body string, mat lib.AzureMultiAut
 	// }
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 
 	// fmt.Println(body)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := doRequestWithTokenRefresh(req, mat.TokenData)
 	lib.CheckFatalError(err)
 	// if err != nil {
 	// 	return nil, err
