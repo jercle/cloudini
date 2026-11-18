@@ -49,7 +49,28 @@ import (
 // 	return tokens
 // }
 
+// Gets a token for the given service principal.
+//
+// The returned token is registered for refresh, so the Http* helpers in this
+// package (or FreshToken/FreshTokenData) will swap in a new token once this
+// one is about to expire.
 func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthTokenRequestOptions, cldConfigOpts *lib.CldConfigOptions, mut *sync.Mutex) (*lib.AzureTokenData, error) {
+	token, err := fetchServicePrincipalToken(tenantId, matOptions, cldConfigOpts, mut)
+	if err != nil || token == nil {
+		return token, err
+	}
+
+	// A refresh must always request a new token rather than read one from cache
+	refreshOptions := matOptions
+	refreshOptions.NoCache = true
+	registerTokenSource(*token, func() (*lib.AzureTokenData, error) {
+		return fetchServicePrincipalToken(tenantId, refreshOptions, cldConfigOpts, nil)
+	})
+
+	return token, nil
+}
+
+func fetchServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthTokenRequestOptions, cldConfigOpts *lib.CldConfigOptions, mut *sync.Mutex) (*lib.AzureTokenData, error) {
 	ctx := context.Background()
 	options := matOptions
 
@@ -118,18 +139,26 @@ func GetServicePrincipalToken(tenantId string, matOptions lib.AzureMultiAuthToke
 		cert := []*x509.Certificate{certData}
 		lib.CheckFatalError(err)
 		cred, err := azidentity.NewClientCertificateCredential(tenantId, options.ClientID, cert, privateKey, &opts)
-		lib.CheckFatalError(err)
+		if err != nil {
+			return nil, err
+		}
 		tokenResponse, err = cred.GetToken(ctx, tokenRequestOptions)
-		lib.CheckFatalError(err)
+		if err != nil {
+			return nil, err
+		}
 	} else {
 		cred, err := azidentity.NewClientSecretCredential(tenantId, options.ClientID, options.ClientSecret, nil)
-		lib.CheckFatalError(err)
+		if err != nil {
+			return nil, err
+		}
 		tokenResponse, err = cred.GetToken(ctx, tokenRequestOptions)
 		// if err != nil {
 		// 	fmt.Println(tenantId)
 		// 	lib.JsonMarshalAndPrint(options)
 		// }
-		lib.CheckFatalError(err)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	token := lib.AzureTokenData{
@@ -174,7 +203,29 @@ func GetAuthScopeString(scope string) (mappedScope []string) {
 	return
 }
 
+// Gets a token using the provided service principal details.
+//
+// The returned token is registered for refresh, so the Http* helpers in this
+// package (or FreshToken/FreshTokenData) will swap in a new token once this
+// one is about to expire.
 func GetServicePrincipalMultiAuthToken(spDetails lib.AzureMultiAuthTokenRequestOptions) (*lib.AzureMultiAuthToken, error) {
+	token, err := fetchServicePrincipalMultiAuthToken(spDetails)
+	if err != nil || token == nil {
+		return token, err
+	}
+
+	registerTokenSource(token.TokenData, func() (*lib.AzureTokenData, error) {
+		newToken, err := fetchServicePrincipalMultiAuthToken(spDetails)
+		if err != nil {
+			return nil, err
+		}
+		return &newToken.TokenData, nil
+	})
+
+	return token, nil
+}
+
+func fetchServicePrincipalMultiAuthToken(spDetails lib.AzureMultiAuthTokenRequestOptions) (*lib.AzureMultiAuthToken, error) {
 	ctx := context.Background()
 	var tokenRequestOptions policy.TokenRequestOptions
 

@@ -143,7 +143,8 @@ func GetEXOMailboxesWithPermissionsAllConfiguredTenants() (mailboxes []EXOMailBo
 //
 
 func GetEXOMailboxesWithPermissionsForTenant(token *lib.AzureMultiAuthToken, tokenGraph *lib.AzureMultiAuthToken) ([]EXOMailBox, error) {
-	tokenStr := token.TokenData.Token
+	// Token may have been issued well before this tenant's turn to run
+	tokenStr := azure.FreshToken(*token).TokenData.Token
 	organization := token.TenantDomain
 	appId := token.ClientId
 

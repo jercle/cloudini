@@ -34,10 +34,9 @@ func StorageBlobHttpGet(options StorageAccountUploadBlobOptions, mat lib.AzureMu
 	}
 
 	req.Header.Add("Content-Type", "application/xml")
-	req.Header.Add("Authorization", "Bearer "+mat.TokenData.Token)
 	req.Header.Add("x-ms-version", "2023-11-03")
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := doRequestWithTokenRefresh(req, mat.TokenData)
 	if err != nil {
 		return nil, err
 	}

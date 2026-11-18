@@ -188,9 +188,8 @@ func listSubscriptionACRs(tenantId string, subscriptionId string, token *lib.Azu
 	}
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+token.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := doRequestWithTokenRefresh(req, *token)
 	lib.CheckFatalError(err)
 
 	responseBody, err := io.ReadAll(res.Body)
@@ -216,9 +215,8 @@ func listSubscriptions(token lib.AzureMultiAuthToken) ([]lib.FetchedSubscription
 		return nil, err
 	}
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+token.TokenData.Token)
 
-	res, err := http.DefaultClient.Do(req)
+	res, err := doRequestWithTokenRefresh(req, token.TokenData)
 	if err != nil {
 		// log.Fatal("Error fetching list of Subscriptions")
 		return nil, err
