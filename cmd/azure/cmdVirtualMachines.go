@@ -1,7 +1,8 @@
 package azure
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 
 	"github.com/jercle/cloudini/lib"
@@ -81,7 +82,7 @@ Note: You can only run this command for vms in one tenant at a time
 		// os.Exit(0)
 
 		if listConfiguredVMs {
-			jsonStr, _ := json.MarshalIndent(config.Azure.VirtualMachines, "", "  ")
+			jsonStr, _ := json.Marshal(config.Azure.VirtualMachines, jsontext.WithIndent("  "))
 			fmt.Println(string(jsonStr))
 		}
 		if startVMs {

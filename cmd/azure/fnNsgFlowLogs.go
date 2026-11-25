@@ -1,7 +1,8 @@
 package azure
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"io"
 	"log"
@@ -83,7 +84,9 @@ func GetFlowLogData(path string) NsgFlowLog {
 	defer jsonFile.Close()
 
 	byteValue, _ := io.ReadAll(jsonFile)
-	json.Unmarshal(byteValue, &flowLogData)
+	// Flow log files have a lower case "records" key and NsgFlowLog.Records has
+	// no json tag. json v2 matches names exactly unless asked not to.
+	json.Unmarshal(byteValue, &flowLogData, json.MatchCaseInsensitiveNames(true))
 
 	return flowLogData
 }
@@ -174,7 +177,7 @@ func (m *IpList) FilterSourceIp(filter string) {
 }
 
 func (r *NsgFlowLogRecord) PrintJSON() {
-	jsonData, err := json.MarshalIndent(r, "", "  ")
+	jsonData, err := json.Marshal(r, jsontext.WithIndent("  "))
 	if err != nil {
 		log.Fatal(err)
 	}

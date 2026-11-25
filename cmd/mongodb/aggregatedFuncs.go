@@ -2,7 +2,8 @@ package mongodb
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"os"
 	"runtime/debug"
@@ -262,7 +263,7 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 		_,
 		vCpuCountWithResources := azure.GetVcpuCountForAllConfiguredTenants(allResources, nil, config.Azure.MultiTenantAuth.Tenants)
 	s.Stop()
-	vCpuCountWithResourcesStr, _ := json.MarshalIndent(vCpuCountWithResources, "", "  ")
+	vCpuCountWithResourcesStr, _ := json.Marshal(vCpuCountWithResources, jsontext.WithIndent("  "))
 	os.WriteFile(cachePath+"/vCpuCountWithResources.json", vCpuCountWithResourcesStr, 0644)
 	fmt.Println("Updating vCPU Counts in database...")
 	s.Start()
@@ -295,7 +296,7 @@ func UpdateAllAzureResourcesVcpuCountsCostData(opts UpdateAllAzureResourcesAndVc
 
 	fmt.Println("Transforming cost export data")
 	transformedData := azure.TransformCostDataNew(combinedCostData, 1, 2)
-	transformedDataStr, _ := json.MarshalIndent(transformedData, "", "  ")
+	transformedDataStr, _ := json.Marshal(transformedData, jsontext.WithIndent("  "))
 	os.WriteFile(cachePath+"/transformedData.json", transformedDataStr, 0644)
 	transformedDataStr = nil
 	combinedCostData = nil
@@ -425,9 +426,9 @@ func UpdateAzureResourceRelations(transformedData lib.AggregatedCostData, opts U
 
 	_, _, cachePath := lib.InitConfig(nil)
 	// fmt.Println("Processing all resources and cost meters to create relations")
-	costDataSliceStr, _ := json.MarshalIndent(costDataSlice, "", "  ")
+	costDataSliceStr, _ := json.Marshal(costDataSlice, jsontext.WithIndent("  "))
 	os.WriteFile(cachePath+"/costDataSlice.json", costDataSliceStr, 0644)
-	resourceFromDatabaseStr, _ := json.MarshalIndent(resourceFromDatabase, "", "  ")
+	resourceFromDatabaseStr, _ := json.Marshal(resourceFromDatabase, jsontext.WithIndent("  "))
 	os.WriteFile(cachePath+"/resourceFromDatabase.json", resourceFromDatabaseStr, 0644)
 	_, processedResourcesSlice := azure.GatherRelatedResourcesAndCostMeters(costDataSlice, resourceFromDatabase, 2, 2)
 	fmt.Println("Updating all resources with related cost data in database")
@@ -450,10 +451,10 @@ func UpdateEntraItems(opts UpdateEntraItemsOptions, tokenReq lib.AllTenantTokens
 	allAppRegistrations, appRegExpiringCreds := azure.GetAppRegDataForAllConfiguredTenants("", opts.GetAllCreds)
 	s.Stop()
 
-	allAppRegistrationsStr, _ := json.MarshalIndent(allAppRegistrations, "", "  ")
+	allAppRegistrationsStr, _ := json.Marshal(allAppRegistrations, jsontext.WithIndent("  "))
 	os.WriteFile(cachePath+"/allAppRegistrations.json", allAppRegistrationsStr, 0644)
 	defer os.Remove(cachePath + "/allAppRegistrations.json")
-	appRegExpiringCredsStr, _ := json.MarshalIndent(appRegExpiringCreds, "", "  ")
+	appRegExpiringCredsStr, _ := json.Marshal(appRegExpiringCreds, jsontext.WithIndent("  "))
 	os.WriteFile(cachePath+"/appRegExpiringCreds.json", appRegExpiringCredsStr, 0644)
 	defer os.Remove(cachePath + "/appRegExpiringCreds.json")
 
@@ -814,9 +815,9 @@ func UpdateAllAzureResources(opts UpdateAllAzureResourcesAndVcpuCountsOptions, t
 	fmt.Println(strconv.Itoa(len(allResourcesSlice)) + " resources found")
 	elapsed := time.Since(startTime)
 	fmt.Println(elapsed)
-	allResourcesSliceStr, _ := json.MarshalIndent(allResourcesSlice, "", "  ")
+	allResourcesSliceStr, _ := json.Marshal(allResourcesSlice, jsontext.WithIndent("  "))
 	os.WriteFile(cachePath+"/allResourcesSlice.json", allResourcesSliceStr, 0644)
-	allResourcesStr, _ := json.MarshalIndent(allResources, "", "  ")
+	allResourcesStr, _ := json.Marshal(allResources, jsontext.WithIndent("  "))
 	os.WriteFile(cachePath+"/allResources.json", allResourcesStr, 0644)
 	// os.Exit(0)
 
@@ -1328,9 +1329,9 @@ func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Coll
 			}
 			if data, ok := machinesById[m.ID]; ok {
 				lib.JsonMarshalAndPrint(m)
-				mStr, _ := json.MarshalIndent(data, "", "  ")
+				mStr, _ := json.Marshal(data, jsontext.WithIndent("  "))
 				os.WriteFile("main-ctx-monitor-existing.json", mStr, 0644)
-				newStr, _ := json.MarshalIndent(m, "", "  ")
+				newStr, _ := json.Marshal(m, jsontext.WithIndent("  "))
 				os.WriteFile("main-ctx-monitor-new.json", newStr, 0644)
 				os.Exit(0)
 			} else {
@@ -1386,9 +1387,9 @@ func UpdateCitrixDataNew(collMachines *mongo.Collection, collMetrics *mongo.Coll
 			if data, ok := machinesById[m.ID]; ok {
 				// fmt.Println("if data, ok := machinesById[m.ID]; ok {")
 				lib.JsonMarshalAndPrint(m)
-				mStr, _ := json.MarshalIndent(data, "", "  ")
+				mStr, _ := json.Marshal(data, jsontext.WithIndent("  "))
 				os.WriteFile("main-ctx-monitor-existing.json", mStr, 0644)
-				newStr, _ := json.MarshalIndent(m, "", "  ")
+				newStr, _ := json.Marshal(m, jsontext.WithIndent("  "))
 				os.WriteFile("main-ctx-monitor-new.json", newStr, 0644)
 				os.Exit(0)
 			} else {

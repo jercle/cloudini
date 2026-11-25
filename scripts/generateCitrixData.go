@@ -2,7 +2,8 @@
 package main
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 
 	"github.com/jercle/cloudini/cmd/citrix"
@@ -16,7 +17,7 @@ func main() {
 	err := gofakeit.Struct(&machineCatalog)
 	lib.CheckFatalError(err)
 
-	jsonStr, _ := json.MarshalIndent(machineCatalog, "", "  ")
+	jsonStr, _ := json.Marshal(machineCatalog, jsontext.WithIndent("  "))
 	fmt.Println(string(jsonStr))
 }
 

@@ -1,7 +1,8 @@
 package azure
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 
 	"github.com/jercle/cloudini/lib"
@@ -46,17 +47,17 @@ var entraB2cGetUserCmd = &cobra.Command{
 
 		if getUserByObjectID != "" {
 			user := GetB2CUserByObjectId(getUserByObjectID, token)
-			jsonStr, _ := json.MarshalIndent(user, "", "  ")
+			jsonStr, _ := json.Marshal(user, jsontext.WithIndent("  "))
 			fmt.Println(string(jsonStr))
 		}
 		if getUserByUPN != "" {
 			user := GetB2CUserByUPN(getUserByUPN, token)
-			jsonStr, _ := json.MarshalIndent(user, "", "  ")
+			jsonStr, _ := json.Marshal(user, jsontext.WithIndent("  "))
 			fmt.Println(string(jsonStr))
 		}
 		if getAllUsers {
 			users := GetAllB2CTenantUsers()
-			jsonStr, _ := json.MarshalIndent(users, "", "  ")
+			jsonStr, _ := json.Marshal(users, jsontext.WithIndent("  "))
 			fmt.Println(string(jsonStr))
 		}
 	},

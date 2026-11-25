@@ -5,7 +5,8 @@ import (
 	"crypto/x509"
 	"encoding/asn1"
 	"encoding/hex"
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -230,7 +231,10 @@ func GetServerCertInfoFromFile(path string) (processedItems []ServerCertInfo) {
 
 		var currData ServerCertInfo
 		jsonStr, _ := json.Marshal(curr)
-		err = json.Unmarshal(jsonStr, &currData)
+		// Keys are as PowerShell wrote them (NotAfter, DnsNameList) and the
+		// ServerCertInfo tags are camel case. json v2 matches names exactly
+		// unless asked not to.
+		err = json.Unmarshal(jsonStr, &currData, json.MatchCaseInsensitiveNames(true))
 		CheckFatalError(err)
 
 		fileName := filepath.Base(path)
@@ -291,8 +295,8 @@ func GetCertInfoFromFilesNew(basePath string, outputPath string) (caCertInfo []C
 		if _, err := os.Stat(outputPath); err != nil {
 			os.MkdirAll(outputPath, os.ModePerm)
 		}
-		caCertInfoStr, _ := json.MarshalIndent(caCertInfo, "", "  ")
-		serverCertInfoStr, _ := json.MarshalIndent(serverCertInfo, "", "  ")
+		caCertInfoStr, _ := json.Marshal(caCertInfo, jsontext.WithIndent("  "))
+		serverCertInfoStr, _ := json.Marshal(serverCertInfo, jsontext.WithIndent("  "))
 		os.WriteFile(outputPath+"/caCertInfo.json", caCertInfoStr, 0644)
 		os.WriteFile(outputPath+"/serverCertInfo.json", serverCertInfoStr, 0644)
 	}
@@ -317,8 +321,8 @@ func GetCertInfoFromFiles(basePath string, outputPath string) (caCertInfo []Cert
 		if _, err := os.Stat(outputPath); err != nil {
 			os.MkdirAll(outputPath, os.ModePerm)
 		}
-		caCertInfoStr, _ := json.MarshalIndent(caCertInfo, "", "  ")
-		serverCertInfoStr, _ := json.MarshalIndent(serverCertInfo, "", "  ")
+		caCertInfoStr, _ := json.Marshal(caCertInfo, jsontext.WithIndent("  "))
+		serverCertInfoStr, _ := json.Marshal(serverCertInfo, jsontext.WithIndent("  "))
 		os.WriteFile(outputPath+"/caCertInfo.json", caCertInfoStr, 0644)
 		os.WriteFile(outputPath+"/serverCertInfo.json", serverCertInfoStr, 0644)
 	}
@@ -346,9 +350,9 @@ func RelateCertAuthCertsToServerCertsNew(caCertInfo []CertAuthorityCertInfo, ser
 			if !slices.Contains(ignoredDispositions, caci.RequestDisposition) {
 				fmt.Println(i)
 
-				jsonStr, _ := json.MarshalIndent(caCertsBySerialNumber, "", "  ")
+				jsonStr, _ := json.Marshal(caCertsBySerialNumber, jsontext.WithIndent("  "))
 				os.WriteFile("/home/jercle/.config/cld/cache/caCertsBySerialNumber.json", jsonStr, 0644)
-				jsonStrCurr, _ := json.MarshalIndent(caci, "", "  ")
+				jsonStrCurr, _ := json.Marshal(caci, jsontext.WithIndent("  "))
 				os.WriteFile("/home/jercle/.config/cld/cache/curr.json", jsonStrCurr, 0644)
 
 				CheckFatalError(fmt.Errorf("whoopsie! caCertsBySerialNumber"))

@@ -1,7 +1,8 @@
 package azure
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"os"
 	"strings"
@@ -146,7 +147,7 @@ func CheckStorageAccountTlsVersionsForAllConfiguredTenants(opts *lib.GetAllResou
 	outputFilePath := options.OutputFilePath
 
 	if outputFilePath != "" {
-		jsonStr, _ := json.MarshalIndent(allResources, "", "  ")
+		jsonStr, _ := json.Marshal(allResources, jsontext.WithIndent("  "))
 
 		currentDate := time.Now().Format("20060102")
 

@@ -2,7 +2,8 @@ package azure
 
 import (
 	"encoding/csv"
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"io"
 	"os"
@@ -360,7 +361,7 @@ func FlattenAggregatedCostData(data lib.AggregatedCostData, resources []lib.Azur
 	for _, res := range resources {
 		var currRes lib.AzureResourceDetails
 
-		jsonStr, _ := json.MarshalIndent(res, "", "  ")
+		jsonStr, _ := json.Marshal(res, jsontext.WithIndent("  "))
 		err := json.Unmarshal(jsonStr, &currRes)
 		lib.CheckFatalError(err)
 
@@ -466,7 +467,7 @@ func ProcessCostData(data lib.AggregatedCostData) (costDataByMeterIdentifer map[
 					for id, meterData := range resData.MeterData {
 						if len(initialCheck[id]) > 1 {
 							err := fmt.Errorf("Incorrect length of meterdata, check data of " + meterData.ResourceMeterIdentifier)
-							jsonStr, _ := json.MarshalIndent(initialCheck[id], "", "  ")
+							jsonStr, _ := json.Marshal(initialCheck[id], jsontext.WithIndent("  "))
 							fmt.Println(string(jsonStr))
 							lib.CheckFatalError(err)
 							os.Exit(1)
@@ -529,7 +530,7 @@ func GatherRelatedResourcesAndCostMeters(costData []lib.AggregatedCostItem, reso
 
 	// lib.JsonMarshalAndPrint(resById)
 	_, _, cachePath := lib.InitConfig(nil)
-	jsonStr, err := json.MarshalIndent(resById, "", "  ")
+	jsonStr, err := json.Marshal(resById, jsontext.WithIndent("  "))
 	lib.CheckFatalError(err)
 	os.WriteFile(cachePath+"/resById.json", jsonStr, 0644)
 
@@ -753,7 +754,10 @@ func AggregateCostData(data lib.AggregatedCostData, tci lib.TransformedCostItem)
 	var aci lib.AggregatedCostItem
 	tciStr, err := json.Marshal(tci)
 	lib.CheckFatalError(err)
-	json.Unmarshal(tciStr, &aci)
+	// TransformedCostItem uses the CSV column names (SubscriptionName) and
+	// AggregatedCostItem uses camel case (subscriptionName). json v2 matches
+	// names exactly unless asked not to.
+	json.Unmarshal(tciStr, &aci, json.MatchCaseInsensitiveNames(true))
 
 	if !mdExists {
 		aci.CostPerDay = make(map[string]float64)
@@ -1247,7 +1251,7 @@ func CombineCostDataSlices(basePath string, saveOutput bool) (combinedSlice []li
 	}
 
 	if saveOutput {
-		jsonStr, err := json.MarshalIndent(combinedSlice, "", "  ")
+		jsonStr, err := json.Marshal(combinedSlice, jsontext.WithIndent("  "))
 		lib.CheckFatalError(err)
 
 		err = os.WriteFile(basePath+"costData-CombinedSlice.json", jsonStr, 0644)

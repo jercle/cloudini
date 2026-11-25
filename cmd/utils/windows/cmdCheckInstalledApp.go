@@ -3,7 +3,8 @@
 package windows
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"sort"
 	"strings"
@@ -34,7 +35,7 @@ to quickly create a Cobra application.`,
 
 		if appName == "" {
 			if fullData {
-				jsonApps, err := json.MarshalIndent(apps, "", "  ")
+				jsonApps, err := json.Marshal(apps, jsontext.WithIndent("  "))
 				if err != nil {
 					log.Error(err, err)
 				}

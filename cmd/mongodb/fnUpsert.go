@@ -2,7 +2,7 @@ package mongodb
 
 import (
 	"context"
-	"encoding/json"
+	json "encoding/json/v2"
 	"fmt"
 	"runtime/debug"
 	"strconv"

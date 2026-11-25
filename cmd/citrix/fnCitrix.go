@@ -2,7 +2,8 @@ package citrix
 
 import (
 	"bytes"
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"io"
 	"net/http"
@@ -58,7 +59,7 @@ func GetMachineCatalogDeliveryGroupAssociations(customerId string, siteId string
 func CacheToken(tokenData lib.CitrixTokenData, cldOpts *lib.CldConfigOptions) {
 	_, _, cachePath := lib.InitConfig(cldOpts)
 	fmt.Println(cachePath)
-	jsonStr, err := json.MarshalIndent(tokenData, "", "  ")
+	jsonStr, err := json.Marshal(tokenData, jsontext.WithIndent("  "))
 	lib.CheckFatalError(err)
 
 	os.WriteFile(cachePath+"/ctxtok.json", jsonStr, os.ModePerm)
@@ -166,7 +167,7 @@ func HttpPost(urlString string, body string, creds lib.CitrixCloudAccountConfig)
 		lib.CheckFatalError(fmt.Errorf(res.Status))
 	}
 
-	resHeader, _ := json.MarshalIndent(res.Header, "", "  ")
+	resHeader, _ := json.Marshal(res.Header, jsontext.WithIndent("  "))
 
 	// fmt.Println()
 	// if err != nil {
@@ -225,7 +226,7 @@ func GetToken(creds lib.CitrixCloudAccountConfig, cldConfigOpts *lib.CldConfigOp
 	var tokenData lib.CitrixTokenData
 
 	json.Unmarshal(responseBody, &tokenData)
-	resHeader, _ := json.MarshalIndent(res.Header, "", "  ")
+	resHeader, _ := json.Marshal(res.Header, jsontext.WithIndent("  "))
 
 	if res.StatusCode == 404 {
 		fmt.Println("Body")

@@ -1,7 +1,8 @@
 package web
 
 import (
-	"encoding/json"
+	jsonv1 "encoding/json"
+	json "encoding/json/v2"
 	"net/http"
 	"net/url"
 	"time"
@@ -42,8 +43,13 @@ func GetWebsiteCertificate(siteUrl string, proxy *string) (certMinimal WebsiteCe
 
 	// lib.JsonMarshalAndPrint(certs)
 
-	jsonStr, _ := json.Marshal(cert)
-	err = json.Unmarshal(jsonStr, &certMinimal)
+	// x509.Certificate has no json tags, so its fields are written as
+	// SerialNumber, NotAfter and so on, and read back here into camel case
+	// tags. That, and marshalling whatever public key type the certificate
+	// holds, relies on json v1 behaviour, so v1 semantics are kept for this
+	// round trip.
+	jsonStr, _ := json.Marshal(cert, jsonv1.DefaultOptionsV1())
+	err = json.Unmarshal(jsonStr, &certMinimal, jsonv1.DefaultOptionsV1())
 	// lib.CheckFatalError(err)
 	certMinimal.Subject = cert.Subject.CommonName
 	certMinimal.Issuer = cert.Issuer.CommonName

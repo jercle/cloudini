@@ -6,7 +6,8 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"log"
 	"math/big"
@@ -68,7 +69,7 @@ func InitConfig(options *CldConfigOptions) (configFile string, configPath string
 		config := CldConfigRoot{}
 		config.Azure.MultiTenantAuth.Tenants = make(CldConfigTenants)
 
-		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
+		jsonBytes, _ := json.Marshal(config, jsontext.WithIndent("  "))
 		err := os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
 		CheckFatalError(err)
 	}
@@ -77,7 +78,7 @@ func InitConfig(options *CldConfigOptions) (configFile string, configPath string
 		config := CldConfigRoot{}
 		config.Azure.MultiTenantAuth.Tenants = make(CldConfigTenants)
 
-		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
+		jsonBytes, _ := json.Marshal(config, jsontext.WithIndent("  "))
 		err := os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
 		CheckFatalError(err)
 	}
@@ -87,7 +88,7 @@ func InitConfig(options *CldConfigOptions) (configFile string, configPath string
 
 func SaveCldConfig(configFilePath string, config CldConfigRoot, options *CldConfigOptions) {
 	if configFilePath == "azureAppConfig" {
-		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
+		jsonBytes, _ := json.Marshal(config, jsontext.WithIndent("  "))
 		err := os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
 		CheckFatalError(err)
 		return
@@ -105,7 +106,7 @@ func SaveCldConfig(configFilePath string, config CldConfigRoot, options *CldConf
 		CheckFatalError(err)
 		os.WriteFile(configFilePath, encConfig, os.ModePerm)
 	} else {
-		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
+		jsonBytes, _ := json.Marshal(config, jsontext.WithIndent("  "))
 		err := os.WriteFile(configFilePath, jsonBytes, os.ModePerm)
 		CheckFatalError(err)
 	}
@@ -145,7 +146,7 @@ func EncryptDecryptedConfigFile(configFilePath string, outputFileName string) {
 func DecryptEncryptedConfigFile(configFilePath string, outputFileName string) {
 	if configFilePath == "azureAppConfig" {
 		config := GetCldConfig(nil)
-		jsonBytes, _ := json.MarshalIndent(config, "", "  ")
+		jsonBytes, _ := json.Marshal(config, jsontext.WithIndent("  "))
 		err := os.WriteFile(outputFileName, jsonBytes, os.ModePerm)
 		CheckFatalError(err)
 		return
@@ -172,6 +173,11 @@ func DecryptEncryptedTokenCache(tokenCachePath string, outputFileName string) {
 	os.WriteFile(outputFileName, decryptedConfig, os.ModePerm)
 	fmt.Println("Saved to", outputFileName)
 }
+
+// Config files are edited by hand, and some config fields have no json tag
+// (PackerConfig.Logs), so keys keep matching without regard to case as they
+// did under json v1. json v2 matches names exactly unless asked not to.
+var configJsonOpts = json.MatchCaseInsensitiveNames(true)
 
 func GetCldConfig(options *CldConfigOptions) CldConfigRoot {
 	var (
@@ -212,10 +218,10 @@ func GetCldConfig(options *CldConfigOptions) CldConfigRoot {
 		// jsonStr, _ := json.MarshalIndent(decryptedConfig, "", "  ")
 		// fmt.Println(string(jsonStr))
 		// os.Exit(0)
-		err = json.Unmarshal(decryptedConfig, &config)
+		err = json.Unmarshal(decryptedConfig, &config, configJsonOpts)
 		CheckFatalError(err)
 	} else {
-		err = json.Unmarshal(byteValue, &config)
+		err = json.Unmarshal(byteValue, &config, configJsonOpts)
 		CheckFatalError(err)
 	}
 
@@ -372,7 +378,7 @@ func CacheSaveToken[T AzureMultiAuthToken | AzureTokenData | CitrixTokenData](to
 
 	if _, err := os.Stat(cacheFile); err != nil {
 		cacheFileData[tokenType] = string(tokenDataStrEncoded)
-		jsonStr, _ := json.MarshalIndent(cacheFileData, "", "  ")
+		jsonStr, _ := json.Marshal(cacheFileData, jsontext.WithIndent("  "))
 		encCacheStr, err := Encrypt(jsonStr, opts)
 		CheckFatalError(err)
 		f, err := os.Create(cacheFile)
@@ -387,7 +393,7 @@ func CacheSaveToken[T AzureMultiAuthToken | AzureTokenData | CitrixTokenData](to
 		err = json.Unmarshal(decrypted, &cacheFileData)
 		if err != nil {
 			cacheFileData[tokenType] = string(tokenDataStrEncoded)
-			jsonStr, _ := json.MarshalIndent(cacheFileData, "", "  ")
+			jsonStr, _ := json.Marshal(cacheFileData, jsontext.WithIndent("  "))
 			encCacheStr, err := Encrypt(jsonStr, opts)
 			CheckFatalError(err)
 			os.WriteFile(cacheFile, encCacheStr, 0644)
@@ -629,7 +635,7 @@ func getAzureAppConfigData(useAzCliAuth bool) CldConfigRoot {
 
 	appConfigBytes, err := appConfig.GetBytes(nil)
 	CheckFatalError(err)
-	json.Unmarshal(appConfigBytes, &cldConfig)
+	json.Unmarshal(appConfigBytes, &cldConfig, configJsonOpts)
 
 	if azAppConfigLabel != "" {
 		options := &azureappconfiguration.Options{
@@ -649,7 +655,7 @@ func getAzureAppConfigData(useAzCliAuth bool) CldConfigRoot {
 
 		appConfigBytes, err := appConfig.GetBytes(nil)
 		CheckFatalError(err)
-		json.Unmarshal(appConfigBytes, &cldConfig)
+		json.Unmarshal(appConfigBytes, &cldConfig, configJsonOpts)
 	}
 
 	return cldConfig

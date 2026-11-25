@@ -3,7 +3,7 @@ package azure
 import (
 	"bytes"
 	"cmp"
-	"encoding/json"
+	json "encoding/json/v2"
 	"fmt"
 	"io"
 	"net/http"

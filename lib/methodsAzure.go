@@ -2,7 +2,8 @@ package lib
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -253,7 +254,7 @@ func (t *TransformedCostItemsByTenant) SumCosts() {
 		// fmt.Println(val)
 
 		for _, res := range val.ResGroups {
-			jsonStr, _ := json.MarshalIndent(res, "", "  ")
+			jsonStr, _ := json.Marshal(res, jsontext.WithIndent("  "))
 			fmt.Println(string(jsonStr))
 			os.Exit(0)
 		}

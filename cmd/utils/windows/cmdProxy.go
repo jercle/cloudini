@@ -3,7 +3,8 @@
 package windows
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"os"
 	"os/exec"
@@ -46,14 +47,14 @@ var proxyCmd = &cobra.Command{
 
 		if listConfig {
 			proxyConfig := lib.GetCldConfig(nil).ProxyConfig
-			jsonBytes, _ := json.MarshalIndent(proxyConfig, "", "  ")
+			jsonBytes, _ := json.Marshal(proxyConfig, jsontext.WithIndent("  "))
 			fmt.Println(string(jsonBytes))
 			os.Exit(0)
 		}
 
 		if !setProxyConfig && !deleteProxyConfig {
 			proxyConfig := GetProxySettings()
-			jsonBytes, _ := json.MarshalIndent(proxyConfig, "", "  ")
+			jsonBytes, _ := json.Marshal(proxyConfig, jsontext.WithIndent("  "))
 			fmt.Println(string(jsonBytes))
 		}
 
@@ -66,14 +67,14 @@ var proxyCmd = &cobra.Command{
 				SetProxySettings(proxyConfigs[selectProxyConfig], false)
 			}
 			proxyConfig := GetProxySettings()
-			jsonBytes, _ := json.MarshalIndent(proxyConfig, "", "  ")
+			jsonBytes, _ := json.Marshal(proxyConfig, jsontext.WithIndent("  "))
 			fmt.Println(string(jsonBytes))
 		}
 
 		if deleteProxyConfig {
 			RemoveProxyConfig()
 			proxyConfig := GetProxySettings()
-			jsonBytes, _ := json.MarshalIndent(proxyConfig, "", "  ")
+			jsonBytes, _ := json.Marshal(proxyConfig, jsontext.WithIndent("  "))
 			fmt.Println(string(jsonBytes))
 		}
 

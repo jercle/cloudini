@@ -2,7 +2,8 @@ package azure
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"io"
 	"net/http"
@@ -110,7 +111,7 @@ func ListStorageContainerBlobs(options lib.StorageAccountRequestOptions, cldConf
 		lib.CheckFatalError(err)
 		for _, blob := range resp.Segment.BlobItems {
 			var blobItem lib.BlobItem
-			jsonBytes, _ := json.MarshalIndent(blob, "", "  ")
+			jsonBytes, _ := json.Marshal(blob, jsontext.WithIndent("  "))
 			blobItem.TenantName = tenant.TenantName
 			blobItem.StorageAccountName = options.StorageAccountName
 			blobItem.ContainerName = options.ContainerName

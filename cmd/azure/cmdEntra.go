@@ -1,7 +1,8 @@
 package azure
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 
 	"github.com/jercle/cloudini/lib"
@@ -73,7 +74,7 @@ var entraCmd = &cobra.Command{
 			if onlyShowId {
 				fmt.Println(roleDef.ID)
 			} else {
-				jsonStr, _ := json.MarshalIndent(roleDef, "", "  ")
+				jsonStr, _ := json.Marshal(roleDef, jsontext.WithIndent("  "))
 				fmt.Println(string(jsonStr))
 			}
 		}
@@ -112,7 +113,7 @@ var entraCmd = &cobra.Command{
 			if onlyShowName {
 				fmt.Println(roleDef.ID)
 			} else {
-				jsonStr, _ := json.MarshalIndent(roleDef, "", "  ")
+				jsonStr, _ := json.Marshal(roleDef, jsontext.WithIndent("  "))
 				fmt.Println(string(jsonStr))
 			}
 		}

@@ -1,13 +1,19 @@
 package azure
 
 import (
-	"encoding/json"
+	jsonv1 "encoding/json"
+	json "encoding/json/v2"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/jercle/cloudini/lib"
 )
+
+// Image versions carry Packer build durations (lib.PackerLogBuildData), and
+// json v2 refuses to marshal a time.Duration unless told how. This keeps the
+// nanosecond number that json v1 wrote.
+var galleryImageVersionJsonOpts = jsonv1.FormatDurationAsNano(true)
 
 func GetGalleryImageVersions(subscriptionId string, resourceGroup string, galleryName string, galleryImageName string, mat lib.AzureMultiAuthToken) (imageVersions lib.GalleryImageVersionList, imageVersionsDetailed []lib.GalleryImageVersionDetailed) {
 
@@ -32,7 +38,7 @@ func GetGalleryImageVersions(subscriptionId string, resourceGroup string, galler
 	json.Unmarshal(res, &listResponse)
 
 	for _, val := range listResponse.Value {
-		str, _ := json.Marshal(val)
+		str, _ := json.Marshal(val, galleryImageVersionJsonOpts)
 
 		var imgVer lib.GalleryImageVersion
 		json.Unmarshal(str, &imgVer)
@@ -51,7 +57,7 @@ func GetGalleryImageVersions(subscriptionId string, resourceGroup string, galler
 		nextLink = currentSet.NextLink
 
 		for _, val := range currentSet.Value {
-			str, _ := json.Marshal(val)
+			str, _ := json.Marshal(val, galleryImageVersionJsonOpts)
 
 			var imgVer lib.GalleryImageVersion
 

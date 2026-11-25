@@ -2,7 +2,7 @@ package lib
 
 import (
 	"bufio"
-	"encoding/json"
+	json "encoding/json/v2"
 	"fmt"
 	"go/format"
 	"io"

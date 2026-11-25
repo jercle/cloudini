@@ -2,7 +2,8 @@
 package main
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -48,7 +49,7 @@ func main() {
 	cldConfig.ProxyConfig = &ProxyConfig
 	cldConfig.Domains = &Domains
 
-	jsonStr, _ := json.MarshalIndent(cldConfig, "", "  ")
+	jsonStr, _ := json.Marshal(cldConfig, jsontext.WithIndent("  "))
 	fmt.Println(string(jsonStr))
 
 	// cldConfig.Azure.MultiTenantAuth.Tenants["T1"].CostExportsLocation =

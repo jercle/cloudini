@@ -2,7 +2,8 @@ package datatransforms
 
 import (
 	"encoding/csv"
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"io"
 	"os"
@@ -95,7 +96,7 @@ func csvToJson(rows [][]string) (string, error) {
 		entries = append(entries, entry)
 	}
 
-	bytes, err := json.MarshalIndent(entries, "", "	")
+	bytes, err := json.Marshal(entries, jsontext.WithIndent("	"))
 	if err != nil {
 		return "", fmt.Errorf("Marshal error %s\n", err)
 	}

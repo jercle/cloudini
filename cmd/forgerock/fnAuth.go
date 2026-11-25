@@ -2,7 +2,7 @@ package forgerock
 
 import (
 	"encoding/base64"
-	"encoding/json"
+	json "encoding/json/v2"
 	"fmt"
 	"io"
 	"net/http"

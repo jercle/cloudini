@@ -1,7 +1,7 @@
 package citrix
 
 import (
-	"encoding/json"
+	json "encoding/json/v2"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"

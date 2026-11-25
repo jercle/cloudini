@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/x509"
-	"encoding/json"
+	json "encoding/json/v2"
 	"encoding/pem"
 	"fmt"
 	"io"

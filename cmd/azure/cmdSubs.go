@@ -1,7 +1,8 @@
 package azure
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 
 	"github.com/jercle/cloudini/lib"
@@ -33,7 +34,7 @@ var subsCmd = &cobra.Command{
 		if ShowActive {
 			activeSub, err := GetActiveCliSub()
 			lib.CheckFatalError(err)
-			jsonStr, _ := json.MarshalIndent(activeSub, "", "  ")
+			jsonStr, _ := json.Marshal(activeSub, jsontext.WithIndent("  "))
 			fmt.Println(string(jsonStr))
 		}
 

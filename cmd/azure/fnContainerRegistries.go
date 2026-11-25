@@ -1,7 +1,7 @@
 package azure
 
 import (
-	"encoding/json"
+	json "encoding/json/v2"
 	"io"
 	"log"
 	"net/http"
@@ -196,7 +196,9 @@ func listSubscriptionACRs(tenantId string, subscriptionId string, token *lib.Azu
 	lib.CheckFatalError(err)
 
 	var regReqBody ContainerRegisryResponse
-	err = json.Unmarshal(responseBody, &regReqBody)
+	// The API returns a lower case "value" key and ContainerRegisryResponse.Value
+	// has no json tag. json v2 matches names exactly unless asked not to.
+	err = json.Unmarshal(responseBody, &regReqBody, json.MatchCaseInsensitiveNames(true))
 	lib.CheckFatalError(err)
 
 	var allSubscriptionContainerRegistries []ContainerRegistry

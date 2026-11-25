@@ -1,19 +1,20 @@
 package lib
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 	"os"
 )
 
 func (config *CldConfigRoot) Save(options *CldConfigOptions) {
 	configFile, _, _ := InitConfig(options)
-	jsonBytes, _ := json.MarshalIndent(config, "", "  ")
+	jsonBytes, _ := json.Marshal(config, jsontext.WithIndent("  "))
 	os.WriteFile(configFile, jsonBytes, os.ModePerm)
 }
 
 func (config *CldConfigRoot) Show() {
-	jsonBytes, _ := json.MarshalIndent(config, "", "  ")
+	jsonBytes, _ := json.Marshal(config, jsontext.WithIndent("  "))
 	fmt.Println(string(jsonBytes))
 }
 

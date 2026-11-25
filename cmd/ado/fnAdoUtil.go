@@ -2,7 +2,7 @@ package ado
 
 import (
 	"encoding/base64"
-	"encoding/json"
+	json "encoding/json/v2"
 	"log"
 	"net/http"
 )
@@ -32,7 +32,7 @@ func azureDevOpsRestGet(uri string, pat string) []byte {
 	defer res.Body.Close()
 
 	var resData *interface{}
-	derr := json.NewDecoder(res.Body).Decode(&resData)
+	derr := json.UnmarshalRead(res.Body, &resData)
 	if derr != nil {
 		log.Fatal(derr)
 	}

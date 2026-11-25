@@ -5,7 +5,8 @@ package datatransforms
 
 import (
 	"bytes"
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"errors"
 	"fmt"
 	"go/format"
@@ -255,11 +256,10 @@ func (g *Generator) ObserveValue(value any) {
 
 // ObserveJSONReader observes JSON values from r.
 func (g *Generator) ObserveJSONReader(r io.Reader) error {
-	decoder := json.NewDecoder(r)
-	// decoder.UseNumber()
+	decoder := jsontext.NewDecoder(r)
 	for {
 		var value any
-		err := decoder.Decode(&value)
+		err := json.UnmarshalDecode(decoder, &value)
 		switch {
 		case errors.Is(err, io.EOF):
 			return nil

@@ -2,7 +2,8 @@ package ado
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json/jsontext"
+	json "encoding/json/v2"
 	"fmt"
 
 	"github.com/jercle/cloudini/lib"
@@ -39,14 +40,14 @@ var pipelinesCmd = &cobra.Command{
 			for _, project := range allProjects {
 				allPipelines = append(allPipelines, project.GetPipelines(ctx, connection)...)
 			}
-			jsonData, err := json.MarshalIndent(allPipelines, "", "  ")
+			jsonData, err := json.Marshal(allPipelines, jsontext.WithIndent("  "))
 			lib.CheckFatalError(err)
 			fmt.Println(string(jsonData))
 		}
 
 		if listAllPipelinesWithRuns {
 			allPipelines = getAllPipelinesWithRuns(ctx, connection)
-			jsonData, err := json.MarshalIndent(allPipelines, "", "  ")
+			jsonData, err := json.Marshal(allPipelines, jsontext.WithIndent("  "))
 			lib.CheckFatalError(err)
 			fmt.Println(string(jsonData))
 		}

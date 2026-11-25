@@ -1,7 +1,7 @@
 package ad
 
 import (
-	"encoding/json"
+	json "encoding/json/v2"
 
 	"github.com/go-ldap/ldap/v3"
 	"github.com/jercle/cloudini/lib"
